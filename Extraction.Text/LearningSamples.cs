@@ -17,7 +17,7 @@ namespace Extraction.Text
 	/// </summary>
 	internal static class LearningSamples
 	{
-		static Tuple<uint, uint> FindNextExample(ref string text)
+		static Tuple<uint, uint> FindNextHeaderExample(ref string text)
 		{
 			int start = text.IndexOf("{{{");
 			text = text.Remove(start, 3);
@@ -25,23 +25,61 @@ namespace Extraction.Text
 			text = text.Remove(end, 3);
 			return Tuple.Create((uint)start, (uint)end);
 		}
+		static Tuple<uint, uint> FindNextBodyExample(ref string text)
+		{
+			int start = text.IndexOf("[[[");
+			text = text.Remove(start, 3);
+			int end = text.IndexOf("]]]");
+			text = text.Remove(end, 3);
+			return Tuple.Create((uint)start, (uint)end);
+		}
 
 		static void LearnD3()
 		{
+			//read in concatenated examples
 			string text = File.ReadAllText("d3.txt");
-			var bounds1 = FindNextExample(ref text);
-			var bounds2 = FindNextExample(ref text);
+
+			//extract regions
+			var header_bounds1 = FindNextHeaderExample(ref text);
+			var body_bounds1 = FindNextBodyExample(ref text);
+			var header_bounds2 = FindNextHeaderExample(ref text);
+			var body_bounds2 = FindNextBodyExample(ref text);
+
+			//create string region
 			var document = RegionLearner.CreateStringRegion(text);
-			var spec = new[] {
+
+			//create specs
+			var header_spec = new[] {
 				new MemberPrefix<StringRegion, StringRegion>(document, new[] {
-					document.Slice(bounds1.Item1, bounds1.Item2),
-					document.Slice(bounds2.Item1, bounds2.Item2)
+					document.Slice(header_bounds1.Item1, header_bounds1.Item2),
+					document.Slice(header_bounds2.Item1, header_bounds2.Item2)
 				})
 			};
-			var program = SequenceLearner.Instance.Learn(spec);
-			var outputs = program.Run(document);
-			foreach (var item in outputs)
+			var body_spec = new[] {
+				new MemberPrefix<StringRegion, StringRegion>(document, new[] {
+					document.Slice(body_bounds1.Item1, body_bounds1.Item2),
+					document.Slice(body_bounds2.Item1, body_bounds2.Item2)
+				})
+			};
+
+			//learn a program and run it on the document
+			var header_program = SequenceLearner.Instance.Learn(header_spec);
+			var header_outputs = header_program.Run(document);
+
+			var body_program = SequenceLearner.Instance.Learn(body_spec);
+			var body_outputs = body_program.Run(document);
+
+			//print the output
+			foreach (var item in header_outputs)
 			{
+				Console.WriteLine($"{item.Start} {item.End}");
+				Console.WriteLine(item);
+				Console.WriteLine("====================================");
+			}
+			Console.WriteLine("--------------------------------------");
+			foreach (var item in body_outputs)
+			{
+				Console.WriteLine($"{item.Start} {item.End}");
 				Console.WriteLine(item);
 				Console.WriteLine("====================================");
 			}
