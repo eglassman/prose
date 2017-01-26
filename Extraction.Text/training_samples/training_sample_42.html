@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <svg width="600" height="600">
+    <g class="badge otherBadge">
+      <circle r="45" transform="translate(100,100)" style="fill: #023474"></circle>
+  
+  	  <circle r="20" transform="translate(100,100)" style="stroke: #9C824A; stroke-width: 15px; fill: #EF0107"></circle>
+    </g> 
+  </svg>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+    	d3.selectAll(".badge")
+      	.transition("down")
+      		.delay(600)
+      		.duration(600)
+      		.attr("transform","translate(100,200)")
+      		.style('opacity', 0.5)
+        	.each('end', function()  {
+          	d3.select(this)
+          		.transition("up")
+          			.delay(600)
+          			.duration(600)
+          			.attr("transform","translate(400,100)")
+          			.style('opacity', 1)
+      });
+    </script>
+</body>
+</html>

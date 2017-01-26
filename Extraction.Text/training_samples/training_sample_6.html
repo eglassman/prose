@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+html, body {
+  background: #222;
+}
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="d3.canvas-hexbin.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var hexbin = d3.canvasHexbin()
+    .size([width, height])
+    .radius(4);
+
+var color = d3.scale.linear()
+   .domain([0, 14, 15, 35, 132])
+   .range(["#050505", "#222", "#d7191c", "#ffffbf", "#2c7bb6"])
+   .interpolate(d3.interpolateHcl);
+
+var canvas = d3.select("body").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+
+var context = canvas.node().getContext("2d");
+var points = [];
+var hexagons = [];
+
+hexbin.context(context);
+
+getImage("readme.png", function(image) {
+  context.drawImage(image, 0, 0, width, height);
+  image = context.getImageData(0, 0, width, height);
+
+  // Rescale the colors.
+  for (var c, i = 0, n = width * height * 4, d = image.data; i < n; i += 4) {
+    points.push([i/4%width, Math.floor(i/4/width), d[i]]);
+  }
+
+  hexagons = hexbin(points);
+  hexagons.forEach(function(d) {
+    d.min = d3.min(d, function(p) { return p[2]; });
+    d.max = d3.max(d, function(p) { return p[2]; });
+    d.mean = d3.mean(d, function(p) { return p[2]; });
+  });
+
+  // optimization: filter out sea level
+  hexagons = hexagons.filter(function(d) {
+    return d.max > 16 || d.min < 10;
+  });
+
+  var interpolated = d3.interpolate(
+    hexagons.map(function(d) { return d.min; }),
+    hexagons.map(function(d) { return d.max; })
+  );
+
+  function toggle() {
+    d3.timer(function(t) {
+      if (t > 9000) return true;
+      if (t > 4500) t = 9000 - t;
+
+      context.clearRect(0,0,width,height);
+
+      interpolated(t/4500).forEach(function(d,i) {
+        context.save();
+        context.fillStyle = color(d);
+        context.translate(hexagons[i].x, hexagons[i].y);
+        hexbin.hexagon(4.5);
+        context.fill();
+        context.restore();
+      });
+    });
+  };
+
+  loop(toggle, 9000);
+
+  function loop(f,t) {
+    f();
+    setTimeout(function() {
+      loop(f,t);
+    },t)
+  };
+});
+
+
+function getImage(path, callback) {
+  var image = new Image;
+  image.onload = function() { callback(image); };
+  image.src = path;
+}
+
+</script>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>d3 module 3 - oxford</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #fff;
+			}
+
+			svg {
+				background-color: #fff;
+			}
+
+			p {
+				width: 450px;
+				font-family: "Arial", sans-serif;
+			}
+
+			rect {
+				fill: #c9c9c9;
+			}
+
+			rect:hover {
+				fill: #ed5e17;
+			}
+
+		</style>
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript">		
+
+
+			
+			d3.select("body")
+				.append("p")
+				.text("Percentage of U.S. domestic flights delayed by circumstances within the airline's control (December 2015)");
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 450)
+						.attr("height", 320);
+
+
+
+			d3.csv("airline_carrier_delay2015v2.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.Dec_2015, +b.Dec_2015);
+					
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 24;
+					})
+					.attr("width", function(d) {
+						return d.Dec_2015 * 40;
+					})
+					.attr("height", 16)
+					.append("title")
+					.text(function(d) {
+						return d.Airline + ": " + d.Dec_2015 + "%";
+					});
+
+			});
+
+
+		</script>
+		
+		<script type="text/javascript">
+			
+			d3.csv("airline_carrier_delay2015v2.csv", function(data) {
+				console.log(data);				
+			});
+			
+		</script>
+	</body>
+	
+</html>

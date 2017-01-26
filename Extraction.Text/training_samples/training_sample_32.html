@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	<body>
+            <svg width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+             <g>
+              <title>Layer 1</title>
+              <path d="m461,369l-354,1l183,-308l171,307z" id="svg_5" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="#ffffaa"/>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_7" y="293" x="284" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Information</text>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_8" y="352" x="278" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">data</text>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_9" y="226" x="285" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Knowledge</text>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_10" y="156" x="285" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Value</text>
+              <line id="svg_11" y2="180" x2="354" y1="180" x1="218" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+              <line id="svg_12" y2="250" x2="396" y1="250" x1="171" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+              <line id="svg_13" y2="320" x2="431" y1="320" x1="132" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+             </g>
+            </svg>
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("UNdata_Export_20150318.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>F1 Driver's Wage between 2014 and 2015</title>
+
+	</head>
+	<body>
+
+		<h1>F1 Drivers' Wage between 2014 and 2015!</h1>
+		<p id="source"><a href="http://www.crash.net/f1/news/221215/1/f1-2015-driver-salaries-published-but-who-earns-most.html">Source: F1 driver salaries published</a></p>
+		<p class="note">This table shows the wages of <em>F1 drivers</em>, one of the richest groups of people in the world, from 2014 to 2015.</p>
+		<p class="note">We can find out most of drivers' wages raised in 2015, only two drivers earned less last year.</p>
+		<p class="note">That's because their performances in the 2014 season was not good enough, if they didn't accept a lower salary, they might lose their jobs.</p>
+		<p class="note"><em>The wage is accounted by "Million Euro"</em></p>
+		<div id="table"></div>
+
+	</body>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+	<!-- load the function file you need before you call it... -->
+	<script type="text/javascript" src="js/stupidtable.js"></script>
+
+		<script type="text/javascript">
+			//Load in contents of CSV file, and do things to the data.
+			d3.csv("f1driverwage.csv", function(error, data) {
+
+				if (error) {
+					console.log("Had an error loading file.");
+				}
+
+				// We'll be using simpler data as values, not objects.
+				var myArray = [];
+
+				// this is a new variable, to make it easier to do a color scale.
+				// alternately, you could extract these values with a map function.
+				var allDifferences = [];
+
+				data.forEach(function(d, i){
+
+					// now we add another data object value, a calculated value.
+					d.difference = d.year2015 - d.year2014;
+
+				 // Add an array to the empty array with the values of each:
+			 	 myArray.push([d.Driver, d.year2014, d.year2015, d.difference]);
+
+         // this is just a convenience, another way would be to use a function to get the values in the d3 scale.
+			 	 allDifferences.push(d.difference);
+
+				});
+
+				console.log(allDifferences);
+
+				var table = d3.select("#table").append("table");
+
+				var header = table.append("thead").append("tr");
+
+				// Made some objects to construct the header in code:
+				// The sort_type is for the Jquery sorting function.
+				var headerObjs = [
+					{ label: "Driver", sort_type: "string" },
+					{ label: "2014", sort_type: "int" },
+					{ label: "2015", sort_type: "int" },
+					{ label: "Difference", sort_type: "int"},
+				];
+
+				header
+					.selectAll("th")
+					.data(headerObjs)
+					.enter()
+					.append("th")
+					.attr("data-sort", function (d) { return d.sort_type; })
+          .text(function(d) { return d.label; });
+
+        var tablebody = table.append("tbody");
+
+        rows = tablebody
+        	.selectAll("tr")
+        	.data(myArray)
+        	.enter()
+        	.append("tr");
+
+        // We built the rows using the nested array - now each row has its own array.
+
+        // let's talk about the scale - start at 0 or at lowest number?
+        console.log('Extent is ', d3.extent(allDifferences));
+
+      	var colorScale = d3.scale.linear()
+      		.domain(d3.extent(allDifferences))
+      		.range(["#fedcbd","#f58220"]);
+
+        cells = rows.selectAll("td")
+        	// each row has data associated; we get it and enter it for the cells.
+        	.data(function(d) {
+        		return d;
+        	})
+        	.enter()
+        	.append("td")
+        	.style("background-color", function(d,i) {
+        		// for the last element in the row, we color the background:
+        		if (i === 3) {
+        			return colorScale(d);
+
+        		}
+        	})
+
+        	.text(function(d) {
+        		return d;
+        	});
+
+
+      // jquery sorting applied to it - could be done with d3 and events.
+      $("table").stupidtable();
+
+
+			});
+
+				// Excercises for you if you want: Fix the names in the data and table so they look nicer.
+				// Sort the data by whatever you think is most interesting. What problem does that cause?
+				// Add a style sheet to make this table look nice
+		</script>
+
+		<style>
+
+		h1 {
+			text-align: center;
+			color: rgb(243,117,97);
+		}
+
+		#source {
+			text-align: center;
+		}
+
+		a {
+			color:rgb(243,117,97);
+			font-size: 18px;
+			font-style:italic;
+		}
+    a:hover {
+			color: red;
+		}
+		a:active {
+			color: rgb(213,97,146);
+		}
+
+		.note {
+			text-align: center;
+			font-size: 19px;
+			display: block;
+			margin-left:130px;
+			margin-right:130px;
+			padding-left:140px;
+			padding-right:140px;
+			margin-top: 20px;
+
+		}
+
+		#table {
+			margin-left:220px;
+		}
+
+		table {
+      font-style: italic;
+			margin-top:50px;
+
+      text-align: center;
+			font-size:22px;
+			display: block;
+			line-height: 43px;
+			border-collapse: collapse;
+			margin-left: 120px;
+
+		}
+		th {
+			text-align: center;
+			width:180px;
+			font-size: 24px;
+			font-style:italic;
+      cursor:pointer;
+			border-bottom: 1px solid rgb(236,236,236);
+			background-color:rgb(242,135,83);
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+		}
+
+
+		td.hovered {
+			background-color: rgb(255,220,187);
+
+		}
+
+		td {
+
+			border:1px solid rgb(236,236,236);
+
+		}
+
+		tbody{
+			font-size: 20px;
+			margin-left:20px;
+
+		}
+		</style>
+
+</html>

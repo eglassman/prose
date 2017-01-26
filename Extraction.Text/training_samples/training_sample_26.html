@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }
+      #map { height: 100%; }
+    </style>
+    <link href='http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css' type='text/css' rel='stylesheet' />
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwlBHEIw2KsaYlvkpUyLFzDUP-dixEra0"></script>
+    <script src='http://dev.openlayers.org/releases/OpenLayers-2.13.1/lib/OpenLayers.js'></script>
+    <script type="text/javascript">
+        var map;
+
+        function init() {
+            map = new OpenLayers.Map('map', {allOverlays: true}, {controls: []});
+            var layerSwitcher = new OpenLayers.Control.LayerSwitcher();
+            map.addControl(layerSwitcher);
+            layerSwitcher.maximizeControl();
+
+            
+            // the SATELLITE layer has all 22 zoom level, so we add it first to
+            // become the internal base layer that determines the zoom levels of the
+            // map.
+            var gsat = new OpenLayers.Layer.Google(
+                "Google Satellite",
+                {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, visibility: false}
+            );
+
+            var styles = [{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#0077ff"},{"visibility":"on"},{"saturation":-48}]},{"featureType":"poi.government","elementType":"geometry.fill","stylers":[{"saturation":-66},{"visibility":"off"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"},{"lightness":33},{"saturation":-55}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"lightness":67},{"hue":"#00ffa2"},{"saturation":-100}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"weight":0.7}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":15},{"visibility":"off"}]},{"featureType":"road.highway","stylers":[{"visibility":"simplified"},{"saturation":100},{"lightness":34}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"lightness":53},{"saturation":-100}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"saturation":-100}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"saturation":-100},{"lightness":37}]},{"featureType":"administrative.province","elementType":"labels.text","stylers":[{"lightness":26}]},{"featureType":"administrative.country","elementType":"labels.text","stylers":[{"visibility":"on"},{"lightness":46}]},{"featureType":"administrative.country","elementType":"geometry.stroke","stylers":[{"lightness":36}]},{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[{"lightness":54}]},{"featureType":"poi.government","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"saturation":100},{"lightness":60}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"visibility":"on"},{"lightness":50},{"saturation":-100}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"saturation":-100}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":49}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":39},{"visibility":"on"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":52}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"saturation":-100},{"lightness":65}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":40}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":30}]}];
+
+            var styledBase = new OpenLayers.Layer.Google(
+                "Google Physical",
+                // NOTE: this 'styled' ID should match the one defined below
+                {type: 'styled', visibility: true}
+            );
+
+            map.addLayers([styledBase, gsat]);
+
+        var styledMapType = new google.maps.StyledMapType(styles, {name: 'Styled Map'});
+        styledBase.mapObject.mapTypes.set('styled', styledMapType);
+        styledBase.mapObject.setMapTypeId('styled');
+
+            // Google.v3 uses EPSG:900913 as projection, so we have to
+            // transform our coordinates
+            map.setCenter(new OpenLayers.LonLat(10.2, 48.9).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 5);
+        }
+
+        init();
+    </script>
+</body>
+</html>

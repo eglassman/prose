@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>d3 legend | scrollable legend</title> 
+  <meta name="author" content="Sundar Singh | eesur.com">
+
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/turban/d3.slider/master/d3.slider.css">
+  <link rel="stylesheet" href="main.css">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> 
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
+
+</head>
+<body>
+
+<header>
+    <p>Crazy test for when legend has to many items for viewport. Next and Prev buttons will only show if over four items/lines</p>
+    <p>Number of items: <span id="slider-text-items">9</span></p>
+    <div id="slider-items"></div> 
+</header>
+
+<section id="container">
+    <section id="chart"></section>
+    <aside id="legend"></aside> 
+</section>
+
+<script src="https://rawgit.com/turban/d3.slider/master/d3.slider.js"></script>
+<script src="legend_component.js" charset="utf-8"></script> 
+<script src="d3_code_legend.js" charset="utf-8"></script> 
+
+</body>
+</html>

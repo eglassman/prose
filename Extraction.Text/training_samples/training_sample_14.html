@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sorting Elements</title>
+		
+        <!--<script type="text/javascript" src="../d3.v3.js"></script>-->
+        <script type="text/javascript" src="http://d3js.org./d3.v3.js"></script>
+		<style type="text/css">
+			
+			
+            
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+        
+
+			h1 {
+				font-size: 25px;
+				margin: 0;
+                color:#B5B1B1;
+			}
+            p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+                color:#B5B1B1;
+                
+			}
+
+			a {
+                text-decoration:none;
+                color:rgb(216,83,43);
+            }
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #B5B1B1;;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;			/* Made this text smaller, for testing */
+                
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;}
+		
+
+
+            /* gridline nuevo */
+            .tick.minor line {
+              stroke: #777;
+              stroke-dasharray: 2,2;
+            }
+             /* gridline nuevo */
+
+             /*
+				NOTE that CSS comments look use asterisks and slashes,
+				not <!-- comment --> like HTML comments.
+             */
+
+		</style>
+	</head>
+	<body>
+
+        <hr>
+		<h1>Alumnos Integrados a la Educación Común</h1>
+        <hr>
+		<p>Los datos corresponden a cantidad de alumnos con discapacidad integrados</br> a la educación: <a href="http://www.datospublicos.gob.ar/data/dataset/indicadores-de-educacion/resource/553d7102-f42b-4b65-8fd5-faf268788eb0">Portal de datos públicos</a>, 2012</p>
+        </br>
+
+		<script type="text/javascript">		
+            
+            //define variables fijas
+            var w = 700;
+			var h = 650;
+			var padding = [ 20, 20, 20, 250 ];  //Top, right, bottom, left
+
+			
+
+           //fin define variables fijas
+
+            //escala
+            
+            
+            
+            
+            var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+           
+			
+            //Nombre Provincias
+			var heightScaleNames = d3.scale.ordinal()
+									.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+            
+            //DISABLED per Scott
+            //Valores por provincia
+         //    var heightScaleNumbers = d3.scale.ordinal()
+									// .rangeRoundBands([ padding[0], h - padding[2] ], 0.1); 
+									//Changed this to make it consistent with scale above
+            
+            
+            //fin escala
+            
+			//ejes
+            var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom").tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000]).tickSize(h-padding[2]);
+
+			var yAxisNames = d3.svg.axis()
+								.scale(heightScaleNames)
+								.orient("left");
+            
+            //DISABLED per Scott
+            // eje izq numeros
+        //     var yAxisNumbers = d3.svg.axis()
+								// .scale(heightScaleNumbers)
+								// .orient("left");
+            
+            
+            //grid lines nuevas
+            
+            //var xAxis = d3.svg.axis()
+            //.scale(y)
+            //.tickSize(width) esto lo pase al eje
+                //            .orient("bottom");
+
+                 //grid lines nuevas
+            
+            
+            //fin ejes
+            //gRID
+            
+            //function make_x_axis() {        
+            //return d3.svg.axis()
+            //.scale(widthScale)
+            //.orient("top")
+            //.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000]);
+            //}
+
+            //FIN Grid
+            //define svg
+            
+            var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+            //fin define svg
+            
+            d3.csv("integradosSecundarioComun.csv", function(data) {
+
+				data.sort(function(a, b) {
+					
+					return d3.descending(+a.SecundarioComun, +b.SecundarioComun);
+					
+				});
+                //
+                widthScale.domain([ 1, d3.max(data, function(d) {
+					return +d.SecundarioComun;
+				}) ]);
+
+				heightScaleNames.domain(data.map(function(d) { return d.divPoliticaTerritorial; } ));
+                
+                //segundo eje y con los valores
+                
+                //DISABLED per Scott
+                // heightScaleNumbers.domain(data.map(function(d) { return d.SecundarioComun; } ));
+                
+                
+
+
+
+    //             // crea rectas
+
+				// var rects = svg.selectAll("rect")
+				// 				.data(data)
+				// 				.enter()
+				// 				.append("rect");
+                
+    //             // fin crea rectas
+    //             // aplica atributos
+                
+    //             rects.attr("x", padding[3])
+				// 	.attr("y", function(d) {
+				// 		return heightScaleNames(d.divPoliticaTerritorial);
+				// 	})
+				// 	.attr("width", function(d) {
+				// 		return widthScale(d.SecundarioComun);
+				// 	})
+				// 	.attr("height", heightScaleNames.rangeBand())
+				// 	.attr("fill", "rgb(216,83,43)")
+				// 	.append("title")
+				// 	.text(function(d) {
+				// 		return d.divPoliticaTerritorial + " su nivel de integración es " + d.SecundarioComun;
+				// 	});
+
+
+
+				
+
+				// SCOTT's preferred solution here is to bind data to groups
+
+				// Create a group for each row of data
+				var groups = svg.selectAll("g")
+								.data(data)
+								.enter()
+								.append("g")
+								// Translate the entire GROUP, not just individual rects!
+								.attr("transform", function(d) {
+									return "translate(" 
+										+ padding[3] 
+										+ "," 
+										+ heightScaleNames(d.divPoliticaTerritorial) 
+										+ ")";
+								});
+                
+                // Then create a rect inside each group                
+                groups.append("rect")
+                	.attr("x", 0)	// See, now the rects can each live at 0,0
+					.attr("y", 0)	// because their containing groups have already been positioned
+					.attr("width", function(d) {
+						return widthScale(d.SecundarioComun);
+					})
+					.attr("height", heightScaleNames.rangeBand())
+					.attr("fill", "rgb(216,83,43)")
+					.append("title")
+					.text(function(d) {
+						return d.divPoliticaTerritorial + " su nivel de integración es " + d.SecundarioComun;
+					});
+                
+                // Finally, create a text element inside each group                
+                groups.append("text")
+                	.attr("x", -30)  // Negative value moves each text element to the left of the group
+					.attr("y", heightScaleNames.rangeBand() * 0.65)  // Move text down to 65% of rangeBand (looks OK to me)
+					.attr("font-size", 10)
+					.text(function(d) {
+						return d.SecundarioComun;
+					});
+
+
+
+
+
+
+
+
+
+
+                //fin crea atributos
+
+                //"#D8532B" color anterior relleno
+                
+                //texto 
+                
+                //grid
+                
+                
+                
+                //    svg.append("g")         
+            //.attr("class", "grid")
+            //.attr("transform", "translate(0," + 0 + ")")
+            //.call(make_x_axis()
+              //  .tickSize(h, 0, 0)
+                //.tickFormat("")
+            //)
+                
+                
+                //grid
+               //h - padding[2]
+                
+               
+                //aplica ejes
+              //  svg.append("g")
+				//	.attr("class", "x axis")
+				//	.attr("transform", "translate(" + padding[3] + "," + (0) + ")").call(xAxis);
+                //nuevo gridlines
+                
+            var gx = svg.append("g")
+            .attr("class", "x axis").attr("transform", "translate("+ padding[3] + "," + (0) + ")")
+            .call(xAxis);
+
+
+            gx.selectAll("g").filter(function(d) { return d; })
+                .classed("minor", true);
+              
+                gx.selectAll("text")
+            .attr("y", 2)
+            .attr("dx", 4)
+            .attr("fill","#B5B1B1");
+                //nuevo gridlines
+
+
+                //Simplified positioning!
+				svg.append("g")
+					.attr("class", "y axis names")
+					.attr("transform", "translate(" + (padding[3] - 30) + ",0)")  //Shift over to left a bit
+                    .call(yAxisNames);
+
+				//DISABLED per Scott
+     //            svg.append("g")
+					// .attr("class", "y axis numbers")
+					// .attr("transform", "translate(" + padding[3] + ",0)")
+					// .call(yAxisNumbers);
+                
+                
+                //fin aplica ejes
+
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

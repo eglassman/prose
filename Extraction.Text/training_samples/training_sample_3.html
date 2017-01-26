@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--http://blog.webkid.io/maps-with-leaflet-and-topojson/-->
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EU map: leaflet">
+    <meta name="keywords" content="openness">
+    <meta name="author" content="Michal Škop">
+<!--    <link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">-->
+
+
+
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/superhero/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<!--    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">-->
+
+
+
+    <title>EU map</title>
+    
+    
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css">
+ 
+    
+    
+  </head>
+  <body>
+
+    <style>
+        #worldmap{
+            background: white;
+            height: 100%;
+            width: 100%;
+        }
+        #worldmap-container {
+            width: 100%;
+            height: 550px;
+            border: 1px solid #CCC;
+        }
+        </style>
+
+        
+    <script>
+        countries =  {};
+    </script>
+    
+    <div class="container">
+        <!-- Page Content -->
+
+
+    <!-- map and categories -->
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div id="worldmap-container">
+                <div id="worldmap"></div>
+                
+            </div>
+        </div>
+
+    </div>
+
+
+<!-- map js -->
+<script src="//cdn.bootcss.com/chroma-js/1.1.1/chroma.min.js"></script>
+<script src="//cdn.bootcss.com/topojson/1.6.19/topojson.min.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="//cdn.bootcss.com/d3/3.5.6/d3.min.js"></script>
+<script src="map.js"></script>
+
+
+    </div>
+    
+
+  </body>
+</html>
+

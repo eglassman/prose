@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Renewable consumption in the European Union</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+			h1 { 
+				font-size: 30px;
+				font-family: helvetica;
+			}
+
+			h2 { 
+				font-size: 20px;
+				font-family: helvetica;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect {
+				fill: #006600;
+			}
+			rect:hover {
+                opacity: 0.67;
+            }
+
+
+		</style>
+	</head>
+	<body>
+		<h1>Which EU country used the most renewable energy?</h1>
+		<h2>In percentage, for 2013</h2>
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 1000)
+						.attr("height", 450);
+
+
+
+			d3.csv("Lesson3GreenEnergy.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.Renewable_energy_consumption, +b.Renewable_energy_consumption);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 15;
+					})
+					.attr("width", function(d) {
+						return d.Renewable_energy_consumption * 10;
+					})
+					.attr("height", 12)
+					.append("title")
+					.text(function(d) {
+						return d.Country + " consumed "+ d.Renewable_energy_consumption + " percent of renewable energy in total in 2013.";
+					});
+
+			});
+
+
+		</script>
+			<p>Source: Eurostat</p>
+	</body>
+</html>
