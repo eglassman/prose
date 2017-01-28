@@ -282,9 +282,6 @@
     <None Include="d3.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="concatenated_index.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="concatenated_index_first50.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
