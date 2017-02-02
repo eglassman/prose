@@ -6,9 +6,11 @@
   });
 </script>
 <style>
+/*specify appearance of labeled code*/
 .data-load-callback { background-color: lightyellow }
 </style>
 
+<!-- make existing labels and their appearance visible -->
 <h5>Program synthesis labels</h5>
 <div class="data-load-callback">data load callback</div>
 
@@ -143,7 +145,7 @@
 						.attr("height", h);
 
 
-
+			<!-- span added around region where program synthesis identified a data load callback -->
 			d3.csv("data.csv", <span class="data-load-callback">function(data) {
 
 				data.sort(function(a, b) {
