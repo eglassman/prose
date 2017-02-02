@@ -1,13 +1,15 @@
 # Defactored Example for Using the Generalized Tutorons Library
 
-The following code, included within your html file, will load the generalized tutorons library and wrap the 10th through the 20th characters in the div #ex0 in a span with class 'testing-labeling'. You're free change #ex0 to any id of your choosing, the arguments 10 and 20 for region start and end to any character indices of your choosing, and you can name the class whatever you want. Some limitations apply. :)
+The following code, included within your html file, will load the generalized tutorons library and wrap the 10th through the 20th characters in the div #ex0 in a span with class 'testing-labeling'. 
+
+You're free change #ex0 to any id of your choosing, the arguments 10 and 20 for region start and end to any character indices of your choosing, and you can name the class whatever you want. Some limitations apply. :)
 
     <script src="/js/tutorons-library.js"></script>
 	<script>
 	  document.addEventListener("DOMContentLoaded", function (event) {
 	    spanAdder = new tutorons.TutoronsConnection(window);
 	    spanAdder.scanDom();
-	    spanAdder.addRegionsD3('#ex0',10,20,'testing-labeling');
+	    spanAdder.addRegions('#ex0',10,20,'testing-labeling');
 	  });
 	</script>
 
@@ -17,9 +19,9 @@ The following code, included within your html file, will load the generalized tu
 
 	</div>
 
-This generalized library I've included is the original tutorons-library (archived here) with the following two additions placed inside, close to the original functions they modified versions of:
+This generalized library I've included is the original tutorons-library (archived here) with body and arguments of the following to functions replaced as follows:
 	
-	TutoronsConnection.prototype.addRegionsD3 = function (id, region_start, region_end, label) {
+	TutoronsConnection.prototype.addRegions = function (id, region_start, region_end, label) {
 	    var parent = this;
 	    //regions.forEach(function (r) {
 	        var range = parent.window.document.createRange();
@@ -28,11 +30,11 @@ This generalized library I've included is the original tutorons-library (archive
 	        var textRanges = parent.htmlWalker.getRangeInText(textNodes, region_start, region_end + 1);
 	        range.setStart(textRanges.start.node, textRanges.start.offset);
 	        range.setEnd(textRanges.end.node, textRanges.end.offset);
-	        parent.markRangeD3(range, label);
+	        parent.markRange(range, label);
 	    //});
 	};
 
-	TutoronsConnection.prototype.markRangeD3 = function (range, label) {
+	TutoronsConnection.prototype.markRange = function (range, label) {
 
 		// fights bloat
 	    if (this.isHighlighted(range)) {

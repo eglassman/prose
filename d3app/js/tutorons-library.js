@@ -36766,20 +36766,7 @@ var TutoronsConnection = function(window, options) {
 
 };
 
-TutoronsConnection.prototype.addRegions = function (tutoron, regions, viewUrl) {
-    var parent = this;
-    regions.forEach(function (r) {
-        var range = parent.window.document.createRange();
-        var node = parent.window.document.querySelector(r.node);
-        var textNodes = parent.htmlWalker.getTextDescendants(node);
-        var textRanges = parent.htmlWalker.getRangeInText(textNodes, r.start_index, r.end_index + 1);
-        range.setStart(textRanges.start.node, textRanges.start.offset);
-        range.setEnd(textRanges.end.node, textRanges.end.offset);
-        parent.markRange(range, r.document, parent.getColor(tutoron), false, r.region_id, r.query_id, viewUrl);
-    });
-};
-
-TutoronsConnection.prototype.addRegionsD3 = function (id, region_start, region_end, label) {
+TutoronsConnection.prototype.addRegions = function (id, region_start, region_end, label) {
     var parent = this;
     //regions.forEach(function (r) {
         var range = parent.window.document.createRange();
@@ -36788,7 +36775,7 @@ TutoronsConnection.prototype.addRegionsD3 = function (id, region_start, region_e
         var textRanges = parent.htmlWalker.getRangeInText(textNodes, region_start, region_end + 1);
         range.setStart(textRanges.start.node, textRanges.start.offset);
         range.setEnd(textRanges.end.node, textRanges.end.offset);
-        parent.markRangeD3(range, label);
+        parent.markRange(range, label);
     //});
 };
 
@@ -36911,7 +36898,7 @@ TutoronsConnection.prototype.markRange = function (range, explanation, color, sh
 
 };
 
-TutoronsConnection.prototype.markRangeD3 = function (range, label) {
+TutoronsConnection.prototype.markRange = function (range, label) {
 
 	// fights bloat
     if (this.isHighlighted(range)) {
