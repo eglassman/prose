@@ -5,7 +5,14 @@
     tutoronsConnection.scanDom();
   });
 </script>
+<style>
+.data-load-callback { background-color: lightyellow }
+</style>
 
+<h5>Program synthesis labels</h5>
+<div class="data-load-callback">data load callback</div>
+
+<h5>Labeled Examples</h5>
 <div class="training-sample-0"><pre><code>
 &lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
@@ -137,7 +144,7 @@
 
 
 
-			d3.csv("data.csv", function(data) {
+			d3.csv("data.csv", <span class="data-load-callback">function(data) {
 
 				data.sort(function(a, b) {
 					return d3.descending(+a.number, +b.number);
@@ -197,7 +204,7 @@
 					.attr("transform", "translate(" + padding[3] + ",0)")
 					.call(yAxis);
 
-			});
+			}</span>);
 
 
 		&lt;/script&gt;
