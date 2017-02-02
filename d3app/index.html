@@ -1,8 +1,9 @@
 <script src="/js/tutorons-library.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function (event) {
-    tutoronsConnection = new tutorons.TutoronsConnection(window);
-    tutoronsConnection.scanDom();
+    spanAdder = new tutorons.TutoronsConnection(window);
+    spanAdder.scanDom();
+    spanAdder.addRegionsD3('#ts0',10,20,'testing-labeling');
   });
 </script>
 <style>
@@ -16,7 +17,7 @@
 
 <h5>Labeled Examples</h5>
 <!-- escaped HTML wrapped in a div with a shared class and unique id, as well as a <pre> and <code> tag, for better rendering -->
-<div class="training-sample" id=0><pre><code>
+<div class="training-sample" id=ts0><pre><code>
 &lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 	&lt;head&gt;
@@ -216,7 +217,7 @@
 
 </code></pre></div>
 
-<div class="training-sample" id=1><pre><code>
+<div class="training-sample" id=ts1><pre><code>
 
 &lt;!doctype html&gt;
 &lt;html lang=en&gt;
@@ -252,7 +253,7 @@
 
 </code></pre></div>
 
-<div class="training-sample" id=2><pre><code>
+<div class="training-sample" id=ts2><pre><code>
 
 &lt;!DOCTYPE html&gt;
 &lt;meta charset="utf-8"&gt;
