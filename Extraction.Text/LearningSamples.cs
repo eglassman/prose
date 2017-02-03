@@ -105,7 +105,8 @@ namespace Extraction.Text
 		{
 			//LearnD3();
 
-			LearnD3UsingMultipleFiles();
+			//LearnD3UsingMultipleFiles();
+			LearnDocType();
 			return;
 
 			LearnRegion();
@@ -217,9 +218,11 @@ namespace Extraction.Text
 
 			//var input2 = RegionLearner.CreateStringRegion(text2); // expect "Cook"
 
+			// Doctype
 			var extractedRegion0 = input0.Slice(0, 15);
 			var extractedRegion1 = input1.Slice(0, 15);
 
+			// html lang setting
 			var extractedRegion0_b = input0.Slice(16, 32);
 			var extractedRegion1_b = input1.Slice(16, 30);
 
@@ -297,6 +300,49 @@ namespace Extraction.Text
 				//{
 				//	Console.WriteLine("encoding lang => \"{0}\"", output_new_b);
 				//}
+			}
+
+			return;
+
+
+		}
+
+		private static void LearnDocType()
+		{
+
+			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
+			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
+
+			var input0 = RegionLearner.CreateStringRegion(text0);
+			var input1 = RegionLearner.CreateStringRegion(text1);
+
+			// Doctype
+			var extractedRegion0 = input0.Slice(0, 15);
+			var extractedRegion1 = input1.Slice(0, 15);
+
+			Console.WriteLine(extractedRegion0.ToString());
+			Console.WriteLine(extractedRegion1.ToString());
+
+			var examples = new[] {
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0), // "Carrie Dodson 100" => "Dodson"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1) // "Leonard Robledo 75" => "Robledo"
+            };
+
+			RegionProgram topRankedProg = RegionLearner.Instance.Learn(examples);
+
+			if (topRankedProg == null)
+			{
+				Console.Error.WriteLine("Error: Learning prog fails!");
+				return;
+			}
+
+			string[] fileEntries = Directory.GetFiles("training_samples");
+			foreach (string fileName in fileEntries)
+			{
+				string text_new = File.ReadAllText(fileName);
+				var input_new = RegionLearner.CreateStringRegion(text_new);
+				StringRegion output_new = topRankedProg.Run(input_new);
+				Console.WriteLine("\"{0}\", {1}", output_new, fileName);
 			}
 
 			return;
