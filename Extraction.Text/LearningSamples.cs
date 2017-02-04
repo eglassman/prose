@@ -478,7 +478,15 @@ namespace Extraction.Text
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg_b.Run(input_new);
-				Console.WriteLine("\"{0}\", {1}", output_new, fileName);
+
+				if (output_new != null)
+				{
+					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				}
+				else
+				{
+					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+				}
 			}
 
 			return;
