@@ -1,0 +1,1227 @@
+"	<head>
+		<meta charset="utf-8">
+		<title>Intermediate D3</title>
+        <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<style type="text/css">
+			
+			body {
+				margin: 0;
+				background-color: #47484B;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			#container {
+				width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: black;
+			}
+
+			h1 {
+				font-size: 24px;
+                font-family : monospace;
+                color: white;
+			}
+
+			p {
+				font-size: 14px;
+                color:#aaaaaa;
+                font-family: monospace;
+			}
+
+			svg {
+				background-color: black;
+			}
+
+			g.bar text {
+				font-size: 11px;
+                font-family: monospace;
+                color: white;
+				font-weight: bold;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: red;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+                fill: #ffffff;
+                font-family: monospace;
+
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #aaaaaa;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;
+                fill:#777777;
+                font-family: monospace;
+                color: white;
+
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+            a {
+                color : white;
+            }
+
+		</style>
+	</head>", training_sample_0.html
+"    <head>
+        <meta charset=utf-8>
+        <title>Simplified Low Barrel</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js"></script>
+    </head>", training_sample_1.html
+"    <meta charset="utf-8">
+    <title>Week Calendar of Life</title>
+    <link rel="stylesheet" href="app.css">
+  </head>", training_sample_10.html
+"<head>
+<meta name="description" content="OpeNER - Opinion targets (Amsterdam)" />
+    <meta charset="utf-8">
+    <title>OpeNER - Opinion targets (Amsterdam)</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src='layout.cloud.js'></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://davidbau.com/encode/seedrandom-min.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>", training_sample_11.html
+"<html>
+  <head>
+    <meta charset="utf-8">  <!--set charset to utf-8-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!--enable mobile views-->
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/normalize.css"> <!--reset css for cross-browser compatibility-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/agency.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+
+    <!-- JS -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <title>D3 Stacked Bar Chart</title>
+    <style>
+      .axis text {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    </style>
+  </head>", training_sample_12.html
+"", training_sample_13.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Sorting Elements</title>
+		
+        <!--<script type="text/javascript" src="../d3.v3.js"></script>-->
+        <script type="text/javascript" src="http://d3js.org./d3.v3.js"></script>
+		<style type="text/css">
+			
+			
+            
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+        
+
+			h1 {
+				font-size: 25px;
+				margin: 0;
+                color:#B5B1B1;
+			}
+            p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+                color:#B5B1B1;
+                
+			}
+
+			a {
+                text-decoration:none;
+                color:rgb(216,83,43);
+            }
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #B5B1B1;;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;			/* Made this text smaller, for testing */
+                
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;}
+		
+
+
+            /* gridline nuevo */
+            .tick.minor line {
+              stroke: #777;
+              stroke-dasharray: 2,2;
+            }
+             /* gridline nuevo */
+
+             /*
+				NOTE that CSS comments look use asterisks and slashes,
+				not <!-- comment --> like HTML comments.
+             */
+
+		</style>
+	</head>", training_sample_14.html
+"<head>
+  <meta charset="utf-8">
+  <title>d3 legend | scrollable legend</title> 
+  <meta name="author" content="Sundar Singh | eesur.com">
+
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/turban/d3.slider/master/d3.slider.css">
+  <link rel="stylesheet" href="main.css">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> 
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
+
+</head>", training_sample_15.html
+"<head>
+<meta charset=utf-8 />
+<title>GeoJSON from live realtime data</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>", training_sample_16.html
+"<head>
+<meta charset="UTF-8">
+<title>Sounds and Boxes</title>
+<link rel="stylesheet" href="soundAndBoxes.css">
+</head>", training_sample_17.html
+"
+<head>
+  <style>
+    .node circle {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .node {
+      font: 10px sans-serif;
+    }
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 1.5px;   
+    }
+      
+    .leaf {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+  </style>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>", training_sample_18.html
+"	<head>
+		<meta charset="utf-8">
+		<title>F1 Driver's Wage between 2014 and 2015</title>
+
+	</head>", training_sample_19.html
+"", training_sample_2.html
+"<head>
+<meta charset="utf-8">
+<title>Gallery</title>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<style>
+
+.thumbs {
+    width:250px;
+    height:150px;
+    display: inline-block;
+    
+        margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+
+
+.images {
+
+max-height:100%; 
+max-width:100%;
+
+
+}
+
+
+
+
+
+ p{
+
+	font-family: "Century Gothic",'Helvetica Neue',Helvetica, sans-serif;
+	font-size: 1.0em;
+}
+
+
+.header1 { 
+
+width: 100%;
+height: 25px;
+background-color: #0099FF;
+line-height: 25px;
+
+
+}
+
+.header2 { 
+
+width: 100%;
+height: 25px;
+background-color: #FF3300;
+line-height: 25px;
+
+
+}
+
+.titles {
+
+	 margin-left: 10px;
+	 color: #fff;
+}
+
+.header3 { 
+
+width: 100%;
+height: 25px;
+background-color: #29293D;
+line-height: 25px;
+
+
+}
+.header4 , .header5{ 
+
+width: 100%;
+height: 25px;
+background-color: #1D561D;
+line-height: 25px;
+
+
+}
+
+
+
+</style>
+</head>", training_sample_20.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style>
+			body { 
+				font-family: helvetica, sans-serif;
+			}
+		</style>
+	</head>", training_sample_21.html
+"  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>", training_sample_22.html
+"<head>
+  <meta charset="utf-8">
+  <title>d3 | reusable heatmap calendar</title> 
+  <meta name="author" content="Sundar Singh | eesur.com">
+  
+  <link rel="stylesheet" href="main.css">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js" charset="utf-8"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+</head>", training_sample_23.html
+"<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <style>
+    .axis path{
+    stroke: black;
+    fill:none;
+    }
+
+    .axis{
+      font-family: calibri;
+      font-size: 8pt;
+    }
+  </style>
+  <script type="text/javascript">
+  function draw(data){
+
+    // Function to parse date
+    var format = d3.time.format("%b %Y");
+
+    function agg_odds(leaves){
+
+      // Returning the mean of all odds for a particular Month-Year
+      return {
+        'MonthYear' : format.parse(leaves[0]["MonthYear"]),
+        'Mean_Odds' : d3.mean(leaves,function(d){return d['Mean_Odds'];}),
+        'Count' : d3.sum(leaves,function(d){return 1;}),
+        'Season' : leaves[0]["Season"],
+        'Country' : leaves[0]["Country"]
+      }
+
+      }
+
+    // Setting Margin, Width and Height
+    var margin = 75,
+    width = 1200 - margin,
+    height = 500 - margin;
+
+    // Appending SVG Element with width and height
+    var svg = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+    // Nesting my dataset by all games from a specific Month+Year and sending to agg_odds function (Returning mean of odds for particular Month-Year)
+    var FranceS2012 = d3.nest()
+    .key(function(d){
+      return d['MonthYear'];
+      })
+    .rollup(agg_odds)
+    .entries(data);
+
+    // Returning max odds from FranceS2012 dataset
+    var max_odds = d3.max(FranceS2012,function(d){
+      return d.values['Mean_Odds'];
+    });
+
+    // Creating fake scale for a specific (August to June) chamnpionship, starting with August of previous year
+    var x_scale = d3.time.scale()
+    .domain([new Date(1900,07,01),new Date(1901,05,01)])
+    .range([margin,width-margin]);
+
+    // Creating y-scale for odds with 1 as lowest minimum value (odds can't be less than 1)
+    var y_scale = d3.scale.linear()
+    .domain([1,max_odds])
+    .range([height-margin,margin]);
+
+    //Creating axis element
+    var x_axis = d3.svg.axis()
+    .scale(x_scale)
+    .tickFormat(d3.time.format('%b'));
+
+    // Creating axis element
+    var y_axis = d3.svg.axis()
+    .scale(y_scale)
+    .orient("left");
+
+    // Drawing x axis
+    d3.select("svg")
+    .append("g")
+    .attr("class","x axis")
+    .attr("transform","translate(0," + (height - margin) + ")")
+    .call(x_axis);
+
+    // Drawing y axis
+    d3.select("svg")
+    .append("g")
+    .attr("class","y axis")
+    .attr("transform","translate(" + margin + ",0)")
+    .call(y_axis);
+
+
+    // Overwriting Scale for specific Season 2012 (Aug 2011 to June 2012)
+    var x_scale = d3.time.scale()
+    .domain([new Date(2011,07,01),new Date(2012,05,01)])
+    .range([margin,width-margin]);
+    
+    // Drawing circles to svg element for the mean of odds for each month of the season (Size being different compared to number of games played in month)
+    d3.select("svg")
+    .selectAll("circle.FranceS2012")
+    .data(FranceS2012).
+    enter().append("circle")
+    .attr("class","FranceS2012")
+    .attr("cx", function(d){
+      return x_scale(d.values["MonthYear"]);})
+    .attr("cy", function(d){return y_scale(d.values["Mean_Odds"]);})
+    .attr("r",function(d){ return d.values["Count"] / 20;})
+    .style("fill","#1b9e77");
+
+    // Debugger to see outcome of drawing
+    debugger;
+
+    // Exiting the circles and removing them, note the class had been created earlier as FranceS2012
+    d3.select("svg")
+    .selectAll("circle.FranceS2012").remove();
+
+    // Debugger to see end result. One circle still present
+    debugger;
+}
+  </script>
+</head>", training_sample_24.html
+"<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<style type="text/css">
+  #line{
+    width: 700px;
+    margin: 20px 0;
+    height: 300px;
+    background: #eee;
+  }
+  button {
+    margin: 20px 0 0 20px;
+  }
+​</style>
+</head>", training_sample_25.html
+"  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }
+      #map { height: 100%; }
+    </style>
+    <link href='http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css' type='text/css' rel='stylesheet' />
+  </head>", training_sample_26.html
+"", training_sample_27.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Consumption of Grapes by Race</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		
+        <style type="text/css">
+			
+			body {
+               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
+            
+            
+
+			svg {
+                background-color: white; }
+            
+            h1{ font-size: 30px;}
+            rect {
+                fill: #794044;}
+            
+            rect:hover {
+                opacity: 0.6;}
+            
+        </style>
+	
+    </head>", training_sample_28.html
+"<html>
+<head><title>Responsiv data vis</title>
+<style>
+
+
+#container{
+  position: absolute; top: 5%; left: 5%; height: 90%; width: 90%;
+}
+svg{
+  border:solid 1px #f00;
+}
+</style></head>", training_sample_29.html
+"
+<!--http://blog.webkid.io/maps-with-leaflet-and-topojson/-->
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EU map: leaflet">
+    <meta name="keywords" content="openness">
+    <meta name="author" content="Michal Škop">
+<!--    <link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">-->
+
+
+
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/superhero/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<!--    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">-->
+
+
+
+    <title>EU map</title>
+    
+    
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css">
+ 
+    
+    
+  </head>", training_sample_3.html
+"  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>", training_sample_30.html
+"", training_sample_31.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>", training_sample_32.html
+"", training_sample_33.html
+"  <head>
+    <meta charset="utf-8">
+    <title>Chiasm Boilerplate</title>
+    
+    <!-- Load the Chiasm stack. -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js"></script>
+        
+    <!-- Make the container fill the page and have a 20px black border. -->
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      #chiasm-container {
+        background-color: white;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+
+      .axis {
+        font: 0.8em sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      /* Custom CSS for axis labels. */
+      .axis-label {
+        text-anchor: middle;
+        font-size: 2em;
+      } 
+    </style>
+  </head>", training_sample_34.html
+"<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>d3 module 3 - oxford</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #fff;
+			}
+
+			svg {
+				background-color: #fff;
+			}
+
+			p {
+				width: 450px;
+				font-family: "Arial", sans-serif;
+			}
+
+			rect {
+				fill: #c9c9c9;
+			}
+
+			rect:hover {
+				fill: #ed5e17;
+			}
+
+		</style>
+	</head>", training_sample_35.html
+"  <head>
+    <meta charset="utf-8">
+
+    <!-- Runs the main program found in main.js. -->
+    <script data-main="main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+
+    <!-- Configure paths for RequireJS modules. -->
+    <script>
+      requirejs.config({
+        paths: {
+          d3: "http://d3js.org/d3.v3.min",
+          jQuery: "//code.jquery.com/jquery-2.1.1.min",
+        }
+      });
+    </script>
+
+    <!-- Include CSS that styles the visualization. -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Line Chart</title>
+  </head>", training_sample_36.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Degrees</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			/*rect:hover {
+				fill: orange;
+			}*/
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+			.text-anchor {
+				font-weight: bold
+			}
+			
+
+		</style>
+	</head>", training_sample_37.html
+"  <head>
+    <meta charset="utf-8">
+
+    <!-- Runs the main program found in main.js. -->
+    <script data-main="main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+
+    <!-- Configure RequireJS paths for third party libraries. -->
+    <script>
+      requirejs.config({
+        paths: {
+          d3: "//d3js.org/d3.v3.min",
+          jquery: "//code.jquery.com/jquery-2.1.1.min",
+          lodash: "//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.4.0/lodash.min",
+          async: "//cdnjs.cloudflare.com/ajax/libs/async/0.9.0/async"
+        }
+      });
+    </script>
+
+    <!-- Include CSS that styles the visualization. -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Bar Chart</title>
+  </head>", training_sample_38.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Cleaning Up</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>", training_sample_39.html
+"", training_sample_4.html
+"  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tryouts D3 Maps</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js"></script>
+  </head>", training_sample_40.html
+"<head>
+    <meta charset="UTF-8">
+    <title>http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428</title>
+    <link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.css">
+    <style>
+        body {
+            background: black;
+            margin:0;
+            padding:0;
+        }
+
+        #histogram rect{
+            -webkit-transition: all 0.1s linear;
+            -moz-transition: all 0.1s linear;
+            -o-transition: all 0.1s linear;
+            transition: all 0.1s linear;
+        }
+
+        #bubble-cloud {
+            background: url("http://dummyimage.com/100x100/111/333?text=sample") 0 0;
+            width: 960px;
+            height: 470px;
+            /*overflow: hidden;*/
+            position: relative;
+            margin:0 auto;
+        }
+        svg {
+            outline: rgba(242,216,28,1);
+            overflow: visible;
+        }
+    </style>
+</head>", training_sample_41.html
+"", training_sample_42.html
+"	<head>
+		<meta charset="utf-8">
+		<title>Renewable consumption in the European Union</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+			h1 { 
+				font-size: 30px;
+				font-family: helvetica;
+			}
+
+			h2 { 
+				font-size: 20px;
+				font-family: helvetica;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect {
+				fill: #006600;
+			}
+			rect:hover {
+                opacity: 0.67;
+            }
+
+
+		</style>
+	</head>", training_sample_43.html
+"<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <title>
+      
+                Chimp Chomp Design | Design and Research Lab based in Surabaya, Indonesia
+                  </title>
+
+        <meta name="description" content="Chimp Chomp is a design and research lab based in Surabaya, Indonesia. Powered by a troupe of hyper monkeys honed in multidisciplinary areas from design, computer science, photography, social science and cultural studies, our clients and collaborators range from independent initiatives to multi-national corporations and organisations.">
+        <meta name="generator" content="Bolt">
+        <link rel="canonical" href="http://chimpchomp.us/">
+       <link rel="stylesheet" href="http://chimpchomp.us//app/extensions/SimpleForms/assets/simpleforms.css" media="screen">
+       <link href='http://fonts.googleapis.com/css?family=Playfair+Display:400,700,400italic' rel='stylesheet' type='text/css'>          
+   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
+   
+        <link rel="stylesheet" href="http://chimpchomp.us/theme/chimpchomp/stylesheets/foundation.css">
+    <link rel="stylesheet" href="http://chimpchomp.us/theme/chimpchomp/stylesheets/app.css">
+
+    <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.foundation.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.foundation.topbar.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.flexslider-min.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.custom.js"></script>
+
+    <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/app.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/swipe.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.min.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.perfectmasonry.js"></script>
+   <script>
+      $(document).ready(function() {  
+         var opt = {
+            layoutMode: 'perfectMasonry',
+            perfectMasonry: {
+               layout: 'vertical',
+               liquid: true,            // Set layout as liquid (default: false)
+               columnWidth: 250,         
+               rowHeight: 250,   
+               minCols: 2,              // Set min col count (default: 1)      
+               maxCols: 5              // Set max col count (default: 9999)               
+            }
+         };
+         
+         // Set default isotope
+         $('#projectContainer').isotope(opt).smartresize();
+         
+         $('#projectFilter a').click(function(){
+           var selector = $(this).attr('data-filter');
+           $('#projectContainer').isotope({ filter: selector });
+           return false;
+         });
+      });  
+   </script>
+   <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+   ga('create', 'UA-GOOGLES-1', 'chimpchomp.us');
+   ga('send', 'pageview');
+
+    </script>
+</head>", training_sample_44.html
+"  <head>
+    <meta charset="utf-8">
+    <title>Map & Globe</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+    <!-- Leaflet.js, a geographic mapping library. -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" /> 
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+
+    <!-- A functional reactive model library. github.com/curran/model -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+
+    <!-- Chiasm core and plugins. github.com/chiasm-project -->
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js"></script>
+
+    <!-- Custom Chiasm plugins for this example. -->
+    <script src="globe.js"></script>
+    <script src="chiasm-leaflet.js"></script>
+
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      /* Make the container fill the page using CSS. */
+      #chiasm-container {
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+    </style>
+
+  </head>", training_sample_45.html
+"  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+      
+    <title>Shotplot</title>
+    
+    <style>
+
+
+h1{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 26px;
+  font-style: bold;
+  
+}
+
+h2{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-style: bold;
+  
+}
+
+p{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;  
+}
+
+body {
+        background-color: #ccc;
+      }
+
+      svg {
+        background-color: white;
+      }
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+    </style>
+    
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+  </head>", training_sample_46.html
+"<head>
+    <title>Polygon libtess fill in WebGL</title>
+    <meta charset="utf-8">
+
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: rgb(14, 21, 30);
+            height: 100%;
+        }
+
+        #map {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: #333;
+        }
+    </style>
+    <!-- vertex shader -->
+    <script id="vshader" type="x-shader/x-vertex">
+        uniform mat4 u_matrix;
+        attribute vec4 a_vertex;
+        attribute float a_pointSize;
+        attribute vec4 a_color;
+        varying vec4 v_color;
+
+        void main() {
+        // Set the size of the point
+        gl_PointSize =  a_pointSize;
+
+        // multiply each vertex by a matrix.
+        gl_Position = u_matrix * a_vertex;
+
+
+        // pass the color to the fragment shader
+        v_color = a_color;
+        }
+    </script>
+    <!-- fragment shader -->
+
+
+
+    <script id="fshader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 v_color;
+
+        void main() {
+
+        // -- squares
+        gl_FragColor = v_color; //vec4(0.8, 0.1,0.1, 0.9); //v_color;
+        
+        gl_FragColor.a = 0.8;
+       }
+
+    </script>
+    <script src="http://www.sumbera.com/gist/js/libtess/libtess.cat.js"></script>
+     <script>
+         
+         /*global libtess */
+
+         var tessy = (function initTesselator() {
+             // function called for each vertex of tesselator output
+             function vertexCallback(data, polyVertArray) {
+                 // console.log(data[0], data[1]);
+                 polyVertArray[polyVertArray.length] = data[0];
+                 polyVertArray[polyVertArray.length] = data[1];
+                 polyVertArray[polyVertArray.length] = currentColor[0];
+                 polyVertArray[polyVertArray.length] = currentColor[1];
+                 polyVertArray[polyVertArray.length] = currentColor[2];
+
+   
+
+             }
+             function begincallback(type) {
+                 if (type !== libtess.primitiveType.GL_TRIANGLES) {
+                     console.log('expected TRIANGLES but got type: ' + type);
+                 }
+             }
+             function errorcallback(errno) {
+                 console.log('error callback');
+                 console.log('error number: ' + errno);
+             }
+             // callback for when segments intersect and must be split
+             function combinecallback(coords, data, weight) {
+                 // console.log('combine callback');
+                 return [coords[0], coords[1], coords[2]];
+             }
+             function edgeCallback(flag) {
+                 // don't really care about the flag, but need no-strip/no-fan behavior
+                 // console.log('edge flag: ' + flag);
+             }
+
+             var tessy = new libtess.GluTesselator();
+             // tessy.gluTessProperty(libtess.gluEnum.GLU_TESS_WINDING_RULE, libtess.windingRule.GLU_TESS_WINDING_POSITIVE);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_VERTEX_DATA, vertexCallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_BEGIN, begincallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_ERROR, errorcallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_COMBINE, combinecallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_EDGE_FLAG, edgeCallback);
+
+             return tessy;
+         })();
+
+
+
+     </script>
+
+</head>", training_sample_47.html
+"  <title>Leaflet Squirrel - Part 5</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <style>
+    #map{ height: 100% }
+  </style>
+</head>", training_sample_48.html
+"", training_sample_49.html
+"", training_sample_5.html
+"", training_sample_6.html
+"  <head>
+    <title>Force-Directed Layout with Convex Hull</title>
+    <script src="http://mbostock.github.com/d3/d3.js?2.9.2"></script>
+ </head>", training_sample_7.html
+"", training_sample_8.html
+"  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+  </style>
+</head>", training_sample_9.html
