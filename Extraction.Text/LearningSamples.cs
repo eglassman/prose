@@ -323,8 +323,8 @@ namespace Extraction.Text
 			var extractedRegion0 = input0.Slice(0, 15);
 			var extractedRegion1 = input1.Slice(0, 15);
 
-			Console.WriteLine(extractedRegion0.ToString());
-			Console.WriteLine(extractedRegion1.ToString());
+			//Console.WriteLine(extractedRegion0.ToString());
+			//Console.WriteLine(extractedRegion1.ToString());
 
 			var examples = new[] {
 				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0), // "Carrie Dodson 100" => "Dodson"
@@ -345,7 +345,14 @@ namespace Extraction.Text
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg.Run(input_new);
-				Console.WriteLine("\"{0}\", {1}", output_new, fileName);
+				if (output_new != null)
+				{
+					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				}
+				else
+				{
+					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+				}
 			}
 
 			return;
@@ -365,8 +372,8 @@ namespace Extraction.Text
 			var extractedRegion0_b = input0.Slice(16, 32);
 			var extractedRegion1_b = input1.Slice(16, 30);
 
-			Console.WriteLine(extractedRegion0_b.ToString());
-			Console.WriteLine(extractedRegion1_b.ToString());
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
 
 			var examples_b = new[] {
 				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
@@ -387,7 +394,14 @@ namespace Extraction.Text
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg_b.Run(input_new);
-				Console.WriteLine("\"{0}\", {1}", output_new, fileName);
+				if (output_new != null)
+				{
+					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				}
+				else
+				{
+					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+				}
 			}
 
 			return;
@@ -407,8 +421,8 @@ namespace Extraction.Text
 			var extractedRegion0_b = input0.Slice(33, 1491);
 			var extractedRegion1_b = input1.Slice(31, 332);
 
-			Console.WriteLine(extractedRegion0_b.ToString());
-			Console.WriteLine(extractedRegion1_b.ToString());
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
 
 			//return;
 
@@ -433,7 +447,14 @@ namespace Extraction.Text
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg_b.Run(input_new);
-				Console.WriteLine("\"{0}\", {1}", output_new, fileName);
+				if (output_new != null)
+				{
+					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				}
+				else
+				{
+					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+				}
 			}
 
 			return;
@@ -453,8 +474,8 @@ namespace Extraction.Text
 			var extractedRegion0_b = input0.Slice(43, 65);
 			var extractedRegion1_b = input1.Slice(50, 70);
 
-			Console.WriteLine(extractedRegion0_b.ToString());
-			Console.WriteLine(extractedRegion1_b.ToString());
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
 
 			//return;
 

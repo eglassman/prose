@@ -1,97 +1,97 @@
-"	<head>
-		<meta charset="utf-8">
-		<title>Intermediate D3</title>
+" <head>
+    <meta charset="utf-8">
+    <title>Intermediate D3</title>
         <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<style type="text/css">
-			
-			body {
-				margin: 0;
-				background-color: #47484B;
-				font-family: Helvetica, Arial, sans-serif;
-			}
+    <style type="text/css">
+      
+      body {
+        margin: 0;
+        background-color: #47484B;
+        font-family: Helvetica, Arial, sans-serif;
+      }
 
-			#container {
-				width: 700px;
-				margin-left: auto;
-				margin-right: auto;
-				margin-top: 50px;
-				padding: 50px;
-				background-color: black;
-			}
+      #container {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 50px;
+        padding: 50px;
+        background-color: black;
+      }
 
-			h1 {
-				font-size: 24px;
+      h1 {
+        font-size: 24px;
                 font-family : monospace;
                 color: white;
-			}
+      }
 
-			p {
-				font-size: 14px;
+      p {
+        font-size: 14px;
                 color:#aaaaaa;
                 font-family: monospace;
-			}
+      }
 
-			svg {
-				background-color: black;
-			}
+      svg {
+        background-color: black;
+      }
 
-			g.bar text {
-				font-size: 11px;
+      g.bar text {
+        font-size: 11px;
                 font-family: monospace;
                 color: white;
-				font-weight: bold;
-				text-anchor: end;
-				opacity: 0;
-			}
+        font-weight: bold;
+        text-anchor: end;
+        opacity: 0;
+      }
 
-			g.bar:hover rect {
-				fill: red;
-			}
+      g.bar:hover rect {
+        fill: red;
+      }
 
-			g.bar:hover text {
-				opacity: 1;
+      g.bar:hover text {
+        opacity: 1;
                 fill: #ffffff;
                 font-family: monospace;
 
-			}
-			
-			.axis path,
-			.axis line {
-				fill: none;
-				stroke: #aaaaaa;
-				shape-rendering: crispEdges;
-			}
-			
-			.axis text {
-				font-family: sans-serif;
-				font-size: 10px;
+      }
+      
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #aaaaaa;
+        shape-rendering: crispEdges;
+      }
+      
+      .axis text {
+        font-family: sans-serif;
+        font-size: 10px;
                 fill:#777777;
                 font-family: monospace;
                 color: white;
 
-			}
+      }
 
-			.y.axis path,
-			.y.axis line {
-				opacity: 0;
-			}
+      .y.axis path,
+      .y.axis line {
+        opacity: 0;
+      }
             
             a {
                 color : white;
             }
 
-		</style>
-	</head>", training_sample_0.html
+    </style>
+  </head>", training_samples/training_sample_0.html, 33, 1491
 "    <head>
         <meta charset=utf-8>
         <title>Simplified Low Barrel</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.min.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js"></script>
-    </head>", training_sample_1.html
+    </head>", training_samples/training_sample_1.html, 31, 332
 "    <meta charset="utf-8">
     <title>Week Calendar of Life</title>
     <link rel="stylesheet" href="app.css">
-  </head>", training_sample_10.html
+  </head>", training_samples/training_sample_10.html, 16, 136
 "<head>
 <meta name="description" content="OpeNER - Opinion targets (Amsterdam)" />
     <meta charset="utf-8">
@@ -101,7 +101,7 @@
     <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="http://davidbau.com/encode/seedrandom-min.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
-</head>", training_sample_11.html
+</head>", training_samples/training_sample_11.html, 23, 506
 "<html>
   <head>
     <meta charset="utf-8">  <!--set charset to utf-8-->
@@ -133,67 +133,67 @@
         shape-rendering: crispEdges;
       }
     </style>
-  </head>", training_sample_12.html
-"", training_sample_13.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Sorting Elements</title>
-		
+  </head>", training_samples/training_sample_12.html, 17, 1254
+"", training_samples/training_sample_13.html, , 
+" <head>
+    <meta charset="utf-8">
+    <title>Sorting Elements</title>
+    
         <!--<script type="text/javascript" src="../d3.v3.js"></script>-->
         <script type="text/javascript" src="http://d3js.org./d3.v3.js"></script>
-		<style type="text/css">
-			
-			
+    <style type="text/css">
+      
+      
             
-			body {
-				background-color: white;
-				font-family: Helvetica, Arial, sans-serif;
-			}
+      body {
+        background-color: white;
+        font-family: Helvetica, Arial, sans-serif;
+      }
 
         
 
-			h1 {
-				font-size: 25px;
-				margin: 0;
+      h1 {
+        font-size: 25px;
+        margin: 0;
                 color:#B5B1B1;
-			}
+      }
             p {
-				font-size: 16px;
-				margin: 10px 0 0 0;
+        font-size: 16px;
+        margin: 10px 0 0 0;
                 color:#B5B1B1;
                 
-			}
+      }
 
-			a {
+      a {
                 text-decoration:none;
                 color:rgb(216,83,43);
             }
 
-			svg {
-				background-color: white;
-			}
+      svg {
+        background-color: white;
+      }
 
-			rect:hover {
-				fill: orange;
-			}
-			
-			.axis path,
-			.axis line {
-				fill: none;
-				stroke: #B5B1B1;;
-				shape-rendering: crispEdges;
-			}
-			
-			.axis text {
-				font-family: sans-serif;
-				font-size: 10px;			/* Made this text smaller, for testing */
+      rect:hover {
+        fill: orange;
+      }
+      
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #B5B1B1;;
+        shape-rendering: crispEdges;
+      }
+      
+      .axis text {
+        font-family: sans-serif;
+        font-size: 10px;      /* Made this text smaller, for testing */
                 
-			}
+      }
 
-			.y.axis path,
-			.y.axis line {
-				opacity: 0;}
-		
+      .y.axis path,
+      .y.axis line {
+        opacity: 0;}
+    
 
 
             /* gridline nuevo */
@@ -204,12 +204,12 @@
              /* gridline nuevo */
 
              /*
-				NOTE that CSS comments look use asterisks and slashes,
-				not <!-- comment --> like HTML comments.
+        NOTE that CSS comments look use asterisks and slashes,
+        not <!-- comment --> like HTML comments.
              */
 
-		</style>
-	</head>", training_sample_14.html
+    </style>
+  </head>", training_samples/training_sample_14.html, 33, 1422
 "<head>
   <meta charset="utf-8">
   <title>d3 legend | scrollable legend</title> 
@@ -220,7 +220,7 @@
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> 
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
 
-</head>", training_sample_15.html
+</head>", training_samples/training_sample_15.html, 33, 512
 "<head>
 <meta charset=utf-8 />
 <title>GeoJSON from live realtime data</title>
@@ -231,12 +231,12 @@
   body { margin:0; padding:0; }
   #map { position:absolute; top:0; bottom:0; width:100%; }
 </style>
-</head>", training_sample_16.html
+</head>", training_samples/training_sample_16.html, 23, 469
 "<head>
 <meta charset="UTF-8">
 <title>Sounds and Boxes</title>
 <link rel="stylesheet" href="soundAndBoxes.css">
-</head>", training_sample_17.html
+</head>", training_samples/training_sample_17.html, 33, 151
 "
 <head>
   <style>
@@ -263,13 +263,13 @@
     }
   </style>
   <script src="http://d3js.org/d3.v3.min.js"></script>
-</head>", training_sample_18.html
-"	<head>
-		<meta charset="utf-8">
-		<title>F1 Driver's Wage between 2014 and 2015</title>
+</head>", training_samples/training_sample_18.html, 39, 455
+" <head>
+    <meta charset="utf-8">
+    <title>F1 Driver's Wage between 2014 and 2015</title>
 
-	</head>", training_sample_19.html
-"", training_sample_2.html
+  </head>", training_samples/training_sample_19.html, 33, 131
+"", training_samples/training_sample_2.html, , 
 "<head>
 <meta charset="utf-8">
 <title>Gallery</title>
@@ -303,8 +303,8 @@ max-width:100%;
 
  p{
 
-	font-family: "Century Gothic",'Helvetica Neue',Helvetica, sans-serif;
-	font-size: 1.0em;
+  font-family: "Century Gothic",'Helvetica Neue',Helvetica, sans-serif;
+  font-size: 1.0em;
 }
 
 
@@ -330,8 +330,8 @@ line-height: 25px;
 
 .titles {
 
-	 margin-left: 10px;
-	 color: #fff;
+   margin-left: 10px;
+   color: #fff;
 }
 
 .header3 { 
@@ -356,24 +356,24 @@ line-height: 25px;
 
 
 </style>
-</head>", training_sample_20.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Loading CSV Data with D3</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-		<style>
-			body { 
-				font-family: helvetica, sans-serif;
-			}
-		</style>
-	</head>", training_sample_21.html
+</head>", training_samples/training_sample_20.html, 23, 912
+" <head>
+    <meta charset="utf-8">
+    <title>Loading CSV Data with D3</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    <style>
+      body { 
+        font-family: helvetica, sans-serif;
+      }
+    </style>
+  </head>", training_samples/training_sample_21.html, 33, 267
 "  <meta charset="utf-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
   <style>
     body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
     svg { width: 100%; height: 100%; }
   </style>
-</head>", training_sample_22.html
+</head>", training_samples/training_sample_22.html, 23, 267
 "<head>
   <meta charset="utf-8">
   <title>d3 | reusable heatmap calendar</title> 
@@ -383,7 +383,7 @@ line-height: 25px;
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js" charset="utf-8"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-</head>", training_sample_23.html
+</head>", training_samples/training_sample_23.html, 33, 497
 "<head>
   <meta charset="utf-8">
   <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -505,7 +505,7 @@ line-height: 25px;
     debugger;
 }
   </script>
-</head>", training_sample_24.html
+</head>", training_samples/training_sample_24.html, 23, 3619
 "<head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <style type="text/css">
@@ -519,7 +519,7 @@ line-height: 25px;
     margin: 20px 0 0 20px;
   }
 ​</style>
-</head>", training_sample_25.html
+</head>", training_samples/training_sample_25.html, 23, 273
 "  <head>
     <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
@@ -527,21 +527,21 @@ line-height: 25px;
       #map { height: 100%; }
     </style>
     <link href='http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css' type='text/css' rel='stylesheet' />
-  </head>", training_sample_26.html
-"", training_sample_27.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Consumption of Grapes by Race</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-		
+  </head>", training_samples/training_sample_26.html, 23, 381
+"", training_samples/training_sample_27.html, , 
+" <head>
+    <meta charset="utf-8">
+    <title>Consumption of Grapes by Race</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    
         <style type="text/css">
-			
-			body {
-               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
+      
+      body {
+                background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
             
             
 
-			svg {
+      svg {
                 background-color: white; }
             
             h1{ font-size: 30px;}
@@ -552,8 +552,8 @@ line-height: 25px;
                 opacity: 0.6;}
             
         </style>
-	
-    </head>", training_sample_28.html
+  
+    </head>", training_samples/training_sample_28.html, 33, 625
 "<html>
 <head><title>Responsiv data vis</title>
 <style>
@@ -565,7 +565,7 @@ line-height: 25px;
 svg{
   border:solid 1px #f00;
 }
-</style></head>", training_sample_29.html
+</style></head>", training_samples/training_sample_29.html, 39, 223
 "
 <!--http://blog.webkid.io/maps-with-leaflet-and-topojson/-->
 
@@ -595,21 +595,21 @@ svg{
  
     
     
-  </head>", training_sample_3.html
+  </head>", training_samples/training_sample_3.html, 33, 1011
 "  <meta charset="utf-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
   <style>
     body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
     svg { width: 100%; height: 100%; }
   </style>
-</head>", training_sample_30.html
-"", training_sample_31.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Loading CSV Data with D3</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-	</head>", training_sample_32.html
-"", training_sample_33.html
+</head>", training_samples/training_sample_30.html, 23, 267
+"", training_samples/training_sample_31.html, , 
+" <head>
+    <meta charset="utf-8">
+    <title>Loading CSV Data with D3</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+  </head>", training_samples/training_sample_32.html, 33, 190
+"", training_samples/training_sample_33.html, , 
 "  <head>
     <meta charset="utf-8">
     <title>Chiasm Boilerplate</title>
@@ -658,37 +658,37 @@ svg{
         font-size: 2em;
       } 
     </style>
-  </head>", training_sample_34.html
+  </head>", training_samples/training_sample_34.html, 23, 1646
 "<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>d3 module 3 - oxford</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-		<style type="text/css">
-			
-			body {
-				background-color: #fff;
-			}
+  <head>
+    <meta charset="utf-8">
+    <title>d3 module 3 - oxford</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    <style type="text/css">
+      
+      body {
+        background-color: #fff;
+      }
 
-			svg {
-				background-color: #fff;
-			}
+      svg {
+        background-color: #fff;
+      }
 
-			p {
-				width: 450px;
-				font-family: "Arial", sans-serif;
-			}
+      p {
+        width: 450px;
+        font-family: "Arial", sans-serif;
+      }
 
-			rect {
-				fill: #c9c9c9;
-			}
+      rect {
+        fill: #c9c9c9;
+      }
 
-			rect:hover {
-				fill: #ed5e17;
-			}
+      rect:hover {
+        fill: #ed5e17;
+      }
 
-		</style>
-	</head>", training_sample_35.html
+    </style>
+  </head>", training_samples/training_sample_35.html, 17, 460
 "  <head>
     <meta charset="utf-8">
 
@@ -709,59 +709,59 @@ svg{
     <link rel="stylesheet" href="styles.css">
 
     <title>Line Chart</title>
-  </head>", training_sample_36.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Degrees</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-		<style type="text/css">
-			
-			body {
-				background-color: white;
-				font-family: Helvetica, Arial, sans-serif;
-			}
+  </head>", training_samples/training_sample_36.html, 23, 607
+" <head>
+    <meta charset="utf-8">
+    <title>Degrees</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
+      
+      body {
+        background-color: white;
+        font-family: Helvetica, Arial, sans-serif;
+      }
 
-			h1 {
-				font-size: 24px;
-				margin: 0;
-			}
+      h1 {
+        font-size: 24px;
+        margin: 0;
+      }
 
-			p {
-				font-size: 14px;
-				margin: 10px 0 0 0;
-			}
+      p {
+        font-size: 14px;
+        margin: 10px 0 0 0;
+      }
 
-			svg {
-				background-color: white;
-			}
+      svg {
+        background-color: white;
+      }
 
-			/*rect:hover {
-				fill: orange;
-			}*/
-			
-			.axis path,
-			.axis line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-			
-			.axis text {
-				font-family: sans-serif;
-				font-size: 11px;
-			}
+      /*rect:hover {
+        fill: orange;
+      }*/
+      
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+      
+      .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+      }
 
-			.y.axis path,
-			.y.axis line {
-				opacity: 0;
-			}
-			.text-anchor {
-				font-weight: bold
-			}
-			
+      .y.axis path,
+      .y.axis line {
+        opacity: 0;
+      }
+      .text-anchor {
+        font-weight: bold
+      }
+      
 
-		</style>
-	</head>", training_sample_37.html
+    </style>
+  </head>", training_samples/training_sample_37.html, 33, 795
 "  <head>
     <meta charset="utf-8">
 
@@ -784,56 +784,56 @@ svg{
     <link rel="stylesheet" href="styles.css">
 
     <title>Bar Chart</title>
-  </head>", training_sample_38.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Cleaning Up</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-		<style type="text/css">
-			
-			body {
-				background-color: white;
-				font-family: Helvetica, Arial, sans-serif;
-			}
+  </head>", training_samples/training_sample_38.html, 23, 766
+" <head>
+    <meta charset="utf-8">
+    <title>Cleaning Up</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    <style type="text/css">
+      
+      body {
+        background-color: white;
+        font-family: Helvetica, Arial, sans-serif;
+      }
 
-			h1 {
-				font-size: 24px;
-				margin: 0;
-			}
+      h1 {
+        font-size: 24px;
+        margin: 0;
+      }
 
-			p {
-				font-size: 14px;
-				margin: 10px 0 0 0;
-			}
+      p {
+        font-size: 14px;
+        margin: 10px 0 0 0;
+      }
 
-			svg {
-				background-color: white;
-			}
+      svg {
+        background-color: white;
+      }
 
-			rect:hover {
-				fill: orange;
-			}
-			
-			.axis path,
-			.axis line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-			
-			.axis text {
-				font-family: sans-serif;
-				font-size: 11px;
-			}
+      rect:hover {
+        fill: orange;
+      }
+      
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+      }
+      
+      .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+      }
 
-			.y.axis path,
-			.y.axis line {
-				opacity: 0;
-			}
+      .y.axis path,
+      .y.axis line {
+        opacity: 0;
+      }
 
-		</style>
-	</head>", training_sample_39.html
-"", training_sample_4.html
+    </style>
+  </head>", training_samples/training_sample_39.html, 33, 742
+"", training_samples/training_sample_4.html, , 
 "  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -844,7 +844,7 @@ svg{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js"></script>
-  </head>", training_sample_40.html
+  </head>", training_samples/training_sample_40.html, 33, 671
 "<head>
     <meta charset="UTF-8">
     <title>http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428</title>
@@ -876,41 +876,41 @@ svg{
             overflow: visible;
         }
     </style>
-</head>", training_sample_41.html
-"", training_sample_42.html
-"	<head>
-		<meta charset="utf-8">
-		<title>Renewable consumption in the European Union</title>
-		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
-		<style type="text/css">
-			
-			body {
-				background-color: white;
-			}
-			h1 { 
-				font-size: 30px;
-				font-family: helvetica;
-			}
+</head>", training_samples/training_sample_41.html, 33, 1023
+"", training_samples/training_sample_42.html, , 
+" <head>
+    <meta charset="utf-8">
+    <title>Renewable consumption in the European Union</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    <style type="text/css">
+      
+      body {
+        background-color: white;
+      }
+      h1 { 
+        font-size: 30px;
+        font-family: helvetica;
+      }
 
-			h2 { 
-				font-size: 20px;
-				font-family: helvetica;
-			}
+      h2 { 
+        font-size: 20px;
+        font-family: helvetica;
+      }
 
-			svg {
-				background-color: white;
-			}
+      svg {
+        background-color: white;
+      }
 
-			rect {
-				fill: #006600;
-			}
-			rect:hover {
+      rect {
+        fill: #006600;
+      }
+      rect:hover {
                 opacity: 0.67;
             }
 
 
-		</style>
-	</head>", training_sample_43.html
+    </style>
+  </head>", training_samples/training_sample_43.html, 33, 563
 "<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
@@ -977,7 +977,7 @@ svg{
    ga('send', 'pageview');
 
     </script>
-</head>", training_sample_44.html
+</head>", training_samples/training_sample_44.html, 99, 3849
 "  <head>
     <meta charset="utf-8">
     <title>Map & Globe</title>
@@ -1019,7 +1019,7 @@ svg{
       }
     </style>
 
-  </head>", training_sample_45.html
+  </head>", training_samples/training_sample_45.html, 23, 1623
 "  <meta charset="utf-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
@@ -1092,7 +1092,7 @@ body {
     
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
-  </head>", training_sample_46.html
+  </head>", training_samples/training_sample_46.html, 23, 1256
 "<head>
     <title>Polygon libtess fill in WebGL</title>
     <meta charset="utf-8">
@@ -1202,7 +1202,7 @@ body {
 
      </script>
 
-</head>", training_sample_47.html
+</head>", training_samples/training_sample_47.html, 23, 3562
 "  <title>Leaflet Squirrel - Part 5</title>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
@@ -1210,18 +1210,18 @@ body {
   <style>
     #map{ height: 100% }
   </style>
-</head>", training_sample_48.html
-"", training_sample_49.html
-"", training_sample_5.html
-"", training_sample_6.html
+</head>", training_samples/training_sample_48.html, 14, 362
+"", training_samples/training_sample_49.html, , 
+"", training_samples/training_sample_5.html, , 
+"", training_samples/training_sample_6.html, , 
 "  <head>
     <title>Force-Directed Layout with Convex Hull</title>
     <script src="http://mbostock.github.com/d3/d3.js?2.9.2"></script>
- </head>", training_sample_7.html
-"", training_sample_8.html
+ </head>", training_samples/training_sample_7.html, 23, 168
+"", training_samples/training_sample_8.html, , 
 "  <meta charset="utf-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
   <style>
     body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
   </style>
-</head>", training_sample_9.html
+</head>", training_samples/training_sample_9.html, 23, 228
