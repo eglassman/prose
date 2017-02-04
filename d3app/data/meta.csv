@@ -1,3 +1,4 @@
+extracted, source, charStart, charEnd
 "<meta charset="utf-8">", training_samples/training_sample_0.html, 43, 65
 "<meta charset=utf-8>", training_samples/training_sample_1.html, 50, 70
 "<meta charset="utf-8">", training_samples/training_sample_10.html, 20, 42
