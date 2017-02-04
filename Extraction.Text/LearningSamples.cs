@@ -106,10 +106,14 @@ namespace Extraction.Text
 			//LearnD3();
 
 			//LearnD3UsingMultipleFiles();
-			LearnDocType();
-			LearnHTMLlang();
-			LearnHead();
-			LearnMeta();
+
+
+			//LearnDocType();
+			//LearnHTMLlang();
+			//LearnHead();
+			//LearnMeta();
+			//LearnTitle();
+			LearnScriptInclude();
 			return;
 
 			LearnRegion();
@@ -482,6 +486,118 @@ namespace Extraction.Text
 			var examples_b = new[] {
 				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
 				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b) // "Leonard Robledo 75" => "Robledo"
+            };
+
+
+			RegionProgram topRankedProg_b = RegionLearner.Instance.Learn(examples_b);
+
+			if (topRankedProg_b == null)
+			{
+				Console.Error.WriteLine("Error: Learning prog fails!");
+				return;
+			}
+
+			string[] fileEntries = Directory.GetFiles("training_samples");
+			foreach (string fileName in fileEntries)
+			{
+				string text_new = File.ReadAllText(fileName);
+				var input_new = RegionLearner.CreateStringRegion(text_new);
+				StringRegion output_new = topRankedProg_b.Run(input_new);
+
+				if (output_new != null)
+				{
+					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				}
+				else
+				{
+					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+				}
+			}
+
+			return;
+
+
+		}
+
+		private static void LearnTitle()
+		{
+
+			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
+			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
+
+			var input0 = RegionLearner.CreateStringRegion(text0);
+			var input1 = RegionLearner.CreateStringRegion(text1);
+
+			var extractedRegion0_b = input0.Slice(68, 98);
+			var extractedRegion1_b = input1.Slice(79, 115);
+
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
+
+			//return;
+
+			var examples_b = new[] {
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b) // "Leonard Robledo 75" => "Robledo"
+            };
+
+
+			RegionProgram topRankedProg_b = RegionLearner.Instance.Learn(examples_b);
+
+			if (topRankedProg_b == null)
+			{
+				Console.Error.WriteLine("Error: Learning prog fails!");
+				return;
+			}
+
+			string[] fileEntries = Directory.GetFiles("training_samples");
+			foreach (string fileName in fileEntries)
+			{
+				string text_new = File.ReadAllText(fileName);
+				var input_new = RegionLearner.CreateStringRegion(text_new);
+				StringRegion output_new = topRankedProg_b.Run(input_new);
+
+				if (output_new != null)
+				{
+					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				}
+				else
+				{
+					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+				}
+			}
+
+			return;
+
+
+		}
+
+		private static void LearnScriptInclude()
+		{
+
+			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
+			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
+			string text2 = File.ReadAllText("training_samples/training_sample_2.html");
+
+			var input0 = RegionLearner.CreateStringRegion(text0);
+			var input1 = RegionLearner.CreateStringRegion(text1);
+			var input2 = RegionLearner.CreateStringRegion(text2);
+
+			var extractedRegion0_b = input0.Slice(107, 170);
+			var extractedRegion1_b = input1.Slice(228, 305);
+			var extractedRegion2_b = input2.Slice(225, 293);
+			var extractedRegion3_b = input2.Slice(294, 366);
+
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
+
+			//return;
+
+			var examples_b = new[] {
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b), // "Leonard Robledo 75" => "Robledo"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion2_b), // "Leonard Robledo 75" => "Robledo"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion3_b) // "Leonard Robledo 75" => "Robledo"
             };
 
 
