@@ -103,48 +103,61 @@ namespace Extraction.Text
 
 		private static void Main(string[] args)
 		{
-			//LearnD3();
+			var runD3scripts = true; //false;
 
-			//LearnD3UsingMultipleFiles();
+			if (runD3scripts)
+			{
+				Console.WriteLine("running d3 scripts");
+
+				//LearnD3();
+
+				//LearnD3UsingMultipleFiles();
 
 
-			//LearnDocType();
-			//LearnHTMLlang();
-			//LearnHead();
-			//LearnMeta();
-			//LearnTitle();
-			LearnScriptInclude();
-			return;
+				LearnDocType();
+				LearnHTMLlang();
+				LearnHead();
+				LearnMeta();
+				LearnTitle();
+				LearnScriptInclude();
+				return;
+			}
+			else
+			{
+				Console.WriteLine("running example scripts");
+				//LearnRegion();
 
-			LearnRegion();
+				//LearnRegionUsingMultipleFiles();
 
-			LearnRegionUsingMultipleFiles();
+				//LearnRegionWithNegativeExamples();
 
-			LearnRegionWithNegativeExamples();
+				//LearnRegionWithAdditionalReferences();
 
-			LearnRegionWithAdditionalReferences();
+				//LearnRegionReferencingParent();
 
-			LearnRegionReferencingParent();
+				//LearnRegionReferencingPrecedingSibling();
 
-			LearnRegionReferencingPrecedingSibling();
+				//LearnRegionReferencingSucceedingSibling();
 
-			LearnRegionReferencingSucceedingSibling();
+				//LearnTop3RegionPrograms();
 
-			LearnTop3RegionPrograms();
+				//LearnAllRegionPrograms();
 
-			LearnAllRegionPrograms();
+				//SerializeProgram();
 
-			SerializeProgram();
+				// Learning sequence is similar to learning region. 
+				// We only illustrate some API usages. Other sequence learning APIs are similar to their region APIs counterpart.
+				// Note: we need to give positive examples continuously. 
+				// For instance, suppose we learn a list of {A, B, C, D, E}.
+				// {A, B} is a valid set of examples, while {A, C} is not.
+				// In case of { A, C}, Extraction.Text assumes that B is a negative example. 
+				// This helps our learning converge more quickly.
+				LearnSequence();
+				//LearnSequenceReferencingSibling();
+				//LearnSequenceReferencingSibling_Modified();
+				return;
+			}
 
-			// Learning sequence is similar to learning region. 
-			// We only illustrate some API usages. Other sequence learning APIs are similar to their region APIs counterpart.
-			// Note: we need to give positive examples continuously. 
-			// For instance, suppose we learn a list of {A, B, C, D, E}.
-			// {A, B} is a valid set of examples, while {A, C} is not.
-			// In case of { A, C}, Extraction.Text assumes that B is a negative example. 
-			// This helps our learning converge more quickly.
-			LearnSequence();
-			LearnSequenceReferencingSibling();
 		}
 
 		/// <summary>
@@ -586,18 +599,18 @@ namespace Extraction.Text
 			var extractedRegion0_b = input0.Slice(107, 170);
 			var extractedRegion1_b = input1.Slice(228, 305);
 			var extractedRegion2_b = input2.Slice(225, 293);
-			var extractedRegion3_b = input2.Slice(294, 366);
+			//var extractedRegion3_b = input2.Slice(294, 366);
 
-			//Console.WriteLine(extractedRegion0_b.ToString());
-			//Console.WriteLine(extractedRegion1_b.ToString());
+			Console.WriteLine(extractedRegion0_b.ToString());
+			Console.WriteLine(extractedRegion1_b.ToString());
+			Console.WriteLine(extractedRegion2_b.ToString());
 
 			//return;
 
 			var examples_b = new[] {
 				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
 				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b), // "Leonard Robledo 75" => "Robledo"
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion2_b), // "Leonard Robledo 75" => "Robledo"
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion3_b) // "Leonard Robledo 75" => "Robledo"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion2_b) // "Leonard Robledo 75" => "Robledo"
             };
 
 
@@ -901,6 +914,10 @@ namespace Extraction.Text
 					"Canada\nConcetta Beck 350\nNicholas Sayers 90\nFrancis Terrill 2430\n" +
 					"Great Britain\nNettie Pope 50\nMack Beeson 1070");
 			// Suppose we want to extract all last names from the input string.
+
+			Console.WriteLine("input");
+			Console.WriteLine(input);
+
 			var examples = new[] {
 				new MemberPrefix<StringRegion, StringRegion>(input, new[] {
 					input.Slice(14, 20), // input => "Carrie"
@@ -950,13 +967,76 @@ namespace Extraction.Text
 				return;
 			}
 
+			Console.WriteLine("printing output");
+
 			foreach (var a in areas
 				.SelectMany(area => topRankedProg.Run(area)
 													.Select(output => new { Input = area, Output = output })))
 			{
+				Console.WriteLine("next a");
+				Console.WriteLine(a.ToString());
 				var output = a.Output != null ? a.Output.Value : "null";
-				Console.WriteLine("printing results of LearnSequenceReferencingSibling");
 				Console.WriteLine("\"{0}\" => \"{1}\"", a.Input, output);
+			}
+		}
+
+		/// <summary>
+		///     Learns a program to extract a sequence of regions from a file.
+		/// </summary>
+		private static void LearnSequenceReferencingSibling_Modified()
+		{
+			var input =
+				SequenceLearner.CreateStringRegion(
+					"United States\nCarrie Dodson 100\nLeonard Robledo 75\nMargaret Cook 320\n" +
+					"Canada\nConcetta Beck 350\nNicholas Sayers 90\nFrancis Terrill 2430\n" +
+					"Great Britain\nNettie Pope 50\nMack Beeson 1070");
+			StringRegion[] areas = { input.Slice(0, 13), input.Slice(69, 75), input.Slice(134, 147) };
+
+			Console.WriteLine("input");
+			Console.WriteLine(input);
+
+			Console.WriteLine("areas");
+			Console.WriteLine("count");
+			Console.WriteLine(areas.Count());
+			foreach (var a in areas)
+			{
+				Console.WriteLine("next area");
+				Console.WriteLine(a);
+			}
+
+			// Suppose we want to extract all last names from the input string.
+			var examples = new[] {
+				new MemberPrefix<StringRegion, StringRegion>(input, new[] {
+					input.Slice(14, 20), // input => "Carrie"
+                    input.Slice(32, 39), // input => "Leonard"
+                })
+			};
+
+			Console.WriteLine("examples");
+			Console.WriteLine(examples.First());
+
+			SequenceProgram topRankedProg = SequenceLearner.Instance.Learn(examples);
+
+			//Console.WriteLine("top ranked program, described");
+			//Console.WriteLine(topRankedProg.Describe());
+			Console.WriteLine("top ranked program, to string");
+			Console.WriteLine(topRankedProg.ToString());
+
+			if (topRankedProg == null)
+			{
+				Console.Error.WriteLine("Error: Learning fails!");
+				return;
+			}
+		
+
+			foreach (var a in topRankedProg.Run(areas))
+			{
+				Console.WriteLine("a");
+				Console.WriteLine(a);
+				Console.WriteLine(a);
+				//var output = a.Output != null ? a.Output.Value : "null";
+				//Console.WriteLine("printing results of LearnSequenceReferencingSibling");
+				//Console.WriteLine("\"{0}\" => \"{1}\"", a.Input, output);
 			}
 		}
 	}
