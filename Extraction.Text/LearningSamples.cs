@@ -114,13 +114,7 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-					Console.WriteLine("},");
-				}
-				else
-				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "doctype");
 					Console.WriteLine("},");
 				}
 			}
@@ -167,13 +161,7 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-					Console.WriteLine("},");
-				}
-				else
-				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "htmllang");
 					Console.WriteLine("},");
 				}
 			}
@@ -224,13 +212,7 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-					Console.WriteLine("},");
-				}
-				else
-				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "head");
 					Console.WriteLine("},");
 				}
 			}
@@ -281,13 +263,7 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-					Console.WriteLine("},");
-				}
-				else
-				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "style");
 					Console.WriteLine("},");
 				}
 			}
@@ -338,13 +314,7 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-					Console.WriteLine("},");
-				}
-				else
-				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "meta");
 					Console.WriteLine("},");
 				}
 			}
@@ -395,13 +365,7 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-					Console.WriteLine("},");
-				}
-				else
-				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "title");
 					Console.WriteLine("},");
 				}
 			}
@@ -479,13 +443,7 @@ namespace Extraction.Text
 					if (output_new != null)
 					{
 						Console.WriteLine("{");
-						Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
-						Console.WriteLine("},");
-					}
-					else
-					{
-						Console.WriteLine("{");
-						Console.WriteLine(" \"filename\": \"{1}\" ", output_new, fileName);
+						Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "scriptinclude");
 						Console.WriteLine("},");
 					}
 				}

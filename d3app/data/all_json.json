@@ -1,4 +1,4 @@
-[{
+var data = [{
  "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 0, "charEnd": 15 
 },
 {
@@ -3316,4 +3316,4 @@ body {
 },
 {
  "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 50, "charEnd": 131 
-}]
+}];

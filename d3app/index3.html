@@ -1,0 +1,393 @@
+<script src="/js/tutorons-library.js"></script>
+<script type="text/javascript" src="data/data.json"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function (event) {
+    spanAdder = new tutorons.TutoronsConnection(window);
+    spanAdder.scanDom();
+    data.forEach(function(s){
+    	var ts_num = s["filename"].split(".")[0].split("training_samples/training_sample_")[1];
+    	console.log('#ts'+ts_num);
+    	spanAdder.addRegionsD3('#ts'+ts_num,s["charStart"],s["charEnd"],'label');
+    });
+    //spanAdder.addRegionsD3('#ts0',10,20,'testing-labeling');
+  });
+</script>
+<style>
+/*specify appearance of labeled code*/
+.data-load-callback { background-color: lightyellow }
+</style>
+
+<!-- make existing labels and their appearance visible -->
+<h5>Program synthesis labels</h5>
+<div class="data-load-callback">data load callback</div>
+
+<h5>Labeled Examples</h5>
+<!-- escaped HTML wrapped in a div with a shared class and unique id, as well as a <pre> and <code> tag, for better rendering -->
+<div class="training-sample" id=ts0><pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+	&lt;head&gt;
+		&lt;meta charset="utf-8"&gt;
+		&lt;title&gt;Intermediate D3&lt;/title&gt;
+        &lt;script src="//d3js.org/d3.v3.min.js" charset="utf-8"&gt;&lt;/script&gt;
+		&lt;style type="text/css"&gt;
+			
+			body {
+				margin: 0;
+				background-color: #47484B;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			#container {
+				width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: black;
+			}
+
+			h1 {
+				font-size: 24px;
+                font-family : monospace;
+                color: white;
+			}
+
+			p {
+				font-size: 14px;
+                color:#aaaaaa;
+                font-family: monospace;
+			}
+
+			svg {
+				background-color: black;
+			}
+
+			g.bar text {
+				font-size: 11px;
+                font-family: monospace;
+                color: white;
+				font-weight: bold;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: red;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+                fill: #ffffff;
+                font-family: monospace;
+
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #aaaaaa;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;
+                fill:#777777;
+                font-family: monospace;
+                color: white;
+
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+            a {
+                color : white;
+            }
+
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+
+		&lt;div id="container"&gt;
+
+			&lt;h1&gt;20 Deadliest Countries about killed Journalists&lt;/h1&gt;
+
+			&lt;p&gt;The Number of Killed Journalists, Source : &lt;a href="https://cpj.org/killed/"&gt;CPJ&lt;/a&gt;&lt;/p&gt;
+			
+		&lt;/div&gt;
+
+		&lt;script type="text/javascript"&gt;		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 30, 120 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+			//Now SVG goes into #container instead of body
+			var svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+			<!-- span added around region where program synthesis identified a data load callback -->
+			d3.csv("data.csv", <span class="data-load-callback">function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.number, +b.number);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.number;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.country; } ));
+
+				//Bind data to groups (not bars directly)
+				var groups = svg.selectAll("g")
+								.data(data)
+								.enter()
+								.append("g")
+								.attr("class", "bar");
+
+				//Add a rect to each group
+				var rects = groups.append("rect")
+					.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.country);
+					})
+					.attr("width", 0)
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#991B00");
+
+				//Add a text element to each group
+				groups.append("text")
+					.attr("x", function(d) {
+						return padding[3] + widthScale(d.number) - 3;
+					})
+					.attr("y", function(d) {
+						return heightScale(d.country) + 11;
+					})
+					.text(function(d) {
+						return d.number;
+					});
+
+				rects.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(1000)
+					.attr("width", function(d) {
+						return widthScale(d.number);
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			}</span>);
+
+
+		&lt;/script&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre></div>
+
+<div class="training-sample" id=ts1><pre><code>
+
+&lt;!doctype html&gt;
+&lt;html lang=en&gt;
+    &lt;head&gt;
+        &lt;meta charset=utf-8&gt;
+        &lt;title&gt;Simplified Low Barrel&lt;/title&gt;
+        &lt;link href="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.min.css" rel="stylesheet" /&gt;
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+&lt;body&gt;
+
+    &lt;style&gt;@import "index.css";&lt;/style&gt;
+
+    &lt;svg id="low-barrel"&gt;
+      &lt;g layout-style="flex: 0.65; flexDirection: row"&gt;
+        &lt;svg class="main" layout-style="flex: 1"&gt;&lt;/svg&gt;
+        &lt;g layout-style="width: 20; justifyContent: center"&gt;
+          &lt;g layout-style="height: 0"&gt;
+            &lt;text text-anchor="middle" transform="rotate(90)"&gt;Temperature&lt;/text&gt;
+          &lt;/g&gt;
+        &lt;/g&gt;
+      &lt;/g&gt;
+      &lt;g layout-style="flex: 0.15; flexDirection: row"&gt;
+        &lt;svg class="navigator" layout-style="flex: 1"&gt;&lt;/svg&gt;
+        &lt;text layout-style="width: 20"&gt;&lt;/text&gt;
+      &lt;/g&gt;
+    &lt;/svg&gt;
+
+    &lt;script src="index.js"&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre></div>
+
+<div class="training-sample" id=ts2><pre><code>
+
+&lt;!DOCTYPE html&gt;
+&lt;meta charset="utf-8"&gt;
+
+&lt;style&gt;
+body{
+	background-color: rgb(38, 38, 38);
+}
+
+path{
+	stroke: white;
+	stroke-width: 6px;
+	fill: none;
+}
+
+circle{
+	fill: white;
+}
+
+rect{
+	fill: orange;
+}
+
+&lt;/style&gt;
+
+&lt;body&gt;&lt;/body&gt;
+
+&lt;script src="/1wheel/raw/67b47524ed8ed829d021/d3-3.5.5.js"&gt;&lt;/script&gt;
+&lt;script src="/1wheel/raw/67b47524ed8ed829d021/lodash-3.8.0.js"&gt;&lt;/script&gt;
+&lt;script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-jetpack.js'&gt;&lt;/script&gt;
+&lt;script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-starterkit.js'&gt;&lt;/script&gt;
+
+
+&lt;script&gt;
+
+var s = 50,
+		width  = 960 - s*2
+		height = 500 - s*2
+
+var svg = d3.select('body')
+	.append('svg')
+		.attr({height: height + s*2, width: width + s*2})
+	.append('g')
+		.translate([s, s])
+
+
+var grid = []
+d3.range(0, width, s).map(function(x, i){
+	d3.range(0, height, s).map(function(y, j){
+		grid.push({
+			pos: [x + (j % 2)*s/2, y*.9]
+		})
+	})
+})
+
+
+var gridGs = svg.dataAppend(grid, 'g').translate(ƒ('pos'))
+
+gridGs.append('circle')
+		.attr('r',3)
+
+var r = s/2/Math.sqrt(3)/2
+var triMidPoints = [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+		.map(function(d){ return d + Math.PI/2 })
+		.map(function(θ){
+			return {
+				pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+				θ: θ, 
+				deg: θ*180/Math.PI
+			}
+		})
+
+var mCircles = gridGs.dataAppend(triMidPoints, 'circle.m')
+		.attr('r', 3)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.θ + ')' })
+
+
+var rectW = 3, rectH = s/2 - 3
+var rects = gridGs.dataAppend(triMidPoints, 'rect')
+		.attr('width', rectW)
+		.attr('height', rectH)
+		.attr('x', +rectW/200)
+		.attr('y', -rectH/2)
+		.attr({rx: 10, ry: 10})
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+
+
+
+var r = s/2/Math.sqrt(3)*3/2
+var triMidPointsFar = [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+		.map(function(d){ return d + Math.PI/2*1 })
+		.map(function(θ){
+			return {
+				pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+				θ: θ, 
+				deg: θ*180/Math.PI
+			}
+		})
+
+rects.data(triMidPointsFar)
+rects.transition().delay(500).duration(1500)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+mCircles.data(triMidPointsFar)
+mCircles.transition().delay(500).duration(1500)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+
+
+function genMidPoints(rFactor, angle){
+	var r = s/2/Math.sqrt(3)*rFactor
+	return [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+			.map(function(d){ return d + Math.PI/2*1 })
+			.map(function(θ){
+				return {
+					pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+					θ: θ, 
+					deg: θ*180/Math.PI
+				}
+			})
+}
+
+
+&lt;/script&gt;
+
+</code></pre></div>
