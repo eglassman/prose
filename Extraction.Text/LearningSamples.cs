@@ -597,24 +597,44 @@ namespace Extraction.Text
 			var input2 = RegionLearner.CreateStringRegion(text2);
 
 			var extractedRegion0_b = input0.Slice(107, 170);
-			var extractedRegion1_b = input1.Slice(228, 305);
+			var extractedRegion1_b = input1.Slice(228, 320);
 			var extractedRegion2_b = input2.Slice(225, 293);
-			//var extractedRegion3_b = input2.Slice(294, 366);
+			var extractedRegion3_b = input2.Slice(294, 366);
+			var extractedRegion4_b = input2.Slice(367, 437);
+			var extractedRegion5_b = input2.Slice(438, 511);
 
 			Console.WriteLine(extractedRegion0_b.ToString());
 			Console.WriteLine(extractedRegion1_b.ToString());
 			Console.WriteLine(extractedRegion2_b.ToString());
+			Console.WriteLine(extractedRegion3_b.ToString());
+			Console.WriteLine(extractedRegion4_b.ToString());
+			Console.WriteLine(extractedRegion5_b.ToString());
 
 			//return;
 
-			var examples_b = new[] {
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b), // "Leonard Robledo 75" => "Robledo"
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion2_b) // "Leonard Robledo 75" => "Robledo"
-            };
+			//var examples_b = new[] {
+			//	new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
+			//	new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b), // "Leonard Robledo 75" => "Robledo"
+			//	new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, extractedRegion2_b) // "Leonard Robledo 75" => "Robledo"
+			//         };
+
+			var spec = new[] {
+				new MemberPrefix<StringRegion, StringRegion>(input0, new[] {
+					extractedRegion0_b
+				}),
+				new MemberPrefix<StringRegion, StringRegion>(input1, new[] {
+					extractedRegion1_b
+				}),
+				new MemberPrefix<StringRegion, StringRegion>(input2, new[] {
+					extractedRegion2_b,
+					extractedRegion3_b,
+					extractedRegion4_b,
+					extractedRegion5_b
+				})
+			};
 
 
-			RegionProgram topRankedProg_b = RegionLearner.Instance.Learn(examples_b);
+			var topRankedProg_b = SequenceLearner.Instance.Learn(spec);
 
 			if (topRankedProg_b == null)
 			{
@@ -627,16 +647,19 @@ namespace Extraction.Text
 			{
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
-				StringRegion output_new = topRankedProg_b.Run(input_new);
+				var all_output_new = topRankedProg_b.Run(input_new);
 
-				if (output_new != null)
-				{
-					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+				foreach (var output_new in all_output_new) {
+					if (output_new != null)
+					{
+						Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+					}
+					else
+					{
+						Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+					}
 				}
-				else
-				{
-					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
-				}
+
 			}
 
 			return;
