@@ -17,90 +17,7 @@ namespace Extraction.Text
 	/// </summary>
 	internal static class LearningSamples
 	{
-		static Tuple<uint, uint> FindNextDocTypeExample(ref string text)
-		{
-			int start = text.IndexOf("{{{");
-			text = text.Remove(start, 3);
-			int end = text.IndexOf("}}}");
-			text = text.Remove(end, 3);
-			return Tuple.Create((uint)start, (uint)end);
-		}
-		static Tuple<uint, uint> FindNextBodyExample(ref string text)
-		{
-			int start = text.IndexOf("[[[");
-			text = text.Remove(start, 3);
-			int end = text.IndexOf("]]]");
-			text = text.Remove(end, 3);
-			return Tuple.Create((uint)start, (uint)end);
-		}
-		static Tuple<uint, uint> FindNextScriptExample(ref string text)
-		{
-			int start = text.IndexOf("~~~");
-			text = text.Remove(start, 3);
-			int end = text.IndexOf("~~~");
-			text = text.Remove(end, 3);
-			return Tuple.Create((uint)start, (uint)end);
-		}
-
-		static void LearnD3()
-		{
-			//read in concatenated examples
-			string text = File.ReadAllText("concatenated_index_first50.html");
-
-			//extract regions
-			var header_bounds1 = FindNextDocTypeExample(ref text);
-			//var body_bounds1 = FindNextBodyExample(ref text);
-			//var script_bounds1 = FindNextScriptExample(ref text);
-			//var script_bounds2 = FindNextScriptExample(ref text);
-			var header_bounds2 = FindNextDocTypeExample(ref text);
-			//var body_bounds2 = FindNextBodyExample(ref text);
-
-			//create string region
-			var document = RegionLearner.CreateStringRegion(text);
-
-			//create specs
-			var header_spec = new[] {
-				new MemberPrefix<StringRegion, StringRegion>(document, new[] {
-					document.Slice(header_bounds1.Item1, header_bounds1.Item2),
-					document.Slice(header_bounds2.Item1, header_bounds2.Item2)
-				})
-			};
-			//var body_spec = new[] {
-			//	new MemberPrefix<StringRegion, StringRegion>(document, new[] {
-			//		document.Slice(body_bounds1.Item1, body_bounds1.Item2),
-			//		document.Slice(body_bounds2.Item1, body_bounds2.Item2)
-			//	})
-			//};
-			//var script_spec = new[] {
-			//	new MemberPrefix<StringRegion, StringRegion>(document, new[] {
-			//		document.Slice(body_bounds1.Item1, body_bounds1.Item2),
-			//		document.Slice(body_bounds2.Item1, body_bounds2.Item2)
-			//	})
-			//};
-
-			//learn a program and run it on the document
-			var header_program = SequenceLearner.Instance.Learn(header_spec);
-			var header_outputs = header_program.Run(document);
-
-			//var body_program = SequenceLearner.Instance.Learn(body_spec);
-			//var body_outputs = body_program.Run(document);
-
-			//print the output
-			foreach (var item in header_outputs)
-			{
-				Console.WriteLine($"{item.Start} {item.End}");
-				Console.WriteLine(item);
-				Console.WriteLine("====================================");
-			}
-			//Console.WriteLine("--------------------------------------");
-			//foreach (var item in body_outputs)
-			//{
-			//	Console.WriteLine($"{item.Start} {item.End}");
-			//	Console.WriteLine(item);
-			//	Console.WriteLine("====================================");
-			//}
-		}
-
+		
 		private static void Main(string[] args)
 		{
 			var runD3scripts = true; //false;
@@ -109,14 +26,10 @@ namespace Extraction.Text
 			{
 				Console.WriteLine("running d3 scripts");
 
-				//LearnD3();
-
-				//LearnD3UsingMultipleFiles();
-
-
 				LearnDocType();
 				LearnHTMLlang();
-				LearnHead();
+				//LearnHead();
+				//LearnStyle();
 				LearnMeta();
 				LearnTitle();
 				LearnScriptInclude();
@@ -160,175 +73,9 @@ namespace Extraction.Text
 
 		}
 
-		/// <summary>
-		///     Learns a program to extract a single region from a file.
-		/// </summary>
-		private static void LearnRegion()
-		{
-			var input = RegionLearner.CreateStringRegion("Carrie Dodson 100");
-
-			// Only one example because we extract one region from one file.
-			// Position specifies the location between two characters in the file. It starts at 0 (the beginning of the file).
-			// An example is identified by a pair of start and end positions.
-			var examples = new[] {
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input, input.Slice(7, 13)) // "Carrie Dodson 100" => "Dodson"
-            };
-
-			RegionProgram topRankedProg = RegionLearner.Instance.Learn(examples);
-			if (topRankedProg == null)
-			{
-				Console.Error.WriteLine("Error: Learning fails!");
-				return;
-			}
-
-			var testInput = RegionLearner.CreateStringRegion("Leonard Robledo 75"); // expect "Robledo"
-			StringRegion output = topRankedProg.Run(testInput);
-			if (output == null)
-			{
-				Console.Error.WriteLine("Error: Extracting fails!");
-				return;
-			}
-			Console.WriteLine("printing results of LearnRegion");
-			Console.WriteLine("\"{0}\" => \"{1}\"", testInput, output);
-		}
-
-		/// <summary>
-		///     Learns a program to extract a single region using two examples in two different files.
-		///     Learning from different files is similar to learning with multiple examples from a single file.
-		///     Demonstrates how to learn with examples from different files.
-		/// </summary>
-		private static void LearnRegionUsingMultipleFiles()
-		{
-			var input1 = RegionLearner.CreateStringRegion("Carrie Dodson 100");
-			var input2 = RegionLearner.CreateStringRegion("Leonard Robledo 75");
-
-			var examples = new[] {
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, input1.Slice(7, 13)), // "Carrie Dodson 100" => "Dodson"
-                new CorrespondingMemberEquals<StringRegion, StringRegion>(input2, input2.Slice(8, 15)) // "Leonard Robledo 75" => "Robledo"
-            };
-
-			RegionProgram topRankedProg = RegionLearner.Instance.Learn(examples);
-			if (topRankedProg == null)
-			{
-				Console.Error.WriteLine("Error: Learning fails!");
-				return;
-			}
-
-			var testInput = RegionLearner.CreateStringRegion("Margaret Cook 320"); // expect "Cook"
-			StringRegion output = topRankedProg.Run(testInput);
-			if (output == null)
-			{
-				Console.Error.WriteLine("Error: Extracting fails!");
-				return;
-			}
-			Console.WriteLine("printing results of LearnRegionUsingMultipleFiles");
-			Console.WriteLine("\"{0}\" => \"{1}\"", testInput, output);
-		}
-
-		private static void LearnD3UsingMultipleFiles()
-		{
-			
-			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
-			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
-
-			//string text2 = File.ReadAllText("training_samples/training_sample_2.html");
-
-			var input0 = RegionLearner.CreateStringRegion(text0);
-			var input1 = RegionLearner.CreateStringRegion(text1);
-
-			//var input2 = RegionLearner.CreateStringRegion(text2); // expect "Cook"
-
-			// Doctype
-			var extractedRegion0 = input0.Slice(0, 15);
-			var extractedRegion1 = input1.Slice(0, 15);
-
-			// html lang setting
-			var extractedRegion0_b = input0.Slice(16, 32);
-			var extractedRegion1_b = input1.Slice(16, 30);
-
-			//var extractedRegion2 = input2.Slice(0, 15);
-
-			Console.WriteLine(extractedRegion0_b.ToString());
-			Console.WriteLine(extractedRegion1_b.ToString());
-
-			//Console.WriteLine(extractedRegion2.S);
-
-			//return;
-			var examples = new[] {
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0), // "Carrie Dodson 100" => "Dodson"
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1) // "Leonard Robledo 75" => "Robledo"
-            };
-
-			var examples_b = new[] {
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
-				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b) // "Leonard Robledo 75" => "Robledo"
-            };
-
-			RegionProgram topRankedProg = RegionLearner.Instance.Learn(examples);
-			RegionProgram topRankedProg_b = RegionLearner.Instance.Learn(examples_b);
-
-			if (topRankedProg == null)
-			{
-				Console.Error.WriteLine("Error: Learning prog fails!");
-				//return;
-			}
-			if (topRankedProg_b == null)
-			{
-				Console.Error.WriteLine("Error: Learning prog b fails!");
-				//return;
-			}
-			//StringRegion output = topRankedProg.Run(input2);
-			//if (output == null)
-			//{
-			//	Console.Error.WriteLine("Error: Extracting fails!");
-			//	return;
-			//}
-			//StringRegion output_b = topRankedProg.Run(input2_b);
-			//if (output == null)
-			//{
-			//	Console.Error.WriteLine("Error: Extracting fails!");
-			//	return;
-			//}
-			//Console.WriteLine("printing results of LearnRegionUsingMultipleFiles");
-			//Console.WriteLine("\"{0}\" => \"{1}\"", input2, output);
-
-			string[] fileEntries = Directory.GetFiles("training_samples");
-			foreach (string fileName in fileEntries)
-			{
-				//Label1.Text += "<img src=\"" + Path.GetFileName(fileName) + "\" /><br />";
-				Console.WriteLine(fileName);
-				string text_new = File.ReadAllText(fileName);
-				var input_new = RegionLearner.CreateStringRegion(text_new);
-				StringRegion output_new = topRankedProg.Run(input_new);
-				StringRegion output_new_b = topRankedProg_b.Run(input_new);
-				Console.WriteLine("HTML tag => \"{0}\"", output_new);
-				Console.WriteLine("encoding lang => \"{0}\"", output_new_b);
-				//if (output_new == null)
-				//{
-				//	Console.Error.WriteLine("Error: Extracting fails on prog a");
-				//}
-				//else
-				//{
-				//	Console.WriteLine("HTML tag => \"{0}\"", output_new);
-				//}
-				//Console.WriteLine("\"{0}\" => \"{1}\"", input_new, output_new);
-				//if (output_new_b == null)
-				//{
-				//	Console.Error.WriteLine("Error: Extracting fails on prog b");
-				//}
-				//else
-				//{
-				//	Console.WriteLine("encoding lang => \"{0}\"", output_new_b);
-				//}
-			}
-
-			return;
-
-
-		}
-
 		private static void LearnDocType()
 		{
+			Console.WriteLine("LearnDocType");
 
 			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
 			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
@@ -364,11 +111,15 @@ namespace Extraction.Text
 				StringRegion output_new = topRankedProg.Run(input_new);
 				if (output_new != null)
 				{
-					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine("},");
 				}
 			}
 
@@ -413,11 +164,15 @@ namespace Extraction.Text
 				StringRegion output_new = topRankedProg_b.Run(input_new);
 				if (output_new != null)
 				{
-					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine("},");
 				}
 			}
 
@@ -466,11 +221,72 @@ namespace Extraction.Text
 				StringRegion output_new = topRankedProg_b.Run(input_new);
 				if (output_new != null)
 				{
-					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine("},");
+				}
+			}
+
+			return;
+
+
+		}
+
+		private static void LearnStyle()
+		{
+
+			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
+			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
+
+			var input0 = RegionLearner.CreateStringRegion(text0);
+			var input1 = RegionLearner.CreateStringRegion(text1);
+
+			var extractedRegion0_b = input0.Slice(33, 1491);
+			var extractedRegion1_b = input1.Slice(31, 332);
+
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
+
+			//return;
+
+			var examples_b = new[] {
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input0, extractedRegion0_b), // "Carrie Dodson 100" => "Dodson"
+				new CorrespondingMemberEquals<StringRegion, StringRegion>(input1, extractedRegion1_b) // "Leonard Robledo 75" => "Robledo"
+            };
+
+			//TODO: ADD NEGATIVE EXAMPLES TO TRAIN IT BETTER
+
+			RegionProgram topRankedProg_b = RegionLearner.Instance.Learn(examples_b);
+
+			if (topRankedProg_b == null)
+			{
+				Console.Error.WriteLine("Error: Learning prog fails!");
+				return;
+			}
+
+			string[] fileEntries = Directory.GetFiles("training_samples");
+			foreach (string fileName in fileEntries)
+			{
+				string text_new = File.ReadAllText(fileName);
+				var input_new = RegionLearner.CreateStringRegion(text_new);
+				StringRegion output_new = topRankedProg_b.Run(input_new);
+				if (output_new != null)
+				{
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("},");
+				}
+				else
+				{
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine("},");
 				}
 			}
 
@@ -519,11 +335,15 @@ namespace Extraction.Text
 
 				if (output_new != null)
 				{
-					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine("},");
 				}
 			}
 
@@ -572,11 +392,15 @@ namespace Extraction.Text
 
 				if (output_new != null)
 				{
-					Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+					Console.WriteLine("{");
+					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine("},");
 				}
 			}
 
@@ -652,11 +476,15 @@ namespace Extraction.Text
 				foreach (var output_new in all_output_new) {
 					if (output_new != null)
 					{
-						Console.WriteLine("\"{0}\", {1}, {2}, {3}", output_new, fileName, output_new.Start, output_new.End);
+						Console.WriteLine("{");
+						Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+						Console.WriteLine("},");
 					}
 					else
 					{
-						Console.WriteLine("\"{0}\", {1}, , ", output_new, fileName);
+						Console.WriteLine("{");
+						Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+						Console.WriteLine("},");
 					}
 				}
 

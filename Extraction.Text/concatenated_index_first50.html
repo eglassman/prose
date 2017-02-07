@@ -1,0 +1,6248 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Intermediate D3</title>
+        <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<style type="text/css">
+			
+			body {
+				margin: 0;
+				background-color: #47484B;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			#container {
+				width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: black;
+			}
+
+			h1 {
+				font-size: 24px;
+                font-family : monospace;
+                color: white;
+			}
+
+			p {
+				font-size: 14px;
+                color:#aaaaaa;
+                font-family: monospace;
+			}
+
+			svg {
+				background-color: black;
+			}
+
+			g.bar text {
+				font-size: 11px;
+                font-family: monospace;
+                color: white;
+				font-weight: bold;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: red;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+                fill: #ffffff;
+                font-family: monospace;
+
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #aaaaaa;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;
+                fill:#777777;
+                font-family: monospace;
+                color: white;
+
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+            a {
+                color : white;
+            }
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container">
+
+			<h1>20 Deadliest Countries about killed Journalists</h1>
+
+			<p>The Number of Killed Journalists, Source : <a href="https://cpj.org/killed/">CPJ</a></p>
+			
+		</div>
+
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 30, 120 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+			//Now SVG goes into #container instead of body
+			var svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("data.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.number, +b.number);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.number;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.country; } ));
+
+				//Bind data to groups (not bars directly)
+				var groups = svg.selectAll("g")
+								.data(data)
+								.enter()
+								.append("g")
+								.attr("class", "bar");
+
+				//Add a rect to each group
+				var rects = groups.append("rect")
+					.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.country);
+					})
+					.attr("width", 0)
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#991B00");
+
+				//Add a text element to each group
+				groups.append("text")
+					.attr("x", function(d) {
+						return padding[3] + widthScale(d.number) - 3;
+					})
+					.attr("y", function(d) {
+						return heightScale(d.country) + 11;
+					})
+					.text(function(d) {
+						return d.number;
+					});
+
+				rects.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(1000)
+					.attr("width", function(d) {
+						return widthScale(d.number);
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+	</body>
+</html>
+<!doctype html>
+<html lang=en>
+    <head>
+        <meta charset=utf-8>
+        <title>Simplified Low Barrel</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js"></script>
+    </head>
+<body>
+
+    <style>@import "index.css";</style>
+
+    <svg id="low-barrel">
+      <g layout-style="flex: 0.65; flexDirection: row">
+        <svg class="main" layout-style="flex: 1"></svg>
+        <g layout-style="width: 20; justifyContent: center">
+          <g layout-style="height: 0">
+            <text text-anchor="middle" transform="rotate(90)">Temperature</text>
+          </g>
+        </g>
+      </g>
+      <g layout-style="flex: 0.15; flexDirection: row">
+        <svg class="navigator" layout-style="flex: 1"></svg>
+        <text layout-style="width: 20"></text>
+      </g>
+    </svg>
+
+    <script src="index.js"></script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+body{
+	background-color: rgb(38, 38, 38);
+}
+
+path{
+	stroke: white;
+	stroke-width: 6px;
+	fill: none;
+}
+
+circle{
+	fill: white;
+}
+
+rect{
+	fill: orange;
+}
+
+</style>
+
+<body></body>
+
+<script src="/1wheel/raw/67b47524ed8ed829d021/d3-3.5.5.js"></script>
+<script src="/1wheel/raw/67b47524ed8ed829d021/lodash-3.8.0.js"></script>
+<script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-jetpack.js'></script>
+<script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-starterkit.js'></script>
+
+
+<script>
+
+var s = 50,
+		width  = 960 - s*2
+		height = 500 - s*2
+
+var svg = d3.select('body')
+	.append('svg')
+		.attr({height: height + s*2, width: width + s*2})
+	.append('g')
+		.translate([s, s])
+
+
+var grid = []
+d3.range(0, width, s).map(function(x, i){
+	d3.range(0, height, s).map(function(y, j){
+		grid.push({
+			pos: [x + (j % 2)*s/2, y*.9]
+		})
+	})
+})
+
+
+var gridGs = svg.dataAppend(grid, 'g').translate(ƒ('pos'))
+
+gridGs.append('circle')
+		.attr('r',3)
+
+var r = s/2/Math.sqrt(3)/2
+var triMidPoints = [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+		.map(function(d){ return d + Math.PI/2 })
+		.map(function(θ){
+			return {
+				pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+				θ: θ, 
+				deg: θ*180/Math.PI
+			}
+		})
+
+var mCircles = gridGs.dataAppend(triMidPoints, 'circle.m')
+		.attr('r', 3)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.θ + ')' })
+
+
+var rectW = 3, rectH = s/2 - 3
+var rects = gridGs.dataAppend(triMidPoints, 'rect')
+		.attr('width', rectW)
+		.attr('height', rectH)
+		.attr('x', +rectW/200)
+		.attr('y', -rectH/2)
+		.attr({rx: 10, ry: 10})
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+
+
+
+var r = s/2/Math.sqrt(3)*3/2
+var triMidPointsFar = [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+		.map(function(d){ return d + Math.PI/2*1 })
+		.map(function(θ){
+			return {
+				pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+				θ: θ, 
+				deg: θ*180/Math.PI
+			}
+		})
+
+rects.data(triMidPointsFar)
+rects.transition().delay(500).duration(1500)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+mCircles.data(triMidPointsFar)
+mCircles.transition().delay(500).duration(1500)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+
+
+function genMidPoints(rFactor, angle){
+	var r = s/2/Math.sqrt(3)*rFactor
+	return [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+			.map(function(d){ return d + Math.PI/2*1 })
+			.map(function(θ){
+				return {
+					pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+					θ: θ, 
+					deg: θ*180/Math.PI
+				}
+			})
+}
+
+
+</script><!DOCTYPE html>
+<html lang="en">
+
+<!--http://blog.webkid.io/maps-with-leaflet-and-topojson/-->
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EU map: leaflet">
+    <meta name="keywords" content="openness">
+    <meta name="author" content="Michal Škop">
+<!--    <link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">-->
+
+
+
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/superhero/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<!--    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">-->
+
+
+
+    <title>EU map</title>
+    
+    
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css">
+ 
+    
+    
+  </head>
+  <body>
+
+    <style>
+        #worldmap{
+            background: white;
+            height: 100%;
+            width: 100%;
+        }
+        #worldmap-container {
+            width: 100%;
+            height: 550px;
+            border: 1px solid #CCC;
+        }
+        </style>
+
+        
+    <script>
+        countries =  {};
+    </script>
+    
+    <div class="container">
+        <!-- Page Content -->
+
+
+    <!-- map and categories -->
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div id="worldmap-container">
+                <div id="worldmap"></div>
+                
+            </div>
+        </div>
+
+    </div>
+
+
+<!-- map js -->
+<script src="//cdn.bootcss.com/chroma-js/1.1.1/chroma.min.js"></script>
+<script src="//cdn.bootcss.com/topojson/1.6.19/topojson.min.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="//cdn.bootcss.com/d3/3.5.6/d3.min.js"></script>
+<script src="map.js"></script>
+
+
+    </div>
+    
+
+  </body>
+</html>
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+  
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%m/%d/%Y").parse;
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.temperature); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("graph.txt", function(error, data) {
+  if (error) throw error;
+
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+  });
+
+  var cities = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {date: d.date, temperature: +d[name]};
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+     
+
+  var city = svg.selectAll(".city")
+      .data(cities)
+    .enter().append("g")
+      .attr("class", "city");
+
+  city.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return color(d.name); });
+
+  city.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+      .attr("x", 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+});
+
+</script>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="960" height="500"></canvas>
+<script src="d3.js"></script>
+<script src="topojson.js"></script>
+<script>
+
+var canvas = d3.select("canvas"),
+    canvasNode = canvas.node(),
+    context = canvasNode.getContext("2d");
+
+var width = canvasNode.width,
+    height = canvasNode.height,
+    scale = width * .6;
+
+var π = Math.PI,
+    τ = 2 * π,
+    halfπ = π / 2,
+    asin = function(x) { return x > 1 ? halfπ : x < -1 ? -halfπ : Math.asin(x); },
+    atan2 = Math.atan2;
+
+d3.json("/mbostock/raw/4090846/world-110m.json", function(error, world) {
+  var sketch = d3.geo.pipeline()
+      .source(d3.geo.jsonSource)
+      .pipe(resample, .020)
+      .pipe(jitter, .004)
+      .pipe(smooth, .005)
+      .sink(d3.geo.jsonSink);
+
+  var land = topojson.feature(world, world.objects.land),
+      lands = {type: "GeometryCollection", geometries: [sketch(land), sketch(land), sketch(land)]};
+
+  d3.timer(function(elapsed) {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height * 1.2);
+    context.scale(scale, -scale);
+
+    context.beginPath();
+    d3.geo.pipeline()
+        .source(d3.geo.jsonSource)
+        .pipe(d3.geo.rotate, elapsed * .00005, -.7, .26)
+        .pipe(d3.geo.clipCircle, Math.PI / 2)
+        .pipe(d3.geo.project, d3.geo.orthographic)
+        .sink(d3.geom.contextSink, context)
+        (lands);
+    context.lineWidth = 1 / scale;
+    context.globalAlpha = .5;
+    context.strokeStyle = "#000";
+    context.stroke();
+
+    context.restore();
+  });
+});
+
+function haversin(θ) {
+  return (θ = Math.sin(θ / 2)) * θ;
+}
+
+function interpolateArc(λ0, φ0, λ1, φ1) {
+  var cφ0 = Math.cos(φ0),
+      sφ0 = Math.sin(φ0),
+      cφ1 = Math.cos(φ1),
+      sφ1 = Math.sin(φ1),
+      kλ0 = cφ0 * Math.cos(λ0),
+      kφ0 = cφ0 * Math.sin(λ0),
+      kλ1 = cφ1 * Math.cos(λ1),
+      kφ1 = cφ1 * Math.sin(λ1),
+      d = 2 * Math.asin(Math.sqrt(haversin(φ1 - φ0) + cφ0 * cφ1 * haversin(λ1 - λ0))),
+      k = 1 / Math.sin(d);
+
+  var interpolate = d ? function(t) {
+    var B = Math.sin(t *= d) * k,
+        A = Math.sin(d - t) * k,
+        x = A * kλ0 + B * kλ1,
+        y = A * kφ0 + B * kφ1,
+        z = A * sφ0 + B * sφ1;
+    return [
+      atan2(y, x),
+      atan2(z, Math.sqrt(x * x + y * y))
+    ];
+  } : function() {
+    return [λ0, φ0];
+  };
+
+  interpolate.distance = d;
+
+  return interpolate;
+}
+
+function resample(δ, sink) {
+  var λ00,
+      φ00,
+      λ0,
+      φ0;
+
+  function lineStart() {
+    θ = 0;
+    resample.point = lineFirstPoint;
+    sink.lineStart();
+  }
+
+  function lineFirstPoint(λ, φ) {
+    λ00 = λ0 = λ, φ00 = φ0 = φ;
+    resample.point = linePoint;
+  }
+
+  function linePoint(λ1, φ1) {
+    sink.point(λ0, φ0);
+    var a = interpolateArc(λ0, φ0, λ0 = λ1, φ0 = φ1),
+        n = Math.floor(a.distance / δ) + 1;
+    for (var i = 1, p; i < n; ++i) p = a(i / n), sink.point(p[0], p[1]);
+  }
+
+  function lineEnd() {
+    linePoint(λ00, φ00);
+    sink.lineEnd();
+    λ00 = φ00 = λ0 = φ0 = undefined;
+    resample.point = null;
+  }
+
+  var resample = {
+    sphere: function() { sink.sphere(); },
+    polygonStart: function() { sink.polygonStart(); },
+    polygonEnd: function() { sink.polygonEnd(); },
+    lineStart: lineStart,
+    lineEnd: lineEnd,
+    point: null
+  };
+
+  return resample;
+}
+
+function jitter(δ, sink) {
+  var random = d3.random.normal(0, δ);
+
+  return {
+    sphere: function() { sink.sphere(); },
+    polygonStart: function() { sink.polygonStart(); },
+    polygonEnd: function() { sink.polygonEnd(); },
+    lineStart: function() { sink.lineStart(); },
+    lineEnd: function() { sink.lineEnd(); },
+    point: function(λ, φ) {
+      var p = rotation(random(), random())(λ, φ);
+      sink.point(p[0], p[1]);
+    }
+  };
+}
+
+function rotation(δλ, δφ) {
+  var cosδφ = Math.cos(δφ),
+      sinδφ = Math.sin(δφ);
+  return function(λ, φ) {
+    λ += δλ; if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
+    var cosφ = Math.cos(φ),
+        x = Math.cos(λ) * cosφ,
+        y = Math.sin(λ) * cosφ,
+        z = Math.sin(φ);
+    return [atan2(y, x * cosδφ - z * sinδφ), asin(z * cosδφ + x * sinδφ)];
+  };
+}
+
+function inverseRotation(δλ, δφ) {
+  var cosδφ = Math.cos(δφ),
+      sinδφ = Math.sin(δφ);
+  return function(λ, φ) {
+    var cosφ = Math.cos(φ),
+        x = Math.cos(λ) * cosφ,
+        y = Math.sin(λ) * cosφ,
+        z = Math.sin(φ);
+    λ = atan2(y, x * cosδφ + z * sinδφ) - δλ;
+    if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
+    return [λ, asin(z * cosδφ - x * sinδφ)];
+  };
+}
+
+function smooth(δ, sink) {
+  var θ,
+      λ00,
+      φ00,
+      λ01,
+      φ01,
+      λ02,
+      φ02,
+      λ0,
+      φ0,
+      λ1,
+      φ1,
+      λ2,
+      φ2;
+
+  function lineStart() {
+    θ = 0;
+    smooth.point = lineFirstPoint;
+    sink.lineStart();
+  }
+
+  function lineFirstPoint(λ, φ) {
+    λ00 = λ0 = λ, φ00 = φ0 = φ;
+    smooth.point = lineSecondPoint;
+  }
+
+  function lineSecondPoint(λ, φ) {
+    λ01 = λ1 = λ, φ01 = φ1 = φ;
+    smooth.point = lineThirdPoint;
+  }
+
+  function lineThirdPoint(λ, φ) {
+    λ02 = λ2 = λ, φ02 = φ2 = φ;
+    smooth.point = linePoint;
+  }
+
+  function linePoint(λ3, φ3) {
+    var segment = interpolateArc(λ1, φ1, λ2, φ2),
+        origin = segment(.5),
+        n = Math.ceil(segment.distance / δ),
+        r = rotation(-origin[0], -origin[1]),
+        ri = inverseRotation(-origin[0], -origin[1]),
+        p0 = r(λ0, φ0),
+        p1 = r(λ1, φ1),
+        p2 = r(λ2, φ2),
+        p3 = r(λ3, φ3);
+    for (var i = 0; i < n; ++i) {
+      var t = i / n,
+          k0 = (1 - t) * (1 - t) * (1 - t) / 6,
+          k1 = (3 * t * t * t - 6 * t * t + 4) / 6,
+          k2 = (-3 * t * t * t + 3 * t * t + 3 * t + 1) / 6,
+          k3 = t * t * t / 6,
+          x = k0 * p0[0] + k1 * p1[0] + k2 * p2[0] + k3 * p3[0],
+          y = k0 * p0[1] + k1 * p1[1] + k2 * p2[1] + k3 * p3[1],
+          p = ri(x, y);
+      sink.point(p[0], p[1]);
+    }
+    λ0 = λ1, φ0 = φ1, λ1 = λ2, φ1 = φ2, λ2 = λ3, φ2 = φ3;
+  }
+
+  function lineEnd() {
+    if (!isNaN(λ02) && !isNaN(φ02)) { // skip polygons with 3 or fewer points
+      linePoint(λ00, φ00);
+      linePoint(λ01, φ01);
+      linePoint(λ02, φ02);
+    }
+    sink.lineEnd();
+    λ00 = φ00 = λ01 = φ01 = λ02 = φ02 = λ0 = φ0 = λ1 = φ1 = λ2 = φ2 = undefined;
+    smooth.point = null;
+  }
+
+  var smooth = {
+    sphere: function() { sink.sphere(); },
+    polygonStart: function() { sink.polygonStart(); },
+    polygonEnd: function() { sink.polygonEnd(); },
+    lineStart: lineStart,
+    lineEnd: lineEnd,
+    point: null
+  };
+
+  return smooth;
+}
+
+</script>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+html, body {
+  background: #222;
+}
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="d3.canvas-hexbin.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var hexbin = d3.canvasHexbin()
+    .size([width, height])
+    .radius(4);
+
+var color = d3.scale.linear()
+   .domain([0, 14, 15, 35, 132])
+   .range(["#050505", "#222", "#d7191c", "#ffffbf", "#2c7bb6"])
+   .interpolate(d3.interpolateHcl);
+
+var canvas = d3.select("body").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+
+var context = canvas.node().getContext("2d");
+var points = [];
+var hexagons = [];
+
+hexbin.context(context);
+
+getImage("readme.png", function(image) {
+  context.drawImage(image, 0, 0, width, height);
+  image = context.getImageData(0, 0, width, height);
+
+  // Rescale the colors.
+  for (var c, i = 0, n = width * height * 4, d = image.data; i < n; i += 4) {
+    points.push([i/4%width, Math.floor(i/4/width), d[i]]);
+  }
+
+  hexagons = hexbin(points);
+  hexagons.forEach(function(d) {
+    d.min = d3.min(d, function(p) { return p[2]; });
+    d.max = d3.max(d, function(p) { return p[2]; });
+    d.mean = d3.mean(d, function(p) { return p[2]; });
+  });
+
+  // optimization: filter out sea level
+  hexagons = hexagons.filter(function(d) {
+    return d.max > 16 || d.min < 10;
+  });
+
+  var interpolated = d3.interpolate(
+    hexagons.map(function(d) { return d.min; }),
+    hexagons.map(function(d) { return d.max; })
+  );
+
+  function toggle() {
+    d3.timer(function(t) {
+      if (t > 9000) return true;
+      if (t > 4500) t = 9000 - t;
+
+      context.clearRect(0,0,width,height);
+
+      interpolated(t/4500).forEach(function(d,i) {
+        context.save();
+        context.fillStyle = color(d);
+        context.translate(hexagons[i].x, hexagons[i].y);
+        hexbin.hexagon(4.5);
+        context.fill();
+        context.restore();
+      });
+    });
+  };
+
+  loop(toggle, 9000);
+
+  function loop(f,t) {
+    f();
+    setTimeout(function() {
+      loop(f,t);
+    },t)
+  };
+});
+
+
+function getImage(path, callback) {
+  var image = new Image;
+  image.onload = function() { callback(image); };
+  image.src = path;
+}
+
+</script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Force-Directed Layout with Convex Hull</title>
+    <script src="http://mbostock.github.com/d3/d3.js?2.9.2"></script>
+ </head>
+  <body>
+    <div id="chart"></div>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500,
+    fill = d3.scale.category10(),
+    nodes = d3.range(100).map(Object);
+
+var groups = d3.nest().key(function(d) { return d & 3; }).entries(nodes);
+
+var groupPath = function(d) {
+    return "M" + 
+      d3.geom.hull(d.values.map(function(i) { return [i.x, i.y]; }))
+        .join("L")
+    + "Z";
+};
+
+var groupFill = function(d, i) { return fill(i & 3); };
+
+var vis = d3.select("#chart").append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var force = d3.layout.force()
+    .nodes(nodes)
+    .links([])
+    .size([w, h])
+    .start();
+
+var node = vis.selectAll("circle.node")
+    .data(nodes)
+  .enter().append("circle")
+    .attr("class", "node")
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .attr("r", 8)
+    .style("fill", function(d, i) { return fill(i & 3); })
+    .style("stroke", function(d, i) { return d3.rgb(fill(i & 3)).darker(2); })
+    .style("stroke-width", 1.5)
+    .call(force.drag);
+
+vis.style("opacity", 1e-6)
+  .transition()
+    .duration(1000)
+    .style("opacity", 1);
+
+force.on("tick", function(e) {
+
+  // Push different nodes in different directions for clustering.
+  var k = 6 * e.alpha;
+  nodes.forEach(function(o, i) {
+    o.x += i & 2 ? k : -k;
+    o.y += i & 1 ? k : -k;
+  });
+
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+
+  console.log('groups : ', groups);
+  
+  vis.selectAll("path")
+    .data(groups)
+      .attr("d", groupPath)
+    .enter().append("path")
+      .style("fill", groupFill)
+      .style("stroke", groupFill)
+      .style("stroke-width", 40)
+      .style("stroke-linejoin", "round")
+      .style("opacity", .2)
+      .attr("d", groupPath);
+});
+
+d3.select("body").on("click", function() {
+  nodes.forEach(function(o, i) {
+    o.x += (Math.random() - .5) * 40;
+    o.y += (Math.random() - .5) * 40;
+  });
+  force.resume();
+});
+
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  margin: 0;
+}
+
+.map {
+  position: relative;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+}
+
+.tile {
+  pointer-events: none;
+  position: absolute;
+  width: 256px;
+  height: 256px;
+}
+
+.info {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="tile.js"></script>
+<script>
+
+var width = Math.max(960, window.innerWidth),
+    height = Math.max(500, window.innerHeight),
+    prefix = prefixMatch(["webkit", "ms", "Moz", "O"]);
+
+var tile = d3.geo.tile()
+    .size([width, height])
+    .overflow([true, false]);
+
+var projection = d3.geo.mercator();
+
+var zoom = d3.behavior.zoom()
+    .scale(1 << 8)
+    .scaleExtent([1 << 8, 1 << 23])
+    .translate([width / 2, height / 2])
+    .on("zoom", zoomed);
+
+var map = d3.select("body").append("div")
+    .attr("class", "map")
+    .style("width", width + "px")
+    .style("height", height + "px")
+    .call(zoom)
+    .on("mousemove", mousemoved);
+
+var layer = map.append("div")
+    .attr("class", "layer");
+
+var info = map.append("div")
+    .attr("class", "info");
+
+zoomed();
+
+function zoomed() {
+  var tiles = tile
+      .scale(zoom.scale())
+      .translate(zoom.translate())
+      ();
+
+  projection
+      .scale(zoom.scale() / 2 / Math.PI)
+      .translate(zoom.translate());
+
+  var image = layer
+      .style(prefix + "transform", matrix3d(tiles.scale, tiles.translate))
+    .selectAll(".tile")
+      .data(tiles, function(d) { return d; });
+
+  image.exit()
+      .remove();
+
+  image.enter().append("img")
+      .attr("class", "tile")
+      .attr("src", function(d) {
+        var z = d[2],
+            k = 1 << z,
+            x = (d[0] % k + k) % k,
+            y = d[1];
+        return "http://" + ["a", "b", "c", "d"][Math.random() * 4 | 0] + ".tiles.mapbox.com/v3/examples.map-i86nkdio/" + z + "/" + x + "/" + y + ".png";
+      })
+      .style("left", function(d) { return (d[0] << 8) + "px"; })
+      .style("top", function(d) { return (d[1] << 8) + "px"; });
+}
+
+function mousemoved() {
+  info.text(formatLocation(projection.invert(d3.mouse(this)), zoom.scale()));
+}
+
+function matrix3d(scale, translate) {
+  var k = scale / 256, r = scale % 1 ? Number : Math.round;
+  return "matrix3d(" + [k, 0, 0, 0, 0, k, 0, 0, 0, 0, k, 0, r(translate[0] * scale), r(translate[1] * scale), 0, 1 ] + ")";
+}
+
+function prefixMatch(p) {
+  var i = -1, n = p.length, s = document.body.style;
+  while (++i < n) if (p[i] + "Transform" in s) return "-" + p[i].toLowerCase() + "-";
+  return "";
+}
+
+function formatLocation(p, k) {
+  var format = d3.format("." + Math.floor(Math.log(k) / 2 - 2) + "f");
+  return (p[1] < 0 ? format(-p[1]) + "°S" : format(p[1]) + "°N") + " "
+       + (p[0] < 0 ? format(-p[0]) + "°W" : format(p[0]) + "°E");
+}
+
+</script>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+  </style>
+</head>
+
+<body>
+  <div id='fuck'></div>
+  <script>
+ 
+    //initial data set
+    data = [26, 70, 159, 246];
+    
+    //select where we want to put our plot
+		divs = d3.select('body #fuck')
+    .selectAll('div.item')	//giving our divs souls
+    .data(data);
+    
+    //make each bar in a div. Putting souls into their bodies
+    divs.enter()
+    	.append('div').classed('item', true);
+
+    //style our bars
+    divs.style({
+      width: '45px',
+      height: function(d, i) { return d + 'px'},
+      margin: '30px',
+      float: 'left',
+     'background-color' : '#080825'
+    });
+    
+    //new data to transition to
+    data = [246, 159, 70, 26];
+    
+    //select the divs
+    divs = d3.select('body #fuck')
+    .selectAll('div.item')
+    .data(data);
+
+    divs.transition().delay(50).duration(2000)
+    	.style({
+     		'height': function(d, i) { return d + 'px'},
+     		'background-color' : '#2725b0'
+    });
+        
+  </script>
+</body><html>
+  <head>
+    <meta charset="utf-8">
+    <title>Week Calendar of Life</title>
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+
+    <label>
+      Born: <input type="date" id="bday">
+    </label>
+
+    <div id="calendar"></div>
+
+    <!-- script src="https://fb.me/react-0.13.3.js"></script -->
+    <script src="react.min.js"></script>
+    <script src="JSXTransformer.min.js"></script>
+
+    <script src="dates.js"></script>
+    <script type="text/jsx" src="app.jsx"></script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="OpeNER - Opinion targets (Amsterdam)" />
+    <meta charset="utf-8">
+    <title>OpeNER - Opinion targets (Amsterdam)</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src='layout.cloud.js'></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://davidbau.com/encode/seedrandom-min.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+    <script src='index.js'></script>
+</body>
+</html>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">  <!--set charset to utf-8-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!--enable mobile views-->
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/normalize.css"> <!--reset css for cross-browser compatibility-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/agency.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+
+    <!-- JS -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <title>D3 Stacked Bar Chart</title>
+    <style>
+      .axis text {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="chart-container">
+          <svg class="chart"></svg>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    //Helpers to convert Date Objects
+    Date.prototype.toHoursDotMinutes = function(){
+      var minutes = this.getMinutes()/60;
+      var hours = this.getHours();
+      return hours+minutes;
+    }
+
+    Date.prototype.toChartDurationFormat = function(){
+      var hours = this.getHours();
+      var minutes = this.getMinutes();
+      return hours + " Hrs" + " " + minutes + " Mins";
+    }
+
+
+    //Conventional D3 Margin
+    var margin = {top: 20, right: 30, bottom: 30, left: 40},
+                width = 900 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+
+
+    d3.json("data.json",function(dates){
+      //Convert each duration to hours.minutes format
+      dates.forEach(function(item){
+        item.date = new Date(item.date);
+        for(var key in item.duration){
+          item.duration[key+"hDM"] = new Date(item.duration[key]).toHoursDotMinutes();
+        }
+      });
+
+      //Set minimum and maximum date for input domain
+      var minDate = dates[0].date;
+      var maxDate = dates[dates.length-1].date;
+
+      var xScale = d3.time.scale.utc()
+                      .domain([minDate,d3.time.day.utc.offset(maxDate,1)])
+                      .range([0,width]);
+
+      var yScale = d3.scale.linear()
+                    .domain([0,24])
+                    .range([0,height]);
+
+      var xAxis = d3.svg.axis()
+                    .orient("top")
+                    .ticks(d3.time.days.utc,1) //I don't understand how this works. *Magically* displays domain days
+                    .tickFormat(d3.time.format('%a, %m/%d'))
+                    .scale(xScale);
+
+      var yAxis = d3.svg.axis()
+                    .orient("left")
+                    .ticks(24)
+                    .scale(yScale);
+
+      var barWidth = width / dates.length;
+
+      var color = d3.scale.ordinal()
+                  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]); //http://bl.ocks.org/mbostock/3886208
+
+
+
+      //set domain of color to be duration names that do not contain hDM
+      // key.indexOf("hDM") returns -1 if "hDM" is not in string
+      color.domain(d3.keys(dates[0].duration).filter(function(key) {  return key.indexOf("hDM") === -1; }));
+
+      //calculate y positions for data and include duration in JavaScript Date Object to append later
+      dates.forEach(function(d) {
+        var y0 = 0;
+        d.duration.pillars = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d.duration[name+ "hDM"], duration: d.duration[name]}; });
+        d.total = d.duration.pillars[d.duration.pillars.length - 1].y1;
+      });
+
+      //Boilerplate chart append
+      var chart = d3.select(".chart")
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      //Append x axis
+      chart.append("g")
+            .attr("class", "x axis")   // give it a class so it can be used to select only xaxis labels  below
+            .attr("transform", "translate(0,-1)")
+            .call(xAxis);
+
+      //Append y axis
+      chart.append("g")
+            .attr("class", "y axis")   // give it a class so it can be used to select only yaxis labels  below
+            .attr("transform", "translate(-1,0)")
+            .call(yAxis)
+            .append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("x",-425)
+              .attr("dy", ".71em")
+              .style("text-anchor", "end")
+              .text("Hours");
+
+
+
+      var dateBar = chart.selectAll(".dateBar")
+        .data(dates)
+      .enter().append("g")
+        .attr("class", "g")
+        .attr("transform", function(d) { return "translate(" + xScale(d.date) + ",0)"; });
+
+      dateBar.selectAll("rect")
+          .data(function(d) { return d.duration.pillars; })
+        .enter().append("rect")
+          .attr("width", barWidth-1)
+          .attr("y", function(d) { return yScale(d.y0); })
+          .attr("height", function(d) {
+            return yScale(d.y1) - yScale(d.y0); })
+          .style("fill", function(d) { return color(d.name); })
+          .on('mouseover', function(d){
+            d3.select(this)
+            .style("fill", "orange");
+            chart.append("text")
+            .attr("id", "tooltip")
+            .attr("x", 450)
+            .attr("y", height)
+            .attr("text-anchor", "middle")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "15px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text("Pillar: " + d.name + " Duration: " + new Date (d.duration).toChartDurationFormat());
+          })
+          .on("mouseout", function(d) {
+            d3.select(this)
+            .transition()
+            .duration(250)
+            .style("fill", function(d) { return color(d.name); });
+            d3.select("#tooltip").remove();
+          });
+
+
+
+      var legend = chart.selectAll(".legend")
+        .data(color.domain())
+      .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+
+
+      legend.append("rect")
+          .attr("x", width - 18)
+          .attr("y", 320)
+          .attr("width", 18)
+          .attr("height", 18)
+          .style("fill", color);
+
+      legend.append("text")
+          .attr("x", width - 24)
+          .attr("y", 329)
+          .attr("dy", ".35em")
+          .style("text-anchor", "end")
+          .text(function(d) { return d; });
+
+    });
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	font-size: 12px;
+	font-family: Arial, sans-serif;
+}
+
+#maindiv {
+	width: 960px;
+	height: 380px;
+}
+
+.dataset-a, .dataset-b {
+	display: inline-block;
+	width: 400px;
+	padding: 0 0 0 50px;
+}
+
+#button {
+	margin: 20px 50px;
+}
+
+#error {
+	margin: 20px 50px;
+	font-size: 20px;
+	color: red;
+}
+</style>
+<body>
+<script src="moebio_framework.min.js"></script>
+<script>
+	var uniform = [0.2334, 0.4229, 0.2938, 0.9500, 0.3745, 0.3985, 0.3158, 0.4228, 0.2844, 0.3871, 0.5104, 0.3336, 0.2984, 0.2859, 0.4372, 0.8939, 0.4119, 0.5078, 0.9713, 0.3784, 0.3209, 0.3385, 0.5550, 0.5868, 0.3276, 0.8119, 0.7752, 0.9800, 0.5759, 0.3898, 0.4301, 0.3909, 0.4792, 0.4215, 0.6487, 0.0861, 0.1373, 0.1443, 0.2952, 0.2803, 0.1996, 0.1195, 0.1100, 0.0133, 0.2272, 0.2399, 0.1183, 0.1424, 0.1873, 0.1649, 0.8907, 0.9081, 0.8240, 0.8495, 0.9040, 0.7813, 0.6995, 0.8918, 0.8165, 0.9883];
+	var clustered = [0.5249, 0.6735, 0.5593, 0.4187, 0.6349, 0.4788, 0.4559, 0.4861, 0.5759, 0.4410, 0.5357, 0.4725, 0.6527, 0.4988, 0.3397, 0.4526, 0.4674, 0.6161, 0.5081, 0.5519, 0.5172, 0.5021, 0.4984, 0.5105, 0.8681, 0.7942, 0.8389, 0.8748, 0.8194, 0.9015, 0.8505, 0.7642, 0.9134, 0.8259, 0.8268, 0.7230, 0.8689, 0.8446, 0.7744, 0.8332, 0.8390, 0.8287, 0.1935, 0.2151, 0.0994, 0.1380, 0.1832, 0.1630, 0.1317, 0.1394, 0.2956, 0.2004, 0.1353, 0.2359, 0.1413, 0.1669, 0.1399, 0.1719, 0.1799, 0.1672];
+	var elbowData = {};
+	var maxK = 10;
+	var newData = false;
+	var g;
+
+	function computeData() {
+		// Reset elbowData
+		elbowData = {};
+
+		uniformNL = mo.NumberList.fromArray(uniform);
+		clusteredNL = mo.NumberList.fromArray(clustered);
+
+		// Compute k-means clusters for k from 1 to 10, and populate the elbowData
+		// for each dataset and each value of k
+		for (var k = 1; k <= maxK; ++k) {
+			uniformKMeans = mo.NumberListOperators.linearKMeans(uniformNL, k);
+			clusteredKMeans = mo.NumberListOperators.linearKMeans(clusteredNL, k);
+
+			function SSE(datasetName, numClusters) {
+				return function(dataset) {
+					// Sum up the sum of squared errors for each cluster
+					sse = 0;
+					for (var c = 0; c < dataset.length; ++c) {
+						mean = dataset[c].getAverage();
+						sse += dataset[c].subtract(mean).pow(2).getNorm();
+					}
+
+					elbowData[datasetName] = elbowData[datasetName] || [];
+					elbowData[datasetName].push([numClusters, sse]);
+				}
+			}
+
+			// Compute sum of squared errors for each cluster
+			SSE('uniform', k)(uniformKMeans);
+			SSE('clustered', k)(clusteredKMeans);
+		}
+	}
+
+	function drawNumberLine(g, dataset, label, offset) {
+		var lineLen = 350;
+		var tickLen = 5;
+		var x = 50 + (offset || 0);
+		var y = 80;
+		var radius = 5;
+
+		var min = 0;
+		var max = 1;
+
+		if (newData) {
+			min = mo.NumberList.fromArray(dataset).getMin();
+			max = mo.NumberList.fromArray(dataset).getMax();
+		}
+
+		var range = max - min;
+
+		g.setStroke('#777');
+		g.setFill('rgba(125,125,125,0.5)');
+
+		// x-axis
+		g.line(x, y, x + lineLen, y);
+		// Ticks
+		g.line(x, y, x, y + tickLen);
+		g.line(x + lineLen / 2, y, x + lineLen / 2, y + tickLen);
+		g.line(x + lineLen, y, x + lineLen, y + tickLen);
+
+		// Draw each data point
+		dataset.forEach(function(d) {
+			g.fCircle(x + ((d - min) / range) * lineLen, y - 1.5 * radius, radius);
+		})
+
+		// Labels
+		g.setText('#555', 12, 'Arial', "center");
+		g.fText(min.toFixed(2), x, y + tickLen);
+		g.fText(((min + max) / 2).toFixed(2), x + lineLen / 2, y + tickLen);
+		g.fText(max.toFixed(2), x + lineLen, y + tickLen);
+
+		g.setText('#555', 16, 'Arial', 'center', 'bottom', 'bold');
+		g.fText(label, x + lineLen / 2, y - 4 * radius);
+	}
+
+	function drawElbowChart(g, datasetName, offset) {
+		var xLineLen = 350;
+		var yLineLen = 200;
+		var tickLen = 5;
+		var x = 50 + (offset || 0);
+		var y = 130;
+		var elbow = elbowData[datasetName];
+		var sseMax = elbow.map(function(pair) { return pair[1] });
+		sseMax = mo.NumberList.fromArray(sseMax).getMax();
+
+		g.setStroke("#777");
+
+		// Draw axes
+		g.line(x, y + yLineLen, x + xLineLen, y + yLineLen);
+		g.line(x, y + yLineLen, x, y)
+
+		// x-axis ticks and labels
+		for (var i = 1; i <= maxK; ++i) {
+			var xTick = Math.floor((i / maxK) * xLineLen);
+			g.line(x + xTick, y + yLineLen, x + xTick, y + yLineLen + tickLen);
+			g.setText('#555', 12, 'Arial', "center");
+			g.fText(i, x + xTick, y + yLineLen + tickLen);
+		}
+
+		// Axis title
+		g.fText("Number of clusters (k)", x + xLineLen / 2, y + yLineLen + tickLen + 12);
+		g.fTextRotated("Sum of squared errors", x - 16, y + yLineLen / 2, -Math.PI / 2);
+
+		g.setStroke("#333");
+
+		// Draw sum of square errors
+		for (var i = 1; i < elbow.length; ++i) {
+			var a = elbow[i - 1];
+			var b = elbow[i];
+			var xA = (a[0] / maxK) * xLineLen + x;
+			var yA = (1 - a[1] / sseMax) * yLineLen + y;
+			var xB = (b[0] / maxK) * xLineLen + x;
+			var yB = (1 - b[1] / sseMax) * yLineLen + y;
+			g.line(xA, yA, xB, yB);
+		}
+	}
+
+	function setup() {
+		g = new mo.Graphics({
+			container: "#maindiv",
+			dimensions: {
+				width: 960,
+				height: 380
+			},
+			init: computeData,
+			cycle: function() {
+				this.setText('#555', 18, 'Arial', 'center', 'bottom', 'bold');
+				this.fText("K-means clustering SSE vs. number of clusters for two random datasets", 450, 20);
+				this.setStroke("#aaa");
+				this.line(150, 25, 750, 25);
+				drawNumberLine(this, clustered, "Dataset A");
+				drawNumberLine(this, uniform, "Dataset B", 450);
+				drawElbowChart(this, 'clustered');
+				drawElbowChart(this, 'uniform', 450);
+			}
+		});
+		g.setBackgroundColor('white');
+	}
+
+	function inputChange() {
+		function parseInput(id) {
+			input = document.getElementById("input-" + id);
+			value = input.value;
+
+			dataset = value.split(",").map(function(d) {
+				val = Number(d);
+				if (isNaN(val) || !isFinite(val) || d.trim().length === 0) {
+					throw "Error parsing Dataset " + id.toUpperCase();
+				}
+				return val;
+			});
+
+			if (id == "a") {
+				clustered = dataset;
+			} else {
+				uniform = dataset;
+			}
+		}
+
+		try {
+			var id = "a";
+			parseInput(id);
+			id = "b";
+			parseInput(id);
+
+			computeData();
+
+			newData = true;
+
+			var errorDiv = document.getElementById('error');
+			error.innerHTML = "";
+		} catch (e) {
+			var errorDiv = document.getElementById('error');
+			error.innerHTML = e;
+		}
+	}
+
+	window.onload = function() {
+		var inputA = document.getElementById('input-a');
+		var inputB = document.getElementById('input-b');
+		
+		inputA.value = clustered.join(", ");
+		inputB.value = uniform.join(", ");
+
+		setup();
+	}
+</script>
+<div id="maindiv"></div>
+<div class="dataset-a">
+	Dataset A: <input type="text" id="input-a" size="45">
+</div>
+<div class="dataset-b">
+	Dataset B: <input type="text" id="input-b" size="45">
+</div>
+<div id="button">
+	<button type="button" onclick="inputChange()">Parse datasets</button>
+</div>
+<div id="error"></div><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sorting Elements</title>
+		
+        <!--<script type="text/javascript" src="../d3.v3.js"></script>-->
+        <script type="text/javascript" src="http://d3js.org./d3.v3.js"></script>
+		<style type="text/css">
+			
+			
+            
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+        
+
+			h1 {
+				font-size: 25px;
+				margin: 0;
+                color:#B5B1B1;
+			}
+            p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+                color:#B5B1B1;
+                
+			}
+
+			a {
+                text-decoration:none;
+                color:rgb(216,83,43);
+            }
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #B5B1B1;;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;			/* Made this text smaller, for testing */
+                
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;}
+		
+
+
+            /* gridline nuevo */
+            .tick.minor line {
+              stroke: #777;
+              stroke-dasharray: 2,2;
+            }
+             /* gridline nuevo */
+
+             /*
+				NOTE that CSS comments look use asterisks and slashes,
+				not <!-- comment --> like HTML comments.
+             */
+
+		</style>
+	</head>
+	<body>
+
+        <hr>
+		<h1>Alumnos Integrados a la Educación Común</h1>
+        <hr>
+		<p>Los datos corresponden a cantidad de alumnos con discapacidad integrados</br> a la educación: <a href="http://www.datospublicos.gob.ar/data/dataset/indicadores-de-educacion/resource/553d7102-f42b-4b65-8fd5-faf268788eb0">Portal de datos públicos</a>, 2012</p>
+        </br>
+
+		<script type="text/javascript">		
+            
+            //define variables fijas
+            var w = 700;
+			var h = 650;
+			var padding = [ 20, 20, 20, 250 ];  //Top, right, bottom, left
+
+			
+
+           //fin define variables fijas
+
+            //escala
+            
+            
+            
+            
+            var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+           
+			
+            //Nombre Provincias
+			var heightScaleNames = d3.scale.ordinal()
+									.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+            
+            //DISABLED per Scott
+            //Valores por provincia
+         //    var heightScaleNumbers = d3.scale.ordinal()
+									// .rangeRoundBands([ padding[0], h - padding[2] ], 0.1); 
+									//Changed this to make it consistent with scale above
+            
+            
+            //fin escala
+            
+			//ejes
+            var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom").tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000]).tickSize(h-padding[2]);
+
+			var yAxisNames = d3.svg.axis()
+								.scale(heightScaleNames)
+								.orient("left");
+            
+            //DISABLED per Scott
+            // eje izq numeros
+        //     var yAxisNumbers = d3.svg.axis()
+								// .scale(heightScaleNumbers)
+								// .orient("left");
+            
+            
+            //grid lines nuevas
+            
+            //var xAxis = d3.svg.axis()
+            //.scale(y)
+            //.tickSize(width) esto lo pase al eje
+                //            .orient("bottom");
+
+                 //grid lines nuevas
+            
+            
+            //fin ejes
+            //gRID
+            
+            //function make_x_axis() {        
+            //return d3.svg.axis()
+            //.scale(widthScale)
+            //.orient("top")
+            //.tickValues([0, 1000, 2000, 3000, 4000, 5000, 6000]);
+            //}
+
+            //FIN Grid
+            //define svg
+            
+            var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+            //fin define svg
+            
+            d3.csv("integradosSecundarioComun.csv", function(data) {
+
+				data.sort(function(a, b) {
+					
+					return d3.descending(+a.SecundarioComun, +b.SecundarioComun);
+					
+				});
+                //
+                widthScale.domain([ 1, d3.max(data, function(d) {
+					return +d.SecundarioComun;
+				}) ]);
+
+				heightScaleNames.domain(data.map(function(d) { return d.divPoliticaTerritorial; } ));
+                
+                //segundo eje y con los valores
+                
+                //DISABLED per Scott
+                // heightScaleNumbers.domain(data.map(function(d) { return d.SecundarioComun; } ));
+                
+                
+
+
+
+    //             // crea rectas
+
+				// var rects = svg.selectAll("rect")
+				// 				.data(data)
+				// 				.enter()
+				// 				.append("rect");
+                
+    //             // fin crea rectas
+    //             // aplica atributos
+                
+    //             rects.attr("x", padding[3])
+				// 	.attr("y", function(d) {
+				// 		return heightScaleNames(d.divPoliticaTerritorial);
+				// 	})
+				// 	.attr("width", function(d) {
+				// 		return widthScale(d.SecundarioComun);
+				// 	})
+				// 	.attr("height", heightScaleNames.rangeBand())
+				// 	.attr("fill", "rgb(216,83,43)")
+				// 	.append("title")
+				// 	.text(function(d) {
+				// 		return d.divPoliticaTerritorial + " su nivel de integración es " + d.SecundarioComun;
+				// 	});
+
+
+
+				
+
+				// SCOTT's preferred solution here is to bind data to groups
+
+				// Create a group for each row of data
+				var groups = svg.selectAll("g")
+								.data(data)
+								.enter()
+								.append("g")
+								// Translate the entire GROUP, not just individual rects!
+								.attr("transform", function(d) {
+									return "translate(" 
+										+ padding[3] 
+										+ "," 
+										+ heightScaleNames(d.divPoliticaTerritorial) 
+										+ ")";
+								});
+                
+                // Then create a rect inside each group                
+                groups.append("rect")
+                	.attr("x", 0)	// See, now the rects can each live at 0,0
+					.attr("y", 0)	// because their containing groups have already been positioned
+					.attr("width", function(d) {
+						return widthScale(d.SecundarioComun);
+					})
+					.attr("height", heightScaleNames.rangeBand())
+					.attr("fill", "rgb(216,83,43)")
+					.append("title")
+					.text(function(d) {
+						return d.divPoliticaTerritorial + " su nivel de integración es " + d.SecundarioComun;
+					});
+                
+                // Finally, create a text element inside each group                
+                groups.append("text")
+                	.attr("x", -30)  // Negative value moves each text element to the left of the group
+					.attr("y", heightScaleNames.rangeBand() * 0.65)  // Move text down to 65% of rangeBand (looks OK to me)
+					.attr("font-size", 10)
+					.text(function(d) {
+						return d.SecundarioComun;
+					});
+
+
+
+
+
+
+
+
+
+
+                //fin crea atributos
+
+                //"#D8532B" color anterior relleno
+                
+                //texto 
+                
+                //grid
+                
+                
+                
+                //    svg.append("g")         
+            //.attr("class", "grid")
+            //.attr("transform", "translate(0," + 0 + ")")
+            //.call(make_x_axis()
+              //  .tickSize(h, 0, 0)
+                //.tickFormat("")
+            //)
+                
+                
+                //grid
+               //h - padding[2]
+                
+               
+                //aplica ejes
+              //  svg.append("g")
+				//	.attr("class", "x axis")
+				//	.attr("transform", "translate(" + padding[3] + "," + (0) + ")").call(xAxis);
+                //nuevo gridlines
+                
+            var gx = svg.append("g")
+            .attr("class", "x axis").attr("transform", "translate("+ padding[3] + "," + (0) + ")")
+            .call(xAxis);
+
+
+            gx.selectAll("g").filter(function(d) { return d; })
+                .classed("minor", true);
+              
+                gx.selectAll("text")
+            .attr("y", 2)
+            .attr("dx", 4)
+            .attr("fill","#B5B1B1");
+                //nuevo gridlines
+
+
+                //Simplified positioning!
+				svg.append("g")
+					.attr("class", "y axis names")
+					.attr("transform", "translate(" + (padding[3] - 30) + ",0)")  //Shift over to left a bit
+                    .call(yAxisNames);
+
+				//DISABLED per Scott
+     //            svg.append("g")
+					// .attr("class", "y axis numbers")
+					// .attr("transform", "translate(" + padding[3] + ",0)")
+					// .call(yAxisNumbers);
+                
+                
+                //fin aplica ejes
+
+
+			});
+
+
+		</script>
+
+	</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>d3 legend | scrollable legend</title> 
+  <meta name="author" content="Sundar Singh | eesur.com">
+
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/turban/d3.slider/master/d3.slider.css">
+  <link rel="stylesheet" href="main.css">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> 
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
+
+</head>
+<body>
+
+<header>
+    <p>Crazy test for when legend has to many items for viewport. Next and Prev buttons will only show if over four items/lines</p>
+    <p>Number of items: <span id="slider-text-items">9</span></p>
+    <div id="slider-items"></div> 
+</header>
+
+<section id="container">
+    <section id="chart"></section>
+    <aside id="legend"></aside> 
+</section>
+
+<script src="https://rawgit.com/turban/d3.slider/master/d3.slider.js"></script>
+<script src="legend_component.js" charset="utf-8"></script> 
+<script src="d3_code_legend.js" charset="utf-8"></script> 
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>GeoJSON from live realtime data</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+<div id='map'></div>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1IjoiYWFpemVtYmVyZyIsImEiOiJIQmdlUkVzIn0.kzKfi1ndNMUcY4sH07RaUQ';
+var map = L.mapbox.map('map', 'mapbox.streets')
+    .setView([38, -102.0], 2);
+
+// As with any other AJAX request, this technique is subject to the Same Origin Policy:
+// http://en.wikipedia.org/wiki/Same_origin_policy
+var featureLayer = L.mapbox.featureLayer()
+    .loadURL('https://wanderdrone.appspot.com/')
+    // Once this layer loads, we set a timer to load it again in a few seconds.
+    .on('ready', run)
+    .addTo(map);
+
+function run() {
+    featureLayer.eachLayer(function(l) {
+        map.panTo(l.getLatLng());
+    });
+    window.setTimeout(function() {
+        featureLayer.loadURL('https://wanderdrone.appspot.com/');
+    }, 2000);
+}
+</script>
+</body>
+</html><!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sounds and Boxes</title>
+<link rel="stylesheet" href="soundAndBoxes.css">
+</head>
+<body>
+</body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="howler.min.js"></script>
+<script src="soundsAndBoxes.js"></script>
+</html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+  <style>
+    .node circle {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .node {
+      font: 10px sans-serif;
+    }
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 1.5px;   
+    }
+      
+    .leaf {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+  </style>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>  
+<body>
+<div class="options">
+  <button onclick="expandAll()">Expand All</button>
+  <button onclick="collapseAll()">Collapse All</button>
+</div>
+
+<script>
+  function getData() {
+    return {
+ "name": "flare",
+ "children": [
+  {
+   "name": "analytics",
+   "children": [
+    {
+     "name": "cluster",
+     "children": [
+      {"name": "AgglomerativeCluster", "size": 3938},
+      {"name": "CommunityStructure", "size": 3812},
+      {"name": "MergeEdge", "size": 743}
+     ]
+    },
+    {
+     "name": "graph",
+     "children": [
+      {"name": "BetweennessCentrality", "size": 3534},
+      {"name": "LinkDistance", "size": 5731}
+     ]
+    },
+    {
+     "name": "optimization",
+     "children": [
+      {"name": "AspectRatioBanker", "size": 7074}
+     ]
+    }
+   ]
+  },
+  {
+   "name": "animate",
+   "children": [
+    {"name": "Easing", "size": 17010},
+    {"name": "FunctionSequence", "size": 5842},
+    {
+     "name": "interpolate",
+     "children": [
+      {"name": "ArrayInterpolator", "size": 1983},
+      {"name": "ColorInterpolator", "size": 2047},
+      {"name": "DateInterpolator", "size": 1375},
+      {"name": "Interpolator", "size": 8746},
+      {"name": "MatrixInterpolator", "size": 2202},
+      {"name": "NumberInterpolator", "size": 1382},
+      {"name": "ObjectInterpolator", "size": 1629},
+      {"name": "PointInterpolator", "size": 1675},
+      {"name": "RectangleInterpolator", "size": 2042}
+     ]
+    },
+    {"name": "ISchedulable", "size": 1041},
+    {"name": "Parallel", "size": 5176},
+    {"name": "Pause", "size": 449},
+    {"name": "Scheduler", "size": 5593},
+    {"name": "Sequence", "size": 5534},
+    {"name": "Transition", "size": 9201},
+    {"name": "Transitioner", "size": 19975},
+    {"name": "TransitionEvent", "size": 1116},
+    {"name": "Tween", "size": 6006}
+   ]
+  }
+ ]
+}
+   ;
+  }
+  
+  var margin = {top: 20, right: 0, bottom: 20, left: 60},
+      width = 1000 - margin.right - margin.left,
+      height = 800 - margin.top - margin.bottom;
+
+  var i = 0,
+      duration = 750,
+      root
+      textinFrontOFNodeFor = [26];
+
+  var tree = d3.layout.tree()
+            .size([height, width-150])
+            .separation(function(a, b) { return (a.parent == b.parent ? 1 : 3); });
+
+  var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.y, d.x]; });
+
+  var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.right + margin.left)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  /*
+  d3.json("webTree.json", function(error, flare) {
+    if (error) throw error;
+
+    root = flare;
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    root.children.forEach(collapse);
+    update(root);
+  });
+  */
+  var myData = getData();
+  root = myData;
+  root.x0 = height / 2;
+  root.y0 = 0;
+
+  root.children.forEach(collapse);
+  update(root);
+
+  d3.select(self.frameElement).style("height", height + "px");
+
+  function expand(d){   
+      var children = (d.children)?d.children:d._children;
+      if (d._children) {        
+          d.children = d._children;
+          d._children = null;       
+      }
+      if(children)
+        children.forEach(expand);
+  }
+
+  function expandAll(){
+      expand(root); 
+      update(root);
+  }
+
+  function collapseAll(){
+      root.children.forEach(collapse);
+      collapse(root);
+      update(root);
+  }
+
+  function collapse(d) {
+      if (d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse);
+        d.children = null;
+      }
+    }
+    
+  function update(source) {
+    // Compute the new tree layout.
+    var nodes = tree.nodes(root).reverse(),
+        links = tree.links(nodes);
+
+    // Normalize for fixed-depth. <-- change here to change width
+     nodes.forEach(function(d) { d.y = d.depth * 120; });
+
+    // Update the nodes…
+    var node = svg.selectAll("g.node")
+        .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+    // Enter any new nodes at the parent's previous position.
+    var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+        .on("click", click);
+        
+    nodeEnter.each(function (d) {
+      if (d.children || d._children) {
+        d3.select(this).append("circle")
+        .attr("r", 1e-6)
+        .style("fill", "steelblue");
+        }
+      else  
+        d3.select(this).append("rect")
+          .attr("class", "leaf")
+          .attr("x", -4.5)
+          .attr("y", -4,5)
+          .attr("width", 1e-6)
+          .attr("height", 1e-6);
+      });       
+        
+    nodeEnter.append("text").each (function (d) {
+       // case: label node in front of it
+       // if ((d.children || d._children) && d.depth === 4) {
+       if (textinFrontOFNodeFor.indexOf(d.id) != -1) {
+         d3.select(this).attr("dx", -8)
+        .attr("dy", 3)
+        .style("font-size", 16)
+        .attr("text-anchor", "end")
+        .text(d.name)
+        .style("fill-opacity", 1e-6);
+       }
+       else {
+        d3.select(this).attr("dx", (d.children || d._children) ? 0 : 8)
+        .attr("dy",(d.children || d._children) ? -8 : 3)
+        .style("font-size", (d.children || d._children) ? 16 : 10)
+        .attr("text-anchor",(d.children || d._children) ? "middle" : "start")
+        .text(d.name);
+      }
+    });
+        
+        
+    // Transition nodes to their new position.
+    var nodeUpdate = node.transition()
+        .duration(duration)
+        .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+    nodeUpdate.select("circle")
+        .attr("r", 4.5)
+        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+    
+    nodeUpdate.select("rect")
+          .attr("width", 9)
+          .attr("height", 9);  
+
+    nodeUpdate.select("text")
+        .style("fill-opacity", 1);
+
+    // Transition exiting nodes to the parent's new position.
+    var nodeExit = node.exit().transition()
+        .duration(duration)
+        .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+        .remove();
+
+    nodeExit.select("circle")
+        .attr("r", 1e-6);
+
+    nodeExit.select("text")
+        .style("fill-opacity", 1e-6);
+
+    // Update the links…
+    var link = svg.selectAll("path.link")
+        .data(links, function(d) { return d.target.id; });
+
+    // Enter any new links at the parent's previous position.
+    link.enter().insert("path", "g")
+        .attr("class", "link")
+        .attr("d", function(d) {
+          var o = {x: source.x0, y: source.y0};
+          return diagonal({source: o, target: o});
+        });
+
+    // Transition links to their new position.
+    link.transition()
+        .duration(duration)
+        .attr("d", diagonal);
+
+    // Transition exiting nodes to the parent's new position.
+    link.exit().transition()
+        .duration(duration)
+        .attr("d", function(d) {
+          var o = {x: source.x, y: source.y};
+          return diagonal({source: o, target: o});
+        })
+        .remove();
+
+    // Stash the old positions for transition.
+    nodes.forEach(function(d) {
+      d.x0 = d.x;
+      d.y0 = d.y;
+    });
+  }
+
+  // Toggle children on click.
+  function click(d) {
+    if (d.children) {
+      d._children = d.children;
+      d.children = null;
+    } else {
+      d.children = d._children;
+      d._children = null;
+    }
+    update(d);
+  }
+</script><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>F1 Driver's Wage between 2014 and 2015</title>
+
+	</head>
+	<body>
+
+		<h1>F1 Drivers' Wage between 2014 and 2015!</h1>
+		<p id="source"><a href="http://www.crash.net/f1/news/221215/1/f1-2015-driver-salaries-published-but-who-earns-most.html">Source: F1 driver salaries published</a></p>
+		<p class="note">This table shows the wages of <em>F1 drivers</em>, one of the richest groups of people in the world, from 2014 to 2015.</p>
+		<p class="note">We can find out most of drivers' wages raised in 2015, only two drivers earned less last year.</p>
+		<p class="note">That's because their performances in the 2014 season was not good enough, if they didn't accept a lower salary, they might lose their jobs.</p>
+		<p class="note"><em>The wage is accounted by "Million Euro"</em></p>
+		<div id="table"></div>
+
+	</body>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+	<!-- load the function file you need before you call it... -->
+	<script type="text/javascript" src="js/stupidtable.js"></script>
+
+		<script type="text/javascript">
+			//Load in contents of CSV file, and do things to the data.
+			d3.csv("f1driverwage.csv", function(error, data) {
+
+				if (error) {
+					console.log("Had an error loading file.");
+				}
+
+				// We'll be using simpler data as values, not objects.
+				var myArray = [];
+
+				// this is a new variable, to make it easier to do a color scale.
+				// alternately, you could extract these values with a map function.
+				var allDifferences = [];
+
+				data.forEach(function(d, i){
+
+					// now we add another data object value, a calculated value.
+					d.difference = d.year2015 - d.year2014;
+
+				 // Add an array to the empty array with the values of each:
+			 	 myArray.push([d.Driver, d.year2014, d.year2015, d.difference]);
+
+         // this is just a convenience, another way would be to use a function to get the values in the d3 scale.
+			 	 allDifferences.push(d.difference);
+
+				});
+
+				console.log(allDifferences);
+
+				var table = d3.select("#table").append("table");
+
+				var header = table.append("thead").append("tr");
+
+				// Made some objects to construct the header in code:
+				// The sort_type is for the Jquery sorting function.
+				var headerObjs = [
+					{ label: "Driver", sort_type: "string" },
+					{ label: "2014", sort_type: "int" },
+					{ label: "2015", sort_type: "int" },
+					{ label: "Difference", sort_type: "int"},
+				];
+
+				header
+					.selectAll("th")
+					.data(headerObjs)
+					.enter()
+					.append("th")
+					.attr("data-sort", function (d) { return d.sort_type; })
+          .text(function(d) { return d.label; });
+
+        var tablebody = table.append("tbody");
+
+        rows = tablebody
+        	.selectAll("tr")
+        	.data(myArray)
+        	.enter()
+        	.append("tr");
+
+        // We built the rows using the nested array - now each row has its own array.
+
+        // let's talk about the scale - start at 0 or at lowest number?
+        console.log('Extent is ', d3.extent(allDifferences));
+
+      	var colorScale = d3.scale.linear()
+      		.domain(d3.extent(allDifferences))
+      		.range(["#fedcbd","#f58220"]);
+
+        cells = rows.selectAll("td")
+        	// each row has data associated; we get it and enter it for the cells.
+        	.data(function(d) {
+        		return d;
+        	})
+        	.enter()
+        	.append("td")
+        	.style("background-color", function(d,i) {
+        		// for the last element in the row, we color the background:
+        		if (i === 3) {
+        			return colorScale(d);
+
+        		}
+        	})
+
+        	.text(function(d) {
+        		return d;
+        	});
+
+
+      // jquery sorting applied to it - could be done with d3 and events.
+      $("table").stupidtable();
+
+
+			});
+
+				// Excercises for you if you want: Fix the names in the data and table so they look nicer.
+				// Sort the data by whatever you think is most interesting. What problem does that cause?
+				// Add a style sheet to make this table look nice
+		</script>
+
+		<style>
+
+		h1 {
+			text-align: center;
+			color: rgb(243,117,97);
+		}
+
+		#source {
+			text-align: center;
+		}
+
+		a {
+			color:rgb(243,117,97);
+			font-size: 18px;
+			font-style:italic;
+		}
+    a:hover {
+			color: red;
+		}
+		a:active {
+			color: rgb(213,97,146);
+		}
+
+		.note {
+			text-align: center;
+			font-size: 19px;
+			display: block;
+			margin-left:130px;
+			margin-right:130px;
+			padding-left:140px;
+			padding-right:140px;
+			margin-top: 20px;
+
+		}
+
+		#table {
+			margin-left:220px;
+		}
+
+		table {
+      font-style: italic;
+			margin-top:50px;
+
+      text-align: center;
+			font-size:22px;
+			display: block;
+			line-height: 43px;
+			border-collapse: collapse;
+			margin-left: 120px;
+
+		}
+		th {
+			text-align: center;
+			width:180px;
+			font-size: 24px;
+			font-style:italic;
+      cursor:pointer;
+			border-bottom: 1px solid rgb(236,236,236);
+			background-color:rgb(242,135,83);
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+		}
+
+
+		td.hovered {
+			background-color: rgb(255,220,187);
+
+		}
+
+		td {
+
+			border:1px solid rgb(236,236,236);
+
+		}
+
+		tbody{
+			font-size: 20px;
+			margin-left:20px;
+
+		}
+		</style>
+
+</html>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Gallery</title>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<style>
+
+.thumbs {
+    width:250px;
+    height:150px;
+    display: inline-block;
+    
+        margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+
+
+.images {
+
+max-height:100%; 
+max-width:100%;
+
+
+}
+
+
+
+
+
+ p{
+
+	font-family: "Century Gothic",'Helvetica Neue',Helvetica, sans-serif;
+	font-size: 1.0em;
+}
+
+
+.header1 { 
+
+width: 100%;
+height: 25px;
+background-color: #0099FF;
+line-height: 25px;
+
+
+}
+
+.header2 { 
+
+width: 100%;
+height: 25px;
+background-color: #FF3300;
+line-height: 25px;
+
+
+}
+
+.titles {
+
+	 margin-left: 10px;
+	 color: #fff;
+}
+
+.header3 { 
+
+width: 100%;
+height: 25px;
+background-color: #29293D;
+line-height: 25px;
+
+
+}
+.header4 , .header5{ 
+
+width: 100%;
+height: 25px;
+background-color: #1D561D;
+line-height: 25px;
+
+
+}
+
+
+
+</style>
+</head>
+<body>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent viverra lorem non nisl posuere, vel efficitur dolor aliquet. Phasellus non facilisis felis. In hac habitasse platea dictumst. Nullam elit orci, ornare vel turpis ac, elementum lacinia elit. Curabitur ultricies dui justo, nec vehicula tortor dapibus a. Maecenas sed nisl maximus, accumsan lorem in, scelerisque nulla. Vivamus vitae sapien tortor. Morbi non sem lacus. Sed cursus metus ac viverra consequat. Suspendisse vulputate condimentum leo.</p>
+<div class="header1"><p class="titles">Visuals made using d3 and other Javascript libraries (Angular, Radian etc)</p></div>
+<div id="d3"></div>
+<div class="header2"><p class="titles">Visuals made using Tableau Public/Desktop</p></div>
+<div id="tab"></div>
+<div class="header3"><p class="titles">Collection of mapping projects (Tableau, d3, Mapbox)</p></div>
+<div id="map"></div>
+
+<div class="header4"><p class="titles">Stats based visuals</p></div>
+<div id="stats"></div>
+<div class="header4"><p class="titles">Experiments</p></div>
+<div id="exp"></div>
+<div class="header5"><p class="titles">Software used for data transformation</p></div>
+<div id="etl"></div>
+
+<script>
+
+
+var d3Viz = [
+
+
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal2.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"]
+
+
+];
+
+   
+var gal = d3.select("#d3");
+
+var thumbs = gal.selectAll(".thumbs").data(d3Viz).enter().append("div").attr("class","thumbs");
+
+var title = thumbs.append("p").html(function(d) {return d[2];});
+
+var links = thumbs.append("a").attr("href",function(d) {return d[1];}).attr("target","_blank");
+
+var images = links.append("img").attr("src",function(d) {return d[0];}).attr("class","images");
+
+
+
+
+var TabViz = [
+
+
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal2.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"]
+
+
+];
+
+   
+var gal2 = d3.select("#tab");
+
+var thumbs2 = gal2.selectAll(".thumbs").data(TabViz).enter().append("div").attr("class","thumbs");
+
+var title2 = thumbs2.append("p").html(function(d) {return d[2];});
+
+var links2 = thumbs2.append("a").attr("href",function(d) {return d[1];}).attr("target","_blank");
+
+var images2 = links2.append("img").attr("src",function(d) {return d[0];}).attr("class","images");
+
+
+
+
+
+
+var MapViz = [
+
+
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal2.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"],
+["gal.png","http://bl.ocks.org/danharr/raw/df96298cbff5445ffe52/", "Visual Number 1"]
+
+
+];
+
+   
+var gal3 = d3.select("#map");
+
+var thumbs3 = gal3.selectAll(".thumbs").data(TabViz).enter().append("div").attr("class","thumbs");
+
+var title3 = thumbs3.append("p").html(function(d) {return d[2];});
+
+var links3 = thumbs3.append("a").attr("href",function(d) {return d[1];}).attr("target","_blank");
+
+var images3 = links3.append("img").attr("src",function(d) {return d[0];}).attr("class","images");
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style>
+			body { 
+				font-family: helvetica, sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+
+		<p>For now, just some rectangles...</p>
+		<svg width="500" height="500">
+			<rect x="10" y="20" width="400" height="30" style="fill:rgb(2,100,117)"/>
+			<rect x="10" y="60" width="400" height="30" style="fill:rgb(194,163,79)"/>
+			<rect x="10" y="100" width="400" height="30" style="fill:rgb(251,184,41)"/>
+		</svg>
+
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("arrestsbyage2012.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html><!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>
+
+<body>
+  <div>Ideation on conversion rate visuals</div>
+  <script>
+    var CONVERSION_RATES = [
+      {converted: 0.14, volume: 4190 + 25479},
+      {converted: 0.51, volume: 2526 + 2090},
+      {converted: 0.55, volume: 2034 + 1325},
+      {converted: 0.45, volume: 1281 + 1296},
+      {converted: 0.54, volume: 35 + 23},
+      {converted: 0.45, volume: 500 + 453},
+      {converted: 0.33, volume: 276 + 375},
+      {converted: 0.30, volume: 310 + 572},
+      {converted: 0.50, volume: 3 + 37},
+      {converted: 0.64, volume: 268 + 119}
+    ];
+    
+    var margin = {top: 10, right: 10, bottom: 10, left: 10};
+    var width = 960 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom - 30;
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr('id', 'transformGroup')
+
+    // Feel free to change or delete any of the code you see!
+    svg.append("rect")
+      .attr({x: 20, y: 10, width: width - 40, height: height - 20})
+      .style({ stroke: 'RGBA(44, 46, 47, 1)', fill:'none'})
+    
+    var totalVolume = CONVERSION_RATES.reduce(function(pv, cv){
+      return pv + cv.volume
+    },0)
+    CONVERSION_RATES.forEach(function(currentConversion, index){
+      CONVERSION_RATES[index].cumulVolume =  currentConversion.volume;
+
+      var prevConversion = CONVERSION_RATES[index - 1];
+      if (prevConversion){
+        CONVERSION_RATES[index].cumulVolume += prevConversion.cumulVolume
+      }
+    })
+    console.log(CONVERSION_RATES)
+    d3.select("#transformGroup").append('g').selectAll("circle").data(CONVERSION_RATES).enter().append('rect')
+      .attr({
+        x: function(d){return (width - 40) * (1 - d.converted)/2 + 20;},
+        y: function(d){
+          console.log(d.cumulVolume / totalVolume)
+          var barHeight = (height - 20) * (1 - d.cumulVolume / totalVolume);
+          return barHeight + 10;
+        },
+        width: function(d){return (width - 40) * d.converted;},
+        height: function(d){
+          var barHeight = (height - 20) * d.volume / totalVolume;
+          return barHeight;
+        },
+      })
+      .style({ fill: 'pink', opacity: 0.6})
+      // .transition().duration(1000)
+    
+    // d3.select("#transformGroup").append('g').selectAll("text").data(CONVERSION_RATES).enter().append('text')
+    //   .text(function(d){return Math.round(calcChanceOfOccurence(d.chance, d.n, d.hire)*1000)/10 + '%, ' +  Math.round(d.chance*100) + '% success, ' +  d.n + ', applicants'})
+    //   .attr({
+    //     x: 0, 
+    //     y: function(d){return 10 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (height - 20)}
+    //   })
+    //   .style({ fill: color, opacity:0.8})      
+    //   .transition().duration(1000)
+    //   .attr({
+    //     x: function(d){return 14 + 20 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (width - 40)}, 
+    //   })
+  </script>
+</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>d3 | reusable heatmap calendar</title> 
+  <meta name="author" content="Sundar Singh | eesur.com">
+  
+  <link rel="stylesheet" href="main.css">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js" charset="utf-8"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+</head>
+<body>
+
+  <article>
+    <header>
+      <span id="info">Info</span> 
+    </header>
+    <section id="heatmap"></section>
+  </article> 
+
+  <script> d3.eesur = {}; //namespace  </script>
+  <script src="d3_code_heatmap_cal.js"></script>
+  <script>
+  // *****************************************
+  // render chart
+  // *****************************************
+  (function() {
+      'use strict';
+      
+      var nestedData;
+      var parseDate = d3.time.format('%Y-%m-%d').parse;
+
+      // create chart
+      var heatChart = d3.eesur.heatmap()
+          .colourRangeStart('#e1f4fd')
+          .colourRangeEnd('#00447c')
+          .height(800)
+          .startYear('2011')
+          .endYear('2016')
+          .on('_hover', function (d, i) {
+              var f = d3.time.format('%B %d %Y');
+              d3.select('#info')
+                  .text(function () {
+                      return f(d) + ': ' + nestedData[d];
+                  });
+          });
+
+      // apply after nesting data
+      d3.json('heatmap_data.json', function(error, data) {
+
+          if (error) return console.warn(error);
+        
+          nestedData = d3.nest()
+              .key(function (d) { return parseDate(d.date.split(' ')[0]); })
+              .rollup(function (n) { 
+                  return d3.sum(n, function (d) { 
+                      return d.amount; // key
+                  }); 
+              })
+              .map(data);
+
+          // console.log(nestedData);
+
+          // render chart
+          d3.select('#heatmap')
+              .datum(nestedData)
+              .call(heatChart);
+
+      });
+
+  }());
+
+  d3.select(self.frameElement).style('height', '900px');
+
+  </script>
+
+</body>
+
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <style>
+    .axis path{
+    stroke: black;
+    fill:none;
+    }
+
+    .axis{
+      font-family: calibri;
+      font-size: 8pt;
+    }
+  </style>
+  <script type="text/javascript">
+  function draw(data){
+
+    // Function to parse date
+    var format = d3.time.format("%b %Y");
+
+    function agg_odds(leaves){
+
+      // Returning the mean of all odds for a particular Month-Year
+      return {
+        'MonthYear' : format.parse(leaves[0]["MonthYear"]),
+        'Mean_Odds' : d3.mean(leaves,function(d){return d['Mean_Odds'];}),
+        'Count' : d3.sum(leaves,function(d){return 1;}),
+        'Season' : leaves[0]["Season"],
+        'Country' : leaves[0]["Country"]
+      }
+
+      }
+
+    // Setting Margin, Width and Height
+    var margin = 75,
+    width = 1200 - margin,
+    height = 500 - margin;
+
+    // Appending SVG Element with width and height
+    var svg = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+    // Nesting my dataset by all games from a specific Month+Year and sending to agg_odds function (Returning mean of odds for particular Month-Year)
+    var FranceS2012 = d3.nest()
+    .key(function(d){
+      return d['MonthYear'];
+      })
+    .rollup(agg_odds)
+    .entries(data);
+
+    // Returning max odds from FranceS2012 dataset
+    var max_odds = d3.max(FranceS2012,function(d){
+      return d.values['Mean_Odds'];
+    });
+
+    // Creating fake scale for a specific (August to June) chamnpionship, starting with August of previous year
+    var x_scale = d3.time.scale()
+    .domain([new Date(1900,07,01),new Date(1901,05,01)])
+    .range([margin,width-margin]);
+
+    // Creating y-scale for odds with 1 as lowest minimum value (odds can't be less than 1)
+    var y_scale = d3.scale.linear()
+    .domain([1,max_odds])
+    .range([height-margin,margin]);
+
+    //Creating axis element
+    var x_axis = d3.svg.axis()
+    .scale(x_scale)
+    .tickFormat(d3.time.format('%b'));
+
+    // Creating axis element
+    var y_axis = d3.svg.axis()
+    .scale(y_scale)
+    .orient("left");
+
+    // Drawing x axis
+    d3.select("svg")
+    .append("g")
+    .attr("class","x axis")
+    .attr("transform","translate(0," + (height - margin) + ")")
+    .call(x_axis);
+
+    // Drawing y axis
+    d3.select("svg")
+    .append("g")
+    .attr("class","y axis")
+    .attr("transform","translate(" + margin + ",0)")
+    .call(y_axis);
+
+
+    // Overwriting Scale for specific Season 2012 (Aug 2011 to June 2012)
+    var x_scale = d3.time.scale()
+    .domain([new Date(2011,07,01),new Date(2012,05,01)])
+    .range([margin,width-margin]);
+    
+    // Drawing circles to svg element for the mean of odds for each month of the season (Size being different compared to number of games played in month)
+    d3.select("svg")
+    .selectAll("circle.FranceS2012")
+    .data(FranceS2012).
+    enter().append("circle")
+    .attr("class","FranceS2012")
+    .attr("cx", function(d){
+      return x_scale(d.values["MonthYear"]);})
+    .attr("cy", function(d){return y_scale(d.values["Mean_Odds"]);})
+    .attr("r",function(d){ return d.values["Count"] / 20;})
+    .style("fill","#1b9e77");
+
+    // Debugger to see outcome of drawing
+    debugger;
+
+    // Exiting the circles and removing them, note the class had been created earlier as FranceS2012
+    d3.select("svg")
+    .selectAll("circle.FranceS2012").remove();
+
+    // Debugger to see end result. One circle still present
+    debugger;
+}
+  </script>
+</head>
+<body>
+
+  <script type="text/javascript">
+
+  //Functions to return/parse Date
+  var MonthYear = d3.time.format("%b %Y");
+  var format = d3.time.format("%d/%m/%Y");
+
+  d3.tsv("https://gist.githubusercontent.com/kaltera/1fd4d6f8e919d753e225/raw/8616c6165eae3f301f6230ed9b522d7a62c7c029/France2012.tsv",function(d){
+
+    // Getting the final result of each game
+    var result = d['FTR'];
+    
+    // Calculating the mean of each betting company for that particular result
+    var mean_odds = d3.mean([d['B365' + result + ''],d['BW' + result + ''],d['IW' + result + ''],d['LB' + result + ''],d['VC' + result + ''],d['WH' + result + '']]);
+
+    // Parsing the date to origin_date
+      var origin_date = format.parse(d['Date']);
+
+      return{
+
+        // Returning "MonthYear" as the Month and Year of the Game. Returning Season (here only 2012). Returning Country (here only France). Returning Mean of the odds calculated earlier
+        'MonthYear' : MonthYear(origin_date),
+        'Season' : d['Year'],
+        'Country' : d['Div'],
+        'Mean_Odds' : mean_odds
+      }
+  },draw);
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<style type="text/css">
+  #line{
+    width: 700px;
+    margin: 20px 0;
+    height: 300px;
+    background: #eee;
+  }
+  button {
+    margin: 20px 0 0 20px;
+  }
+​</style>
+</head>
+<body>
+  <div id="line"></div>​
+  <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.5.0"></script>
+  <script type="text/javascript">
+    var w = 700;
+    var h = 300;
+
+    var svg = d3.select("#line")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h)
+      .attr("id", "visualization")
+      .attr("xmlns", "http://www.w3.org/2000/svg");
+
+    var data = d3.range(11).map(function(){return Math.random()*10})
+    var x = d3.scale.linear().domain([0, 10]).range([0, 700]);
+    var y = d3.scale.linear().domain([0, 10]).range([10, 290]);
+    var line = d3.svg.line()
+      .interpolate("cardinal")
+      .x(function(d,i) {return x(i);})
+      .y(function(d) {return y(d);})
+
+    var path = svg.append("path")
+      .attr("d", line(data))
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", "2")
+      .attr("fill", "none");
+
+    var totalLength = path.node().getTotalLength();
+
+    path
+      .attr("stroke-dasharray", totalLength + " " + totalLength)
+      .attr("stroke-dashoffset", totalLength)
+      .transition()
+        .duration(2000)
+        .ease("linear")
+        .attr("stroke-dashoffset", 0);
+
+    svg.on("click", function(){
+      path      
+        .transition()
+        .duration(2000)
+        .ease("linear")
+        .attr("stroke-dashoffset", totalLength);
+    })
+    
+
+    
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }
+      #map { height: 100%; }
+    </style>
+    <link href='http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css' type='text/css' rel='stylesheet' />
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwlBHEIw2KsaYlvkpUyLFzDUP-dixEra0"></script>
+    <script src='http://dev.openlayers.org/releases/OpenLayers-2.13.1/lib/OpenLayers.js'></script>
+    <script type="text/javascript">
+        var map;
+
+        function init() {
+            map = new OpenLayers.Map('map', {allOverlays: true}, {controls: []});
+            var layerSwitcher = new OpenLayers.Control.LayerSwitcher();
+            map.addControl(layerSwitcher);
+            layerSwitcher.maximizeControl();
+
+            
+            // the SATELLITE layer has all 22 zoom level, so we add it first to
+            // become the internal base layer that determines the zoom levels of the
+            // map.
+            var gsat = new OpenLayers.Layer.Google(
+                "Google Satellite",
+                {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, visibility: false}
+            );
+
+            var styles = [{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#0077ff"},{"visibility":"on"},{"saturation":-48}]},{"featureType":"poi.government","elementType":"geometry.fill","stylers":[{"saturation":-66},{"visibility":"off"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"},{"lightness":33},{"saturation":-55}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"lightness":67},{"hue":"#00ffa2"},{"saturation":-100}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"weight":0.7}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":15},{"visibility":"off"}]},{"featureType":"road.highway","stylers":[{"visibility":"simplified"},{"saturation":100},{"lightness":34}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"lightness":53},{"saturation":-100}]},{"featureType":"administrative.province","elementType":"labels.text.fill","stylers":[{"saturation":-100}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"saturation":-100},{"lightness":37}]},{"featureType":"administrative.province","elementType":"labels.text","stylers":[{"lightness":26}]},{"featureType":"administrative.country","elementType":"labels.text","stylers":[{"visibility":"on"},{"lightness":46}]},{"featureType":"administrative.country","elementType":"geometry.stroke","stylers":[{"lightness":36}]},{"featureType":"administrative.locality","elementType":"labels.icon","stylers":[{"lightness":54}]},{"featureType":"poi.government","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"saturation":100},{"lightness":60}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"visibility":"on"},{"lightness":50},{"saturation":-100}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"saturation":-100}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":49}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":39},{"visibility":"on"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":52}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"saturation":-100},{"lightness":65}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"saturation":-100},{"lightness":40}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"saturation":-100},{"lightness":30}]}];
+
+            var styledBase = new OpenLayers.Layer.Google(
+                "Google Physical",
+                // NOTE: this 'styled' ID should match the one defined below
+                {type: 'styled', visibility: true}
+            );
+
+            map.addLayers([styledBase, gsat]);
+
+        var styledMapType = new google.maps.StyledMapType(styles, {name: 'Styled Map'});
+        styledBase.mapObject.mapTypes.set('styled', styledMapType);
+        styledBase.mapObject.setMapTypeId('styled');
+
+            // Google.v3 uses EPSG:900913 as projection, so we have to
+            // transform our coordinates
+            map.setCenter(new OpenLayers.LonLat(10.2, 48.9).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 5);
+        }
+
+        init();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+  .arc path {
+    stroke: white;
+  }
+  .arc {
+    cursor: pointer;
+  }
+</style>
+
+<body>
+
+<script src="http://d3js.org/d3.v3.js"></script>
+
+<script>
+
+itemData = {
+  itemName: 'itemName',
+  hour: 1,
+  cost: 5
+}
+
+items = [
+  {
+    name: "A",
+    cost: 2,
+    color: 'steelblue'
+  },
+    {
+    name: "B",
+    cost: 2.5,
+    color: 'tomato'
+  },
+  {
+    name: "C",
+    cost: 1,
+    color: 'mediumturquoise'
+  },
+  {
+    name: "D",
+    cost: 3,
+    color: 'plum'
+  }
+]
+
+newItem = function () {
+  var index = Math.floor(Math.random() * (items.length));
+  var time = Math.floor(Math.random() * (23));
+
+  return {
+    itemName: items[index].name,
+    cost: items[index].cost,
+    hour: time
+  };
+}
+
+var data = []
+
+for (var i = 0; i < 1000; i++) {
+  data.push(newItem());
+}
+
+itemBuckets = [];
+
+fillBuckets = function (item) {
+  var bucketData = [];
+  var totalSales = 0;
+
+  for (var i = 0; i < 24; i++) {
+    bucketData[i] = 0;
+  }
+
+  data.filter(function(d) { return d.itemName === item.name; })
+      .forEach(function(itemSale){
+        bucketData[itemSale.hour]++;
+        totalSales += itemSale.cost;
+      });
+
+  itemBuckets.push({
+    name: item.name,
+    totalSales: totalSales,
+    buckets: bucketData,
+    color: item.color
+  })
+};
+
+items.forEach(function(item){
+  fillBuckets(item);
+});
+
+maxSales = d3.max(itemBuckets, function (bucket)
+  { return bucket.totalSales; })
+//should this be on a per item level?
+maxCount = d3.max(itemBuckets.reduce(function(previousValue, currentValue) {
+  return previousValue.concat(currentValue.buckets);
+}, []));
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 900 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom
+    cellSize =  width / 25
+    radius = height/2
+    smallRadius = width/26;
+
+var svg = d3.select('body').append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+
+var arc = d3.svg.arc()
+  .outerRadius(radius)
+  .innerRadius(0);
+
+var newArc = d3.svg.arc()
+    .outerRadius(smallRadius)
+    .innerRadius(0);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.totalSales; });
+
+var pieGroup = svg.append('g').attr('class', 'pieGroup')
+                  .attr('transform', 'translate(' + width/2 + ',' + height/2 +')');
+
+var punchGroup = svg.append('g').attr('class', 'punchGroup')
+                    .attr('transform', 'translate(' +  smallRadius * 2 + ',' + 0 +')');;
+
+var paths = null;
+
+var g = pieGroup.selectAll('.arc')
+  .data(pie(itemBuckets));
+
+g.enter().append('g')
+  .attr('class', 'arc')
+  .style('fill', function(d) { return d.data.color; })
+  .on('click', function(d) { refreshPunches(d.data)});
+
+g.exit().remove();
+
+paths = g.append('path').attr('d', arc);
+
+var refreshPunches = function(data) {
+  // move pie chart to half size
+
+  paths.transition().attr('d', newArc);
+
+  svg.select('.pieGroup').transition()
+      .attr('transform', 'translate(' + smallRadius + ',' + height/2 + ')');
+
+  //disply heat map with data.color
+  updatePunches(data);
+}
+
+var updatePunches = function (data) {
+  var punches = punchGroup.selectAll('circle')
+                  .data(data.buckets);
+
+  punches.enter().append('circle')
+    .attr('cx', function(d, i) {
+      return smallRadius * (i+1);
+    })
+    .attr('cy', height/2);
+
+  punches.transition()
+    .style('fill', data.color)
+    .attr('r', function(d) {
+      return (smallRadius / 2) * Math.random();
+    });
+}
+
+</script>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Consumption of Grapes by Race</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		
+        <style type="text/css">
+			
+			body {
+               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
+            
+            
+
+			svg {
+                background-color: white; }
+            
+            h1{ font-size: 30px;}
+            rect {
+                fill: #794044;}
+            
+            rect:hover {
+                opacity: 0.6;}
+            
+        </style>
+	
+    </head>
+	
+    <body>
+        <h1>Grapes Consumption by Race</h1>
+        <h2>Per Capita Retail Pounds Per Year</h2>
+		<script type="text/javascript">		
+			               
+           var svg = d3.select("body")
+                    .append("svg")
+				    .attr("width", 400)
+                    .attr("height", 380);
+                
+            d3.csv("fruits-by-race-uploaded-to-gist-FINAL.csv", function(data) {
+				
+                data.sort(function(a, b) {return d3.descending(+a.Grapes, +b.Grapes);});
+                
+                var rects = svg.selectAll("rect")
+					.data(data)
+					.enter()
+				    .append("rect");
+                    
+                rects.attr("x", 210)
+					.attr("y", function(d, i) {return i * 30;})
+					.attr("width", function(d) {return d.Grapes * 3;})
+					.attr("height", 25)
+                                      
+                    .append("title")
+                    .text(function(d) {return d.RaceEthnicity + "'s annual consumption of GRAPES, in retail pounds, is " + d.Grapes;});      
+            
+                svg.selectAll("text")
+					.data(data)
+					.enter()
+					.append("text")
+					.text(function(d){return d.RaceEthnicity;})
+					.attr("x", 200)
+					.attr("y", function(d, i){return i * 30 + 17;})
+                	.attr({"fill": "#8b8970",	"font-size": "12px", "text-anchor": "end"})});
+
+        </script>
+        <p>Sources: Food Intakes Converted to Retail Commodities Databases (ARS) and<br /> Food Availability (Per Capita) Data System; <a href="http://www.ers.usda.gov/data-products/commodity-consumption-by-population-characteristics.aspx#27850">Table 1: Fruit Availablity;</a> United States<br /> Department of Agriculture, Economic Research Service, 1999-2002.</p>
+	</body>
+</html><!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head><title>Responsiv data vis</title>
+<style>
+
+
+#container{
+  position: absolute; top: 5%; left: 5%; height: 90%; width: 90%;
+}
+svg{
+  border:solid 1px #f00;
+}
+</style></head>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<body>
+  <div id="container">
+    <svg></svg>
+  </div>
+
+</body>
+<script>
+
+var debounce = function(fn, timeout) {
+  var timeoutID = -1;
+  return function() {
+    if (timeoutID > -1) {
+      window.clearTimeout(timeoutID);
+    }
+    timeoutID = window.setTimeout(fn, timeout);
+  }
+};
+
+var draw = debounce(function() {
+  console.log('do your stuff in here');
+  var bounds = d3.select('#container').node().getBoundingClientRect();
+  var margin = {top:0,left:0,bottom:0,right:0};
+  d3.select('svg').attr({
+    height:Math.round(bounds.height),
+    width:Math.round(bounds.width)
+  });
+
+
+}, 125); //but wait atleast 125 ms before repeating this function
+
+d3.select(window).on('resize', draw);
+
+//$(window).resize(draw);
+
+</script>
+</html>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>
+
+<body>
+  <script>
+    var margin = {top: 20, right: 10, bottom: 20, left: 10};
+    var width = 960 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Feel free to change or delete any of the code you see!
+    d3.tsv("RG_AnnualFlow_v01.txt")
+    	.row(function(d) {return {key: d.key, value: +d.value};})
+    	.get(function(error, rows) { console.log(rows); });
+    
+    svg.append("rect")
+      .attr({x: 100, y: 10, width: width - 200, height: height - 20})
+      .style({ fill: "#a72d1a"})
+      .transition().duration(3000).ease("bounce")
+      .style({ fill: "#5db9e3"})
+    
+    console.log("you are now rocking with d3", d3);
+  </script>
+</body>
+<!DOCTYPE html>               
+<meta charset="utf-8">
+<style>
+
+.bar {
+  fill: purple;
+}
+
+.bar:hover {
+  fill: yellow;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 0, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10, "%");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("data.tsv", type, function(error, data) {
+  if (error) throw error;
+
+  x.domain(data.map(function(d) { return d.letter; }));
+  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 20)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+  		.attr("y",500)
+  		.attr("height",0)
+  		.transition().duration(1568)
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); });
+});
+
+function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+</script>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	<body>
+            <svg width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+             <g>
+              <title>Layer 1</title>
+              <path d="m461,369l-354,1l183,-308l171,307z" id="svg_5" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="#ffffaa"/>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_7" y="293" x="284" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Information</text>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_8" y="352" x="278" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">data</text>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_9" y="226" x="285" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Knowledge</text>
+              <text xml:space="preserve" text-anchor="middle" font-family="Cursive" font-size="24" id="svg_10" y="156" x="285" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Value</text>
+              <line id="svg_11" y2="180" x2="354" y1="180" x1="218" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+              <line id="svg_12" y2="250" x2="396" y1="250" x1="171" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+              <line id="svg_13" y2="320" x2="431" y1="320" x1="132" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+             </g>
+            </svg>
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("UNdata_Export_20150318.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html><!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var svg = d3.select(document.body).append('svg')
+  .attr('width', 500)
+  .attr('height', 500);
+
+
+var c = svg.append('circle');
+
+
+var v = 10;
+var circle = circleComponent();
+
+update();
+setInterval(update, 2000);
+
+
+function circleComponent() {
+  function draw(selection) {
+    // .enter() and .exit() won't this wont work, since we didn't use .data()
+    // selection.enter()
+    //   .append('circle');
+
+    selection
+      .attr('class', 'circle')
+      .attr('r', v)
+      .attr('cx', v)
+      .attr('cy', v)
+      .style('fill', '#333');
+
+    // selection.exit()
+    //   .remove();
+  }
+  
+  return draw;
+}
+
+
+function update() {
+  c.datum({v: v += 10});
+  c.call(circle);
+}
+
+
+function v(d) {
+  return d.v;
+}
+</script><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chiasm Boilerplate</title>
+    
+    <!-- Load the Chiasm stack. -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js"></script>
+        
+    <!-- Make the container fill the page and have a 20px black border. -->
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      #chiasm-container {
+        background-color: white;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+
+      .axis {
+        font: 0.8em sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      /* Custom CSS for axis labels. */
+      .axis-label {
+        text-anchor: middle;
+        font-size: 2em;
+      } 
+    </style>
+  </head>
+  <body>
+
+    <!-- Chiasm component DOM elements will be injected into this div. -->
+    <div id="chiasm-container"></div>
+    
+    <!-- This is the main program that sets up the Chiasm application. -->
+    <script>
+
+      // Create a new Chiasm instance.
+      var chiasm = new Chiasm();
+
+      // Register plugins that the configuration can access.
+      chiasm.plugins.layout = ChiasmLayout;
+      chiasm.plugins.links = ChiasmLinks;
+      chiasm.plugins.datasetLoader = ChiasmDatasetLoader;
+      chiasm.plugins.scatterPlot = ChiasmCharts.components.scatterPlot;
+
+      // Set the Chaism configuration.
+      chiasm.setConfig({
+        "layout": {
+          "plugin": "layout",
+          "state": {
+            "containerSelector": "#chiasm-container",
+            "layout": "myScatterPlot"
+          }
+        },
+        "scatterPlotDataLoader": {
+          "plugin": "datasetLoader",
+          "state": {
+            "path": "iris"
+          }
+        },
+        "myScatterPlot": {
+          "plugin": "scatterPlot",
+          "state": {
+            "xAxisLabelText": "Sepal Length",
+            "xColumn": "sepal_length",
+            "yAxisLabelText": "Petal Length", 
+            "yColumn": "petal_length",
+            "xAxisLabelTextOffset": 40,
+            "yAxisLabelTextOffset": 35,
+            "margin": { top: 10, right: 10, bottom: 50, left: 60 }
+          }
+        },
+        "myLinks": {
+          "plugin": "links",
+          "state": {
+            "bindings": [
+              "scatterPlotDataLoader.dataset -> myScatterPlot.dataset",
+            ]
+          }
+        }
+      }); 
+      
+      chiasm.getComponent("myScatterPlot").then(function (scatterPlotDataLoader){
+        console.log(scatterPlotDataLoader)
+        scatterPlotDataLoader.when("dataset", function(dataset){
+          console.log(dataset)
+        });
+      });
+
+      // Here's a simpler configuration to try,
+      // including just a single component instance.
+      /*
+      chiasm.setConfig({
+        "layout": {
+          "plugin": "layout",
+          "state": {
+            "containerSelector": "#chiasm-container",
+            "layout": "visualization"
+          }
+        },
+        "visualization": {
+          "plugin": "coloredRectangle",
+          "state": {
+            "color": "blue"
+          }
+        }
+      });
+      */
+
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>d3 module 3 - oxford</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #fff;
+			}
+
+			svg {
+				background-color: #fff;
+			}
+
+			p {
+				width: 450px;
+				font-family: "Arial", sans-serif;
+			}
+
+			rect {
+				fill: #c9c9c9;
+			}
+
+			rect:hover {
+				fill: #ed5e17;
+			}
+
+		</style>
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript">		
+
+
+			
+			d3.select("body")
+				.append("p")
+				.text("Percentage of U.S. domestic flights delayed by circumstances within the airline's control (December 2015)");
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 450)
+						.attr("height", 320);
+
+
+
+			d3.csv("airline_carrier_delay2015v2.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.Dec_2015, +b.Dec_2015);
+					
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 24;
+					})
+					.attr("width", function(d) {
+						return d.Dec_2015 * 40;
+					})
+					.attr("height", 16)
+					.append("title")
+					.text(function(d) {
+						return d.Airline + ": " + d.Dec_2015 + "%";
+					});
+
+			});
+
+
+		</script>
+		
+		<script type="text/javascript">
+			
+			d3.csv("airline_carrier_delay2015v2.csv", function(data) {
+				console.log(data);				
+			});
+			
+		</script>
+	</body>
+	
+</html><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Runs the main program found in main.js. -->
+    <script data-main="main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+
+    <!-- Configure paths for RequireJS modules. -->
+    <script>
+      requirejs.config({
+        paths: {
+          d3: "http://d3js.org/d3.v3.min",
+          jQuery: "//code.jquery.com/jquery-2.1.1.min",
+        }
+      });
+    </script>
+
+    <!-- Include CSS that styles the visualization. -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Line Chart</title>
+  </head>
+  <body>
+
+    <!-- The visualization will be injected into this div. -->
+    <div id="container"></div>
+
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Degrees</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			/*rect:hover {
+				fill: orange;
+			}*/
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+			.text-anchor {
+				font-weight: bold
+			}
+			
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Bachelor's Degrees by Institution</h1>
+
+		<p>Overall trends in degreses awarded by higher education institutions in California from 2000 - 2009. Source: <a href="http://www.cpec.ca.gov/OnLineData/OnLineData.asp">CPEC</a>.</p>
+
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 40, 120 ];  //Top, right, bottom, left
+
+			var color = d3.scale.ordinal()
+   				 .range(["#faa51a", "#89c78a", "#8f97cb"]);
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("degrees.csv", function(data) {
+
+				
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.total;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.year; } ));
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", padding[3])
+					.attr("y", function(d, i) {
+						return heightScale(d.year);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.total);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", function(d) {
+          				if (d.system == "University of California") {
+               				return "#937952";
+          				} else if (d.system == "California State University") {
+               				return "#faa51a";
+          				} else {
+               				return  "#565276";
+         				 }
+					 })
+					 
+					.append("title")
+					.text(function(d) {
+						return d.system + " total is: " + d.total;
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis)
+					.append("text")      // text label for the x axis
+        				.attr("x", 265 )
+        				.attr("y", 40 )
+						.attr("font-weight", "bold")
+       					.style("text-anchor", "middle")
+       					 .text("Total Number of Students");
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+	
+
+			});
+
+
+		</script>
+
+	</body>
+</html><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Runs the main program found in main.js. -->
+    <script data-main="main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+
+    <!-- Configure RequireJS paths for third party libraries. -->
+    <script>
+      requirejs.config({
+        paths: {
+          d3: "//d3js.org/d3.v3.min",
+          jquery: "//code.jquery.com/jquery-2.1.1.min",
+          lodash: "//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.4.0/lodash.min",
+          async: "//cdnjs.cloudflare.com/ajax/libs/async/0.9.0/async"
+        }
+      });
+    </script>
+
+    <!-- Include CSS that styles the visualization. -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Bar Chart</title>
+  </head>
+  <body>
+
+    <!-- The visualization will be injected into this div. -->
+    <div id="container"></div>
+
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Cleaning Up</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Where do computer science/math/stats graduates work?</h1>
+
+
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 30, 180 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("wherework.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.compmathstats, +b.compmathstats);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.compmathstats;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.field; } ));
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.field);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.compmathstats);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "steelblue")
+					.append("title")
+					.text(function(d) {
+						return d.compmathstats + " of Computer Science, Mathematics and/or Statistics Majors work as/in " + d.field;
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+	</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tryouts D3 Maps</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js"></script>
+  </head>
+  <body>
+  </body>
+  <script src="main.js"></script>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428</title>
+    <link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.css">
+    <style>
+        body {
+            background: black;
+            margin:0;
+            padding:0;
+        }
+
+        #histogram rect{
+            -webkit-transition: all 0.1s linear;
+            -moz-transition: all 0.1s linear;
+            -o-transition: all 0.1s linear;
+            transition: all 0.1s linear;
+        }
+
+        #bubble-cloud {
+            background: url("http://dummyimage.com/100x100/111/333?text=sample") 0 0;
+            width: 960px;
+            height: 470px;
+            /*overflow: hidden;*/
+            position: relative;
+            margin:0 auto;
+        }
+        svg {
+            outline: rgba(242,216,28,1);
+            overflow: visible;
+        }
+    </style>
+</head>
+<body>
+<div id="bubble-cloud"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/elapsedTime/elapsed-time-2.0.js"></script>
+<script src="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.js"></script>
+<script src="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/plot-transform.js"></script>
+<script>
+    // helpers
+    var random = function(min, max) {
+        if (max == null) {
+            max = min;
+            min = 0;
+        }
+        return min + Math.floor(Math.random() * (max - min + 1));
+        },
+        metrics = d3.select('#bubble-cloud').append("div")
+            .attr("id", "metrics")
+            .style("white-space", "pre"),
+        elapsedTime = outputs.ElapsedTime("#metrics", {
+            border: 0, margin: 0, "box-sizing": "border-box",
+            padding: "0 0 0 6px", background: "black", "color": "orange"
+        })
+            .message(function(value) {
+                var this_lap = this.lap().lastLap, aveLap = this.aveLap(this_lap)
+                return 'alpha:' + d3.format(" >7,.3f")(value)
+                    + '\tframe rate:' + d3.format(" >4,.1f")(1 / aveLap) + " fps"
+            }),
+        hist = d3.ui.FpsMeter("#metrics", {display: "inline-block"}, {
+            height: 10, width: 100,
+            values: function(d){return 1/d},
+            domain: [0, 60]
+        }),
+
+    // mock data
+        colors = [
+        {
+            fill: 'rgba(242,216,28,0.3)',
+            stroke: 'rgba(242,216,28,1)'
+        },
+        {
+            fill: 'rgba(207,203,196,0.3)',
+            stroke: 'rgba(207,203,196,1)'
+        },
+        {
+            fill: 'rgba(0,0,0,0.2)',
+            stroke: 'rgba(100,100,100,1)'
+        }
+    ];
+
+    // initialize
+    var container = d3.select('#bubble-cloud');
+    var $container = $('#bubble-cloud');
+    var containerWidth = 960;
+    var containerHeight = 470 - elapsedTime.selection.node().clientHeight;
+    var svgContainer = container
+        .append('svg')
+        .attr('width', containerWidth)
+        .attr('height', containerHeight);
+
+    var data = [],
+        rmin = 30,
+        rmax = 60;
+
+    d3.range(0, 3).forEach(function(j){
+        d3.range(0, 8).forEach(function(i){
+            var r = random(rmin, rmax);
+            data.push({
+                text: 'text' + i,
+                category: 'category' + j,
+                x: random(rmax, containerWidth - rmax),
+                y: random(rmax, containerHeight - rmax),
+                r: r,
+                fill: colors[j].fill,
+                stroke: colors[j].stroke,
+                get v() {
+                    var d = this;
+                    return {x: d.x - d.px || 0, y: d.y - d.py || 0}
+                },
+                set v(v) {
+                    var d = this;
+                    d.px = d.x - v.x;
+                    d.py = d.y - v.y;
+                },
+                get s() {
+                    var v = this.v;
+                    return Math.sqrt(v.x * v.x + v.y * v.y)
+                },
+                set s(s1){
+                    var s0 = this.s, v0 = this.v;
+                    if(!v0 || s0 == 0) {
+                        var theta = Math.random() * Math.PI * 2;
+                        this.v = {x: Math.cos(theta) * s1, y: Math.sin(theta) * s1}
+                    } else this.v = {x: v0.x * s1/s0, y: v0.y * s1/s0};
+                },
+                set sx(s) {
+                    this.v = {x: s, y: this.v.y}
+                },
+                set sy(s) {
+                    this.v = {y: s, x: this.v.x}
+                },
+            });
+        })
+    });
+
+    // collision detection
+    // derived from http://bl.ocks.org/mbostock/1748247
+    function collide(alpha, s0) {
+        var quadtree = d3.geom.quadtree(data);
+        return function(d) {
+            var drt = d.rt;
+            boundaries(d, drt);
+            var r = drt + rmax,
+                nx1 = d.x - r,
+                nx2 = d.x + r,
+                ny1 = d.y - r,
+                ny2 = d.y + r;
+            quadtree.visit(function(quad, x1, y1, x2, y2) {
+                if (quad.point && (quad.point !== d)) {
+                    var x = d.x - quad.point.x,
+                        y = d.y - quad.point.y,
+                        l = Math.sqrt(x * x + y * y),
+                        r = drt + quad.point.rt;
+                    if (l < r) {
+                        l = (l - r) / l * (1 + alpha);
+                        d.x -= x *= l;
+                        d.y -= y *= l;
+                        quad.point.x += x;
+                        quad.point.y += y;
+                    }
+                }
+                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+            });
+        };
+        function boundaries(d, _drt) {
+            var moreThan, v0,
+                drt = _drt || d.rt;
+            // boundaries
+
+            //reflect off the edges of the container
+            // check for boundary collisions and reverse velocity if necessary
+            if((moreThan = d.x > (containerWidth - drt)) || d.x < drt) {
+                d.escaped |= 2;
+                // if the object is outside the boundaries
+                //   manage the sign of its x velocity component to ensure it is moving back into the bounds
+                if(~~d.v.x) d.sx = d.v.x * (moreThan && d.v.x > 0 || !moreThan && d.v.x < 0 ? -1 : 1);
+                //   if vx is too small, then steer it back in
+                else d.sx = (~~Math.abs(d.v.y) || Math.min(s0, 1)*2) * (moreThan ? -1 : 1);
+                // clear the boundary without affecting the velocity
+                v0 = d.v;
+                d.x = moreThan ? containerWidth - drt : drt;
+                d.v = v0;
+                // add a bit of hysteresis to quench limit cycles
+            } else if (d.x < (containerWidth - 2*drt) && d.x > 2*drt) d.escaped &= ~2;
+
+            if((moreThan = d.y > (containerHeight - drt)) || d.y < drt) {
+                d.escaped |= 4;
+                if(~~d.v.y) d.sy = d.v.y * (moreThan && d.v.y > 0 || !moreThan && d.v.y < 0 ? -1 : 1);
+                else d.sy = (~~Math.abs(d.v.x) || Math.min(s0, 1)*2) * (moreThan ? -1 : 1);
+                v0 = d.v;
+                d.y = moreThan ? containerHeight - drt : drt;
+                d.v = v0;
+            }  else  if (d.y < (containerHeight - 2*drt) && d.y > 2*drt) d.escaped &= ~4;
+        }
+    }
+    // prepare layout
+    var force = d3.layout
+        .force()
+        .size([containerWidth, containerHeight])
+        .gravity(0.001)
+        .charge(100)
+        .friction(.8)
+        .on("start", function() {
+            elapsedTime.start(100);
+        });
+
+    // load data
+    force.nodes(data)
+        .start();
+
+    // create item groups
+    var node = svgContainer.selectAll('.node')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('class', 'node')
+        .call(force.drag);
+
+    // create circles
+    var circles = node.append('circle')
+        .classed('circle', true)
+        .attr('r', function (d) {
+            return d.r;
+        })
+        .style('fill', function (d) {
+            return d.fill;
+        })
+        .style('stroke', function (d) {
+            return d.stroke;
+        })
+        .each(function(d){
+            // add dynamic r getter
+            var n= d3.select(this);
+            Object.defineProperty(d, "rt", {get: function(){
+                return +n.attr("r")
+            }})
+        });
+
+    // create labels
+    node.append('text')
+        .text(function(d) {
+            return d.text
+        })
+        .classed('text', true)
+        .style({
+            'fill': '#ffffff',
+            'text-anchor': 'middle',
+            'font-size': '10px',
+            'font-weight': 'bold',
+            'text-transform': 'uppercase',
+            'font-family': 'Tahoma, Arial, sans-serif'
+        })
+        .attr('x', function (d) {
+            return 0;
+        })
+        .attr('y', function (d) {
+            return - rmax/5;
+        });
+
+    node.append('text')
+        .text(function(d) {
+            return d.category
+        })
+        .classed('category', true)
+        .style({
+            'fill': '#ffffff',
+            'font-family': 'Tahoma, Arial, sans-serif',
+            'text-anchor': 'middle',
+            'font-size': '8px'
+        })
+        .attr('x', function (d) {
+            return 0;
+        })
+        .attr('y', function (d) {
+            return rmax/4;
+        });
+
+    var lines = node.append('line')
+        .classed('line', true)
+        .attr({
+            x1: function (d) {
+                return - d.r + rmax/10;
+            },
+            y1: function (d) {
+                return 0;
+            },
+            x2: function (d) {
+                return d.r - rmax/10;
+            },
+            y2: function (d) {
+                return 0;
+            }
+        })
+        .attr('stroke-width', 1)
+        .attr('stroke',  function (d) {
+            return d.stroke;
+        })
+        .each(function(d){
+            // add dynamic x getter
+            var n= d3.select(this);
+            Object.defineProperty(d, "lxt", {get: function(){
+                return {x1: +n.attr("x1"), x2: +n.attr("x2")}
+            }})
+        });
+
+    // put circle into movement
+    force.on('tick', function t(e){
+        var s0 = 0.25, k = 0.3;
+
+        a = e.alpha ? e.alpha : force.alpha();
+
+        elapsedTime.mark(a);
+        if(elapsedTime.aveLap.history.length)
+            hist(elapsedTime.aveLap.history);
+
+        for ( var i = 0; i < 2; i++) {
+            circles
+                .each(collide(a, s0));
+        }
+
+
+        // regulate the speed of the circles
+        data.forEach(function reg(d){
+            if(!d.escaped) d.s =  (s0 - d.s * k) / (1 - k);
+        });
+
+        node.attr("transform", function position(d){return "translate(" + [d.x, d.y] + ")"});
+
+        force.alpha(0.05);
+    });
+
+    // animate
+    window.setInterval(function(){
+        var tinfl = 3000, tdefl = 1000, inflate = "elastic", deflate = "cubic-out";
+
+        for(var i = 0; i < data.length; i++) {
+            if(Math.random()>0.8) data[i].r = random(rmin,rmax);
+        }
+        var changes = circles.filter(function(d){return !d.scheduled && d.r != d.rt});
+        changes.filter(function(d){return d.r > d.rt})
+            .transition("r").duration(tinfl).ease(inflate)
+            .attr('r', function (d) {
+                return d.r;
+            })
+            .call(transFlag);
+        changes.filter(function(d){return d.r < d.rt})
+            .transition("r").duration(tdefl).ease(deflate)
+            .attr('r', function (d) {
+                return d.r;
+            })
+            .call(transFlag);
+        // this runs with an error of less than 1% of rmax
+        changes = lines.filter(function(d){return !d.scheduled && d.r != d.rt});
+        changes.filter(function(d){return d.r > d.rt})
+            .transition("l").duration(tinfl).ease(inflate)
+            .attr({
+                x1: function lx1(d) {
+                    return -d.r + rmax / 10;
+                },
+                x2: function lx2(d) {
+                    return d.r - rmax / 10;
+                }
+            })
+            .call(transFlag);
+        changes.filter(function(d){return d.r < d.rt})
+            .transition("l").duration(tdefl).ease(deflate)
+            .attr({
+                x1: function lx1(d) {
+                    return -d.r + rmax / 10;
+                },
+                x2: function lx2(d) {
+                    return d.r - rmax / 10;
+                }
+            })
+            .call(transFlag);
+
+        function transFlag(transition){
+            transition.each("start", function(d){
+                d.scheduled = true;
+            })
+                .each("end", function(d){
+                    window.setTimeout(function(){d.scheduled = false;}, tinfl)
+                })
+        }
+
+    }, 2 * 500);
+</script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<body>
+  <svg width="600" height="600">
+    <g class="badge otherBadge">
+      <circle r="45" transform="translate(100,100)" style="fill: #023474"></circle>
+  
+  	  <circle r="20" transform="translate(100,100)" style="stroke: #9C824A; stroke-width: 15px; fill: #EF0107"></circle>
+    </g> 
+  </svg>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+    	d3.selectAll(".badge")
+      	.transition("down")
+      		.delay(600)
+      		.duration(600)
+      		.attr("transform","translate(100,200)")
+      		.style('opacity', 0.5)
+        	.each('end', function()  {
+          	d3.select(this)
+          		.transition("up")
+          			.delay(600)
+          			.duration(600)
+          			.attr("transform","translate(400,100)")
+          			.style('opacity', 1)
+      });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Renewable consumption in the European Union</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+			h1 { 
+				font-size: 30px;
+				font-family: helvetica;
+			}
+
+			h2 { 
+				font-size: 20px;
+				font-family: helvetica;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect {
+				fill: #006600;
+			}
+			rect:hover {
+                opacity: 0.67;
+            }
+
+
+		</style>
+	</head>
+	<body>
+		<h1>Which EU country used the most renewable energy?</h1>
+		<h2>In percentage, for 2013</h2>
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 1000)
+						.attr("height", 450);
+
+
+
+			d3.csv("Lesson3GreenEnergy.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.Renewable_energy_consumption, +b.Renewable_energy_consumption);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 15;
+					})
+					.attr("width", function(d) {
+						return d.Renewable_energy_consumption * 10;
+					})
+					.attr("height", 12)
+					.append("title")
+					.text(function(d) {
+						return d.Country + " consumed "+ d.Renewable_energy_consumption + " percent of renewable energy in total in 2013.";
+					});
+
+			});
+
+
+		</script>
+			<p>Source: Eurostat</p>
+	</body>
+</html><!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <title>
+      
+                Chimp Chomp Design | Design and Research Lab based in Surabaya, Indonesia
+                  </title>
+
+        <meta name="description" content="Chimp Chomp is a design and research lab based in Surabaya, Indonesia. Powered by a troupe of hyper monkeys honed in multidisciplinary areas from design, computer science, photography, social science and cultural studies, our clients and collaborators range from independent initiatives to multi-national corporations and organisations.">
+        <meta name="generator" content="Bolt">
+        <link rel="canonical" href="http://chimpchomp.us/">
+       <link rel="stylesheet" href="http://chimpchomp.us//app/extensions/SimpleForms/assets/simpleforms.css" media="screen">
+       <link href='http://fonts.googleapis.com/css?family=Playfair+Display:400,700,400italic' rel='stylesheet' type='text/css'>          
+   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
+   
+        <link rel="stylesheet" href="http://chimpchomp.us/theme/chimpchomp/stylesheets/foundation.css">
+    <link rel="stylesheet" href="http://chimpchomp.us/theme/chimpchomp/stylesheets/app.css">
+
+    <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.foundation.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.foundation.topbar.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.flexslider-min.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.custom.js"></script>
+
+    <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/app.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/swipe.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.min.js"></script>
+   <script src="http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.perfectmasonry.js"></script>
+   <script>
+      $(document).ready(function() {  
+         var opt = {
+            layoutMode: 'perfectMasonry',
+            perfectMasonry: {
+               layout: 'vertical',
+               liquid: true,            // Set layout as liquid (default: false)
+               columnWidth: 250,         
+               rowHeight: 250,   
+               minCols: 2,              // Set min col count (default: 1)      
+               maxCols: 5              // Set max col count (default: 9999)               
+            }
+         };
+         
+         // Set default isotope
+         $('#projectContainer').isotope(opt).smartresize();
+         
+         $('#projectFilter a').click(function(){
+           var selector = $(this).attr('data-filter');
+           $('#projectContainer').isotope({ filter: selector });
+           return false;
+         });
+      });  
+   </script>
+   <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+   ga('create', 'UA-GOOGLES-1', 'chimpchomp.us');
+   ga('send', 'pageview');
+
+    </script>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Positioning the Top Bar -->
+   <div id="logo">
+      <a href="/">
+         <img src="http://chimpchomp.us/theme/chimpchomp/images/chimpchomplogo.jpg">
+      </a>
+   </div>
+   <nav class="top-bar">
+      <ul>
+         <li class="toggle-topbar"><a href="#"><span>Menu</span></a></li>
+                  
+    <li class="index-1 first active">
+        <a href="/"            class='first'>
+            Home
+        </a>
+
+            </li>
+
+
+    <li class="index-2">
+        <a href="/projects"            class=''>
+            Projects
+        </a>
+
+            </li>
+
+
+    <li class="index-3">
+        <a href="/oddsends"            class=''>
+            Odds &amp; Ends
+        </a>
+
+            </li>
+
+
+    <li class="index-4">
+        <a href="/about"            class=''>
+            About
+        </a>
+
+            </li>
+
+
+    <li class="index-5 last">
+        <a href="/contact"            class='last'>
+            Contact
+        </a>
+
+            </li>
+
+
+
+               </ul>   
+    </nav>
+   
+    <!-- Header bar -->
+
+    <!-- End header -->
+
+<!-- Main Page Content and Sidebar -->
+
+<div class="row">
+
+    <!-- Main Blog Content -->
+    <div role="content">
+         
+      <section class="home-projects">
+      <h3 class="home-header" id="latestprojects"><a href="/projects">Featured Projects</a></h3>
+                            <article class="homeProjectThumb " id="projectThumb-1">
+                                    <div imageholder">
+                        <a href="/project/korea">
+                            <img src="http://chimpchomp.us/thumbs/350x350crop/korea/Korea-33.jpg">
+                        </a>
+                    </div>
+                
+                <h3><a href="/project/korea">Korea</a></h3>
+
+                <p>All things pretty during our hedonist trip to Seoul, Korea</p>
+
+            </article>
+
+                    <article class="homeProjectThumb " id="projectThumb-2">
+                                    <div imageholder">
+                        <a href="/project/ayorek">
+                            <img src="http://chimpchomp.us/thumbs/350x350crop/2013-08ayorek/ayorek-responsive.jpg">
+                        </a>
+                    </div>
+                
+                <h3><a href="/project/ayorek">Ayorek</a></h3>
+
+                <p>Ayorek is a platform to record, connect, and enable the city and the people of Surabaya (Indonesia).</p>
+
+            </article>
+
+                    <article class="homeProjectThumb " id="projectThumb-3">
+                                    <div imageholder">
+                        <a href="/project/ha-giang">
+                            <img src="http://chimpchomp.us/thumbs/350x350crop/hagiang/Ha%20Giang%20-10.jpg">
+                        </a>
+                    </div>
+                
+                <h3><a href="/project/ha-giang">Ha Giang</a></h3>
+
+                <p>It is an interesting time in Ha Giang, a transition where a long standing solitude way of living is slowly adapting to modern convenience.</p>
+
+            </article>
+
+                    <article class="homeProjectThumb col-last" id="projectThumb-4">
+                                    <div imageholder">
+                        <a href="/project/c2o-library">
+                            <img src="http://chimpchomp.us/thumbs/350x350crop/2013-08/RecordSaturday-1.jpg">
+                        </a>
+                    </div>
+                
+                <h3><a href="/project/c2o-library">c2o library</a></h3>
+
+                <p>Founded in 2008 in Surabaya, C2O library & collabtive is an independent library and a collaborative space to learn, connect and create.</p>
+
+            </article>
+
+        
+      </section>
+      
+      <hr>
+      
+      <section class="home-oddsends">
+      <h3 class="home-header"><a href="/oddsends">Odds & Ends</a></h3>
+                            <article>
+                <h3 id="oddsendsTitle"><a href="/oddend/house-cleaning">House Cleaning</a></h3>
+                         <a href="/categories/news">news</a>     |  3.09.2013
+            </article>
+
+            <hr class="dotted">
+              </section>
+      
+      <section class="home-snapshot">
+      <div id="snapshot-navigation">
+      <div id="snapshot-left-arrow">prev</div>/ 
+      <div id="snapshot-right-arrow">next</div>
+      </div>
+      <h3 class="home-header">Snapshot</h3>
+      
+       
+   
+         <div id='slider' class='swipe'>
+            <div class='swipe-wrap'>
+                                 <div class="first ">
+                                    
+                                        <a href="/project/korea"><img src="http://chimpchomp.us/thumbs/753x502crop/korea/Korea-8.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/ha-giang"><img src="/thumbs/753x502crop/hagiang/Ha%20Giang%20-14.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/turkey"><img src="/thumbs/753x502crop/Turkey%20Small/Turkey-23.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/singapore"><img src="/thumbs/753x502crop/Singapore%20Small/Singapore-16.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/ludruk"><img src="/thumbs/753x502crop/Ludruk%20Small/Ludruk-18.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/2013-hasil-calendar"><img src="/thumbs/753x502crop/2012-11hasilcalendar/hasilcalendar-2012110612.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/glass-meets-glass"><img src="/thumbs/753x502crop/MuseumWeb/Museum-17.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/hanoi"><img src="/thumbs/753x502crop/HanoiWeb/Hanoi-8.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/kiwi-new-zealand"><img src="/thumbs/753x502crop/KiwiWeb/Kiwi-11.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/nuts-and-bolts"><img src="/thumbs/753x502crop/2011-11tokohasil/2012-07.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/new-york"><img src="/thumbs/753x502crop/newyork/New%20York-17.jpg"></a>
+
+                                    </div>
+                                 <div class="">
+                                    
+                                        <a href="/project/otik"><img src="/thumbs/753x502crop/2011-08otik/otik-05_coloured.jpg"></a>
+
+                                    </div>
+                                 <div class="last ">
+                                    
+                                        <a href="/project/book-bake-sale"><img src="http://chimpchomp.us/thumbs/753x502crop/2011-04bookbake/Cookies-4.jpg"></a>
+
+                                    </div>
+                           </div>
+         </div>
+         
+         
+         <script>
+            var elem = document.getElementById('slider');
+            var currentSlide, totalSlides;
+            
+            window.mySwipe = new Swipe(elem, {
+              startSlide: 0,
+              speed: 400,
+              continuous: true,
+              disableScroll: false,
+              stopPropagation: false,
+            });
+            
+            $('#snapshot-left-arrow').on('click', function() {
+               window.mySwipe.prev();
+            });
+            $('#snapshot-right-arrow').on('click', function() {
+               window.mySwipe.next();
+            });
+         </script>
+      </section>
+      
+      <hr>
+      
+      <section class="home-sideprojects">
+      <h3 class="home-header">Bananas Elsewhere</h3>
+      
+                           <div id="sideProjectContainer">
+                        <div class="sideProjectThumb " id="sideProjectThumb-1">
+                  <img src="http://chimpchomp.us/thumbs/450x450crop/2013-08ayorek/ayorek-responsive.jpg">
+                  <a href="http://ayorek.org"><div class="sideProjectDetails" id="sideProjectDetails-1">
+                     <div class="sideProjectCaption">
+                           <h2>Ayorek</h2>
+                           <p>Ayorek is a platform to record, connect, and enable the city and the people of Surabaya (Indonesia).</p>
+                        
+                     </div>
+                  </div></a>
+               </div>
+               
+                        <div class="sideProjectThumb " id="sideProjectThumb-2">
+                  <img src="http://chimpchomp.us/thumbs/450x450crop/2013-08/RecordSaturday-1.jpg">
+                  <a href="http://c2o-library.net"><div class="sideProjectDetails" id="sideProjectDetails-2">
+                     <div class="sideProjectCaption">
+                           <h2>c2o library</h2>
+                           <p>Founded in 2008 in Surabaya, C2O library & collabtive is an independent library and a collaborative space to learn, connect and create.</p>
+                        
+                     </div>
+                  </div></a>
+               </div>
+               
+                        <div class="sideProjectThumb col-last" id="sideProjectThumb-3">
+                  <img src="http://chimpchomp.us/thumbs/450x450crop/2013-09/wanderingtoes1.jpg">
+                  <a href=""><div class="sideProjectDetails" id="sideProjectDetails-3">
+                     <div class="sideProjectCaption">
+                           <h2>Wandering Toes</h2>
+                           <p>Exploring the city. Coming soon!</p>
+                        
+                     </div>
+                  </div></a>
+               </div>
+               
+                  </div>
+      </section>
+      
+      <hr>
+      
+      <section class="bottom-about">
+         <h3 class="home-header"><a href="/about">About</a></h3>
+         <article>
+                        <p>Chimp Chomp is a design and research lab based in Surabaya, Indonesia. Powered by a couple of hyper monkeys honed in multidisciplinary areas from design, computer science, photography, social science and cultural studies, our clients and collaborators range from independent initiatives to multi-national corporations and organisations.</p>
+         </article>
+      </section>
+
+      <section class="bottom-contact">
+         <h3 class="home-header"><a href="/contact">Contact</a></h3>
+         <article>
+            <p>Project inquiry, job application, internship application? 
+            <a href="http://chimpchomp.us/contact">This way please</a>.</p>
+            <p><strong>Chimp Chomp Design</strong><br />
+            Jl. Dr. Cipto 20 Surabaya 60264 Indonesia</p>
+            <p><strong>Email:</strong> we@chimpchomp.us<br />
+            <strong>Phone/WhatsApp:</strong> +62-818 0304 8070</p>
+         </article>
+      </section>
+      
+    </div>
+    <!-- End Main Content -->
+
+</div>
+
+<!-- End Main Content and Sidebar -->
+
+
+<!-- Footer -->
+
+<footer class="row">
+    <div class="col-full">
+        <hr class="double"/>
+        <div>
+         <ul class="link-list">
+            
+    <li class="index-1 first active">
+        <a href="/"            class='first'>
+            Home
+        </a>
+
+            </li>
+
+
+    <li class="index-2">
+        <a href="/projects"            class=''>
+            Projects
+        </a>
+
+            </li>
+
+
+    <li class="index-3">
+        <a href="/oddsends"            class=''>
+            Odds &amp; Ends
+        </a>
+
+            </li>
+
+
+    <li class="index-4">
+        <a href="/about"            class=''>
+            About
+        </a>
+
+            </li>
+
+
+    <li class="index-5 last">
+        <a href="/contact"            class='last'>
+            Contact
+        </a>
+
+            </li>
+
+
+         </ul>
+    </div>
+</footer>
+
+<!-- End Footer -->
+
+
+
+
+</div>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Map & Globe</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+    <!-- Leaflet.js, a geographic mapping library. -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" /> 
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+
+    <!-- A functional reactive model library. github.com/curran/model -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+
+    <!-- Chiasm core and plugins. github.com/chiasm-project -->
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js"></script>
+
+    <!-- Custom Chiasm plugins for this example. -->
+    <script src="globe.js"></script>
+    <script src="chiasm-leaflet.js"></script>
+
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      /* Make the container fill the page using CSS. */
+      #chiasm-container {
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="chiasm-container"></div>
+
+    <script>
+
+      var chiasm = Chiasm();
+
+      chiasm.plugins.layout = ChiasmLayout;
+      chiasm.plugins.links = ChiasmLinks;
+      chiasm.plugins.globe = Globe;
+      chiasm.plugins.leaflet = ChiasmLeaflet;
+
+      chiasm.setConfig({
+        "layout": {
+          "plugin": "layout",
+          "state": {
+            "containerSelector": "#chiasm-container",
+            "layout": {
+              "orientation": "horizontal",
+              "children": [
+                "leafletMap",
+                "d3Globe",
+              ]
+            }
+          }
+        },
+        "leafletMap": {
+          "plugin": "leaflet",
+          "state": {
+            "center": [-4.592, 39.859],
+            "zoom": 5
+          }
+        },
+        "d3Globe": {
+          "plugin": "globe"
+        },
+        "links": {
+          "plugin": "links",
+          "state": {
+            "bindings": [
+              "leafletMap.zoom -> d3Globe.zoom",
+              "leafletMap.center <-> d3Globe.center"
+            ]
+          }
+        }
+      });
+    
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+      
+    <title>Shotplot</title>
+    
+    <style>
+
+
+h1{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 26px;
+  font-style: bold;
+  
+}
+
+h2{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-style: bold;
+  
+}
+
+p{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;  
+}
+
+body {
+        background-color: #ccc;
+      }
+
+      svg {
+        background-color: white;
+      }
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+    </style>
+    
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+  </head>
+  <body>
+
+
+    <h1>Shotplots</h1>
+
+    <div id="shotplotContainerWrapper">  
+      <div id="shotplotContainer">
+
+     </div>
+    </div>
+ <script>
+
+
+// The basic image.
+
+var holder = d3.select("div")
+      .append("svg")           // append an SVG element to the div
+      .attr("width", 750)      
+      .attr("height", 467);   
+
+
+// draw a rectangle - pitch
+holder.append("rect")        // attach a rectangle
+    .attr("x", 0)         // position the left of the rectangle
+    .attr("y", 0)          // position the top of the rectangle
+    .attr("height", 467)    // set the height
+    .attr("width", 750)    // set the width
+    .style("stroke-width", 0)    // set the stroke width
+    .style("fill", "#80B280");    // set the fill colour 
+
+
+// draw penalty area 
+holder.append("rect")        // attach a rectangle
+    .attr("x", 135)         // position the left of the rectangle
+    .attr("y", 90)          // position the top of the rectangle
+    .attr("height", 125)    // set the height
+    .attr("width", 480)    // set the width
+    .style("stroke-width", 4)    // set the stroke width
+    .style("stroke", "white")    // set the line colour
+     .style("fill", "#80B280");    // set the fill colour 
+
+
+// // draw a six yard box
+ holder.append("rect")        // attach a rectangle
+    .attr("x", 252)         // position the left of the rectangle
+    .attr("y", 90)          // position the top of the rectangle
+    .attr("height", 47)    // set the height
+    .attr("width", 246)    // set the width
+    .style("stroke-width", 4)    // set the stroke width
+    .style("stroke", "white")    // set the line colour
+    .style("fill", "#80B280");    // set the fill colour 
+
+
+// // draw a circle - penalty spot 1
+holder.append("circle")        // attach a circle
+    .attr("cx", 375)           // position the x-centre
+    .attr("cy", 171)           // position the y-centre
+    .attr("r", 3)             // set the radius
+    .style("fill", "white");     // set the fill colour
+
+
+
+// // penalty box semi-circle 1
+var arc = d3.svg.arc()
+    .innerRadius(68)
+    .outerRadius(72)
+    .startAngle(2.25) //radians
+    .endAngle(4.05) //just radians
+    
+    holder.append("path")
+    .attr("d", arc)
+    .attr("fill", "white")
+    .attr("transform", "translate(375,171)");
+
+// center circle
+var arc1 = d3.svg.arc()
+    .innerRadius(70)
+    .outerRadius(74)
+    .startAngle(6) //radians
+    .endAngle(-1) //just radians
+    
+    holder.append("path")
+    .attr("d", arc1)
+    .attr("fill", "white")
+    .attr("transform", "translate(375,465)");
+
+
+// // add goal
+ holder.append("rect")        // attach a rectangle
+    .attr("x", 333)         // position the left of the rectangle
+    .attr("y", 57)          // position the top of the rectangle
+    .attr("height", 33)    // set the height
+    .attr("width", 84)    // set the width
+    .style("stroke-width", 4)    // set the stroke width
+    .style("stroke", "#EEEEEE")    // set the line colour
+    .style("fill", "#80B280");    // set the fill colour 
+
+// draw goal line 
+holder.append("line")
+    .attr("x1", 0)
+    .attr("y1", 90)
+    .attr("x2", 750)
+    .attr("y2", 90)
+    .style("stroke-width", 4)    // set the stroke width
+    .style("stroke", "white")    // set the line colour
+
+
+// draw half way line 
+holder.append("line")
+    .attr("x1", 0)
+    .attr("y1", 465)
+    .attr("x2", 750)
+    .attr("y2", 465)
+    .style("stroke-width", 4)    // set the stroke width
+    .style("stroke", "white")    // set the line colour
+
+
+
+// TOOLTIP SETUP
+
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Opponent:</strong> <span style='color:red'>" + d.opp + "</span>" + "<br>" + 
+    "<strong>Venue:</strong> <span style='color:lime'>" + d.ha + "</span>" + "<br>" + 
+    "<strong>Time:</strong> <span style='color:orange'>" + d.time  + "</span>"
+    ;
+  })
+
+holder.call(tip);
+
+
+// colors of dots
+var color = d3.scale.ordinal()
+.range(["blue", "red", "yellow", "lightgray", "peru"]);
+
+
+
+// add points  
+d3.csv("playershots_remy1314.txt", function(error, dots) {
+
+
+
+  holder.append("g")
+      .selectAll("circle")
+      .data(dots)
+      .enter()
+      .append("circle")
+      .attr("r", 5)
+      .attr("cx", function(d) { return +d.d3x; })
+      .attr("cy", function(d) { return +d.d3y; })
+      .style("stroke-width", 2)    // set the stroke width
+      .style("stroke", "black")    // set the line colour
+      .style("fill", function(d) { return color(d.event)})
+      .style("opacity", 0)    // set the initialopacity
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      .transition()
+      .delay(function(d,i){return  i * 200})
+      .duration(200)
+      .style("opacity", 1)    // set the opacity           
+            ;
+
+});
+
+
+
+// Legend 1
+var dataset = [
+              {x: 600, y: 15, r: 4, color: "yellow", txt: "Goal"},
+              {x: 600, y: 30, r: 4, color: "red", txt: "On-Target"},
+              {x: 600, y: 45, r: 4, color: "blue", txt: "Off-Target"},
+              {x: 600, y: 60, r: 4, color: "peru", txt: "Hit Woodwork"},
+              {x: 600, y: 75, r: 4, color: "lightgray", txt: "Blocked"}
+                       ];
+
+      holder.append("g")
+         .selectAll("circle")
+         .data(dataset)
+         .enter()
+         .append("circle")
+         .attr("cx", function(d) { return d.x; })
+         .attr("cy", function(d) { return d.y; })
+         .attr("r", function(d) { return d.r; })
+         .style("stroke-width", 2)    // set the stroke width
+         .style("stroke", "black")    // set the line colour
+         .style("fill", function(d) {return d.color;})
+   ;
+
+var text = holder.append("g").selectAll("text")
+                        .data(dataset)
+                        .enter()
+                        .append("text");
+
+var textLabels = text
+                 .attr("x", function(d) { return d.x +7; })
+                 .attr("y", function(d) { return d.y +3; })
+                 .text( function (d) { return d.txt; })
+                 .attr("font-family", 'Arial')
+                 .attr("font-size", "10px")
+                 .attr("fill", "black");
+
+
+
+// Plot Title
+var dataset1 = [
+              {x: 25, y: 25, fs: "18px", txt: "Loïc Rémy"},
+              {x: 25, y: 45, fs: "14px", txt: "Newcastle United"},
+              {x: 25, y: 60, fs: "12px", txt: "2013/14"}
+                       ];
+var text1 = holder.append("g").selectAll("text")
+                        .data(dataset1)
+                        .enter()
+                        .append("text");
+
+var textLabels1 = text1
+                 .attr("x", function(d) { return d.x; })
+                 .attr("y", function(d) { return d.y; })
+                 .text( function (d) { return d.txt; })
+                 .attr("font-family", 'Arial')
+                 .attr("font-size", function (d) { return d.fs; })
+                 .attr("fill", "black");
+
+    </script>
+  
+
+<p>A <a href="http://d3js.org/">d3.js</a> visualization of Loïc Rémy's shots throughout the 2013-14 season.  The animation is a bit gratuitous but fun.  <br> The dots appear in chronological order.  Hover over a datapoint to find more information about each shot.</p>
+
+<p> Code are <a href="https://github.com/jalapic/jalapic.github.io">available here </a>. Please get in touch via twitter if you have any feedback - <a href="https://twitter.com/jalapic">@jalapic</a> </p>
+
+</body>
+</html>
+<!doctype html>
+<html>
+<head>
+    <title>Polygon libtess fill in WebGL</title>
+    <meta charset="utf-8">
+
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: rgb(14, 21, 30);
+            height: 100%;
+        }
+
+        #map {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: #333;
+        }
+    </style>
+    <!-- vertex shader -->
+    <script id="vshader" type="x-shader/x-vertex">
+        uniform mat4 u_matrix;
+        attribute vec4 a_vertex;
+        attribute float a_pointSize;
+        attribute vec4 a_color;
+        varying vec4 v_color;
+
+        void main() {
+        // Set the size of the point
+        gl_PointSize =  a_pointSize;
+
+        // multiply each vertex by a matrix.
+        gl_Position = u_matrix * a_vertex;
+
+
+        // pass the color to the fragment shader
+        v_color = a_color;
+        }
+    </script>
+    <!-- fragment shader -->
+
+
+
+    <script id="fshader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 v_color;
+
+        void main() {
+
+        // -- squares
+        gl_FragColor = v_color; //vec4(0.8, 0.1,0.1, 0.9); //v_color;
+        
+        gl_FragColor.a = 0.8;
+       }
+
+    </script>
+    <script src="http://www.sumbera.com/gist/js/libtess/libtess.cat.js"></script>
+     <script>
+         
+         /*global libtess */
+
+         var tessy = (function initTesselator() {
+             // function called for each vertex of tesselator output
+             function vertexCallback(data, polyVertArray) {
+                 // console.log(data[0], data[1]);
+                 polyVertArray[polyVertArray.length] = data[0];
+                 polyVertArray[polyVertArray.length] = data[1];
+                 polyVertArray[polyVertArray.length] = currentColor[0];
+                 polyVertArray[polyVertArray.length] = currentColor[1];
+                 polyVertArray[polyVertArray.length] = currentColor[2];
+
+   
+
+             }
+             function begincallback(type) {
+                 if (type !== libtess.primitiveType.GL_TRIANGLES) {
+                     console.log('expected TRIANGLES but got type: ' + type);
+                 }
+             }
+             function errorcallback(errno) {
+                 console.log('error callback');
+                 console.log('error number: ' + errno);
+             }
+             // callback for when segments intersect and must be split
+             function combinecallback(coords, data, weight) {
+                 // console.log('combine callback');
+                 return [coords[0], coords[1], coords[2]];
+             }
+             function edgeCallback(flag) {
+                 // don't really care about the flag, but need no-strip/no-fan behavior
+                 // console.log('edge flag: ' + flag);
+             }
+
+             var tessy = new libtess.GluTesselator();
+             // tessy.gluTessProperty(libtess.gluEnum.GLU_TESS_WINDING_RULE, libtess.windingRule.GLU_TESS_WINDING_POSITIVE);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_VERTEX_DATA, vertexCallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_BEGIN, begincallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_ERROR, errorcallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_COMBINE, combinecallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_EDGE_FLAG, edgeCallback);
+
+             return tessy;
+         })();
+
+
+
+     </script>
+
+</head>
+<body>
+    <div id="map" ></div>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <script src="http://www.sumbera.com/gist/js/leaflet/canvas/L.CanvasOverlay.js"></script>
+    
+    
+
+    <script src="http://www.sumbera.com/gist/data/CZDistricts.js" charset="utf-8"></script>
+
+
+    <script>
+        
+        var leafletMap = L.map('map').setView([50.00, 14.44], 8);
+        L.tileLayer("http://{s}.sm.mapstack.stamen.com/(toner-background,$fff[difference],$fff[@23],$fff[hsl-saturation@20],toner-lines[destination-in])/{z}/{x}/{y}.png")
+        //L.tileLayer("http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png")
+            .addTo(leafletMap);
+
+
+        var glLayer = L.canvasOverlay()
+                       .drawing(drawingOnCanvas)
+                       .addTo(leafletMap);
+        var canvas = glLayer.canvas();
+
+        glLayer.canvas.width = canvas.clientWidth;
+        glLayer.canvas.height = canvas.clientHeight;
+
+
+        var gl = canvas.getContext('experimental-webgl', { antialias: true });
+
+        var pixelsToWebGLMatrix = new Float32Array(16);
+        var mapMatrix = new Float32Array(16);
+
+        // -- WebGl setup
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, document.getElementById('vshader').text);
+        gl.compileShader(vertexShader);
+
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, document.getElementById('fshader').text);
+        gl.compileShader(fragmentShader);
+
+        // link shaders to create our program
+        var program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+
+
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.enable(gl.BLEND);
+        //  gl.disable(gl.DEPTH_TEST);
+        // ----------------------------
+        // look up the locations for the inputs to our shaders.
+        var u_matLoc = gl.getUniformLocation(program, "u_matrix");
+        gl.aPointSize = gl.getAttribLocation(program, "a_pointSize");
+        // Set the matrix to some that makes 1 unit 1 pixel.
+
+        pixelsToWebGLMatrix.set([2 / canvas.width, 0, 0, 0, 0, -2 / canvas.height, 0, 0, 0, 0, 0, 0, -1, 1, 0, 1]);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+
+        gl.uniformMatrix4fv(u_matLoc, false, pixelsToWebGLMatrix);
+
+
+
+        var currentColor;
+        
+
+        // -- data
+
+        var verts = [];
+        //-- verts only
+       /*
+        data.features[0].geometry.coordinates[0].map(function (d, i) {
+            pixel = LatLongToPixelXY(d[1], d[0]);
+            verts.push(pixel.x, pixel.y, 0.1, 0.6, 0.1);
+        });
+        */
+
+        var start = new Date();
+        var all = [];
+        var numfeatures = data.features.length;
+      
+
+        data.features.map(function (b, i) {
+            tessy.gluTessNormal(0, 0, 1);
+            tessy.gluTessBeginPolygon(verts);
+            tessy.gluTessBeginContour();
+            currentColor = [Math.random(), Math.random(), Math.random()]; //[0.1, 0.6, 0.1];
+            b.geometry.coordinates[0].map(function (d, i) {
+                pixel = LatLongToPixelXY(d[1], d[0],0);
+                var coords = [pixel.x, pixel.y, 0];
+                tessy.gluTessVertex(coords, coords);
+            });
+            tessy.gluTessEndContour();
+            tessy.gluTessEndPolygon();
+
+            all = verts.concat(all);
+            
+            verts = [];
+
+        });
+        
+        
+     
+        verts = all;
+
+        
+        console.log("updated at  " + new Date().setTime(new Date().getTime() - start.getTime()) + " ms ");
+        
+        
+
+        // tirangles or point count
+       
+        var numPoints = verts.length / 5;
+        console.log("num points:   " + numPoints);
+        var vertBuffer = gl.createBuffer();
+        var vertArray = new Float32Array(verts);
+        var fsize = vertArray.BYTES_PER_ELEMENT;
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertArray, gl.STATIC_DRAW);
+        var vertLoc = gl.getAttribLocation(program, "a_vertex");
+        gl.vertexAttribPointer(vertLoc, 2, gl.FLOAT, false, fsize * 5, 0);
+        gl.enableVertexAttribArray(vertLoc);
+        // -- offset for color buffer
+        var colorLoc = gl.getAttribLocation(program, "a_color");
+        gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, fsize * 5, fsize * 2);
+        gl.enableVertexAttribArray(colorLoc);
+
+        glLayer.redraw();
+
+        
+
+
+
+
+
+        function drawingOnCanvas(canvasOverlay, params) {
+            if (gl == null) return;
+
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+
+            pixelsToWebGLMatrix.set([2 / canvas.width, 0, 0, 0, 0, -2 / canvas.height, 0, 0, 0, 0, 0, 0, -1, 1, 0, 1]);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+
+
+
+            var pointSize = Math.max(leafletMap.getZoom() - 4.0, 1.0);
+            gl.vertexAttrib1f(gl.aPointSize, pointSize);
+
+            // -- set base matrix to translate canvas pixel coordinates -> webgl coordinates
+            mapMatrix.set(pixelsToWebGLMatrix);
+
+            var bounds = leafletMap.getBounds();
+            var topLeft = new L.LatLng(bounds.getNorth(), bounds.getWest());
+            var offset = LatLongToPixelXY(topLeft.lat, topLeft.lng);
+
+            // -- Scale to current zoom
+            var scale = Math.pow(2, leafletMap.getZoom());
+            scaleMatrix(mapMatrix, scale, scale);
+
+            translateMatrix(mapMatrix, -offset.x, -offset.y);
+
+            // -- attach matrix value to 'mapMatrix' uniform in shader
+            gl.uniformMatrix4fv(u_matLoc, false, mapMatrix);
+            gl.drawArrays(gl.TRIANGLES, 0, numPoints);
+
+        }
+
+        // Returns a random integer from 0 to range - 1.
+        function randomInt(range) {
+            return Math.floor(Math.random() * range);
+        }
+
+        /*
+        function latlonToPixels(lat, lon) {
+            initialResolution = 2 * Math.PI * 6378137 / 256, // at zoomlevel 0
+            originShift = 2 * Math.PI * 6378137 / 2;
+
+            // -- to meters
+            var mx = lon * originShift / 180;
+            var my = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / (Math.PI / 180);
+            my = my * originShift / 180;
+
+
+            // -- to pixels at zoom level 0
+
+            var res = initialResolution;
+            x = (mx + originShift) / res,
+            y = (my + originShift) / res;
+
+
+            return { x: x, y: 256- y };
+        }
+        */
+        // -- converts latlon to pixels at zoom level 0 (for 256x256 tile size) , inverts y coord )
+        // -- source : http://build-failed.blogspot.cz/2013/02/displaying-webgl-data-on-google-maps.html
+
+        function LatLongToPixelXY(latitude, longitude) {
+            var pi_180 = Math.PI / 180.0;
+            var pi_4 = Math.PI * 4;
+            var sinLatitude = Math.sin(latitude * pi_180);
+            var pixelY = (0.5 - Math.log((1 + sinLatitude) / (1 - sinLatitude)) / (pi_4)) * 256;
+            var pixelX = ((longitude + 180) / 360) * 256;
+
+            var pixel = { x: pixelX, y: pixelY };
+
+            return pixel;
+        }
+
+        function translateMatrix(matrix, tx, ty) {
+            // translation is in last column of matrix
+            matrix[12] += matrix[0] * tx + matrix[4] * ty;
+            matrix[13] += matrix[1] * tx + matrix[5] * ty;
+            matrix[14] += matrix[2] * tx + matrix[6] * ty;
+            matrix[15] += matrix[3] * tx + matrix[7] * ty;
+        }
+
+        function scaleMatrix(matrix, scaleX, scaleY) {
+            // scaling x and y, which is just scaling first two columns of matrix
+            matrix[0] *= scaleX;
+            matrix[1] *= scaleX;
+            matrix[2] *= scaleX;
+            matrix[3] *= scaleX;
+
+            matrix[4] *= scaleY;
+            matrix[5] *= scaleY;
+            matrix[6] *= scaleY;
+            matrix[7] *= scaleY;
+        }
+
+
+    </script>
+</body>
+</html>
+<html>
+<head>
+  <title>Leaflet Squirrel - Part 5</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <style>
+    #map{ height: 100% }
+  </style>
+</head>
+<body>
+  <style>
+    .custom-popup .leaflet-popup-content-wrapper {
+      background: rgba(70, 145, 158, 0.7);
+      color: #fff;
+      font-size: 12px;
+      font-family: 'Comic Sans MS', monospace;
+      line-height: 18px;
+    }
+    .custom-popup .leaflet-popup-content-wrapper a {
+      color: rgba(255, 255, 255, 0.1);
+    }
+    .custom-popup .leaflet-popup-tip-container {
+      margin: 0 auto;
+      width: 40px;
+      height: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .custom-popup .leaflet-popup-tip {
+      width: 15px;
+      height: 15px;
+      padding: 1px;
+      margin: -8px auto 0;
+      -moz-transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
+      background: rgba(70, 145, 158, 0.7);
+    }
+  </style>
+  <div class="custom-popup" id="map"></div>
+
+  <script>
+
+  // initialize the map centered on the geographic center of the lower 48
+  var map = L.map('map').setView([39.833, -98.35], 4);
+
+  // load tile layer from mapstack we copied earlier and use the required attribution
+  L.tileLayer(
+    'http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png', {
+        attribution: 'Map tiles by <a href=”http://stamen.com”>Stamen Design</a>, under <a href=”http://creativecommons.org/licenses/by/3.0”>CC BY 3.0</a>. Data by <a href=”http://openstreetmap.org”>OpenStreetMap</a>, under <a href=”http://creativecommons.org/licenses/by-sa/3.0”>CC BY SA</a>',
+      // we want to limit the scrollability
+      maxZoom: 19,
+      minZoom: 4
+    }).addTo(map);
+    
+
+  $.getJSON("ssa-states.geojson", function(stateData){
+    L.geoJson(stateData).addTo(map);
+  });
+
+     // load the geojson file you saved in this directory
+  $.getJSON("ssa-capitals.geojson", function(data){
+    // use this to reference the icon in our repo 
+    var squirrelIcon = L.icon({
+        iconUrl: 'http://i1185.photobucket.com/albums/z344/buspainter2005/squirrel-king-icon_zps670e8595.png',
+        iconSize: [48, 48]
+    });
+    // add it to the map 
+   L.geoJson(data,{
+    pointToLayer: function(feature,latlng){
+	  var marker = L.marker(latlng,{
+      icon: squirrelIcon
+    });
+    marker.bindPopup('<b>Name: </b>' + feature.properties.FeatureNa + '<br/>' + '<b>Elevation: </b>' + feature.properties.elev);
+          return marker;
+    }
+  }).addTo(map);
+});
+    </script>
+</body>
+</html><!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.bar {
+  fill: yellow;
+}
+
+.bar:hover {
+  fill: green;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10, "%");
+
+var svg = d3.select("body").append("svg")
+    
+		.attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  	.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("data.tsv", type, function(error, data) {
+  if (error) throw error;
+
+  x.domain(data.map(function(d) { return d.letter; }));
+  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+  		.attr("y", 1000).transition().duration(1000)
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y (d.frequency); })
+  		
+  
+});
+
+function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+</script>
