@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Web;
 using System.Linq;
 using Microsoft.ProgramSynthesis;
 using Microsoft.ProgramSynthesis.AST;
@@ -8,6 +9,7 @@ using Microsoft.ProgramSynthesis.Extraction.Text;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.VersionSpace;
 using Microsoft.ProgramSynthesis.Wrangling.Constraints;
+
 
 namespace Extraction.Text
 {
@@ -28,8 +30,8 @@ namespace Extraction.Text
 
 				LearnDocType();
 				LearnHTMLlang();
-				//LearnHead();
-				//LearnStyle();
+				LearnHead();
+				LearnStyle();
 				LearnMeta();
 				LearnTitle();
 				LearnScriptInclude();
@@ -109,16 +111,17 @@ namespace Extraction.Text
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg.Run(input_new);
+				//var HttpUtility.HtmlEncode(unencoded);
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 					Console.WriteLine("},");
 				}
 				else
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 					Console.WriteLine("},");
 				}
 			}
@@ -165,13 +168,13 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 					Console.WriteLine("},");
 				}
 				else
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 					Console.WriteLine("},");
 				}
 			}
@@ -222,13 +225,13 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 					Console.WriteLine("},");
 				}
 				else
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 					Console.WriteLine("},");
 				}
 			}
@@ -247,8 +250,8 @@ namespace Extraction.Text
 			var input0 = RegionLearner.CreateStringRegion(text0);
 			var input1 = RegionLearner.CreateStringRegion(text1);
 
-			var extractedRegion0_b = input0.Slice(33, 1491);
-			var extractedRegion1_b = input1.Slice(31, 332);
+			var extractedRegion0_b = input0.Slice(173, 1482);
+			var extractedRegion1_b = input1.Slice(345, 380);
 
 			//Console.WriteLine(extractedRegion0_b.ToString());
 			//Console.WriteLine(extractedRegion1_b.ToString());
@@ -279,13 +282,13 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 					Console.WriteLine("},");
 				}
 				else
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 					Console.WriteLine("},");
 				}
 			}
@@ -336,13 +339,13 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 					Console.WriteLine("},");
 				}
 				else
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 					Console.WriteLine("},");
 				}
 			}
@@ -393,13 +396,13 @@ namespace Extraction.Text
 				if (output_new != null)
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 					Console.WriteLine("},");
 				}
 				else
 				{
 					Console.WriteLine("{");
-					Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+					Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 					Console.WriteLine("},");
 				}
 			}
@@ -427,12 +430,12 @@ namespace Extraction.Text
 			var extractedRegion4_b = input2.Slice(367, 437);
 			var extractedRegion5_b = input2.Slice(438, 511);
 
-			Console.WriteLine(extractedRegion0_b.ToString());
-			Console.WriteLine(extractedRegion1_b.ToString());
-			Console.WriteLine(extractedRegion2_b.ToString());
-			Console.WriteLine(extractedRegion3_b.ToString());
-			Console.WriteLine(extractedRegion4_b.ToString());
-			Console.WriteLine(extractedRegion5_b.ToString());
+			//Console.WriteLine(extractedRegion0_b.ToString());
+			//Console.WriteLine(extractedRegion1_b.ToString());
+			//Console.WriteLine(extractedRegion2_b.ToString());
+			//Console.WriteLine(extractedRegion3_b.ToString());
+			//Console.WriteLine(extractedRegion4_b.ToString());
+			//Console.WriteLine(extractedRegion5_b.ToString());
 
 			//return;
 
@@ -477,13 +480,13 @@ namespace Extraction.Text
 					if (output_new != null)
 					{
 						Console.WriteLine("{");
-						Console.WriteLine(" extract: {0}, filename: {1}, charStart: {2}, charEnd: {3} ", output_new, fileName, output_new.Start, output_new.End);
+						Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3} ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End);
 						Console.WriteLine("},");
 					}
 					else
 					{
 						Console.WriteLine("{");
-						Console.WriteLine(" extract: {0}, filename: {1} ", output_new, fileName);
+						Console.WriteLine(" \"extract\": \"{0}\", \"filename\": \"{1}\" ", output_new, fileName);
 						Console.WriteLine("},");
 					}
 				}
