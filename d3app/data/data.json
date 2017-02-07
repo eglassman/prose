@@ -1,0 +1,3319 @@
+data = [{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!doctype html&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;html&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 0, "charEnd": 6 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_13.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!doctype html&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE HTML&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_25.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_27.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_31.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_33.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_4.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_42.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!doctype html&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;html&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 0, "charEnd": 6 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_49.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_5.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_6.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_8.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 0, "charEnd": 15 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "&lt;html lang=en&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 16, "charEnd": 30 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_10.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_11.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_12.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_13.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_16.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_18.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_2.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_20.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_22.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_24.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_25.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_26.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_27.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_29.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_30.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_31.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_33.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_34.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 33 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_36.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_38.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_4.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;fr&quot;&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_42.html" 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 16, "charEnd": 32 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_44.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_45.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_46.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_47.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_48.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_49.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_5.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_6.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_7.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_8.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_9.html" 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Intermediate D3&lt;/title&gt;
+        &lt;script src=&quot;//d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				margin: 0;
+				background-color: #47484B;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			#container {
+				width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: black;
+			}
+
+			h1 {
+				font-size: 24px;
+                font-family : monospace;
+                color: white;
+			}
+
+			p {
+				font-size: 14px;
+                color:#aaaaaa;
+                font-family: monospace;
+			}
+
+			svg {
+				background-color: black;
+			}
+
+			g.bar text {
+				font-size: 11px;
+                font-family: monospace;
+                color: white;
+				font-weight: bold;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: red;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+                fill: #ffffff;
+                font-family: monospace;
+
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #aaaaaa;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;
+                fill:#777777;
+                font-family: monospace;
+                color: white;
+
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+            a {
+                color : white;
+            }
+
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 33, "charEnd": 1491 
+},
+{
+ "extract": "    &lt;head&gt;
+        &lt;meta charset=utf-8&gt;
+        &lt;title&gt;Simplified Low Barrel&lt;/title&gt;
+        &lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.min.css&quot; rel=&quot;stylesheet&quot; /&gt;
+        &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;/head&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 31, "charEnd": 332 
+},
+{
+ "extract": "    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Week Calendar of Life&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;app.css&quot;&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 16, "charEnd": 136 
+},
+{
+ "extract": "&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;OpeNER - Opinion targets (Amsterdam)&quot; /&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;OpeNER - Opinion targets (Amsterdam)&lt;/title&gt;
+    &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+    &lt;script src=&#39;layout.cloud.js&#39;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://d3js.org/queue.v1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://davidbau.com/encode/seedrandom-min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;index.css&quot;&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 23, "charEnd": 506 
+},
+{
+ "extract": "&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;  &lt;!--set charset to utf-8--&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;  &lt;!--enable mobile views--&gt;
+
+    &lt;!-- CSS --&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/normalize.css&quot;&gt; &lt;!--reset css for cross-browser compatibility--&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/bootstrap.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/agency.css&quot;&gt;
+    &lt;!-- &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/bootstrap-theme.css&quot;&gt; --&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/main.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/responsive.css&quot;&gt;
+
+
+    &lt;!-- JS --&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;title&gt;D3 Stacked Bar Chart&lt;/title&gt;
+    &lt;style&gt;
+      .axis text {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 17, "charEnd": 1254 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_13.html" 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Sorting Elements&lt;/title&gt;
+		
+        &lt;!--&lt;script type=&quot;text/javascript&quot; src=&quot;../d3.v3.js&quot;&gt;&lt;/script&gt;--&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org./d3.v3.js&quot;&gt;&lt;/script&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+			
+			
+            
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+        
+
+			h1 {
+				font-size: 25px;
+				margin: 0;
+                color:#B5B1B1;
+			}
+            p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+                color:#B5B1B1;
+                
+			}
+
+			a {
+                text-decoration:none;
+                color:rgb(216,83,43);
+            }
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #B5B1B1;;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;			/* Made this text smaller, for testing */
+                
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;}
+		
+
+
+            /* gridline nuevo */
+            .tick.minor line {
+              stroke: #777;
+              stroke-dasharray: 2,2;
+            }
+             /* gridline nuevo */
+
+             /*
+				NOTE that CSS comments look use asterisks and slashes,
+				not &lt;!-- comment --&gt; like HTML comments.
+             */
+
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 33, "charEnd": 1422 
+},
+{
+ "extract": "&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;d3 legend | scrollable legend&lt;/title&gt; 
+  &lt;meta name=&quot;author&quot; content=&quot;Sundar Singh | eesur.com&quot;&gt;
+
+  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://rawgit.com/turban/d3.slider/master/d3.slider.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;
+  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt; 
+  &lt;script type=&quot;text/javascript&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;/head&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 33, "charEnd": 512 
+},
+{
+ "extract": "&lt;head&gt;
+&lt;meta charset=utf-8 /&gt;
+&lt;title&gt;GeoJSON from live realtime data&lt;/title&gt;
+&lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
+&lt;script src=&#39;https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js&#39;&gt;&lt;/script&gt;
+&lt;link href=&#39;https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css&#39; rel=&#39;stylesheet&#39; /&gt;
+&lt;style&gt;
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 23, "charEnd": 469 
+},
+{
+ "extract": "&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Sounds and Boxes&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;soundAndBoxes.css&quot;&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 33, "charEnd": 151 
+},
+{
+ "extract": "
+&lt;head&gt;
+  &lt;style&gt;
+    .node circle {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .node {
+      font: 10px sans-serif;
+    }
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 1.5px;   
+    }
+      
+    .leaf {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+  &lt;/style&gt;
+  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 39, "charEnd": 455 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;F1 Driver&#39;s Wage between 2014 and 2015&lt;/title&gt;
+
+	&lt;/head&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 33, "charEnd": 131 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_2.html" 
+},
+{
+ "extract": "&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;Gallery&lt;/title&gt;
+&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+&lt;style&gt;
+
+.thumbs {
+    width:250px;
+    height:150px;
+    display: inline-block;
+    
+        margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+
+
+.images {
+
+max-height:100%; 
+max-width:100%;
+
+
+}
+
+
+
+
+
+ p{
+
+	font-family: &quot;Century Gothic&quot;,&#39;Helvetica Neue&#39;,Helvetica, sans-serif;
+	font-size: 1.0em;
+}
+
+
+.header1 { 
+
+width: 100%;
+height: 25px;
+background-color: #0099FF;
+line-height: 25px;
+
+
+}
+
+.header2 { 
+
+width: 100%;
+height: 25px;
+background-color: #FF3300;
+line-height: 25px;
+
+
+}
+
+.titles {
+
+	 margin-left: 10px;
+	 color: #fff;
+}
+
+.header3 { 
+
+width: 100%;
+height: 25px;
+background-color: #29293D;
+line-height: 25px;
+
+
+}
+.header4 , .header5{ 
+
+width: 100%;
+height: 25px;
+background-color: #1D561D;
+line-height: 25px;
+
+
+}
+
+
+
+&lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 23, "charEnd": 912 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;
+		&lt;style&gt;
+			body { 
+				font-family: helvetica, sans-serif;
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 33, "charEnd": 267 
+},
+{
+ "extract": "  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  &lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 23, "charEnd": 267 
+},
+{
+ "extract": "&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;d3 | reusable heatmap calendar&lt;/title&gt; 
+  &lt;meta name=&quot;author&quot; content=&quot;Sundar Singh | eesur.com&quot;&gt;
+  
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;
+  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 33, "charEnd": 497 
+},
+{
+ "extract": "&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;http://dimplejs.org/dist/dimple.v2.0.0.min.js&quot;&gt;&lt;/script&gt;
+    &lt;style&gt;
+    .axis path{
+    stroke: black;
+    fill:none;
+    }
+
+    .axis{
+      font-family: calibri;
+      font-size: 8pt;
+    }
+  &lt;/style&gt;
+  &lt;script type=&quot;text/javascript&quot;&gt;
+  function draw(data){
+
+    // Function to parse date
+    var format = d3.time.format(&quot;%b %Y&quot;);
+
+    function agg_odds(leaves){
+
+      // Returning the mean of all odds for a particular Month-Year
+      return {
+        &#39;MonthYear&#39; : format.parse(leaves[0][&quot;MonthYear&quot;]),
+        &#39;Mean_Odds&#39; : d3.mean(leaves,function(d){return d[&#39;Mean_Odds&#39;];}),
+        &#39;Count&#39; : d3.sum(leaves,function(d){return 1;}),
+        &#39;Season&#39; : leaves[0][&quot;Season&quot;],
+        &#39;Country&#39; : leaves[0][&quot;Country&quot;]
+      }
+
+      }
+
+    // Setting Margin, Width and Height
+    var margin = 75,
+    width = 1200 - margin,
+    height = 500 - margin;
+
+    // Appending SVG Element with width and height
+    var svg = d3.select(&quot;body&quot;)
+    .append(&quot;svg&quot;)
+    .attr(&quot;width&quot;, width)
+    .attr(&quot;height&quot;, height);
+
+    // Nesting my dataset by all games from a specific Month+Year and sending to agg_odds function (Returning mean of odds for particular Month-Year)
+    var FranceS2012 = d3.nest()
+    .key(function(d){
+      return d[&#39;MonthYear&#39;];
+      })
+    .rollup(agg_odds)
+    .entries(data);
+
+    // Returning max odds from FranceS2012 dataset
+    var max_odds = d3.max(FranceS2012,function(d){
+      return d.values[&#39;Mean_Odds&#39;];
+    });
+
+    // Creating fake scale for a specific (August to June) chamnpionship, starting with August of previous year
+    var x_scale = d3.time.scale()
+    .domain([new Date(1900,07,01),new Date(1901,05,01)])
+    .range([margin,width-margin]);
+
+    // Creating y-scale for odds with 1 as lowest minimum value (odds can&#39;t be less than 1)
+    var y_scale = d3.scale.linear()
+    .domain([1,max_odds])
+    .range([height-margin,margin]);
+
+    //Creating axis element
+    var x_axis = d3.svg.axis()
+    .scale(x_scale)
+    .tickFormat(d3.time.format(&#39;%b&#39;));
+
+    // Creating axis element
+    var y_axis = d3.svg.axis()
+    .scale(y_scale)
+    .orient(&quot;left&quot;);
+
+    // Drawing x axis
+    d3.select(&quot;svg&quot;)
+    .append(&quot;g&quot;)
+    .attr(&quot;class&quot;,&quot;x axis&quot;)
+    .attr(&quot;transform&quot;,&quot;translate(0,&quot; + (height - margin) + &quot;)&quot;)
+    .call(x_axis);
+
+    // Drawing y axis
+    d3.select(&quot;svg&quot;)
+    .append(&quot;g&quot;)
+    .attr(&quot;class&quot;,&quot;y axis&quot;)
+    .attr(&quot;transform&quot;,&quot;translate(&quot; + margin + &quot;,0)&quot;)
+    .call(y_axis);
+
+
+    // Overwriting Scale for specific Season 2012 (Aug 2011 to June 2012)
+    var x_scale = d3.time.scale()
+    .domain([new Date(2011,07,01),new Date(2012,05,01)])
+    .range([margin,width-margin]);
+    
+    // Drawing circles to svg element for the mean of odds for each month of the season (Size being different compared to number of games played in month)
+    d3.select(&quot;svg&quot;)
+    .selectAll(&quot;circle.FranceS2012&quot;)
+    .data(FranceS2012).
+    enter().append(&quot;circle&quot;)
+    .attr(&quot;class&quot;,&quot;FranceS2012&quot;)
+    .attr(&quot;cx&quot;, function(d){
+      return x_scale(d.values[&quot;MonthYear&quot;]);})
+    .attr(&quot;cy&quot;, function(d){return y_scale(d.values[&quot;Mean_Odds&quot;]);})
+    .attr(&quot;r&quot;,function(d){ return d.values[&quot;Count&quot;] / 20;})
+    .style(&quot;fill&quot;,&quot;#1b9e77&quot;);
+
+    // Debugger to see outcome of drawing
+    debugger;
+
+    // Exiting the circles and removing them, note the class had been created earlier as FranceS2012
+    d3.select(&quot;svg&quot;)
+    .selectAll(&quot;circle.FranceS2012&quot;).remove();
+
+    // Debugger to see end result. One circle still present
+    debugger;
+}
+  &lt;/script&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 23, "charEnd": 3619 
+},
+{
+ "extract": "&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot;/&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+  #line{
+    width: 700px;
+    margin: 20px 0;
+    height: 300px;
+    background: #eee;
+  }
+  button {
+    margin: 20px 0 0 20px;
+  }
+​&lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_25.html", "charStart": 23, "charEnd": 273 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+      html, body { height: 100%; margin: 0; padding: 0; }
+      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }
+      #map { height: 100%; }
+    &lt;/style&gt;
+    &lt;link href=&#39;http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39; /&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 23, "charEnd": 381 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_27.html" 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Consumption of Grapes by Race&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;
+		
+        &lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
+            
+            
+
+			svg {
+                background-color: white; }
+            
+            h1{ font-size: 30px;}
+            rect {
+                fill: #794044;}
+            
+            rect:hover {
+                opacity: 0.6;}
+            
+        &lt;/style&gt;
+	
+    &lt;/head&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 33, "charEnd": 625 
+},
+{
+ "extract": "&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Responsiv data vis&lt;/title&gt;
+&lt;style&gt;
+
+
+#container{
+  position: absolute; top: 5%; left: 5%; height: 90%; width: 90%;
+}
+svg{
+  border:solid 1px #f00;
+}
+&lt;/style&gt;&lt;/head&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 39, "charEnd": 223 
+},
+{
+ "extract": "
+&lt;!--http://blog.webkid.io/maps-with-leaflet-and-topojson/--&gt;
+
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;EU map: leaflet&quot;&gt;
+    &lt;meta name=&quot;keywords&quot; content=&quot;openness&quot;&gt;
+    &lt;meta name=&quot;author&quot; content=&quot;Michal Škop&quot;&gt;
+&lt;!--    &lt;link type=&quot;image/x-icon&quot; href=&quot;/images/favicon.ico&quot; rel=&quot;shortcut icon&quot;&gt;--&gt;
+
+
+
+    &lt;link href=&quot;//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/superhero/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;link href=&quot;//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+
+    &lt;script src=&quot;//code.jquery.com/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;
+&lt;!--    &lt;script src=&quot;//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&quot;&gt;--&gt;
+
+
+
+    &lt;title&gt;EU map&lt;/title&gt;
+    
+    
+&lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot;&gt;
+ 
+    
+    
+  &lt;/head&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 33, "charEnd": 1011 
+},
+{
+ "extract": "  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  &lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 23, "charEnd": 267 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_31.html" 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 33, "charEnd": 190 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_33.html" 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Chiasm Boilerplate&lt;/title&gt;
+    
+    &lt;!-- Load the Chiasm stack. --&gt;
+    &lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js&quot;&gt;&lt;/script&gt;
+        
+    &lt;!-- Make the container fill the page and have a 20px black border. --&gt;
+    &lt;style&gt;
+
+      body {
+        background-color: black;
+      }
+
+      #chiasm-container {
+        background-color: white;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+
+      .axis {
+        font: 0.8em sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      /* Custom CSS for axis labels. */
+      .axis-label {
+        text-anchor: middle;
+        font-size: 2em;
+      } 
+    &lt;/style&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 23, "charEnd": 1646 
+},
+{
+ "extract": "&lt;html lang=&quot;en&quot;&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;d3 module 3 - oxford&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: #fff;
+			}
+
+			svg {
+				background-color: #fff;
+			}
+
+			p {
+				width: 450px;
+				font-family: &quot;Arial&quot;, sans-serif;
+			}
+
+			rect {
+				fill: #c9c9c9;
+			}
+
+			rect:hover {
+				fill: #ed5e17;
+			}
+
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 460 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+
+    &lt;!-- Runs the main program found in main.js. --&gt;
+    &lt;script data-main=&quot;main.js&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- Configure paths for RequireJS modules. --&gt;
+    &lt;script&gt;
+      requirejs.config({
+        paths: {
+          d3: &quot;http://d3js.org/d3.v3.min&quot;,
+          jQuery: &quot;//code.jquery.com/jquery-2.1.1.min&quot;,
+        }
+      });
+    &lt;/script&gt;
+
+    &lt;!-- Include CSS that styles the visualization. --&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+
+    &lt;title&gt;Line Chart&lt;/title&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 23, "charEnd": 607 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Degrees&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			/*rect:hover {
+				fill: orange;
+			}*/
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+			.text-anchor {
+				font-weight: bold
+			}
+			
+
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 33, "charEnd": 795 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+
+    &lt;!-- Runs the main program found in main.js. --&gt;
+    &lt;script data-main=&quot;main.js&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- Configure RequireJS paths for third party libraries. --&gt;
+    &lt;script&gt;
+      requirejs.config({
+        paths: {
+          d3: &quot;//d3js.org/d3.v3.min&quot;,
+          jquery: &quot;//code.jquery.com/jquery-2.1.1.min&quot;,
+          lodash: &quot;//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.4.0/lodash.min&quot;,
+          async: &quot;//cdnjs.cloudflare.com/ajax/libs/async/0.9.0/async&quot;
+        }
+      });
+    &lt;/script&gt;
+
+    &lt;!-- Include CSS that styles the visualization. --&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;
+
+    &lt;title&gt;Bar Chart&lt;/title&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 23, "charEnd": 766 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Cleaning Up&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 33, "charEnd": 742 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_4.html" 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=Edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+    &lt;title&gt;Tryouts D3 Maps&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 33, "charEnd": 671 
+},
+{
+ "extract": "&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.css&quot;&gt;
+    &lt;style&gt;
+        body {
+            background: black;
+            margin:0;
+            padding:0;
+        }
+
+        #histogram rect{
+            -webkit-transition: all 0.1s linear;
+            -moz-transition: all 0.1s linear;
+            -o-transition: all 0.1s linear;
+            transition: all 0.1s linear;
+        }
+
+        #bubble-cloud {
+            background: url(&quot;http://dummyimage.com/100x100/111/333?text=sample&quot;) 0 0;
+            width: 960px;
+            height: 470px;
+            /*overflow: hidden;*/
+            position: relative;
+            margin:0 auto;
+        }
+        svg {
+            outline: rgba(242,216,28,1);
+            overflow: visible;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 33, "charEnd": 1023 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_42.html" 
+},
+{
+ "extract": "	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Renewable consumption in the European Union&lt;/title&gt;
+		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: white;
+			}
+			h1 { 
+				font-size: 30px;
+				font-family: helvetica;
+			}
+
+			h2 { 
+				font-size: 20px;
+				font-family: helvetica;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect {
+				fill: #006600;
+			}
+			rect:hover {
+                opacity: 0.67;
+            }
+
+
+		&lt;/style&gt;
+	&lt;/head&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 33, "charEnd": 563 
+},
+{
+ "extract": "&lt;!--[if IE 7]&gt;    &lt;html class=&quot;no-js lt-ie9 lt-ie8&quot; lang=&quot;en&quot;&gt; &lt;![endif]--&gt;
+&lt;!--[if IE 8]&gt;    &lt;html class=&quot;no-js lt-ie9&quot; lang=&quot;en&quot;&gt; &lt;![endif]--&gt;
+&lt;!--[if gt IE 8]&gt;&lt;!--&gt; &lt;html class=&quot;no-js&quot; lang=&quot;en&quot;&gt; &lt;!--&lt;![endif]--&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0&quot; /&gt;
+        &lt;title&gt;
+      
+                Chimp Chomp Design | Design and Research Lab based in Surabaya, Indonesia
+                  &lt;/title&gt;
+
+        &lt;meta name=&quot;description&quot; content=&quot;Chimp Chomp is a design and research lab based in Surabaya, Indonesia. Powered by a troupe of hyper monkeys honed in multidisciplinary areas from design, computer science, photography, social science and cultural studies, our clients and collaborators range from independent initiatives to multi-national corporations and organisations.&quot;&gt;
+        &lt;meta name=&quot;generator&quot; content=&quot;Bolt&quot;&gt;
+        &lt;link rel=&quot;canonical&quot; href=&quot;http://chimpchomp.us/&quot;&gt;
+       &lt;link rel=&quot;stylesheet&quot; href=&quot;http://chimpchomp.us//app/extensions/SimpleForms/assets/simpleforms.css&quot; media=&quot;screen&quot;&gt;
+       &lt;link href=&#39;http://fonts.googleapis.com/css?family=Playfair+Display:400,700,400italic&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39;&gt;          
+   &lt;link href=&#39;http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39;&gt;
+   
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;http://chimpchomp.us/theme/chimpchomp/stylesheets/foundation.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://chimpchomp.us/theme/chimpchomp/stylesheets/app.css&quot;&gt;
+
+    &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.foundation.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.foundation.topbar.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.flexslider-min.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.custom.js&quot;&gt;&lt;/script&gt;
+
+    &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/app.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/swipe.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.min.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.perfectmasonry.js&quot;&gt;&lt;/script&gt;
+   &lt;script&gt;
+      $(document).ready(function() {  
+         var opt = {
+            layoutMode: &#39;perfectMasonry&#39;,
+            perfectMasonry: {
+               layout: &#39;vertical&#39;,
+               liquid: true,            // Set layout as liquid (default: false)
+               columnWidth: 250,         
+               rowHeight: 250,   
+               minCols: 2,              // Set min col count (default: 1)      
+               maxCols: 5              // Set max col count (default: 9999)               
+            }
+         };
+         
+         // Set default isotope
+         $(&#39;#projectContainer&#39;).isotope(opt).smartresize();
+         
+         $(&#39;#projectFilter a&#39;).click(function(){
+           var selector = $(this).attr(&#39;data-filter&#39;);
+           $(&#39;#projectContainer&#39;).isotope({ filter: selector });
+           return false;
+         });
+      });  
+   &lt;/script&gt;
+   &lt;script&gt;
+   (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){
+   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
+
+   ga(&#39;create&#39;, &#39;UA-GOOGLES-1&#39;, &#39;chimpchomp.us&#39;);
+   ga(&#39;send&#39;, &#39;pageview&#39;);
+
+    &lt;/script&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 99, "charEnd": 3849 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Map &amp; Globe&lt;/title&gt;
+
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- Leaflet.js, a geographic mapping library. --&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css&quot; /&gt; 
+    &lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- A functional reactive model library. github.com/curran/model --&gt;
+    &lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- Chiasm core and plugins. github.com/chiasm-project --&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.1.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- Custom Chiasm plugins for this example. --&gt;
+    &lt;script src=&quot;globe.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;chiasm-leaflet.js&quot;&gt;&lt;/script&gt;
+
+    &lt;style&gt;
+
+      body {
+        background-color: black;
+      }
+
+      /* Make the container fill the page using CSS. */
+      #chiasm-container {
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+    &lt;/style&gt;
+
+  &lt;/head&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 23, "charEnd": 1623 
+},
+{
+ "extract": "  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
+
+      
+    &lt;title&gt;Shotplot&lt;/title&gt;
+    
+    &lt;style&gt;
+
+
+h1{
+  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;
+  font-size: 26px;
+  font-style: bold;
+  
+}
+
+h2{
+  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-style: bold;
+  
+}
+
+p{
+  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;
+  font-size: 16px;  
+}
+
+body {
+        background-color: #ccc;
+      }
+
+      svg {
+        background-color: white;
+      }
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: &quot;\25BC&quot;;
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+    &lt;/style&gt;
+    
+    &lt;script src=&quot;http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js&quot;&gt;&lt;/script&gt;
+
+  &lt;/head&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 23, "charEnd": 1256 
+},
+{
+ "extract": "&lt;head&gt;
+    &lt;title&gt;Polygon libtess fill in WebGL&lt;/title&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+
+    &lt;style&gt;
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: rgb(14, 21, 30);
+            height: 100%;
+        }
+
+        #map {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: #333;
+        }
+    &lt;/style&gt;
+    &lt;!-- vertex shader --&gt;
+    &lt;script id=&quot;vshader&quot; type=&quot;x-shader/x-vertex&quot;&gt;
+        uniform mat4 u_matrix;
+        attribute vec4 a_vertex;
+        attribute float a_pointSize;
+        attribute vec4 a_color;
+        varying vec4 v_color;
+
+        void main() {
+        // Set the size of the point
+        gl_PointSize =  a_pointSize;
+
+        // multiply each vertex by a matrix.
+        gl_Position = u_matrix * a_vertex;
+
+
+        // pass the color to the fragment shader
+        v_color = a_color;
+        }
+    &lt;/script&gt;
+    &lt;!-- fragment shader --&gt;
+
+
+
+    &lt;script id=&quot;fshader&quot; type=&quot;x-shader/x-fragment&quot;&gt;
+        precision mediump float;
+        varying vec4 v_color;
+
+        void main() {
+
+        // -- squares
+        gl_FragColor = v_color; //vec4(0.8, 0.1,0.1, 0.9); //v_color;
+        
+        gl_FragColor.a = 0.8;
+       }
+
+    &lt;/script&gt;
+    &lt;script src=&quot;http://www.sumbera.com/gist/js/libtess/libtess.cat.js&quot;&gt;&lt;/script&gt;
+     &lt;script&gt;
+         
+         /*global libtess */
+
+         var tessy = (function initTesselator() {
+             // function called for each vertex of tesselator output
+             function vertexCallback(data, polyVertArray) {
+                 // console.log(data[0], data[1]);
+                 polyVertArray[polyVertArray.length] = data[0];
+                 polyVertArray[polyVertArray.length] = data[1];
+                 polyVertArray[polyVertArray.length] = currentColor[0];
+                 polyVertArray[polyVertArray.length] = currentColor[1];
+                 polyVertArray[polyVertArray.length] = currentColor[2];
+
+   
+
+             }
+             function begincallback(type) {
+                 if (type !== libtess.primitiveType.GL_TRIANGLES) {
+                     console.log(&#39;expected TRIANGLES but got type: &#39; + type);
+                 }
+             }
+             function errorcallback(errno) {
+                 console.log(&#39;error callback&#39;);
+                 console.log(&#39;error number: &#39; + errno);
+             }
+             // callback for when segments intersect and must be split
+             function combinecallback(coords, data, weight) {
+                 // console.log(&#39;combine callback&#39;);
+                 return [coords[0], coords[1], coords[2]];
+             }
+             function edgeCallback(flag) {
+                 // don&#39;t really care about the flag, but need no-strip/no-fan behavior
+                 // console.log(&#39;edge flag: &#39; + flag);
+             }
+
+             var tessy = new libtess.GluTesselator();
+             // tessy.gluTessProperty(libtess.gluEnum.GLU_TESS_WINDING_RULE, libtess.windingRule.GLU_TESS_WINDING_POSITIVE);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_VERTEX_DATA, vertexCallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_BEGIN, begincallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_ERROR, errorcallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_COMBINE, combinecallback);
+             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_EDGE_FLAG, edgeCallback);
+
+             return tessy;
+         })();
+
+
+
+     &lt;/script&gt;
+
+&lt;/head&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 23, "charEnd": 3562 
+},
+{
+ "extract": "  &lt;title&gt;Leaflet Squirrel - Part 5&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot;/&gt;
+  &lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    #map{ height: 100% }
+  &lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 14, "charEnd": 362 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_49.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_5.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_6.html" 
+},
+{
+ "extract": "  &lt;head&gt;
+    &lt;title&gt;Force-Directed Layout with Convex Hull&lt;/title&gt;
+    &lt;script src=&quot;http://mbostock.github.com/d3/d3.js?2.9.2&quot;&gt;&lt;/script&gt;
+ &lt;/head&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 23, "charEnd": 168 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_8.html" 
+},
+{
+ "extract": "  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+  &lt;/style&gt;
+&lt;/head&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 23, "charEnd": 228 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				margin: 0;
+				background-color: #47484B;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			#container {
+				width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: black;
+			}
+
+			h1 {
+				font-size: 24px;
+                font-family : monospace;
+                color: white;
+			}
+
+			p {
+				font-size: 14px;
+                color:#aaaaaa;
+                font-family: monospace;
+			}
+
+			svg {
+				background-color: black;
+			}
+
+			g.bar text {
+				font-size: 11px;
+                font-family: monospace;
+                color: white;
+				font-weight: bold;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: red;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+                fill: #ffffff;
+                font-family: monospace;
+
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #aaaaaa;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;
+                fill:#777777;
+                font-family: monospace;
+                color: white;
+
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+            a {
+                color : white;
+            }
+
+		&lt;/style&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 173, "charEnd": 1482 
+},
+{
+ "extract": "&lt;style&gt;@import &quot;index.css&quot;;&lt;/style&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 345, "charEnd": 380 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_10.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_11.html" 
+},
+{
+ "extract": "&lt;style&gt;
+      .axis text {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    &lt;/style&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 1041, "charEnd": 1244 
+},
+{
+ "extract": "&lt;style&gt;
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	font-size: 12px;
+	font-family: Arial, sans-serif;
+}
+
+#maindiv {
+	width: 960px;
+	height: 380px;
+}
+
+.dataset-a, .dataset-b {
+	display: inline-block;
+	width: 400px;
+	padding: 0 0 0 50px;
+}
+
+#button {
+	margin: 20px 50px;
+}
+
+#error {
+	margin: 20px 50px;
+	font-size: 20px;
+	color: red;
+}
+&lt;/style&gt;", "filename": "training_samples/training_sample_13.html", "charStart": 39, "charEnd": 420 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			
+            
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+        
+
+			h1 {
+				font-size: 25px;
+				margin: 0;
+                color:#B5B1B1;
+			}
+            p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+                color:#B5B1B1;
+                
+			}
+
+			a {
+                text-decoration:none;
+                color:rgb(216,83,43);
+            }
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #B5B1B1;;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 10px;			/* Made this text smaller, for testing */
+                
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;}
+		
+
+
+            /* gridline nuevo */
+            .tick.minor line {
+              stroke: #777;
+              stroke-dasharray: 2,2;
+            }
+             /* gridline nuevo */
+
+             /*
+				NOTE that CSS comments look use asterisks and slashes,
+				not &lt;!-- comment --&gt; like HTML comments.
+             */
+
+		&lt;/style&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 260, "charEnd": 1413 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_15.html" 
+},
+{
+ "extract": "&lt;style&gt;
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+&lt;/style&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 354, "charEnd": 461 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_17.html" 
+},
+{
+ "extract": "&lt;style&gt;
+    .node circle {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .node {
+      font: 10px sans-serif;
+    }
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 1.5px;   
+    }
+      
+    .leaf {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+  &lt;/style&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 49, "charEnd": 392 
+},
+{
+ "extract": "&lt;style&gt;
+
+		h1 {
+			text-align: center;
+			color: rgb(243,117,97);
+		}
+
+		#source {
+			text-align: center;
+		}
+
+		a {
+			color:rgb(243,117,97);
+			font-size: 18px;
+			font-style:italic;
+		}
+    a:hover {
+			color: red;
+		}
+		a:active {
+			color: rgb(213,97,146);
+		}
+
+		.note {
+			text-align: center;
+			font-size: 19px;
+			display: block;
+			margin-left:130px;
+			margin-right:130px;
+			padding-left:140px;
+			padding-right:140px;
+			margin-top: 20px;
+
+		}
+
+		#table {
+			margin-left:220px;
+		}
+
+		table {
+      font-style: italic;
+			margin-top:50px;
+
+      text-align: center;
+			font-size:22px;
+			display: block;
+			line-height: 43px;
+			border-collapse: collapse;
+			margin-left: 120px;
+
+		}
+		th {
+			text-align: center;
+			width:180px;
+			font-size: 24px;
+			font-style:italic;
+      cursor:pointer;
+			border-bottom: 1px solid rgb(236,236,236);
+			background-color:rgb(242,135,83);
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+		}
+
+
+		td.hovered {
+			background-color: rgb(255,220,187);
+
+		}
+
+		td {
+
+			border:1px solid rgb(236,236,236);
+
+		}
+
+		tbody{
+			font-size: 20px;
+			margin-left:20px;
+
+		}
+		&lt;/style&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 4187, "charEnd": 5327 
+},
+{
+ "extract": "&lt;style&gt;
+body{
+	background-color: rgb(38, 38, 38);
+}
+
+path{
+	stroke: white;
+	stroke-width: 6px;
+	fill: none;
+}
+
+circle{
+	fill: white;
+}
+
+rect{
+	fill: orange;
+}
+
+&lt;/style&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 40, "charEnd": 208 
+},
+{
+ "extract": "&lt;style&gt;
+
+.thumbs {
+    width:250px;
+    height:150px;
+    display: inline-block;
+    
+        margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+
+}
+
+
+.images {
+
+max-height:100%; 
+max-width:100%;
+
+
+}
+
+
+
+
+
+ p{
+
+	font-family: &quot;Century Gothic&quot;,&#39;Helvetica Neue&#39;,Helvetica, sans-serif;
+	font-size: 1.0em;
+}
+
+
+.header1 { 
+
+width: 100%;
+height: 25px;
+background-color: #0099FF;
+line-height: 25px;
+
+
+}
+
+.header2 { 
+
+width: 100%;
+height: 25px;
+background-color: #FF3300;
+line-height: 25px;
+
+
+}
+
+.titles {
+
+	 margin-left: 10px;
+	 color: #fff;
+}
+
+.header3 { 
+
+width: 100%;
+height: 25px;
+background-color: #29293D;
+line-height: 25px;
+
+
+}
+.header4 , .header5{ 
+
+width: 100%;
+height: 25px;
+background-color: #1D561D;
+line-height: 25px;
+
+
+}
+
+
+
+&lt;/style&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 129, "charEnd": 904 
+},
+{
+ "extract": "&lt;style&gt;
+			body { 
+				font-family: helvetica, sans-serif;
+			}
+		&lt;/style&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 184, "charEnd": 258 
+},
+{
+ "extract": "&lt;style&gt;
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  &lt;/style&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 134, "charEnd": 259 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_23.html" 
+},
+{
+ "extract": "&lt;style&gt;
+    .axis path{
+    stroke: black;
+    fill:none;
+    }
+
+    .axis{
+      font-family: calibri;
+      font-size: 8pt;
+    }
+  &lt;/style&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 186, "charEnd": 328 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+  #line{
+    width: 700px;
+    margin: 20px 0;
+    height: 300px;
+    background: #eee;
+  }
+  button {
+    margin: 20px 0 0 20px;
+  }
+​&lt;/style&gt;", "filename": "training_samples/training_sample_25.html", "charStart": 98, "charEnd": 265 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+      html, body { height: 100%; margin: 0; padding: 0; }
+      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }
+      #map { height: 100%; }
+    &lt;/style&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 36, "charEnd": 241 
+},
+{
+ "extract": "&lt;style&gt;
+  .arc path {
+    stroke: white;
+  }
+  .arc {
+    cursor: pointer;
+  }
+&lt;/style&gt;", "filename": "training_samples/training_sample_27.html", "charStart": 40, "charEnd": 127 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
+            
+            
+
+			svg {
+                background-color: white; }
+            
+            h1{ font-size: 30px;}
+            rect {
+                fill: #794044;}
+            
+            rect:hover {
+                opacity: 0.6;}
+            
+        &lt;/style&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 198, "charEnd": 611 
+},
+{
+ "extract": "&lt;style&gt;
+
+
+#container{
+  position: absolute; top: 5%; left: 5%; height: 90%; width: 90%;
+}
+svg{
+  border:solid 1px #f00;
+}
+&lt;/style&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 86, "charEnd": 216 
+},
+{
+ "extract": "&lt;style&gt;
+        #worldmap{
+            background: white;
+            height: 100%;
+            width: 100%;
+        }
+        #worldmap-container {
+            width: 100%;
+            height: 550px;
+            border: 1px solid #CCC;
+        }
+        &lt;/style&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 1026, "charEnd": 1289 
+},
+{
+ "extract": "&lt;style&gt;
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  &lt;/style&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 134, "charEnd": 259 
+},
+{
+ "extract": "&lt;style&gt;
+
+.bar {
+  fill: purple;
+}
+
+.bar:hover {
+  fill: yellow;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+&lt;/style&gt;", "filename": "training_samples/training_sample_31.html", "charStart": 54, "charEnd": 289 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_32.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_33.html" 
+},
+{
+ "extract": "&lt;style&gt;
+
+      body {
+        background-color: black;
+      }
+
+      #chiasm-container {
+        background-color: white;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+
+      .axis {
+        font: 0.8em sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      /* Custom CSS for axis labels. */
+      .axis-label {
+        text-anchor: middle;
+        font-size: 2em;
+      } 
+    &lt;/style&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 1083, "charEnd": 1636 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: #fff;
+			}
+
+			svg {
+				background-color: #fff;
+			}
+
+			p {
+				width: 450px;
+				font-family: &quot;Arial&quot;, sans-serif;
+			}
+
+			rect {
+				fill: #c9c9c9;
+			}
+
+			rect:hover {
+				fill: #ed5e17;
+			}
+
+		&lt;/style&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 181, "charEnd": 451 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_36.html" 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			/*rect:hover {
+				fill: orange;
+			}*/
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+			.text-anchor {
+				font-weight: bold
+			}
+			
+
+		&lt;/style&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 171, "charEnd": 786 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_38.html" 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		&lt;/style&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 171, "charEnd": 733 
+},
+{
+ "extract": "&lt;style&gt;
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+  
+}
+
+&lt;/style&gt;", "filename": "training_samples/training_sample_4.html", "charStart": 39, "charEnd": 287 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_40.html" 
+},
+{
+ "extract": "&lt;style&gt;
+        body {
+            background: black;
+            margin:0;
+            padding:0;
+        }
+
+        #histogram rect{
+            -webkit-transition: all 0.1s linear;
+            -moz-transition: all 0.1s linear;
+            -o-transition: all 0.1s linear;
+            transition: all 0.1s linear;
+        }
+
+        #bubble-cloud {
+            background: url(&quot;http://dummyimage.com/100x100/111/333?text=sample&quot;) 0 0;
+            width: 960px;
+            height: 470px;
+            /*overflow: hidden;*/
+            position: relative;
+            margin:0 auto;
+        }
+        svg {
+            outline: rgba(242,216,28,1);
+            overflow: visible;
+        }
+    &lt;/style&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 315, "charEnd": 1015 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_42.html" 
+},
+{
+ "extract": "&lt;style type=&quot;text/css&quot;&gt;
+			
+			body {
+				background-color: white;
+			}
+			h1 { 
+				font-size: 30px;
+				font-family: helvetica;
+			}
+
+			h2 { 
+				font-size: 20px;
+				font-family: helvetica;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect {
+				fill: #006600;
+			}
+			rect:hover {
+                opacity: 0.67;
+            }
+
+
+		&lt;/style&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 203, "charEnd": 554 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_44.html" 
+},
+{
+ "extract": "&lt;style&gt;
+
+      body {
+        background-color: black;
+      }
+
+      /* Make the container fill the page using CSS. */
+      #chiasm-container {
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+    &lt;/style&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 1339, "charEnd": 1612 
+},
+{
+ "extract": "&lt;style&gt;
+
+
+h1{
+  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;
+  font-size: 26px;
+  font-style: bold;
+  
+}
+
+h2{
+  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-style: bold;
+  
+}
+
+p{
+  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;
+  font-size: 16px;  
+}
+
+body {
+        background-color: #ccc;
+      }
+
+      svg {
+        background-color: white;
+      }
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: &quot;\25BC&quot;;
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+    &lt;/style&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 177, "charEnd": 1151 
+},
+{
+ "extract": "&lt;style&gt;
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: rgb(14, 21, 30);
+            height: 100%;
+        }
+
+        #map {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: #333;
+        }
+    &lt;/style&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 111, "charEnd": 447 
+},
+{
+ "extract": "&lt;style&gt;
+    #map{ height: 100% }
+  &lt;/style&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 311, "charEnd": 354 
+},
+{
+ "extract": "&lt;style&gt;
+
+.bar {
+  fill: yellow;
+}
+
+.bar:hover {
+  fill: green;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+&lt;/style&gt;", "filename": "training_samples/training_sample_49.html", "charStart": 39, "charEnd": 273 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_5.html" 
+},
+{
+ "extract": "&lt;style&gt;
+html, body {
+  background: #222;
+}
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+&lt;/style&gt;", "filename": "training_samples/training_sample_6.html", "charStart": 39, "charEnd": 144 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_7.html" 
+},
+{
+ "extract": "&lt;style&gt;
+
+body {
+  margin: 0;
+}
+
+.map {
+  position: relative;
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+}
+
+.tile {
+  pointer-events: none;
+  position: absolute;
+  width: 256px;
+  height: 256px;
+}
+
+.info {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+&lt;/style&gt;", "filename": "training_samples/training_sample_8.html", "charStart": 39, "charEnd": 318 
+},
+{
+ "extract": "&lt;style&gt;
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+  &lt;/style&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 134, "charEnd": 220 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=utf-8&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 50, "charEnd": 70 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 20, "charEnd": 42 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 109, "charEnd": 131 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;  &lt;!--set charset to utf-8--&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 37, "charEnd": 88 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_13.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 42, "charEnd": 64 
+},
+{
+ "extract": "&lt;meta charset=utf-8 /&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 30, "charEnd": 52 
+},
+{
+ "extract": "&lt;meta charset=&quot;UTF-8&quot;&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 40, "charEnd": 62 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 30, "charEnd": 52 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 25, "charEnd": 47 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 42, "charEnd": 64 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 32, "charEnd": 54 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_25.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_26.html" 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_27.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 109, "charEnd": 131 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 25, "charEnd": 47 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_31.html", "charStart": 31, "charEnd": 53 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_33.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 36, "charEnd": 58 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 44, "charEnd": 66 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 36, "charEnd": 58 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 36, "charEnd": 58 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_4.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;UTF-8&quot; /&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 46, "charEnd": 70 
+},
+{
+ "extract": "&lt;meta charset=&quot;UTF-8&quot;&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 44, "charEnd": 66 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_42.html" 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 43, "charEnd": 65 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot; /&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 326, "charEnd": 350 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 36, "charEnd": 58 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 25, "charEnd": 47 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 83, "charEnd": 105 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_48.html" 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_49.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_5.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_6.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_7.html" 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_8.html", "charStart": 16, "charEnd": 38 
+},
+{
+ "extract": "&lt;meta charset=&quot;utf-8&quot;&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 25, "charEnd": 47 
+},
+{
+ "extract": "&lt;title&gt;Intermediate D3&lt;/title&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 68, "charEnd": 98 
+},
+{
+ "extract": "&lt;title&gt;Simplified Low Barrel&lt;/title&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 79, "charEnd": 115 
+},
+{
+ "extract": "&lt;title&gt;Week Calendar of Life&lt;/title&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 47, "charEnd": 83 
+},
+{
+ "extract": "&lt;title&gt;OpeNER - Opinion targets (Amsterdam)&lt;/title&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 136, "charEnd": 187 
+},
+{
+ "extract": "&lt;title&gt;D3 Stacked Bar Chart&lt;/title&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 1001, "charEnd": 1036 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_13.html" 
+},
+{
+ "extract": "&lt;title&gt;Sorting Elements&lt;/title&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 68, "charEnd": 99 
+},
+{
+ "extract": "&lt;title&gt;d3 legend | scrollable legend&lt;/title&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 67, "charEnd": 111 
+},
+{
+ "extract": "&lt;title&gt;GeoJSON from live realtime data&lt;/title&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 53, "charEnd": 99 
+},
+{
+ "extract": "&lt;title&gt;Sounds and Boxes&lt;/title&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 63, "charEnd": 94 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_18.html" 
+},
+{
+ "extract": "&lt;title&gt;F1 Driver&#39;s Wage between 2014 and 2015&lt;/title&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 68, "charEnd": 121 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_2.html" 
+},
+{
+ "extract": "&lt;title&gt;Gallery&lt;/title&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 53, "charEnd": 75 
+},
+{
+ "extract": "&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 68, "charEnd": 107 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_22.html" 
+},
+{
+ "extract": "&lt;title&gt;d3 | reusable heatmap calendar&lt;/title&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 67, "charEnd": 112 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_24.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_25.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_26.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_27.html" 
+},
+{
+ "extract": "&lt;title&gt;Consumption of Grapes by Race&lt;/title&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 68, "charEnd": 112 
+},
+{
+ "extract": "&lt;title&gt;Responsiv data vis&lt;/title&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 52, "charEnd": 85 
+},
+{
+ "extract": "&lt;title&gt;EU map&lt;/title&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 876, "charEnd": 897 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_30.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_31.html" 
+},
+{
+ "extract": "&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 68, "charEnd": 107 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_33.html" 
+},
+{
+ "extract": "&lt;title&gt;Chiasm Boilerplate&lt;/title&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 63, "charEnd": 96 
+},
+{
+ "extract": "&lt;title&gt;d3 module 3 - oxford&lt;/title&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 69, "charEnd": 104 
+},
+{
+ "extract": "&lt;title&gt;Line Chart&lt;/title&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 572, "charEnd": 597 
+},
+{
+ "extract": "&lt;title&gt;Degrees&lt;/title&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 68, "charEnd": 90 
+},
+{
+ "extract": "&lt;title&gt;Bar Chart&lt;/title&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 732, "charEnd": 756 
+},
+{
+ "extract": "&lt;title&gt;Cleaning Up&lt;/title&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 68, "charEnd": 94 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_4.html" 
+},
+{
+ "extract": "&lt;title&gt;Tryouts D3 Maps&lt;/title&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 206, "charEnd": 236 
+},
+{
+ "extract": "&lt;title&gt;http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428&lt;/title&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 71, "charEnd": 188 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_42.html" 
+},
+{
+ "extract": "&lt;title&gt;Renewable consumption in the European Union&lt;/title&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 68, "charEnd": 126 
+},
+{
+ "extract": "&lt;title&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 456, "charEnd": 463 
+},
+{
+ "extract": "&lt;title&gt;Map &amp; Globe&lt;/title&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 63, "charEnd": 89 
+},
+{
+ "extract": "&lt;title&gt;Shotplot&lt;/title&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 144, "charEnd": 167 
+},
+{
+ "extract": "&lt;title&gt;Polygon libtess fill in WebGL&lt;/title&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 34, "charEnd": 78 
+},
+{
+ "extract": "&lt;title&gt;Leaflet Squirrel - Part 5&lt;/title&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 16, "charEnd": 56 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_49.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_5.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_6.html" 
+},
+{
+ "extract": "&lt;title&gt;Force-Directed Layout with Convex Hull&lt;/title&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 36, "charEnd": 89 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_8.html" 
+},
+{
+ "extract": "", "filename": "training_samples/training_sample_9.html" 
+},
+{
+ "extract": "&lt;script src=&quot;//d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 107, "charEnd": 170 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 228, "charEnd": 320 
+},
+{
+ "extract": "&lt;script src=&quot;index.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 931, "charEnd": 963 
+},
+{
+ "extract": "&lt;script src=&quot;react.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 315, "charEnd": 351 
+},
+{
+ "extract": "&lt;script src=&quot;JSXTransformer.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 356, "charEnd": 401 
+},
+{
+ "extract": "&lt;script src=&quot;dates.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 407, "charEnd": 439 
+},
+{
+ "extract": "&lt;script type=&quot;text/jsx&quot; src=&quot;app.jsx&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 444, "charEnd": 491 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 192, "charEnd": 260 
+},
+{
+ "extract": "&lt;script src=&#39;layout.cloud.js&#39;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 265, "charEnd": 304 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/queue.v1.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 309, "charEnd": 364 
+},
+{
+ "extract": "&lt;script src=&quot;http://davidbau.com/encode/seedrandom-min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 369, "charEnd": 437 
+},
+{
+ "extract": "&lt;script src=&#39;index.js&#39;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 518, "charEnd": 550 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 703, "charEnd": 814 
+},
+{
+ "extract": "&lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 819, "charEnd": 910 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 915, "charEnd": 996 
+},
+{
+ "extract": "&lt;script src=&quot;moebio_framework.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_13.html", "charStart": 428, "charEnd": 475 
+},
+{
+ "extract": "&lt;!--&lt;script type=&quot;text/javascript&quot; src=&quot;../d3.v3.js&quot;&gt;&lt;/script&gt;--&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 111, "charEnd": 176 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org./d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 185, "charEnd": 257 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 322, "charEnd": 390 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 394, "charEnd": 503 
+},
+{
+ "extract": "&lt;script src=&quot;https://rawgit.com/turban/d3.slider/master/d3.slider.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 879, "charEnd": 958 
+},
+{
+ "extract": "&lt;script src=&quot;legend_component.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 959, "charEnd": 1018 
+},
+{
+ "extract": "&lt;script src=&quot;d3_code_legend.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 1020, "charEnd": 1077 
+},
+{
+ "extract": "&lt;script src=&#39;https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js&#39;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 184, "charEnd": 263 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 167, "charEnd": 219 
+},
+{
+ "extract": "&lt;script src=&quot;howler.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 220, "charEnd": 257 
+},
+{
+ "extract": "&lt;script src=&quot;soundsAndBoxes.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 258, "charEnd": 299 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 395, "charEnd": 447 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 889, "charEnd": 993 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;https://code.jquery.com/jquery-1.9.1.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 995, "charEnd": 1085 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;js/stupidtable.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 1152, "charEnd": 1216 
+},
+{
+ "extract": "&lt;script src=&quot;/1wheel/raw/67b47524ed8ed829d021/d3-3.5.5.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 225, "charEnd": 293 
+},
+{
+ "extract": "&lt;script src=&quot;/1wheel/raw/67b47524ed8ed829d021/lodash-3.8.0.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 294, "charEnd": 366 
+},
+{
+ "extract": "&lt;script src=&#39;/1wheel/raw/1b6758978dc2d52d3a37/d3-jetpack.js&#39;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 367, "charEnd": 437 
+},
+{
+ "extract": "&lt;script src=&#39;/1wheel/raw/1b6758978dc2d52d3a37/d3-starterkit.js&#39;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 438, "charEnd": 511 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 76, "charEnd": 128 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 110, "charEnd": 181 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 50, "charEnd": 131 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 219, "charEnd": 287 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 290, "charEnd": 399 
+},
+{
+ "extract": "&lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 402, "charEnd": 489 
+},
+{
+ "extract": "&lt;script src=&quot;d3_code_heatmap_cal.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 683, "charEnd": 729 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 57, "charEnd": 109 
+},
+{
+ "extract": "&lt;script src=&quot;http://dimplejs.org/dist/dimple.v2.0.0.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 112, "charEnd": 181 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://mbostock.github.com/d3/d3.js?2.5.0&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_25.html", "charStart": 308, "charEnd": 396 
+},
+{
+ "extract": "&lt;script src=&quot;https://maps.googleapis.com/maps/api/js?key=AIzaSyDwlBHEIw2KsaYlvkpUyLFzDUP-dixEra0&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 420, "charEnd": 527 
+},
+{
+ "extract": "&lt;script src=&#39;http://dev.openlayers.org/releases/OpenLayers-2.13.1/lib/OpenLayers.js&#39;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 532, "charEnd": 626 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_27.html", "charStart": 137, "charEnd": 185 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 115, "charEnd": 186 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 225, "charEnd": 293 
+},
+{
+ "extract": "&lt;script src=&quot;//code.jquery.com/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 718, "charEnd": 780 
+},
+{
+ "extract": "&lt;script src=&quot;//cdn.bootcss.com/chroma-js/1.1.1/chroma.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 1704, "charEnd": 1775 
+},
+{
+ "extract": "&lt;script src=&quot;//cdn.bootcss.com/topojson/1.6.19/topojson.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 1776, "charEnd": 1849 
+},
+{
+ "extract": "&lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 1850, "charEnd": 1923 
+},
+{
+ "extract": "&lt;script src=&quot;//cdn.bootcss.com/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 1924, "charEnd": 1984 
+},
+{
+ "extract": "&lt;script src=&quot;map.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 1985, "charEnd": 2015 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 50, "charEnd": 131 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_31.html", "charStart": 297, "charEnd": 378 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 110, "charEnd": 181 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_33.html", "charStart": 46, "charEnd": 98 
+},
+{
+ "extract": "&lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 142, "charEnd": 215 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 220, "charEnd": 319 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 324, "charEnd": 417 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 422, "charEnd": 503 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 508, "charEnd": 587 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 592, "charEnd": 685 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 690, "charEnd": 799 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 804, "charEnd": 895 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 900, "charEnd": 993 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 107, "charEnd": 178 
+},
+{
+ "extract": "&lt;script data-main=&quot;main.js&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 117, "charEnd": 222 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 93, "charEnd": 168 
+},
+{
+ "extract": "&lt;script data-main=&quot;main.js&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 117, "charEnd": 222 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 97, "charEnd": 168 
+},
+{
+ "extract": "&lt;script src=&quot;//d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_4.html", "charStart": 295, "charEnd": 342 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 387, "charEnd": 469 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 474, "charEnd": 568 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 573, "charEnd": 661 
+},
+{
+ "extract": "&lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 693, "charEnd": 724 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 1061, "charEnd": 1157 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 1158, "charEnd": 1239 
+},
+{
+ "extract": "&lt;script src=&quot;https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/elapsedTime/elapsed-time-2.0.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 1240, "charEnd": 1343 
+},
+{
+ "extract": "&lt;script src=&quot;https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 1344, "charEnd": 1437 
+},
+{
+ "extract": "&lt;script src=&quot;https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/plot-transform.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 1438, "charEnd": 1532 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_42.html", "charStart": 326, "charEnd": 394 
+},
+{
+ "extract": "&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 129, "charEnd": 200 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.foundation.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 1663, "charEnd": 1760 
+},
+{
+ "extract": "&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 1765, "charEnd": 1848 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.foundation.topbar.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 1853, "charEnd": 1954 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.flexslider-min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 1958, "charEnd": 2056 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.custom.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 2060, "charEnd": 2153 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/app.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 2159, "charEnd": 2239 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/swipe.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 2243, "charEnd": 2325 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 2329, "charEnd": 2424 
+},
+{
+ "extract": "&lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.perfectmasonry.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 2428, "charEnd": 2534 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 95, "charEnd": 188 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 193, "charEnd": 287 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 292, "charEnd": 373 
+},
+{
+ "extract": "&lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 523, "charEnd": 596 
+},
+{
+ "extract": "&lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 676, "charEnd": 749 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 819, "charEnd": 898 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 903, "charEnd": 1002 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.1.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 1007, "charEnd": 1100 
+},
+{
+ "extract": "&lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 1105, "charEnd": 1196 
+},
+{
+ "extract": "&lt;script src=&quot;globe.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 1255, "charEnd": 1287 
+},
+{
+ "extract": "&lt;script src=&quot;chiasm-leaflet.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 1292, "charEnd": 1333 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 50, "charEnd": 131 
+},
+{
+ "extract": "&lt;script src=&quot;http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 1161, "charEnd": 1245 
+},
+{
+ "extract": "&lt;script src=&quot;http://www.sumbera.com/gist/js/libtess/libtess.cat.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 1308, "charEnd": 1385 
+},
+{
+ "extract": "&lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 3688, "charEnd": 3761 
+},
+{
+ "extract": "&lt;script src=&quot;http://www.sumbera.com/gist/js/leaflet/canvas/L.CanvasOverlay.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 3766, "charEnd": 3854 
+},
+{
+ "extract": "&lt;script src=&quot;http://www.sumbera.com/gist/data/CZDistricts.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 3870, "charEnd": 3957 
+},
+{
+ "extract": "&lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 144, "charEnd": 217 
+},
+{
+ "extract": "&lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 220, "charEnd": 308 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_49.html", "charStart": 281, "charEnd": 362 
+},
+{
+ "extract": "&lt;script src=&quot;d3.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_5.html", "charStart": 82, "charEnd": 111 
+},
+{
+ "extract": "&lt;script src=&quot;topojson.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_5.html", "charStart": 112, "charEnd": 147 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_6.html", "charStart": 152, "charEnd": 204 
+},
+{
+ "extract": "&lt;script src=&quot;d3.canvas-hexbin.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_6.html", "charStart": 205, "charEnd": 248 
+},
+{
+ "extract": "&lt;script src=&quot;http://mbostock.github.com/d3/d3.js?2.9.2&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 94, "charEnd": 159 
+},
+{
+ "extract": "&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_8.html", "charStart": 326, "charEnd": 378 
+},
+{
+ "extract": "&lt;script src=&quot;tile.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_8.html", "charStart": 379, "charEnd": 410 
+},
+{
+ "extract": "&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js&quot;&gt;&lt;/script&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 50, "charEnd": 131 
+}];
