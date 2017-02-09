@@ -9,10 +9,53 @@ using Microsoft.ProgramSynthesis.Extraction.Text;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
 using Microsoft.ProgramSynthesis.VersionSpace;
 using Microsoft.ProgramSynthesis.Wrangling.Constraints;
+using Newtonsoft.Json;
 
 
 namespace Extraction.Text
 {
+
+	public class Person
+	{
+		public string Name { get; set; }
+		public int Age { get; set; }
+		public Person() { }
+		public Person(string name, int age)
+		{
+			Name = name;
+			Age = age;
+		}
+		//Other properties, methods, events...
+	}
+
+	public class Label
+	{
+		public string label { get; set; }
+		public string extracted { get; set; }
+		public string filename { get; set; }
+		public uint charStart { get; set; }
+		public uint charEnd { get; set; }
+		public bool success { get; set; }
+		public Label() { }
+		public Label(string Label, string Extracted, string Filename, int CharStart, int CharEnd, bool Success)
+		{
+			label = Label;
+			extracted = Extracted;
+			filename = Filename;
+			charStart = (uint) CharStart;
+			charEnd = (uint) CharEnd;
+			success = Success;
+		}
+		//Other properties, methods, events...
+	}
+
+	//Source: http://stackoverflow.com/questions/14368129/c-sharp-global-variables
+	public static class Globals
+	{
+		public static List<Label> labelslist = new List<Label>(); // Modifiable in Code
+		public static Boolean testing = false;
+	}
+
 	/// <summary>
 	///     Extraction.Text learns programs to extract a single string region or a sequence of string regions from text files.
 	///     This class demonstrates some common usage of Extraction.Text APIs.
@@ -22,23 +65,45 @@ namespace Extraction.Text
 		
 		private static void Main(string[] args)
 		{
+			//var testing = false;
+
+			if (Globals.testing)
+			{
+				Person p = new Person()
+				{
+					Name = "Han Solo",
+					Age = 39
+				};
+				Console.WriteLine(p);
+				Console.WriteLine(p.Name);
+				Console.WriteLine(p.Age);
+				var objToJson = JsonConvert.SerializeObject(p);
+				File.WriteAllText("objToJson.json", objToJson);
+
+				return;
+			}
 			var runD3scripts = true; //false;
 
 			if (runD3scripts)
 			{
 				Console.WriteLine("running d3 scripts");
+				//var labelslist = new List<Label>();
 
 				LearnDocType();
 
-				LearnHTMLlang();
+				//LearnHTMLlang();
 
 				//LearnHead();
 
-				LearnStyle();
-				return;
-				LearnMeta();
-				LearnTitle();
-				LearnScriptInclude();
+				//LearnStyle();
+				//return;
+				//LearnMeta();
+				//LearnTitle();
+				//LearnScriptInclude();
+
+				//write out data
+				var objToJson = JsonConvert.SerializeObject(Globals.labelslist,Formatting.Indented);
+				File.WriteAllText("labelslist.json", objToJson);
 				return;
 			}
 			else
@@ -83,6 +148,25 @@ namespace Extraction.Text
 		{
 			Console.WriteLine("LearnDocType");
 
+			if (Globals.testing)
+			{
+				//Console.WriteLine(Globals.labelslist);
+				Label l = new Label()
+				{
+					label = "Label",
+					extracted = "Extracted",
+					filename = "Filename",
+					charStart = 0,
+					charEnd = 1,
+					success = true
+				};
+				Globals.labelslist.Add(l);
+				//Console.WriteLine(Globals.labelslist);
+				var objToJson = JsonConvert.SerializeObject(Globals.labelslist);
+				File.WriteAllText("labelslist.json", objToJson);
+				return;
+			}
+
 			string text0 = File.ReadAllText("training_samples/training_sample_0.html");
 			string text1 = File.ReadAllText("training_samples/training_sample_1.html");
 
@@ -119,17 +203,37 @@ namespace Extraction.Text
 
 				if (output_new != null)
 				{
-
-					Console.WriteLine("{");
-					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "doctype");
-					Console.WriteLine("},");
+					Label l = new Label()
+					{
+						label = "doctype",
+						extracted = HttpUtility.HtmlEncode(output_new),
+						filename = fileName,
+						charStart = output_new.Start,
+						charEnd = output_new.End,
+						success = true
+					};
+					Globals.labelslist.Add(l);
+					//Console.WriteLine("{");
+					//Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "doctype");
+					//Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "doctype");
-					Console.WriteLine("},");
+					Label l = new Label()
+					{
+						label = "doctype",
+						extracted = "",
+						filename = fileName,
+						charStart = 0,
+						charEnd = 0,
+						success = false
+					};
+					Globals.labelslist.Add(l);
+					//Console.WriteLine("{");
+					//Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "doctype");
+					//Console.WriteLine("},");
 				}
+
 			}
 
 			return;
