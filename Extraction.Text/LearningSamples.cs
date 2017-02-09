@@ -103,7 +103,8 @@ namespace Extraction.Text
 
 				//write out data
 				var objToJson = JsonConvert.SerializeObject(Globals.labelslist,Formatting.Indented);
-				File.WriteAllText("labelslist.json", objToJson);
+				string path = @"/Users/elenaglassman/Gitrepos/glassman-prose/d3app/data/labelslist.json";
+				File.WriteAllText(path, objToJson);
 				return;
 			}
 			else

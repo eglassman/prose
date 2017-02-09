@@ -1,30 +1,31 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="/js/tutorons-library.js"></script>
 <script src="//jashkenas.github.io/underscore/underscore-min.js"></script>
-<script type="text/javascript" src="data/data.json"></script>
+<!-- <script type="text/javascript" src="data/data.json"></script> -->
 <!-- <script src="bundle.js"></script> -->
 <script>
   document.addEventListener("DOMContentLoaded", function (event) {
     spanAdder = new tutorons.TutoronsConnection(window);
     spanAdder.scanDom();
-    data.forEach(function(s){
-      var ts_num = s["filename"].split(".")[0].split("training_samples/training_sample_")[1];
-      //console.log('#ts'+ts_num,s["charStart"],s["charEnd"]);
-      if (s["extracted"]!=="") {
-        try {
-          spanAdder.addRegionsD3('#ts'+ts_num,s["charStart"],s["charEnd"],s["label"]+" semantic-label");
-        } catch(err) {
-          console.log('failed on ',err,s);
+    $.getJSON("data/labelslist.json", function(data){
+      console.log('new data');
+      console.log(data);
+      data.forEach(function(s){
+        var ts_num = s["filename"].split(".")[0].split("training_samples/training_sample_")[1];
+        //console.log('#ts'+ts_num,s["charStart"],s["charEnd"]);
+        if (s["extracted"]!=="") {
+          try {
+            spanAdder.addRegionsD3('#ts'+ts_num,s["charStart"],s["charEnd"],s["label"]+" semantic-label");
+          } catch(err) {
+            console.log('failed on ',err,s);
+          }
+          $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled">'+s["extracted"]+'</span></code></pre></div>');
+        } else {
+          //console.log('wtf?');
+          $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled none">'+"None"+'</span></code></pre></div>');
         }
-        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled">'+s["extracted"]+'</span></code></pre></div>');
-      } else {
-        //console.log('wtf?');
-        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled none">'+"None"+'</span></code></pre></div>');
-      }
-      //console.log('another s processed')
+      });
     });
-
-    //console.log('final s processed')
   });
 </script>
 <script src="bundle.js"></script>
