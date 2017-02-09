@@ -1,1026 +1,318 @@
 data = [{
- "filename": "training_samples/training_sample_0.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_1.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!doctype html&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_10.html", "charStart": 0, "charEnd": 6, "label": "doctype" 
+ "extracted": "&lt;html&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 0, "charEnd": 6, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_11.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_12.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_13.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_13.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_14.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_15.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_16.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_17.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!doctype html&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_18.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_19.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_2.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_2.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_20.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE HTML&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_21.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_22.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_23.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_24.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_25.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_25.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_26.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_27.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_27.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_28.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_29.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_3.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_30.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_31.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_31.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_32.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_33.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_33.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_34.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_35.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_36.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_37.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_38.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_39.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_4.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_4.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_40.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_41.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_42.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_42.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_43.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_44.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_45.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_46.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_47.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!doctype html&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_48.html", "charStart": 0, "charEnd": 6, "label": "doctype" 
+ "extracted": "&lt;html&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 0, "charEnd": 6, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_49.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_49.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_5.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_5.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_6.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_6.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_7.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_8.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_8.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_9.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
+ "extracted": "&lt;!DOCTYPE html&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 0, "charEnd": 15, "label": "doctype" 
 },
 {
- "filename": "training_samples/training_sample_0.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_1.html", "charStart": 16, "charEnd": 30, "label": "htmllang" 
+ "extracted": "&lt;html lang=en&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 16, "charEnd": 30, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_14.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_15.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_17.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_19.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_21.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_23.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_28.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_3.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_32.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 33, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 33, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_37.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_39.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_40.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;fr&quot;&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_41.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_43.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
- "filename": "training_samples/training_sample_0.html", "charStart": 33, "charEnd": 1491, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Intermediate D3&lt;/title&gt;\n        &lt;script src=&quot;//d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				margin: 0;\n				background-color: #47484B;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n			#container {\n				width: 700px;\n				margin-left: auto;\n				margin-right: auto;\n				margin-top: 50px;\n				padding: 50px;\n				background-color: black;\n			}\n\n			h1 {\n				font-size: 24px;\n                font-family : monospace;\n                color: white;\n			}\n\n			p {\n				font-size: 14px;\n                color:#aaaaaa;\n                font-family: monospace;\n			}\n\n			svg {\n				background-color: black;\n			}\n\n			g.bar text {\n				font-size: 11px;\n                font-family: monospace;\n                color: white;\n				font-weight: bold;\n				text-anchor: end;\n				opacity: 0;\n			}\n\n			g.bar:hover rect {\n				fill: red;\n			}\n\n			g.bar:hover text {\n				opacity: 1;\n                fill: #ffffff;\n                font-family: monospace;\n\n			}\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: #aaaaaa;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 10px;\n                fill:#777777;\n                font-family: monospace;\n                color: white;\n\n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;\n			}\n            \n            a {\n                color : white;\n            }\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 33, "charEnd": 1491, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_1.html", "charStart": 31, "charEnd": 332, "label": "head" 
+ "extracted": "    &lt;head&gt;\n        &lt;meta charset=utf-8&gt;\n        &lt;title&gt;Simplified Low Barrel&lt;/title&gt;\n        &lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.min.css&quot; rel=&quot;stylesheet&quot; /&gt;\n        &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3fc/4.3.1/d3fc.bundle.min.js&quot;&gt;&lt;/script&gt;\n    &lt;/head&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 31, "charEnd": 332, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_10.html", "charStart": 16, "charEnd": 136, "label": "head" 
+ "extracted": "    &lt;meta charset=&quot;utf-8&quot;&gt;\n    &lt;title&gt;Week Calendar of Life&lt;/title&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;app.css&quot;&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_10.html", "charStart": 16, "charEnd": 136, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_11.html", "charStart": 23, "charEnd": 506, "label": "head" 
+ "extracted": "&lt;head&gt;\n&lt;meta name=&quot;description&quot; content=&quot;OpeNER - Opinion targets (Amsterdam)&quot; /&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n    &lt;title&gt;OpeNER - Opinion targets (Amsterdam)&lt;/title&gt;\n    &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;\n    &lt;script src=&#39;layout.cloud.js&#39;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://d3js.org/queue.v1.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://davidbau.com/encode/seedrandom-min.js&quot;&gt;&lt;/script&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;index.css&quot;&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_11.html", "charStart": 23, "charEnd": 506, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_12.html", "charStart": 17, "charEnd": 1254, "label": "head" 
+ "extracted": "&lt;html&gt;\n  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;  &lt;!--set charset to utf-8--&gt;\n    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;  &lt;!--enable mobile views--&gt;\n\n    &lt;!-- CSS --&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/normalize.css&quot;&gt; &lt;!--reset css for cross-browser compatibility--&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/bootstrap.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/agency.css&quot;&gt;\n    &lt;!-- &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/bootstrap-theme.css&quot;&gt; --&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/main.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/responsive.css&quot;&gt;\n\n\n    &lt;!-- JS --&gt;\n    &lt;script type=&quot;text/javascript&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;\n    &lt;title&gt;D3 Stacked Bar Chart&lt;/title&gt;\n    &lt;style&gt;\n      .axis text {\n        font: 10px sans-serif;\n      }\n\n      .axis path,\n      .axis line {\n        fill: none;\n        stroke: #000;\n        shape-rendering: crispEdges;\n      }\n    &lt;/style&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 17, "charEnd": 1254, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_14.html", "charStart": 33, "charEnd": 1422, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Sorting Elements&lt;/title&gt;\n		\n        &lt;!--&lt;script type=&quot;text/javascript&quot; src=&quot;../d3.v3.js&quot;&gt;&lt;/script&gt;--&gt;\n        &lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org./d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			\n            \n			body {\n				background-color: white;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n        \n\n			h1 {\n				font-size: 25px;\n				margin: 0;\n                color:#B5B1B1;\n			}\n            p {\n				font-size: 16px;\n				margin: 10px 0 0 0;\n                color:#B5B1B1;\n                \n			}\n\n			a {\n                text-decoration:none;\n                color:rgb(216,83,43);\n            }\n\n			svg {\n				background-color: white;\n			}\n\n			rect:hover {\n				fill: orange;\n			}\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: #B5B1B1;;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 10px;			/* Made this text smaller, for testing */\n                \n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;}\n		\n\n\n            /* gridline nuevo */\n            .tick.minor line {\n              stroke: #777;\n              stroke-dasharray: 2,2;\n            }\n             /* gridline nuevo */\n\n             /*\n				NOTE that CSS comments look use asterisks and slashes,\n				not &lt;!-- comment --&gt; like HTML comments.\n             */\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 33, "charEnd": 1422, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_15.html", "charStart": 33, "charEnd": 512, "label": "head" 
+ "extracted": "&lt;head&gt;\n  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;title&gt;d3 legend | scrollable legend&lt;/title&gt; \n  &lt;meta name=&quot;author&quot; content=&quot;Sundar Singh | eesur.com&quot;&gt;\n\n  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://rawgit.com/turban/d3.slider/master/d3.slider.css&quot;&gt;\n  &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;\n  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt; \n  &lt;script type=&quot;text/javascript&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js&quot;&gt;&lt;/script&gt;\n\n&lt;/head&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 33, "charEnd": 512, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_16.html", "charStart": 23, "charEnd": 469, "label": "head" 
+ "extracted": "&lt;head&gt;\n&lt;meta charset=utf-8 /&gt;\n&lt;title&gt;GeoJSON from live realtime data&lt;/title&gt;\n&lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;\n&lt;script src=&#39;https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js&#39;&gt;&lt;/script&gt;\n&lt;link href=&#39;https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css&#39; rel=&#39;stylesheet&#39; /&gt;\n&lt;style&gt;\n  body { margin:0; padding:0; }\n  #map { position:absolute; top:0; bottom:0; width:100%; }\n&lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_16.html", "charStart": 23, "charEnd": 469, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_17.html", "charStart": 33, "charEnd": 151, "label": "head" 
+ "extracted": "&lt;head&gt;\n&lt;meta charset=&quot;UTF-8&quot;&gt;\n&lt;title&gt;Sounds and Boxes&lt;/title&gt;\n&lt;link rel=&quot;stylesheet&quot; href=&quot;soundAndBoxes.css&quot;&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 33, "charEnd": 151, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_18.html", "charStart": 39, "charEnd": 455, "label": "head" 
+ "extracted": "\n&lt;head&gt;\n  &lt;style&gt;\n    .node circle {\n      fill: #fff;\n      stroke: steelblue;\n      stroke-width: 1.5px;\n    }\n\n    .node {\n      font: 10px sans-serif;\n    }\n\n    .link {\n      fill: none;\n      stroke: #ccc;\n      stroke-width: 1.5px;   \n    }\n      \n    .leaf {\n      fill: #fff;\n      stroke: steelblue;\n      stroke-width: 1.5px;\n    }\n  &lt;/style&gt;\n  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_18.html", "charStart": 39, "charEnd": 455, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_19.html", "charStart": 33, "charEnd": 131, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;F1 Driver&#39;s Wage between 2014 and 2015&lt;/title&gt;\n\n	&lt;/head&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 33, "charEnd": 131, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_20.html", "charStart": 23, "charEnd": 912, "label": "head" 
+ "extracted": "&lt;head&gt;\n&lt;meta charset=&quot;utf-8&quot;&gt;\n&lt;title&gt;Gallery&lt;/title&gt;\n&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;\n&lt;style&gt;\n\n.thumbs {\n    width:250px;\n    height:150px;\n    display: inline-block;\n    \n        margin-top: 10px;\n    margin-bottom: 10px;\n    margin-right: 10px;\n    margin-left: 10px;\n\n}\n\n\n.images {\n\nmax-height:100%; \nmax-width:100%;\n\n\n}\n\n\n\n\n\n p{\n\n	font-family: &quot;Century Gothic&quot;,&#39;Helvetica Neue&#39;,Helvetica, sans-serif;\n	font-size: 1.0em;\n}\n\n\n.header1 { \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #0099FF;\nline-height: 25px;\n\n\n}\n\n.header2 { \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #FF3300;\nline-height: 25px;\n\n\n}\n\n.titles {\n\n	 margin-left: 10px;\n	 color: #fff;\n}\n\n.header3 { \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #29293D;\nline-height: 25px;\n\n\n}\n.header4 , .header5{ \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #1D561D;\nline-height: 25px;\n\n\n}\n\n\n\n&lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 23, "charEnd": 912, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_21.html", "charStart": 33, "charEnd": 267, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style&gt;\n			body { \n				font-family: helvetica, sans-serif;\n			}\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 33, "charEnd": 267, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_22.html", "charStart": 23, "charEnd": 267, "label": "head" 
+ "extracted": "  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }\n    svg { width: 100%; height: 100%; }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_22.html", "charStart": 23, "charEnd": 267, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_23.html", "charStart": 33, "charEnd": 497, "label": "head" 
+ "extracted": "&lt;head&gt;\n  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;title&gt;d3 | reusable heatmap calendar&lt;/title&gt; \n  &lt;meta name=&quot;author&quot; content=&quot;Sundar Singh | eesur.com&quot;&gt;\n  \n  &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;\n  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;\n  &lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js&quot;&gt;&lt;/script&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 33, "charEnd": 497, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_24.html", "charStart": 23, "charEnd": 3619, "label": "head" 
+ "extracted": "&lt;head&gt;\n  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;\n  &lt;script src=&quot;http://dimplejs.org/dist/dimple.v2.0.0.min.js&quot;&gt;&lt;/script&gt;\n    &lt;style&gt;\n    .axis path{\n    stroke: black;\n    fill:none;\n    }\n\n    .axis{\n      font-family: calibri;\n      font-size: 8pt;\n    }\n  &lt;/style&gt;\n  &lt;script type=&quot;text/javascript&quot;&gt;\n  function draw(data){\n\n    // Function to parse date\n    var format = d3.time.format(&quot;%b %Y&quot;);\n\n    function agg_odds(leaves){\n\n      // Returning the mean of all odds for a particular Month-Year\n      return {\n        &#39;MonthYear&#39; : format.parse(leaves[0][&quot;MonthYear&quot;]),\n        &#39;Mean_Odds&#39; : d3.mean(leaves,function(d){return d[&#39;Mean_Odds&#39;];}),\n        &#39;Count&#39; : d3.sum(leaves,function(d){return 1;}),\n        &#39;Season&#39; : leaves[0][&quot;Season&quot;],\n        &#39;Country&#39; : leaves[0][&quot;Country&quot;]\n      }\n\n      }\n\n    // Setting Margin, Width and Height\n    var margin = 75,\n    width = 1200 - margin,\n    height = 500 - margin;\n\n    // Appending SVG Element with width and height\n    var svg = d3.select(&quot;body&quot;)\n    .append(&quot;svg&quot;)\n    .attr(&quot;width&quot;, width)\n    .attr(&quot;height&quot;, height);\n\n    // Nesting my dataset by all games from a specific Month+Year and sending to agg_odds function (Returning mean of odds for particular Month-Year)\n    var FranceS2012 = d3.nest()\n    .key(function(d){\n      return d[&#39;MonthYear&#39;];\n      })\n    .rollup(agg_odds)\n    .entries(data);\n\n    // Returning max odds from FranceS2012 dataset\n    var max_odds = d3.max(FranceS2012,function(d){\n      return d.values[&#39;Mean_Odds&#39;];\n    });\n\n    // Creating fake scale for a specific (August to June) chamnpionship, starting with August of previous year\n    var x_scale = d3.time.scale()\n    .domain([new Date(1900,07,01),new Date(1901,05,01)])\n    .range([margin,width-margin]);\n\n    // Creating y-scale for odds with 1 as lowest minimum value (odds can&#39;t be less than 1)\n    var y_scale = d3.scale.linear()\n    .domain([1,max_odds])\n    .range([height-margin,margin]);\n\n    //Creating axis element\n    var x_axis = d3.svg.axis()\n    .scale(x_scale)\n    .tickFormat(d3.time.format(&#39;%b&#39;));\n\n    // Creating axis element\n    var y_axis = d3.svg.axis()\n    .scale(y_scale)\n    .orient(&quot;left&quot;);\n\n    // Drawing x axis\n    d3.select(&quot;svg&quot;)\n    .append(&quot;g&quot;)\n    .attr(&quot;class&quot;,&quot;x axis&quot;)\n    .attr(&quot;transform&quot;,&quot;translate(0,&quot; + (height - margin) + &quot;)&quot;)\n    .call(x_axis);\n\n    // Drawing y axis\n    d3.select(&quot;svg&quot;)\n    .append(&quot;g&quot;)\n    .attr(&quot;class&quot;,&quot;y axis&quot;)\n    .attr(&quot;transform&quot;,&quot;translate(&quot; + margin + &quot;,0)&quot;)\n    .call(y_axis);\n\n\n    // Overwriting Scale for specific Season 2012 (Aug 2011 to June 2012)\n    var x_scale = d3.time.scale()\n    .domain([new Date(2011,07,01),new Date(2012,05,01)])\n    .range([margin,width-margin]);\n    \n    // Drawing circles to svg element for the mean of odds for each month of the season (Size being different compared to number of games played in month)\n    d3.select(&quot;svg&quot;)\n    .selectAll(&quot;circle.FranceS2012&quot;)\n    .data(FranceS2012).\n    enter().append(&quot;circle&quot;)\n    .attr(&quot;class&quot;,&quot;FranceS2012&quot;)\n    .attr(&quot;cx&quot;, function(d){\n      return x_scale(d.values[&quot;MonthYear&quot;]);})\n    .attr(&quot;cy&quot;, function(d){return y_scale(d.values[&quot;Mean_Odds&quot;]);})\n    .attr(&quot;r&quot;,function(d){ return d.values[&quot;Count&quot;] / 20;})\n    .style(&quot;fill&quot;,&quot;#1b9e77&quot;);\n\n    // Debugger to see outcome of drawing\n    debugger;\n\n    // Exiting the circles and removing them, note the class had been created earlier as FranceS2012\n    d3.select(&quot;svg&quot;)\n    .selectAll(&quot;circle.FranceS2012&quot;).remove();\n\n    // Debugger to see end result. One circle still present\n    debugger;\n}\n  &lt;/script&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_24.html", "charStart": 23, "charEnd": 3619, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_25.html", "charStart": 23, "charEnd": 273, "label": "head" 
+ "extracted": "&lt;head&gt;\n&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot;/&gt;\n&lt;style type=&quot;text/css&quot;&gt;\n  #line{\n    width: 700px;\n    margin: 20px 0;\n    height: 300px;\n    background: #eee;\n  }\n  button {\n    margin: 20px 0 0 20px;\n  }\n​&lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_25.html", "charStart": 23, "charEnd": 273, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_26.html", "charStart": 23, "charEnd": 381, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;style type=&quot;text/css&quot;&gt;\n      html, body { height: 100%; margin: 0; padding: 0; }\n      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }\n      #map { height: 100%; }\n    &lt;/style&gt;\n    &lt;link href=&#39;http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39; /&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 23, "charEnd": 381, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_28.html", "charStart": 33, "charEnd": 625, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Consumption of Grapes by Race&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		\n        &lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}\n            \n            \n\n			svg {\n                background-color: white; }\n            \n            h1{ font-size: 30px;}\n            rect {\n                fill: #794044;}\n            \n            rect:hover {\n                opacity: 0.6;}\n            \n        &lt;/style&gt;\n	\n    &lt;/head&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 33, "charEnd": 625, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_29.html", "charStart": 39, "charEnd": 223, "label": "head" 
+ "extracted": "&lt;html&gt;\n&lt;head&gt;&lt;title&gt;Responsiv data vis&lt;/title&gt;\n&lt;style&gt;\n\n\n#container{\n  position: absolute; top: 5%; left: 5%; height: 90%; width: 90%;\n}\nsvg{\n  border:solid 1px #f00;\n}\n&lt;/style&gt;&lt;/head&gt;", "filename": "training_samples/training_sample_29.html", "charStart": 39, "charEnd": 223, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_3.html", "charStart": 33, "charEnd": 1011, "label": "head" 
+ "extracted": "\n&lt;!--http://blog.webkid.io/maps-with-leaflet-and-topojson/--&gt;\n\n  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;\n    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;\n    &lt;meta name=&quot;description&quot; content=&quot;EU map: leaflet&quot;&gt;\n    &lt;meta name=&quot;keywords&quot; content=&quot;openness&quot;&gt;\n    &lt;meta name=&quot;author&quot; content=&quot;Michal Škop&quot;&gt;\n&lt;!--    &lt;link type=&quot;image/x-icon&quot; href=&quot;/images/favicon.ico&quot; rel=&quot;shortcut icon&quot;&gt;--&gt;\n\n\n\n    &lt;link href=&quot;//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/superhero/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;\n    &lt;link href=&quot;//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css&quot; rel=&quot;stylesheet&quot;&gt;\n\n    &lt;script src=&quot;//code.jquery.com/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;\n&lt;!--    &lt;script src=&quot;//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&quot;&gt;--&gt;\n\n\n\n    &lt;title&gt;EU map&lt;/title&gt;\n    \n    \n&lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot;&gt;\n \n    \n    \n  &lt;/head&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 33, "charEnd": 1011, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_30.html", "charStart": 23, "charEnd": 267, "label": "head" 
+ "extracted": "  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }\n    svg { width: 100%; height: 100%; }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 23, "charEnd": 267, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_32.html", "charStart": 33, "charEnd": 190, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 33, "charEnd": 190, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_34.html", "charStart": 23, "charEnd": 1646, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n    &lt;title&gt;Chiasm Boilerplate&lt;/title&gt;\n    \n    &lt;!-- Load the Chiasm stack. --&gt;\n    &lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js&quot;&gt;&lt;/script&gt;\n        \n    &lt;!-- Make the container fill the page and have a 20px black border. --&gt;\n    &lt;style&gt;\n\n      body {\n        background-color: black;\n      }\n\n      #chiasm-container {\n        background-color: white;\n        position: fixed;\n        left: 20px;\n        right: 20px;\n        top: 20px;\n        bottom: 20px;\n      }\n\n      .axis {\n        font: 0.8em sans-serif;\n      }\n\n      .axis path,\n      .axis line {\n        fill: none;\n        stroke: #000;\n        shape-rendering: crispEdges;\n      }\n\n      /* Custom CSS for axis labels. */\n      .axis-label {\n        text-anchor: middle;\n        font-size: 2em;\n      } \n    &lt;/style&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 23, "charEnd": 1646, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 460, "label": "head" 
+ "extracted": "&lt;html lang=&quot;en&quot;&gt;\n	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;d3 module 3 - oxford&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				background-color: #fff;\n			}\n\n			svg {\n				background-color: #fff;\n			}\n\n			p {\n				width: 450px;\n				font-family: &quot;Arial&quot;, sans-serif;\n			}\n\n			rect {\n				fill: #c9c9c9;\n			}\n\n			rect:hover {\n				fill: #ed5e17;\n			}\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 460, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_36.html", "charStart": 23, "charEnd": 607, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n\n    &lt;!-- Runs the main program found in main.js. --&gt;\n    &lt;script data-main=&quot;main.js&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js&quot;&gt;&lt;/script&gt;\n\n    &lt;!-- Configure paths for RequireJS modules. --&gt;\n    &lt;script&gt;\n      requirejs.config({\n        paths: {\n          d3: &quot;http://d3js.org/d3.v3.min&quot;,\n          jQuery: &quot;//code.jquery.com/jquery-2.1.1.min&quot;,\n        }\n      });\n    &lt;/script&gt;\n\n    &lt;!-- Include CSS that styles the visualization. --&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;\n\n    &lt;title&gt;Line Chart&lt;/title&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_36.html", "charStart": 23, "charEnd": 607, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_37.html", "charStart": 33, "charEnd": 795, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Degrees&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				background-color: white;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n			h1 {\n				font-size: 24px;\n				margin: 0;\n			}\n\n			p {\n				font-size: 14px;\n				margin: 10px 0 0 0;\n			}\n\n			svg {\n				background-color: white;\n			}\n\n			/*rect:hover {\n				fill: orange;\n			}*/\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: black;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 11px;\n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;\n			}\n			.text-anchor {\n				font-weight: bold\n			}\n			\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 33, "charEnd": 795, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_38.html", "charStart": 23, "charEnd": 766, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n\n    &lt;!-- Runs the main program found in main.js. --&gt;\n    &lt;script data-main=&quot;main.js&quot; src=&quot;//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js&quot;&gt;&lt;/script&gt;\n\n    &lt;!-- Configure RequireJS paths for third party libraries. --&gt;\n    &lt;script&gt;\n      requirejs.config({\n        paths: {\n          d3: &quot;//d3js.org/d3.v3.min&quot;,\n          jquery: &quot;//code.jquery.com/jquery-2.1.1.min&quot;,\n          lodash: &quot;//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.4.0/lodash.min&quot;,\n          async: &quot;//cdnjs.cloudflare.com/ajax/libs/async/0.9.0/async&quot;\n        }\n      });\n    &lt;/script&gt;\n\n    &lt;!-- Include CSS that styles the visualization. --&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;\n\n    &lt;title&gt;Bar Chart&lt;/title&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_38.html", "charStart": 23, "charEnd": 766, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_39.html", "charStart": 33, "charEnd": 742, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Cleaning Up&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				background-color: white;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n			h1 {\n				font-size: 24px;\n				margin: 0;\n			}\n\n			p {\n				font-size: 14px;\n				margin: 10px 0 0 0;\n			}\n\n			svg {\n				background-color: white;\n			}\n\n			rect:hover {\n				fill: orange;\n			}\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: black;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 11px;\n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;\n			}\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 33, "charEnd": 742, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_40.html", "charStart": 33, "charEnd": 671, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;UTF-8&quot; /&gt;\n    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=Edge&quot;&gt;\n    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;\n    &lt;title&gt;Tryouts D3 Maps&lt;/title&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js&quot;&gt;&lt;/script&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 33, "charEnd": 671, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_41.html", "charStart": 33, "charEnd": 1023, "label": "head" 
+ "extracted": "&lt;head&gt;\n    &lt;meta charset=&quot;UTF-8&quot;&gt;\n    &lt;title&gt;http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428&lt;/title&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.css&quot;&gt;\n    &lt;style&gt;\n        body {\n            background: black;\n            margin:0;\n            padding:0;\n        }\n\n        #histogram rect{\n            -webkit-transition: all 0.1s linear;\n            -moz-transition: all 0.1s linear;\n            -o-transition: all 0.1s linear;\n            transition: all 0.1s linear;\n        }\n\n        #bubble-cloud {\n            background: url(&quot;http://dummyimage.com/100x100/111/333?text=sample&quot;) 0 0;\n            width: 960px;\n            height: 470px;\n            /*overflow: hidden;*/\n            position: relative;\n            margin:0 auto;\n        }\n        svg {\n            outline: rgba(242,216,28,1);\n            overflow: visible;\n        }\n    &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 33, "charEnd": 1023, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_43.html", "charStart": 33, "charEnd": 563, "label": "head" 
+ "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Renewable consumption in the European Union&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				background-color: white;\n			}\n			h1 { \n				font-size: 30px;\n				font-family: helvetica;\n			}\n\n			h2 { \n				font-size: 20px;\n				font-family: helvetica;\n			}\n\n			svg {\n				background-color: white;\n			}\n\n			rect {\n				fill: #006600;\n			}\n			rect:hover {\n                opacity: 0.67;\n            }\n\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 33, "charEnd": 563, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_44.html", "charStart": 99, "charEnd": 3849, "label": "head" 
+ "extracted": "&lt;!--[if IE 7]&gt;    &lt;html class=&quot;no-js lt-ie9 lt-ie8&quot; lang=&quot;en&quot;&gt; &lt;![endif]--&gt;\n&lt;!--[if IE 8]&gt;    &lt;html class=&quot;no-js lt-ie9&quot; lang=&quot;en&quot;&gt; &lt;![endif]--&gt;\n&lt;!--[if gt IE 8]&gt;&lt;!--&gt; &lt;html class=&quot;no-js&quot; lang=&quot;en&quot;&gt; &lt;!--&lt;![endif]--&gt;\n&lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot; /&gt;\n\n    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0&quot; /&gt;\n        &lt;title&gt;\n      \n                Chimp Chomp Design | Design and Research Lab based in Surabaya, Indonesia\n                  &lt;/title&gt;\n\n        &lt;meta name=&quot;description&quot; content=&quot;Chimp Chomp is a design and research lab based in Surabaya, Indonesia. Powered by a troupe of hyper monkeys honed in multidisciplinary areas from design, computer science, photography, social science and cultural studies, our clients and collaborators range from independent initiatives to multi-national corporations and organisations.&quot;&gt;\n        &lt;meta name=&quot;generator&quot; content=&quot;Bolt&quot;&gt;\n        &lt;link rel=&quot;canonical&quot; href=&quot;http://chimpchomp.us/&quot;&gt;\n       &lt;link rel=&quot;stylesheet&quot; href=&quot;http://chimpchomp.us//app/extensions/SimpleForms/assets/simpleforms.css&quot; media=&quot;screen&quot;&gt;\n       &lt;link href=&#39;http://fonts.googleapis.com/css?family=Playfair+Display:400,700,400italic&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39;&gt;          \n   &lt;link href=&#39;http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39;&gt;\n   \n        &lt;link rel=&quot;stylesheet&quot; href=&quot;http://chimpchomp.us/theme/chimpchomp/stylesheets/foundation.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://chimpchomp.us/theme/chimpchomp/stylesheets/app.css&quot;&gt;\n\n    &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.foundation.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.foundation.topbar.js&quot;&gt;&lt;/script&gt;\n   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.flexslider-min.js&quot;&gt;&lt;/script&gt;\n   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/modernizr.custom.js&quot;&gt;&lt;/script&gt;\n\n    &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/app.js&quot;&gt;&lt;/script&gt;\n   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/swipe.js&quot;&gt;&lt;/script&gt;\n   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.min.js&quot;&gt;&lt;/script&gt;\n   &lt;script src=&quot;http://chimpchomp.us/theme/chimpchomp/javascripts/jquery.isotope.perfectmasonry.js&quot;&gt;&lt;/script&gt;\n   &lt;script&gt;\n      $(document).ready(function() {  \n         var opt = {\n            layoutMode: &#39;perfectMasonry&#39;,\n            perfectMasonry: {\n               layout: &#39;vertical&#39;,\n               liquid: true,            // Set layout as liquid (default: false)\n               columnWidth: 250,         \n               rowHeight: 250,   \n               minCols: 2,              // Set min col count (default: 1)      \n               maxCols: 5              // Set max col count (default: 9999)               \n            }\n         };\n         \n         // Set default isotope\n         $(&#39;#projectContainer&#39;).isotope(opt).smartresize();\n         \n         $(&#39;#projectFilter a&#39;).click(function(){\n           var selector = $(this).attr(&#39;data-filter&#39;);\n           $(&#39;#projectContainer&#39;).isotope({ filter: selector });\n           return false;\n         });\n      });  \n   &lt;/script&gt;\n   &lt;script&gt;\n   (function(i,s,o,g,r,a,m){i[&#39;GoogleAnalyticsObject&#39;]=r;i[r]=i[r]||function(){\n   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n   })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);\n\n   ga(&#39;create&#39;, &#39;UA-GOOGLES-1&#39;, &#39;chimpchomp.us&#39;);\n   ga(&#39;send&#39;, &#39;pageview&#39;);\n\n    &lt;/script&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_44.html", "charStart": 99, "charEnd": 3849, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_45.html", "charStart": 23, "charEnd": 1623, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n    &lt;title&gt;Map &amp; Globe&lt;/title&gt;\n\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;\n\n    &lt;!-- Leaflet.js, a geographic mapping library. --&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css&quot; /&gt; \n    &lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js&quot;&gt;&lt;/script&gt;\n\n    &lt;!-- A functional reactive model library. github.com/curran/model --&gt;\n    &lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;\n\n    &lt;!-- Chiasm core and plugins. github.com/chiasm-project --&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.1.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;\n\n    &lt;!-- Custom Chiasm plugins for this example. --&gt;\n    &lt;script src=&quot;globe.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;chiasm-leaflet.js&quot;&gt;&lt;/script&gt;\n\n    &lt;style&gt;\n\n      body {\n        background-color: black;\n      }\n\n      /* Make the container fill the page using CSS. */\n      #chiasm-container {\n        position: fixed;\n        left: 20px;\n        right: 20px;\n        top: 20px;\n        bottom: 20px;\n      }\n    &lt;/style&gt;\n\n  &lt;/head&gt;", "filename": "training_samples/training_sample_45.html", "charStart": 23, "charEnd": 1623, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_46.html", "charStart": 23, "charEnd": 1256, "label": "head" 
+ "extracted": "  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;\n\n      \n    &lt;title&gt;Shotplot&lt;/title&gt;\n    \n    &lt;style&gt;\n\n\nh1{\n  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;\n  font-size: 26px;\n  font-style: bold;\n  \n}\n\nh2{\n  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;\n  font-size: 22px;\n  font-style: bold;\n  \n}\n\np{\n  font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;\n  font-size: 16px;  \n}\n\nbody {\n        background-color: #ccc;\n      }\n\n      svg {\n        background-color: white;\n      }\n\n\n.d3-tip {\n  line-height: 1;\n  font-weight: bold;\n  font-size: 14px;\n  padding: 12px;\n  background: rgba(0, 0, 0, 0.8);\n  color: #fff;\n  border-radius: 2px;\n}\n\n/* Creates a small triangle extender for the tooltip */\n.d3-tip:after {\n  box-sizing: border-box;\n  display: inline;\n  font-size: 10px;\n  width: 100%;\n  line-height: 1;\n  color: rgba(0, 0, 0, 0.8);\n  content: &quot;\25BC&quot;;\n  position: absolute;\n  text-align: center;\n}\n\n/* Style northward tooltips differently */\n.d3-tip.n:after {\n  margin: -1px 0 0 0;\n  top: 100%;\n  left: 0;\n}\n\n\n    &lt;/style&gt;\n    \n    &lt;script src=&quot;http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js&quot;&gt;&lt;/script&gt;\n\n  &lt;/head&gt;", "filename": "training_samples/training_sample_46.html", "charStart": 23, "charEnd": 1256, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_47.html", "charStart": 23, "charEnd": 3562, "label": "head" 
+ "extracted": "&lt;head&gt;\n    &lt;title&gt;Polygon libtess fill in WebGL&lt;/title&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n\n    &lt;style&gt;\n        html, body {\n            height: 100%;\n            padding: 0;\n            margin: 0;\n            background: rgb(14, 21, 30);\n            height: 100%;\n        }\n\n        #map {\n            position: absolute;\n            height: 100%;\n            width: 100%;\n            background-color: #333;\n        }\n    &lt;/style&gt;\n    &lt;!-- vertex shader --&gt;\n    &lt;script id=&quot;vshader&quot; type=&quot;x-shader/x-vertex&quot;&gt;\n        uniform mat4 u_matrix;\n        attribute vec4 a_vertex;\n        attribute float a_pointSize;\n        attribute vec4 a_color;\n        varying vec4 v_color;\n\n        void main() {\n        // Set the size of the point\n        gl_PointSize =  a_pointSize;\n\n        // multiply each vertex by a matrix.\n        gl_Position = u_matrix * a_vertex;\n\n\n        // pass the color to the fragment shader\n        v_color = a_color;\n        }\n    &lt;/script&gt;\n    &lt;!-- fragment shader --&gt;\n\n\n\n    &lt;script id=&quot;fshader&quot; type=&quot;x-shader/x-fragment&quot;&gt;\n        precision mediump float;\n        varying vec4 v_color;\n\n        void main() {\n\n        // -- squares\n        gl_FragColor = v_color; //vec4(0.8, 0.1,0.1, 0.9); //v_color;\n        \n        gl_FragColor.a = 0.8;\n       }\n\n    &lt;/script&gt;\n    &lt;script src=&quot;http://www.sumbera.com/gist/js/libtess/libtess.cat.js&quot;&gt;&lt;/script&gt;\n     &lt;script&gt;\n         \n         /*global libtess */\n\n         var tessy = (function initTesselator() {\n             // function called for each vertex of tesselator output\n             function vertexCallback(data, polyVertArray) {\n                 // console.log(data[0], data[1]);\n                 polyVertArray[polyVertArray.length] = data[0];\n                 polyVertArray[polyVertArray.length] = data[1];\n                 polyVertArray[polyVertArray.length] = currentColor[0];\n                 polyVertArray[polyVertArray.length] = currentColor[1];\n                 polyVertArray[polyVertArray.length] = currentColor[2];\n\n   \n\n             }\n             function begincallback(type) {\n                 if (type !== libtess.primitiveType.GL_TRIANGLES) {\n                     console.log(&#39;expected TRIANGLES but got type: &#39; + type);\n                 }\n             }\n             function errorcallback(errno) {\n                 console.log(&#39;error callback&#39;);\n                 console.log(&#39;error number: &#39; + errno);\n             }\n             // callback for when segments intersect and must be split\n             function combinecallback(coords, data, weight) {\n                 // console.log(&#39;combine callback&#39;);\n                 return [coords[0], coords[1], coords[2]];\n             }\n             function edgeCallback(flag) {\n                 // don&#39;t really care about the flag, but need no-strip/no-fan behavior\n                 // console.log(&#39;edge flag: &#39; + flag);\n             }\n\n             var tessy = new libtess.GluTesselator();\n             // tessy.gluTessProperty(libtess.gluEnum.GLU_TESS_WINDING_RULE, libtess.windingRule.GLU_TESS_WINDING_POSITIVE);\n             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_VERTEX_DATA, vertexCallback);\n             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_BEGIN, begincallback);\n             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_ERROR, errorcallback);\n             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_COMBINE, combinecallback);\n             tessy.gluTessCallback(libtess.gluEnum.GLU_TESS_EDGE_FLAG, edgeCallback);\n\n             return tessy;\n         })();\n\n\n\n     &lt;/script&gt;\n\n&lt;/head&gt;", "filename": "training_samples/training_sample_47.html", "charStart": 23, "charEnd": 3562, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_48.html", "charStart": 14, "charEnd": 362, "label": "head" 
+ "extracted": "  &lt;title&gt;Leaflet Squirrel - Part 5&lt;/title&gt;\n  &lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot;/&gt;\n  &lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&gt;&lt;/script&gt;\n  &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    #map{ height: 100% }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 14, "charEnd": 362, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_7.html", "charStart": 23, "charEnd": 168, "label": "head" 
+ "extracted": "  &lt;head&gt;\n    &lt;title&gt;Force-Directed Layout with Convex Hull&lt;/title&gt;\n    &lt;script src=&quot;http://mbostock.github.com/d3/d3.js?2.9.2&quot;&gt;&lt;/script&gt;\n &lt;/head&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 23, "charEnd": 168, "label": "head" 
 },
 {
- "filename": "training_samples/training_sample_9.html", "charStart": 23, "charEnd": 228, "label": "head" 
-},
-{
- "filename": "training_samples/training_sample_0.html", "charStart": 173, "charEnd": 1482, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_1.html", "charStart": 345, "charEnd": 380, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_12.html", "charStart": 1041, "charEnd": 1244, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_13.html", "charStart": 39, "charEnd": 420, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_14.html", "charStart": 260, "charEnd": 1413, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_16.html", "charStart": 354, "charEnd": 461, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_18.html", "charStart": 49, "charEnd": 392, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_19.html", "charStart": 4187, "charEnd": 5327, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_2.html", "charStart": 40, "charEnd": 208, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_20.html", "charStart": 129, "charEnd": 904, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_21.html", "charStart": 184, "charEnd": 258, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_22.html", "charStart": 134, "charEnd": 259, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_24.html", "charStart": 186, "charEnd": 328, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_25.html", "charStart": 98, "charEnd": 265, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_26.html", "charStart": 36, "charEnd": 241, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_27.html", "charStart": 40, "charEnd": 127, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_28.html", "charStart": 198, "charEnd": 611, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_29.html", "charStart": 86, "charEnd": 216, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 1026, "charEnd": 1289, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_30.html", "charStart": 134, "charEnd": 259, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_31.html", "charStart": 54, "charEnd": 289, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 1083, "charEnd": 1636, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_35.html", "charStart": 181, "charEnd": 451, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_37.html", "charStart": 171, "charEnd": 786, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_39.html", "charStart": 171, "charEnd": 733, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_4.html", "charStart": 39, "charEnd": 287, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 315, "charEnd": 1015, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_43.html", "charStart": 203, "charEnd": 554, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 1339, "charEnd": 1612, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_46.html", "charStart": 177, "charEnd": 1151, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 111, "charEnd": 447, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_48.html", "charStart": 311, "charEnd": 354, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_49.html", "charStart": 39, "charEnd": 273, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_6.html", "charStart": 39, "charEnd": 144, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_8.html", "charStart": 39, "charEnd": 318, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_9.html", "charStart": 134, "charEnd": 220, "label": "style" 
-},
-{
- "filename": "training_samples/training_sample_0.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_1.html", "charStart": 50, "charEnd": 70, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_10.html", "charStart": 20, "charEnd": 42, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 109, "charEnd": 131, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_12.html", "charStart": 37, "charEnd": 88, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_13.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_14.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 42, "charEnd": 64, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_16.html", "charStart": 30, "charEnd": 52, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_17.html", "charStart": 40, "charEnd": 62, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_18.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_19.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_2.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_20.html", "charStart": 30, "charEnd": 52, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_21.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_22.html", "charStart": 25, "charEnd": 47, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_23.html", "charStart": 42, "charEnd": 64, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_24.html", "charStart": 32, "charEnd": 54, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_27.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_28.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_29.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 109, "charEnd": 131, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_30.html", "charStart": 25, "charEnd": 47, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_31.html", "charStart": 31, "charEnd": 53, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_32.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_33.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 36, "charEnd": 58, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_35.html", "charStart": 44, "charEnd": 66, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_36.html", "charStart": 36, "charEnd": 58, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_37.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_38.html", "charStart": 36, "charEnd": 58, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_39.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_4.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_40.html", "charStart": 46, "charEnd": 70, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 44, "charEnd": 66, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_43.html", "charStart": 43, "charEnd": 65, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 326, "charEnd": 350, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 36, "charEnd": 58, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_46.html", "charStart": 25, "charEnd": 47, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 83, "charEnd": 105, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_49.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_5.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_6.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_8.html", "charStart": 16, "charEnd": 38, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_9.html", "charStart": 25, "charEnd": 47, "label": "meta" 
-},
-{
- "filename": "training_samples/training_sample_0.html", "charStart": 68, "charEnd": 98, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_1.html", "charStart": 79, "charEnd": 115, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_10.html", "charStart": 47, "charEnd": 83, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 136, "charEnd": 187, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_12.html", "charStart": 1001, "charEnd": 1036, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_14.html", "charStart": 68, "charEnd": 99, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 67, "charEnd": 111, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_16.html", "charStart": 53, "charEnd": 99, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_17.html", "charStart": 63, "charEnd": 94, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_19.html", "charStart": 68, "charEnd": 121, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_20.html", "charStart": 53, "charEnd": 75, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_21.html", "charStart": 68, "charEnd": 107, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_23.html", "charStart": 67, "charEnd": 112, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_28.html", "charStart": 68, "charEnd": 112, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_29.html", "charStart": 52, "charEnd": 85, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 876, "charEnd": 897, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_32.html", "charStart": 68, "charEnd": 107, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 63, "charEnd": 96, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_35.html", "charStart": 69, "charEnd": 104, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_36.html", "charStart": 572, "charEnd": 597, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_37.html", "charStart": 68, "charEnd": 90, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_38.html", "charStart": 732, "charEnd": 756, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_39.html", "charStart": 68, "charEnd": 94, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_40.html", "charStart": 206, "charEnd": 236, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 71, "charEnd": 188, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_43.html", "charStart": 68, "charEnd": 126, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 456, "charEnd": 463, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 63, "charEnd": 89, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_46.html", "charStart": 144, "charEnd": 167, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 34, "charEnd": 78, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_48.html", "charStart": 16, "charEnd": 56, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_7.html", "charStart": 36, "charEnd": 89, "label": "title" 
-},
-{
- "filename": "training_samples/training_sample_0.html", "charStart": 107, "charEnd": 170, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_1.html", "charStart": 228, "charEnd": 320, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_1.html", "charStart": 931, "charEnd": 963, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_10.html", "charStart": 315, "charEnd": 351, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_10.html", "charStart": 356, "charEnd": 401, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_10.html", "charStart": 407, "charEnd": 439, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_10.html", "charStart": 444, "charEnd": 491, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 192, "charEnd": 260, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 265, "charEnd": 304, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 309, "charEnd": 364, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 369, "charEnd": 437, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_11.html", "charStart": 518, "charEnd": 550, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_12.html", "charStart": 703, "charEnd": 814, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_12.html", "charStart": 819, "charEnd": 910, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_12.html", "charStart": 915, "charEnd": 996, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_13.html", "charStart": 428, "charEnd": 475, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_14.html", "charStart": 111, "charEnd": 176, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_14.html", "charStart": 185, "charEnd": 257, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 322, "charEnd": 390, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 394, "charEnd": 503, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 879, "charEnd": 958, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 959, "charEnd": 1018, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_15.html", "charStart": 1020, "charEnd": 1077, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_16.html", "charStart": 184, "charEnd": 263, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_17.html", "charStart": 167, "charEnd": 219, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_17.html", "charStart": 220, "charEnd": 257, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_17.html", "charStart": 258, "charEnd": 299, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_18.html", "charStart": 395, "charEnd": 447, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_19.html", "charStart": 889, "charEnd": 993, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_19.html", "charStart": 995, "charEnd": 1085, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_19.html", "charStart": 1152, "charEnd": 1216, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_2.html", "charStart": 225, "charEnd": 293, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_2.html", "charStart": 294, "charEnd": 366, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_2.html", "charStart": 367, "charEnd": 437, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_2.html", "charStart": 438, "charEnd": 511, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_20.html", "charStart": 76, "charEnd": 128, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_21.html", "charStart": 110, "charEnd": 181, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_22.html", "charStart": 50, "charEnd": 131, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_23.html", "charStart": 219, "charEnd": 287, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_23.html", "charStart": 290, "charEnd": 399, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_23.html", "charStart": 402, "charEnd": 489, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_23.html", "charStart": 683, "charEnd": 729, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_24.html", "charStart": 57, "charEnd": 109, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_24.html", "charStart": 112, "charEnd": 181, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_25.html", "charStart": 308, "charEnd": 396, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_26.html", "charStart": 420, "charEnd": 527, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_26.html", "charStart": 532, "charEnd": 626, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_27.html", "charStart": 137, "charEnd": 185, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_28.html", "charStart": 115, "charEnd": 186, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_29.html", "charStart": 225, "charEnd": 293, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 718, "charEnd": 780, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 1704, "charEnd": 1775, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 1776, "charEnd": 1849, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 1850, "charEnd": 1923, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 1924, "charEnd": 1984, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_3.html", "charStart": 1985, "charEnd": 2015, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_30.html", "charStart": 50, "charEnd": 131, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_31.html", "charStart": 297, "charEnd": 378, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_32.html", "charStart": 110, "charEnd": 181, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_33.html", "charStart": 46, "charEnd": 98, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 142, "charEnd": 215, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 220, "charEnd": 319, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 324, "charEnd": 417, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 422, "charEnd": 503, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 508, "charEnd": 587, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 592, "charEnd": 685, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 690, "charEnd": 799, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 804, "charEnd": 895, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_34.html", "charStart": 900, "charEnd": 993, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_35.html", "charStart": 107, "charEnd": 178, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_36.html", "charStart": 117, "charEnd": 222, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_37.html", "charStart": 93, "charEnd": 168, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_38.html", "charStart": 117, "charEnd": 222, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_39.html", "charStart": 97, "charEnd": 168, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_4.html", "charStart": 295, "charEnd": 342, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_40.html", "charStart": 387, "charEnd": 469, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_40.html", "charStart": 474, "charEnd": 568, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_40.html", "charStart": 573, "charEnd": 661, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_40.html", "charStart": 693, "charEnd": 724, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 1061, "charEnd": 1157, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 1158, "charEnd": 1239, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 1240, "charEnd": 1343, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 1344, "charEnd": 1437, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_41.html", "charStart": 1438, "charEnd": 1532, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_42.html", "charStart": 326, "charEnd": 394, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_43.html", "charStart": 129, "charEnd": 200, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 1663, "charEnd": 1760, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 1765, "charEnd": 1848, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 1853, "charEnd": 1954, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 1958, "charEnd": 2056, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 2060, "charEnd": 2153, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 2159, "charEnd": 2239, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 2243, "charEnd": 2325, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 2329, "charEnd": 2424, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_44.html", "charStart": 2428, "charEnd": 2534, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 95, "charEnd": 188, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 193, "charEnd": 287, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 292, "charEnd": 373, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 523, "charEnd": 596, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 676, "charEnd": 749, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 819, "charEnd": 898, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 903, "charEnd": 1002, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 1007, "charEnd": 1100, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 1105, "charEnd": 1196, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 1255, "charEnd": 1287, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_45.html", "charStart": 1292, "charEnd": 1333, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_46.html", "charStart": 50, "charEnd": 131, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_46.html", "charStart": 1161, "charEnd": 1245, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 1308, "charEnd": 1385, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 3688, "charEnd": 3761, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 3766, "charEnd": 3854, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_47.html", "charStart": 3870, "charEnd": 3957, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_48.html", "charStart": 144, "charEnd": 217, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_48.html", "charStart": 220, "charEnd": 308, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_49.html", "charStart": 281, "charEnd": 362, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_5.html", "charStart": 82, "charEnd": 111, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_5.html", "charStart": 112, "charEnd": 147, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_6.html", "charStart": 152, "charEnd": 204, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_6.html", "charStart": 205, "charEnd": 248, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_7.html", "charStart": 94, "charEnd": 159, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_8.html", "charStart": 326, "charEnd": 378, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_8.html", "charStart": 379, "charEnd": 410, "label": "scriptinclude" 
-},
-{
- "filename": "training_samples/training_sample_9.html", "charStart": 50, "charEnd": 131, "label": "scriptinclude" 
+ "extracted": "  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 23, "charEnd": 228, "label": "head" 
 }];
