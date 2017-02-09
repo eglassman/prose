@@ -18,13 +18,13 @@
         }
         $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled">'+s["extracted"]+'</span></code></pre></div>');
       } else {
-        console.log('wtf?');
+        //console.log('wtf?');
         $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled none">'+"None"+'</span></code></pre></div>');
       }
-      console.log('another s processed')
+      //console.log('another s processed')
     });
 
-    console.log('final s processed')
+    //console.log('final s processed')
   });
 </script>
 <script src="bundle.js"></script>
@@ -35,7 +35,7 @@
 
   $( document ).ready(function() {
 
-    console.log( "ready!" );
+    //console.log( "ready!" );
     //console.log('bundle script innards')
 
     var new_arr = [];
@@ -43,17 +43,17 @@
       //console.log(i,e);
       new_arr.push($(e).text());
     });
-    console.log(new_arr);
+    //console.log(new_arr);
     var counter = arrayCounter(new_arr);
-    console.log(counter);
-    console.log('sorted')
+    //console.log(counter);
+    //console.log('sorted')
     console.log(sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }}));
     //counter = _.invert(counter);
     //counter = sortObj(counter, {sortOrder: 'asc'});
     for(var key in sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }})) {
       //sorted[sorted.length] = key;
-      console.log(key,counter[key]);
-      $('#composite-doctype').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="doctype compiled">'+counter[key]+', '+escape(key)+'</span></code></pre></div>');
+      //console.log(key,counter[key]);
+      $('#composite-doctype').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="doctype compiled"><span class="count">'+counter[key]+'</span>,<span class="extracted">'+escape(key)+'</span></span></code></pre></div>');
     }
 
     var new_arr = [];
@@ -61,16 +61,16 @@
       //console.log(i,e);
       new_arr.push($(e).text());
     });
-    console.log(new_arr);
-    console.log(arrayCounter(new_arr));
+    //console.log(new_arr);
+    //console.log(arrayCounter(new_arr));
     var counter = arrayCounter(new_arr);
     console.log(sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }}));
     //counter = _.invert(counter);
     //counter = sortObj(counter, {sortOrder: 'desc'});
     for(var key in sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }})) {
       //sorted[sorted.length] = key;
-      console.log(key,counter[key]);
-      $('#composite-htmllang').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="htmllang compiled">'+counter[key]+', '+escape(key)+'</span></code></pre></div>');
+      //console.log(key,counter[key]);
+      $('#composite-htmllang').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="htmllang compiled"><span class="count">'+counter[key]+'</span>,<span class="extracted">'+escape(key)+'</span></span></code></pre></div>');
     }
 
     var new_arr = [];
@@ -78,17 +78,20 @@
       //console.log(i,e);
       new_arr.push($(e).text());
     });
-    console.log(new_arr);
-    console.log(arrayCounter(new_arr));
+    //console.log(new_arr);
+    //console.log(arrayCounter(new_arr));
     var counter = arrayCounter(new_arr);
     console.log(sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }}));
     //counter = _.invert(counter);
     //counter = sortObj(counter, {sortOrder: 'desc'});
     for(var key in sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }})) {
       //sorted[sorted.length] = key;
-      console.log(key,counter[key]);
-      $('#composite-style').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="style compiled">'+counter[key]+', '+escape(key)+'</span></code></pre></div>');
+      //console.log(key,counter[key]);
+      $('#composite-style').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="style compiled"><span class="count">'+counter[key]+'</span>,<span class="extracted">'+escape(key)+'</span></span></code></pre></div>');
     }
+
+    //Find co-occurring statements
+
 
   });
 </script>
