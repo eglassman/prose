@@ -1,6 +1,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="/js/tutorons-library.js"></script>
 <script type="text/javascript" src="data/data.json"></script>
+<!-- <script src="bundle.js"></script> -->
 <script>
   document.addEventListener("DOMContentLoaded", function (event) {
     spanAdder = new tutorons.TutoronsConnection(window);
@@ -14,17 +15,50 @@
         } catch(err) {
           console.log('failed on ',err,s);
         }
-        $('#composite-'+s["label"]).append('<div class="'+s["label"]+' compiled"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+s["extracted"]+'</code></pre></div>');
+        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' compiled">'+s["extracted"]+'</span></code></pre></div>');
       } else {
         console.log('wtf?');
-        $('#composite-'+s["label"]).append('<div class="'+s["label"]+' compiled none"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+"None"+'</code></pre></div>');
+        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' compiled none">'+"None"+'</span></code></pre></div>');
       }
+      console.log('another s processed')
     });
+    // console.log('bundle script innards')
+    // var new_arr = [];
+    // $('.doctype.compiled').each(function(i,e){
+    //   console.log(i,e);
+    //   new_arr.push($(e).text());
+    // });
+    // console.log(new_arr);
+    // console.log(arrayCounter(new_arr));
     //spanAdder.addRegionsD3('#ts0',10,20,'testing-labeling');
+    console.log('final s processed')
   });
 </script>
 <script src="bundle.js"></script>
-
+<script type="text/javascript">
+  var arrayCounter = require('array-counter');
+  $( document ).ready(function() {
+      console.log( "ready!" );
+      console.log('bundle script innards')
+    var new_arr = [];
+    $('.doctype.compiled').each(function(i,e){
+      console.log(i,e);
+      new_arr.push($(e).text());
+    });
+    console.log(new_arr);
+    console.log(arrayCounter(new_arr));
+  });
+</script>
+<!-- <script type="text/javascript">
+  console.log('bundle script innards')
+  var new_arr = [];
+  $('.doctype.compiled').each(function(i,e){
+    console.log(i,e);
+    new_arr.push($(e).text());
+  });
+  console.log(new_arr);
+  console.log(arrayCounter(new_arr));
+</script> -->
 
 <style>
 /*specify appearance of labeled code*/
