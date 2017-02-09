@@ -155,40 +155,103 @@ data = [{
  "extracted": "&lt;html lang=en&gt;", "filename": "training_samples/training_sample_1.html", "charStart": 16, "charEnd": 30, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_10.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_11.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_12.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_13.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_15.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_16.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_17.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_18.html", "charStart": "", "charEnd": "", "label": "htmllang" 
 },
 {
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_2.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_20.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_21.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_22.html", "charStart": "", "charEnd": "", "label": "htmllang" 
 },
 {
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_23.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_24.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_25.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_26.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_27.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_29.html", "charStart": "", "charEnd": "", "label": "htmllang" 
 },
 {
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_3.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_30.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_31.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_33.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_34.html", "charStart": "", "charEnd": "", "label": "htmllang" 
 },
 {
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_35.html", "charStart": 17, "charEnd": 33, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_36.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_37.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_38.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_4.html", "charStart": "", "charEnd": "", "label": "htmllang" 
 },
 {
  "extracted": "&lt;html lang=&quot;fr&quot;&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
@@ -197,7 +260,43 @@ data = [{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_42.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
  "extracted": "&lt;html lang=&quot;en&quot;&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 16, "charEnd": 32, "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_44.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_45.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_46.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_47.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_48.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_49.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_5.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_6.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_7.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_8.html", "charStart": "", "charEnd": "", "label": "htmllang" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_9.html", "charStart": "", "charEnd": "", "label": "htmllang" 
 },
 {
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Intermediate D3&lt;/title&gt;\n        &lt;script src=&quot;//d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				margin: 0;\n				background-color: #47484B;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n			#container {\n				width: 700px;\n				margin-left: auto;\n				margin-right: auto;\n				margin-top: 50px;\n				padding: 50px;\n				background-color: black;\n			}\n\n			h1 {\n				font-size: 24px;\n                font-family : monospace;\n                color: white;\n			}\n\n			p {\n				font-size: 14px;\n                color:#aaaaaa;\n                font-family: monospace;\n			}\n\n			svg {\n				background-color: black;\n			}\n\n			g.bar text {\n				font-size: 11px;\n                font-family: monospace;\n                color: white;\n				font-weight: bold;\n				text-anchor: end;\n				opacity: 0;\n			}\n\n			g.bar:hover rect {\n				fill: red;\n			}\n\n			g.bar:hover text {\n				opacity: 1;\n                fill: #ffffff;\n                font-family: monospace;\n\n			}\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: #aaaaaa;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 10px;\n                fill:#777777;\n                font-family: monospace;\n                color: white;\n\n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;\n			}\n            \n            a {\n                color : white;\n            }\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_0.html", "charStart": 33, "charEnd": 1491, "label": "head" 
@@ -213,6 +312,9 @@ data = [{
 },
 {
  "extracted": "&lt;html&gt;\n  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;  &lt;!--set charset to utf-8--&gt;\n    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;  &lt;!--enable mobile views--&gt;\n\n    &lt;!-- CSS --&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/normalize.css&quot;&gt; &lt;!--reset css for cross-browser compatibility--&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/bootstrap.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/agency.css&quot;&gt;\n    &lt;!-- &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/bootstrap-theme.css&quot;&gt; --&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/main.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;css/responsive.css&quot;&gt;\n\n\n    &lt;!-- JS --&gt;\n    &lt;script type=&quot;text/javascript&quot; src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;\n    &lt;title&gt;D3 Stacked Bar Chart&lt;/title&gt;\n    &lt;style&gt;\n      .axis text {\n        font: 10px sans-serif;\n      }\n\n      .axis path,\n      .axis line {\n        fill: none;\n        stroke: #000;\n        shape-rendering: crispEdges;\n      }\n    &lt;/style&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_12.html", "charStart": 17, "charEnd": 1254, "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_13.html", "charStart": "", "charEnd": "", "label": "head" 
 },
 {
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Sorting Elements&lt;/title&gt;\n		\n        &lt;!--&lt;script type=&quot;text/javascript&quot; src=&quot;../d3.v3.js&quot;&gt;&lt;/script&gt;--&gt;\n        &lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org./d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			\n            \n			body {\n				background-color: white;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n        \n\n			h1 {\n				font-size: 25px;\n				margin: 0;\n                color:#B5B1B1;\n			}\n            p {\n				font-size: 16px;\n				margin: 10px 0 0 0;\n                color:#B5B1B1;\n                \n			}\n\n			a {\n                text-decoration:none;\n                color:rgb(216,83,43);\n            }\n\n			svg {\n				background-color: white;\n			}\n\n			rect:hover {\n				fill: orange;\n			}\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: #B5B1B1;;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 10px;			/* Made this text smaller, for testing */\n                \n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;}\n		\n\n\n            /* gridline nuevo */\n            .tick.minor line {\n              stroke: #777;\n              stroke-dasharray: 2,2;\n            }\n             /* gridline nuevo */\n\n             /*\n				NOTE that CSS comments look use asterisks and slashes,\n				not &lt;!-- comment --&gt; like HTML comments.\n             */\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_14.html", "charStart": 33, "charEnd": 1422, "label": "head" 
@@ -231,6 +333,9 @@ data = [{
 },
 {
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;F1 Driver&#39;s Wage between 2014 and 2015&lt;/title&gt;\n\n	&lt;/head&gt;", "filename": "training_samples/training_sample_19.html", "charStart": 33, "charEnd": 131, "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_2.html", "charStart": "", "charEnd": "", "label": "head" 
 },
 {
  "extracted": "&lt;head&gt;\n&lt;meta charset=&quot;utf-8&quot;&gt;\n&lt;title&gt;Gallery&lt;/title&gt;\n&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;\n&lt;style&gt;\n\n.thumbs {\n    width:250px;\n    height:150px;\n    display: inline-block;\n    \n        margin-top: 10px;\n    margin-bottom: 10px;\n    margin-right: 10px;\n    margin-left: 10px;\n\n}\n\n\n.images {\n\nmax-height:100%; \nmax-width:100%;\n\n\n}\n\n\n\n\n\n p{\n\n	font-family: &quot;Century Gothic&quot;,&#39;Helvetica Neue&#39;,Helvetica, sans-serif;\n	font-size: 1.0em;\n}\n\n\n.header1 { \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #0099FF;\nline-height: 25px;\n\n\n}\n\n.header2 { \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #FF3300;\nline-height: 25px;\n\n\n}\n\n.titles {\n\n	 margin-left: 10px;\n	 color: #fff;\n}\n\n.header3 { \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #29293D;\nline-height: 25px;\n\n\n}\n.header4 , .header5{ \n\nwidth: 100%;\nheight: 25px;\nbackground-color: #1D561D;\nline-height: 25px;\n\n\n}\n\n\n\n&lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_20.html", "charStart": 23, "charEnd": 912, "label": "head" 
@@ -254,6 +359,9 @@ data = [{
  "extracted": "  &lt;head&gt;\n    &lt;style type=&quot;text/css&quot;&gt;\n      html, body { height: 100%; margin: 0; padding: 0; }\n      .olControlLayerSwitcher { top: 100px !important; left: 10px; width: 40px; }\n      #map { height: 100%; }\n    &lt;/style&gt;\n    &lt;link href=&#39;http://dev.openlayers.org/releases/OpenLayers-2.13.1/theme/default/style.css&#39; type=&#39;text/css&#39; rel=&#39;stylesheet&#39; /&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_26.html", "charStart": 23, "charEnd": 381, "label": "head" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_27.html", "charStart": "", "charEnd": "", "label": "head" 
+},
+{
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Consumption of Grapes by Race&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		\n        &lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}\n            \n            \n\n			svg {\n                background-color: white; }\n            \n            h1{ font-size: 30px;}\n            rect {\n                fill: #794044;}\n            \n            rect:hover {\n                opacity: 0.6;}\n            \n        &lt;/style&gt;\n	\n    &lt;/head&gt;", "filename": "training_samples/training_sample_28.html", "charStart": 33, "charEnd": 625, "label": "head" 
 },
 {
@@ -266,7 +374,13 @@ data = [{
  "extracted": "  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }\n    svg { width: 100%; height: 100%; }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_30.html", "charStart": 23, "charEnd": 267, "label": "head" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_31.html", "charStart": "", "charEnd": "", "label": "head" 
+},
+{
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Loading CSV Data with D3&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_32.html", "charStart": 33, "charEnd": 190, "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_33.html", "charStart": "", "charEnd": "", "label": "head" 
 },
 {
  "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;utf-8&quot;&gt;\n    &lt;title&gt;Chiasm Boilerplate&lt;/title&gt;\n    \n    &lt;!-- Load the Chiasm stack. --&gt;\n    &lt;script src=&quot;http://curran.github.io/model/cdn/model-v0.2.4.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js&quot;&gt;&lt;/script&gt;\n        \n    &lt;!-- Make the container fill the page and have a 20px black border. --&gt;\n    &lt;style&gt;\n\n      body {\n        background-color: black;\n      }\n\n      #chiasm-container {\n        background-color: white;\n        position: fixed;\n        left: 20px;\n        right: 20px;\n        top: 20px;\n        bottom: 20px;\n      }\n\n      .axis {\n        font: 0.8em sans-serif;\n      }\n\n      .axis path,\n      .axis line {\n        fill: none;\n        stroke: #000;\n        shape-rendering: crispEdges;\n      }\n\n      /* Custom CSS for axis labels. */\n      .axis-label {\n        text-anchor: middle;\n        font-size: 2em;\n      } \n    &lt;/style&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_34.html", "charStart": 23, "charEnd": 1646, "label": "head" 
@@ -287,10 +401,16 @@ data = [{
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Cleaning Up&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				background-color: white;\n				font-family: Helvetica, Arial, sans-serif;\n			}\n\n			h1 {\n				font-size: 24px;\n				margin: 0;\n			}\n\n			p {\n				font-size: 14px;\n				margin: 10px 0 0 0;\n			}\n\n			svg {\n				background-color: white;\n			}\n\n			rect:hover {\n				fill: orange;\n			}\n			\n			.axis path,\n			.axis line {\n				fill: none;\n				stroke: black;\n				shape-rendering: crispEdges;\n			}\n			\n			.axis text {\n				font-family: sans-serif;\n				font-size: 11px;\n			}\n\n			.y.axis path,\n			.y.axis line {\n				opacity: 0;\n			}\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_39.html", "charStart": 33, "charEnd": 742, "label": "head" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_4.html", "charStart": "", "charEnd": "", "label": "head" 
+},
+{
  "extracted": "  &lt;head&gt;\n    &lt;meta charset=&quot;UTF-8&quot; /&gt;\n    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=Edge&quot;&gt;\n    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;\n    &lt;title&gt;Tryouts D3 Maps&lt;/title&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css&quot;&gt;\n    &lt;link rel=&quot;stylesheet&quot; href=&quot;main.css&quot;&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js&quot;&gt;&lt;/script&gt;\n    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.js&quot;&gt;&lt;/script&gt;\n  &lt;/head&gt;", "filename": "training_samples/training_sample_40.html", "charStart": 33, "charEnd": 671, "label": "head" 
 },
 {
  "extracted": "&lt;head&gt;\n    &lt;meta charset=&quot;UTF-8&quot;&gt;\n    &lt;title&gt;http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428&lt;/title&gt;\n    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.css&quot;&gt;\n    &lt;style&gt;\n        body {\n            background: black;\n            margin:0;\n            padding:0;\n        }\n\n        #histogram rect{\n            -webkit-transition: all 0.1s linear;\n            -moz-transition: all 0.1s linear;\n            -o-transition: all 0.1s linear;\n            transition: all 0.1s linear;\n        }\n\n        #bubble-cloud {\n            background: url(&quot;http://dummyimage.com/100x100/111/333?text=sample&quot;) 0 0;\n            width: 960px;\n            height: 470px;\n            /*overflow: hidden;*/\n            position: relative;\n            margin:0 auto;\n        }\n        svg {\n            outline: rgba(242,216,28,1);\n            overflow: visible;\n        }\n    &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_41.html", "charStart": 33, "charEnd": 1023, "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_42.html", "charStart": "", "charEnd": "", "label": "head" 
 },
 {
  "extracted": "	&lt;head&gt;\n		&lt;meta charset=&quot;utf-8&quot;&gt;\n		&lt;title&gt;Renewable consumption in the European Union&lt;/title&gt;\n		&lt;script type=&quot;text/javascript&quot; src=&quot;http://d3js.org/d3.v3.js&quot;&gt;&lt;/script&gt;\n		&lt;style type=&quot;text/css&quot;&gt;\n			\n			body {\n				background-color: white;\n			}\n			h1 { \n				font-size: 30px;\n				font-family: helvetica;\n			}\n\n			h2 { \n				font-size: 20px;\n				font-family: helvetica;\n			}\n\n			svg {\n				background-color: white;\n			}\n\n			rect {\n				fill: #006600;\n			}\n			rect:hover {\n                opacity: 0.67;\n            }\n\n\n		&lt;/style&gt;\n	&lt;/head&gt;", "filename": "training_samples/training_sample_43.html", "charStart": 33, "charEnd": 563, "label": "head" 
@@ -311,7 +431,19 @@ data = [{
  "extracted": "  &lt;title&gt;Leaflet Squirrel - Part 5&lt;/title&gt;\n  &lt;link rel=&quot;stylesheet&quot; href=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css&quot;/&gt;\n  &lt;script src=&quot;http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js&quot;&gt;&lt;/script&gt;\n  &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    #map{ height: 100% }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_48.html", "charStart": 14, "charEnd": 362, "label": "head" 
 },
 {
+ "extracted": "", "filename": "training_samples/training_sample_49.html", "charStart": "", "charEnd": "", "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_5.html", "charStart": "", "charEnd": "", "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_6.html", "charStart": "", "charEnd": "", "label": "head" 
+},
+{
  "extracted": "  &lt;head&gt;\n    &lt;title&gt;Force-Directed Layout with Convex Hull&lt;/title&gt;\n    &lt;script src=&quot;http://mbostock.github.com/d3/d3.js?2.9.2&quot;&gt;&lt;/script&gt;\n &lt;/head&gt;", "filename": "training_samples/training_sample_7.html", "charStart": 23, "charEnd": 168, "label": "head" 
+},
+{
+ "extracted": "", "filename": "training_samples/training_sample_8.html", "charStart": "", "charEnd": "", "label": "head" 
 },
 {
  "extracted": "  &lt;meta charset=&quot;utf-8&quot;&gt;\n  &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js&quot;&gt;&lt;/script&gt;\n  &lt;style&gt;\n    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }\n  &lt;/style&gt;\n&lt;/head&gt;", "filename": "training_samples/training_sample_9.html", "charStart": 23, "charEnd": 228, "label": "head" 

@@ -1,3 +1,4 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="/js/tutorons-library.js"></script>
 <script type="text/javascript" src="data/data.json"></script>
 <script>
@@ -6,16 +7,30 @@
     spanAdder.scanDom();
     data.forEach(function(s){
       var ts_num = s["filename"].split(".")[0].split("training_samples/training_sample_")[1];
-      console.log('#ts'+ts_num,s["charStart"],s["charEnd"]);
-      if (s["charStart"]!==null) {
+      //console.log('#ts'+ts_num,s["charStart"],s["charEnd"]);
+      if (s["extracted"]!=="") {
         try {
-          spanAdder.addRegionsD3('#ts'+ts_num,s["charStart"],s["charEnd"],s["label"]);
+          spanAdder.addRegionsD3('#ts'+ts_num,s["charStart"],s["charEnd"],s["label"]+" semantic-label");
         } catch(err) {
-          console.log(err,'failed on ',s)
+          console.log('failed on ',err,s);
         }
+        $('#composite-'+s["label"]).append('<div class="'+s["label"]+' compiled"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+s["extracted"]+'</code></pre></div>');
       } else {
-        console.log('wtf?')
+        console.log('wtf?');
+        $('#composite-'+s["label"]).append('<div class="'+s["label"]+' compiled none"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+"None"+'</code></pre></div>');
       }
+      // if (s["label"]==="doctype"){
+      //   //console.log('doctype:',s);
+      //   $('#composite-doctype').append('<div class="'+s["label"]+' compiled"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+s["extracted"]+'</code></pre></div>');
+      // }
+      // if (s["label"]==="htmllang"){
+      //   //console.log('doctype:',s);
+      //   $('#composite-htmllang').append('<div class="'+s["label"]+' compiled"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+s["extracted"]+'</code></pre></div>');
+      // }
+      // if (s["label"]==="head"){
+      //   //console.log('doctype:',s);
+      //   $('#composite-head').append('<div class="'+s["label"]+' compiled"><pre style="margin-top: 0px; margin-bottom: 0px;"><code>'+s["extracted"]+'</code></pre></div>');
+      // }
     });
     //spanAdder.addRegionsD3('#ts0',10,20,'testing-labeling');
   });
@@ -29,6 +44,15 @@
 .meta {background-color: blue}
 .title {background-color: red}
 .scriptinclude {background-color: orange}
+
+.pre {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.composite-label {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
 </style>
 
 <!-- make existing labels and their appearance visible -->
@@ -40,6 +64,13 @@
 <div class="meta">meta</div>
 <div class="title">title</div>
 <div class="scriptinclude">scriptinclude</div>
+
+<h5>Code-first Composite</h5>
+<div id="composite">
+  <div id="composite-doctype" class="composite-label"></div>
+  <div id="composite-htmllang" class="composite-label"></div>
+  <div id="composite-head" class="composite-label"></div>
+</div>
 
 <h5>Labeled Examples</h5>
 <!-- escaped HTML wrapped in a div with a shared class and unique id, as well as a <pre> and <code> tag, for better rendering -->

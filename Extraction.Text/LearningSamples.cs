@@ -118,9 +118,15 @@ namespace Extraction.Text
 
 				if (output_new != null)
 				{
-					
+
 					Console.WriteLine("{");
 					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "doctype");
+					Console.WriteLine("},");
+				}
+				else
+				{
+					Console.WriteLine("{");
+					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "doctype");
 					Console.WriteLine("},");
 				}
 			}
@@ -169,6 +175,12 @@ namespace Extraction.Text
 				{
 					Console.WriteLine("{");
 					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "htmllang");
+					Console.WriteLine("},");
+				}
+				else
+				{
+					Console.WriteLine("{");
+					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "htmllang");
 					Console.WriteLine("},");
 				}
 			}
@@ -240,9 +252,14 @@ namespace Extraction.Text
 						extracted = output_new_string;
 					}
 
-
 					Console.WriteLine("{");
 					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", extracted, fileName, output_new.Start, output_new.End, "head");
+					Console.WriteLine("},");
+				}
+				else
+				{
+					Console.WriteLine("{");
+					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "head");
 					Console.WriteLine("},");
 				}
 			}
