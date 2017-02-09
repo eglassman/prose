@@ -32,9 +32,10 @@ namespace Extraction.Text
 
 				LearnHTMLlang();
 
-				LearnHead();
-				return;
+				//LearnHead();
+
 				LearnStyle();
+				return;
 				LearnMeta();
 				LearnTitle();
 				LearnScriptInclude();
@@ -307,10 +308,38 @@ namespace Extraction.Text
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg_b.Run(input_new);
+				var extracted = "";
 				if (output_new != null)
 				{
+					var output_new_escaped = HttpUtility.HtmlEncode(output_new);
+					//from http://stackoverflow.com/questions/1547476/easiest-way-to-split-a-string-on-newlines-in-net
+					var output_new_string = output_new_escaped.ToString();
+					//Console.WriteLine(output_new_string);
+					//return;
+					string[] lines = output_new_string.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+					if (lines.Length > 1)
+					{
+						//Console.WriteLine("help");
+						//foreach (string l in lines)
+						//{
+						//	Console.WriteLine(l);
+						//}
+						//Console.WriteLine(string.Join("\\n", lines));
+						extracted = string.Join("\\n", lines);
+					}
+					else
+					{
+						extracted = output_new_string;
+					}
+
 					Console.WriteLine("{");
-					Console.WriteLine(" \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "style");
+					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", extracted, fileName, output_new.Start, output_new.End, "style");
+					Console.WriteLine("},");
+				}
+				else
+				{
+					Console.WriteLine("{");
+					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "style");
 					Console.WriteLine("},");
 				}
 			}

@@ -1,5 +1,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="/js/tutorons-library.js"></script>
+<script src="//jashkenas.github.io/underscore/underscore-min.js"></script>
 <script type="text/javascript" src="data/data.json"></script>
 <!-- <script src="bundle.js"></script> -->
 <script>
@@ -15,38 +16,80 @@
         } catch(err) {
           console.log('failed on ',err,s);
         }
-        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' compiled">'+s["extracted"]+'</span></code></pre></div>');
+        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled">'+s["extracted"]+'</span></code></pre></div>');
       } else {
         console.log('wtf?');
-        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' compiled none">'+"None"+'</span></code></pre></div>');
+        $('#composite-'+s["label"]).append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="'+s["label"]+' pre-compiled none">'+"None"+'</span></code></pre></div>');
       }
       console.log('another s processed')
     });
-    // console.log('bundle script innards')
-    // var new_arr = [];
-    // $('.doctype.compiled').each(function(i,e){
-    //   console.log(i,e);
-    //   new_arr.push($(e).text());
-    // });
-    // console.log(new_arr);
-    // console.log(arrayCounter(new_arr));
-    //spanAdder.addRegionsD3('#ts0',10,20,'testing-labeling');
+
     console.log('final s processed')
   });
 </script>
 <script src="bundle.js"></script>
 <script type="text/javascript">
   var arrayCounter = require('array-counter');
+  var escape = require('escape-html');
+  var sortObj = require('sort-object');
+
   $( document ).ready(function() {
-      console.log( "ready!" );
-      console.log('bundle script innards')
+
+    console.log( "ready!" );
+    //console.log('bundle script innards')
+
     var new_arr = [];
-    $('.doctype.compiled').each(function(i,e){
-      console.log(i,e);
+    $('.doctype.pre-compiled').each(function(i,e){
+      //console.log(i,e);
+      new_arr.push($(e).text());
+    });
+    console.log(new_arr);
+    var counter = arrayCounter(new_arr);
+    console.log(counter);
+    console.log('sorted')
+    console.log(sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }}));
+    //counter = _.invert(counter);
+    //counter = sortObj(counter, {sortOrder: 'asc'});
+    for(var key in sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }})) {
+      //sorted[sorted.length] = key;
+      console.log(key,counter[key]);
+      $('#composite-doctype').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="doctype compiled">'+counter[key]+', '+escape(key)+'</span></code></pre></div>');
+    }
+
+    var new_arr = [];
+    $('.htmllang.pre-compiled').each(function(i,e){
+      //console.log(i,e);
       new_arr.push($(e).text());
     });
     console.log(new_arr);
     console.log(arrayCounter(new_arr));
+    var counter = arrayCounter(new_arr);
+    console.log(sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }}));
+    //counter = _.invert(counter);
+    //counter = sortObj(counter, {sortOrder: 'desc'});
+    for(var key in sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }})) {
+      //sorted[sorted.length] = key;
+      console.log(key,counter[key]);
+      $('#composite-htmllang').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="htmllang compiled">'+counter[key]+', '+escape(key)+'</span></code></pre></div>');
+    }
+
+    var new_arr = [];
+    $('.style.pre-compiled').each(function(i,e){
+      //console.log(i,e);
+      new_arr.push($(e).text());
+    });
+    console.log(new_arr);
+    console.log(arrayCounter(new_arr));
+    var counter = arrayCounter(new_arr);
+    console.log(sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }}));
+    //counter = _.invert(counter);
+    //counter = sortObj(counter, {sortOrder: 'desc'});
+    for(var key in sortObj(counter, {sort: function (a, b) { return counter[a] < counter[b] ? 1 : -1; }})) {
+      //sorted[sorted.length] = key;
+      console.log(key,counter[key]);
+      $('#composite-style').append('<div><pre style="margin-top: 0px; margin-bottom: 0px;"><code><span class="style compiled">'+counter[key]+', '+escape(key)+'</span></code></pre></div>');
+    }
+
   });
 </script>
 <!-- <script type="text/javascript">
@@ -78,6 +121,9 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
+.pre-compiled {
+  display: none;
+}
 </style>
 
 <!-- make existing labels and their appearance visible -->
@@ -94,7 +140,7 @@
 <div id="composite">
   <div id="composite-doctype" class="composite-label"></div>
   <div id="composite-htmllang" class="composite-label"></div>
-  <div id="composite-head" class="composite-label"></div>
+  <div id="composite-style" class="composite-label"></div>
 </div>
 
 <h5>Labeled Examples</h5>
