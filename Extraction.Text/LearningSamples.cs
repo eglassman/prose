@@ -91,7 +91,7 @@ namespace Extraction.Text
 
 				LearnDocType();
 
-				//LearnHTMLlang();
+				LearnHTMLlang();
 
 				//LearnHead();
 
@@ -279,15 +279,35 @@ namespace Extraction.Text
 
 				if (output_new != null)
 				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "htmllang");
-					Console.WriteLine("},");
+					Label l = new Label()
+					{
+						label = "htmllang",
+						extracted = HttpUtility.HtmlEncode(output_new),
+						filename = fileName,
+						charStart = output_new.Start,
+						charEnd = output_new.End,
+						success = true
+					};
+					Globals.labelslist.Add(l);
+					//Console.WriteLine("{");
+					//Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "doctype");
+					//Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "htmllang");
-					Console.WriteLine("},");
+					Label l = new Label()
+					{
+						label = "htmllang",
+						extracted = "",
+						filename = fileName,
+						charStart = 0,
+						charEnd = 0,
+						success = false
+					};
+					Globals.labelslist.Add(l);
+					//Console.WriteLine("{");
+					//Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "doctype");
+					//Console.WriteLine("},");
 				}
 			}
 

@@ -398,5 +398,405 @@
     "charStart": 0,
     "charEnd": 15,
     "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_0.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=en&gt;",
+    "filename": "training_samples/training_sample_1.html",
+    "charStart": 16,
+    "charEnd": 30,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_10.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_11.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_12.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_13.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_14.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_15.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_16.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_17.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_18.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_19.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_2.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_20.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_21.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_22.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_23.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_24.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_25.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_26.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_27.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_28.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_29.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_3.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_30.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_31.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_32.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_33.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_34.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_35.html",
+    "charStart": 17,
+    "charEnd": 33,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_36.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_37.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_38.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_39.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_4.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;fr&quot;&gt;",
+    "filename": "training_samples/training_sample_40.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_41.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_42.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "&lt;html lang=&quot;en&quot;&gt;",
+    "filename": "training_samples/training_sample_43.html",
+    "charStart": 16,
+    "charEnd": 32,
+    "success": true
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_44.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_45.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_46.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_47.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_48.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_49.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_5.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_6.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_7.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_8.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
+  },
+  {
+    "label": "htmllang",
+    "extracted": "",
+    "filename": "training_samples/training_sample_9.html",
+    "charStart": 0,
+    "charEnd": 0,
+    "success": false
   }
 ]
