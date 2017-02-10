@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src ="http://d3js.org/d3.v3.js"></script>
+        <style type="text/css">
+        body{
+            background-color:azure;
+            font-family: Helvetica;  
+        }
+            rect:hover{
+            fill: yellow
+            }
+        
+            .axis text{
+                font-size: 8pt
+            }
+            .y.axis path,
+            .y.axis line{
+                opacity:0
+            }
+            
+            .axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+         H1{
+             text-align: center;
+         }
+            p{  text-align: left;
+                margin: 10;
+            }
+        </style>
+	</head>
+	<body>
+        <H1>Number of Medicare/Medicaid Beneficiaries by State</H1>
+        <p>Now in bar format!</p>
+        
+            <svg width = "500" height = "500">
+            </svg>
+       
+<script type='text/javascript' src='http://stats.wp.com/e-201515.js' async defer></script>
+		<script type="text/javascript">
+            var w = 700;
+            var h = 700;
+            var svg = d3.select('svg')
+            .attr("width",w)
+            .attr("height",h);
+            var padding = [0,25,25,50]; //top,right,bottom,left
+            var widthScale = d3.scale.linear()
+            .range([0,w- padding[1]-padding[3]]);
+           
+            var heightScale = d3.scale.ordinal()
+            .rangeRoundBands([padding[0], h-padding[2]],0.1);
+
+            var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+            
+			//Load in contents of CSV file
+			d3.csv("Medicare and Medicaid Data.csv", function(data) {
+//                console.log(d3.entries(alldata));
+//                var data = d3.nest()
+//                .key(function(d){return d.State;})
+//                .rollup(function(d){return d3.sum(d,function(g){return g.Beneficiaries;});}).entries(alldata);
+                
+                //var data = alldata.filter(function(d){return d.State == 'GA';});
+               //console.log(data);
+              data.sort(function(a,b){
+                return d3.descending(+a.Beneficiaries, +b.Beneficiaries);
+              });
+                data.tran
+                
+                widthScale.domain([0,d3.max(data,function(d){
+                   // console.log(d.Beneficiaries);
+                    return +d.Beneficiaries;
+                })]);
+                
+                heightScale.domain(data.map(function(d){
+                    return d.State;}));
+                          //console.log(heightScale.domain());
+                var bars = svg.selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect");
+                 //console.log(widthScale.domain());
+                bars.attr("x",padding[3])
+                .attr("y", function(d){
+                    return heightScale(d.State);
+                })
+                .attr("width", function(d){
+                    //console.log(d.Beneficiaries)
+                    return widthScale(d.Beneficiaries);
+                })
+                .attr("height",heightScale.rangeBand())
+                .attr("fill","blue")
+                .append("title")
+                .text(function(d){
+                    return "State: " + d.State +"\n" + "Beneficiaries:"+ d.Beneficiaries;
+                });
+                
+                var xaxis = svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+                
+                
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+			});
+            
+            
+
+		</script>
+
+	</body>
+</html>

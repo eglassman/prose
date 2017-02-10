@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="pathlayout.js"></script>
+<script>
+var width = 600,
+    height = 500;
+
+var projection = d3.geo.mercator()
+    .scale(5*(width + 1) / 2 / Math.PI)
+    .translate([width / 2, height / 2])
+    .rotate([-125, -15, 0])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+
+d3.json("track.json", function(error, track) {
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var trail = d3.layout.trail()
+        .positioner(function(d) {return [d.lon,d.lat];})
+        .coordType('coordinates');
+
+    var trail_layout = trail.data(track).layout();
+
+    paths = svg.selectAll("line").data(trail_layout);
+
+    paths.enter()
+    .append('path')
+    .style("stroke-width",3)
+    .style("stroke","black") 
+    .attr("d", path);
+});
+</script>

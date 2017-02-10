@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Greenland (Centered)</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+</head>
+<body>
+
+  <style>
+  body {
+    margin: 0;
+  }
+
+  .sphere {
+    fill: #A7DBD8;
+    stroke: #79A09E;
+  }
+
+  .land {
+    fill: #E0E4CC;
+    stroke: #ACAF9F;
+    stroke-width: 1;
+  }
+
+  .graticule {
+    fill: none;
+    stroke: #79A09E;
+    stroke-width: 1;
+    stroke-dasharray: 1,2;
+  }
+
+  .overlay {
+    fill-opacity: 0;
+  }
+
+  #map-container svg {
+    float: left;
+  }
+  </style>
+
+  <div id="map-container"></div>
+
+  <script>
+
+    // Set the dimensions of the map
+    var width  = 960,
+        height = 480;
+
+    // Create a selection for the container div and append the svg element
+    var div = d3.select('#map-container'),
+        svg = div.selectAll('svg').data([0]);
+
+    svg.enter().append('svg');
+
+    // Set the size of the SVG element
+    svg.attr('width', height).attr('height', height);
+
+    svg.exit().remove();
+
+    // Create and configure a geographic projection
+    var projection = d3.geo.mercator()
+      .scale(height / (2 * Math.PI))
+      .translate([height / 2, height / 2]);
+
+    // Create and configure a path generator
+    var pathGenerator = d3.geo.path()
+      .projection(projection);
+
+    // Create and configure the graticule generator (one line every 20 degrees)
+    var graticule = d3.geo.graticule();
+
+    // Retrieve the geographic data asynchronously
+    d3.json('greenland.geojson', function(err, data) {
+
+      // Throw errors on getting or parsing the file
+      if (err) { throw err; }
+
+      // Create a group to hold the map-related features
+      var grp = svg.selectAll('g.container').data([data, data]);
+
+      grp.enter().append('g').classed('container', true);
+      grp.exit().remove();
+
+      // Sphere
+      var sphere = grp.selectAll('path.sphere').data([{type: 'Sphere'}]);
+
+      sphere.enter().append('path').classed('sphere', true);
+      sphere.attr('d', pathGenerator);
+      sphere.exit().remove();
+
+      // Graticule lines (behind the land)
+      var lines = grp.selectAll('path.graticule').data([graticule()]);
+
+      lines.enter().append('path').classed('graticule', true);
+      lines.attr('d', pathGenerator);
+      lines.exit().remove();
+
+      // Land
+      var land = grp.selectAll('path.land').data([data]);
+
+      // Compute the feature centroid
+      var centroid = d3.geo.centroid(data);
+
+      projection.rotate([-centroid[0], -centroid[1]]);
+
+      land.enter().append('path').classed('land', true);
+      land.attr('d', pathGenerator);
+      land.exit().remove();
+
+    });
+  </script>
+
+</body>
+</html>

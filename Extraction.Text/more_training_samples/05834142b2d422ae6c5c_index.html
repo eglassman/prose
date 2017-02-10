@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    
+    <body>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script>
+    $(document).ready(function() {
+        var width = 500,
+    height = 500,
+    numberOfSections = 10,    
+    spinDuration = 30000,
+    spinMinDuration = 5000,
+    maxSpins = 2,
+    transformDuration = 3000,
+    transformSteps = 6;
+
+var pie = d3.layout.pie()
+    .value(Math.random)
+    .sort(null);
+
+var data = pie(d3.range(0, numberOfSections)).map(function(d) {
+    d.innerRadius = Math.random() * width / transformSteps;
+    d.outerRadius = Math.random() * width / transformSteps + d.innerRadius;
+    return d;
+});
+
+var arc = d3.svg.arc();
+
+var g = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("background", "transparent")
+    .selectAll("g")
+    .data(pie(data))
+    .enter()
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")rotate(0)");
+
+var path = g
+    .append("path")
+    .attr("d", arc)
+    .attr("fill", "#539dd3")
+    .attr("stroke", "#111")
+    .attr("stroke-width", 2)
+    .attr("stroke-opacity", function(d) { return Math.random(); })
+    .attr("fill-opacity", function(d) { return Math.random(); });
+
+(function transformLoop() {
+    path.transition()
+    .duration(function() { return transformDuration * Math.random();})
+        .attr("stroke-opacity", function(d) { return Math.random(); })
+        .attr("fill-opacity", function(d) { return Math.random(); })
+        .attrTween("d", tweenArc(function(d, i) {
+            var inner = Math.random() * width / transformSteps,
+                outer = Math.random() * width / transformSteps + inner;
+            return {
+                innerRadius: inner,
+                outerRadius: outer
+            };
+        }));
+    setTimeout(transformLoop, transformDuration);
+    
+})();
+
+(function spinLoop() {
+    g.transition()
+        .ease("elastic")
+        .duration(function() {return spinMinDuration + (Math.random() *  (spinDuration - spinMinDuration));})
+        .attrTween("transform", function() {
+            return function(t) {
+                return "translate(" + width / 2 + "," + height / 2 + ")rotate(" + 360 * t * maxSpins + ")"
+            }
+        })
+        .each("end", spinLoop);
+})();
+
+function tweenArc(b) {
+  return function(a, i) {
+    var d = b.call(this, a, i), i = d3.interpolate(a, d);
+    for (var k in d) a[k] = d[k]; // update data
+    return function(t) { return arc(i(t)); };
+  };
+}
+});
+    </script>
+    </body>
+</html>

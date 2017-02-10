@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Matt's Code</title>
+      <link rel="stylesheet" href="http://mattscode.io/assets/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://mattscode.io/assets/css/animate.css">
+        <link href='http://fonts.googleapis.com/css?family=Exo+2:300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://mattscode.io/assets/css/master.css">
+    </head>
+    
+    <body>
+        <div class="loading">
+            <p align="center">
+                <img src="http://mattscode.io/assets/img/beaker.png" alt="Loading..." style="width:150px;">
+            </p>
+            <div class="progress progress-striped active" style="width:140px;margin:0 auto;height:10px;border-radius:0;">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"> <span class="sr-only">45% Complete</span>
+
+                </div>
+            </div>
+            <p align="center" style="color:#999;">loading...</p>
+        </div>
+        <div class="sidebar">
+            <div class="heightlock">
+                <p class="title">Browse Projects</p>
+                <ul>
+                    <li><a href="#">About Me</a>  <span class="glyphicon white glyphicon-plus right"></span>
+
+                        <ul>
+                            <li><a href="#" data-link="http://mattscode.io/profile.html">Profile</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Websites</a>  <span class="glyphicon white glyphicon-plus right"></span>
+
+                        <ul>
+                            <li><a href="#" data-link="http://acixs.com">Acixs</a>
+                            </li>
+                            <li><a href="#" data-link="http://tinderlight.com">Tinderlight</a>
+                            </li>
+                            <li><a href="#" data-link="http://12daysofindie.com">12 Days of Indie</a>
+                            </li>
+                            <li><a href="#" data-link="http://66.85.175.201/Multicraft/">Multicraft</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Control Panels</a>  <span class="glyphicon white glyphicon-plus right"></span>
+
+                        <ul>
+                            <li><a href="#" data-link="http://66.85.175.201/starmap/">Starmap</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Web Projects</a>  <span class="glyphicon white glyphicon-plus right"></span>
+
+                        <ul>
+                            <li><a href="#" data-link="http://66.85.175.201/3dButtons/">3D Buttons</a>
+                            </li>
+                            <li><a href="#" data-link="http://66.85.175.201/3DSwitch/">3D Switch</a>
+                            </li>
+                            <li><a href="#" data-link="http://66.85.175.201/acixs/">New Acixs</a>
+                            </li>
+                            <li><a href="#" data-link="http://66.85.175.201/bcl/">BCSS Lib</a>
+                            </li>
+                            <li><a href="#" data-link="http://66.85.175.201/LaunchButton/">Launch Button</a>
+                            </li>
+                            <li><a href="#" data-link="http://66.85.175.201/rd_nav/matte">RD Navigation</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Design</a>  <span class="glyphicon white glyphicon-plus right"></span>
+
+                        <ul>
+                            <li><a href="#" data-link="http://ftbservers.com/uploads/banners/bec3ce8e-f4f2-4a35-b3b7-9a98993d4b2d.jpeg">8BitBlocks Banner</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <br>
+                <p class="title">Statistics</p>
+                <ul style="color:#fff;">
+                    <li>Cups of Coffee <span class="glyphicon glyphicon-tint white right"> 608</span>
+                    </li>
+                    <li>Vision Degration <span class="glyphicon glyphicon-eye-open white right"> 20%</span>
+                    </li>
+                    <li>Bugs Squashed <span class="glyphicon glyphicon-screenshot white right"> Lots!</span>
+                    </li>
+                </ul>
+                <br>
+                <p class="title">Stuff I Know</p>
+                <ul>
+                    <li style="color:#fff"><span class="glyphicon glyphicon-pushpin"></span> &nbsp; HTML5, CSS3, Sass, Slim HTML, jQuery, JavaScipt, PHP, MySQL, Python, AngularJS, jQueryUI, jQueryMobile, Bootstrap, Photoshop, Illustraitor, Shell Scripting, CentOS Server, Ubuntu Server.</li>
+                </ul>
+                <!-- <p class="title">Contact</p>
+        <ul>
+            <form role="form">
+              <div class="form-group">
+                <label class="inputlabel">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label class="inputlabel">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              </div>
+
+              <button type="submit" class="btn btn-default btn-xs btn-success right">Submit</button>
+            </form>
+        </ul>-->
+            </div>
+        </div>
+
+        <div class="screenestate"> <a href="#" class="toggleSidebar"><span class='glyphicon glyphicon-list-alt' ></span></a>
+
+            <div class="window draggable scalable" onclick="$(this).css('z-index', windowz);windowz++;" data-scaled="false">
+                <div class="menu">
+                    <div class="onethird">&nbsp;</div>
+                    <div class="onethird windowTitle" > <span>Project Browser</span>
+
+                    </div>
+                    <div class="onethird">
+                        <button class="exit" onclick="$(this).closest('.window').fadeOut()"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="full" onclick="fullscreen($(this))"><span class="glyphicon glyphicon-fullscreen"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="url"> <span class="glyphicon glyphicon-chevron-right" disabled="disabled" style="font-size:12pt;margin:5px 0 0 10px;"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" class="urlthingy">
+                    <div class="progress progress-striped active subloader">
+                        <div class="progress-bar" style="border-radius:0;" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"> <span class="sr-only">45% Complete</span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="moremenu">
+                    <ul>
+                        <li><a href="#" class="reload" onclick="$(this).closest('.window').find('.browserview').attr( 'src', function ( i, val ) { return val; });">Reload</a>
+                        </li>
+                        <li><a href="#" class="tab" onclick="window.open($(this).closest('.window').find('.browserview').attr( 'src'), '_blank');">Open in tab</a>
+                        </li>
+                        <li><a href="#" class="reload" onclick="$(this).closest('.window').find('.browserview').attr( 'src', function ( i, val ) { var newsource='view-source:'+val; return newsource; });">Source</a>
+                        </li>
+                        <li><a href="#">About</a>
+                        </li>
+                    </ul>
+                </div>
+                <iframe class="browserview" onload="loadstatus($(this));" src="http://www.acixs.com" frameborder="0" height="100%" width="100%"></iframe>
+            </div>
+        </div>
+        <div class="tipjar">
+            <p>Help fill my coffee mug <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5BPVVQ9U2GNQE" class="btn btn-xs right btn-success">Donate</a>
+            </p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">60% Satisfied <span class="sr-only">60% Complete (warning)</span>
+
+                </div>
+            </div>
+        </div> <a href="mailto:contact.mattdylan@gmail.com" class="hireme"><img src="http://tinderlight.github.io/mattscode/assets/img/hire.png" style="width:60px;" alt=""></a>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script src="assets/js/scripts.js"></script>
+    </body>
+
+</html>

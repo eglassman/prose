@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chiasm Boilerplate</title>
+    
+    <!-- Load the Chiasm stack. -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.3.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-dataset-loader/chiasm-dataset-loader-v0.3.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-charts/chiasm-charts-v0.1.0.js"></script>
+        
+    <!-- Make the container fill the page and have a 20px black border. -->
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      #chiasm-container {
+        background-color: white;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+
+      .axis {
+        font: 0.8em sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      /* Custom CSS for axis labels. */
+      .axis-label {
+        text-anchor: middle;
+        font-size: 2em;
+      } 
+    </style>
+  </head>
+  <body>
+
+    <!-- Chiasm component DOM elements will be injected into this div. -->
+    <div id="chiasm-container"></div>
+    
+    <!-- This is the main program that sets up the Chiasm application. -->
+    <script>
+
+      // Create a new Chiasm instance.
+      var chiasm = new Chiasm();
+
+      // Register plugins that the configuration can access.
+      chiasm.plugins.layout = ChiasmLayout;
+      chiasm.plugins.links = ChiasmLinks;
+      chiasm.plugins.datasetLoader = ChiasmDatasetLoader;
+      chiasm.plugins.scatterPlot = ChiasmCharts.components.scatterPlot;
+
+      // Set the Chaism configuration.
+      chiasm.setConfig({
+        "layout": {
+          "plugin": "layout",
+          "state": {
+            "containerSelector": "#chiasm-container",
+            "layout": "myScatterPlot"
+          }
+        },
+        "scatterPlotDataLoader": {
+          "plugin": "datasetLoader",
+          "state": {
+            "path": "iris"
+          }
+        },
+        "myScatterPlot": {
+          "plugin": "scatterPlot",
+          "state": {
+            "xAxisLabelText": "Sepal Length",
+            "xColumn": "sepal_length",
+            "yAxisLabelText": "Petal Length", 
+            "yColumn": "petal_length",
+            "xAxisLabelTextOffset": 40,
+            "yAxisLabelTextOffset": 35,
+            "margin": { top: 10, right: 10, bottom: 50, left: 60 }
+          }
+        },
+        "myLinks": {
+          "plugin": "links",
+          "state": {
+            "bindings": [
+              "scatterPlotDataLoader.dataset -> myScatterPlot.dataset",
+            ]
+          }
+        }
+      }); 
+      
+      chiasm.getComponent("myScatterPlot").then(function (scatterPlotDataLoader){
+        console.log(scatterPlotDataLoader)
+        scatterPlotDataLoader.when("dataset", function(dataset){
+          console.log(dataset)
+        });
+      });
+
+      // Here's a simpler configuration to try,
+      // including just a single component instance.
+      /*
+      chiasm.setConfig({
+        "layout": {
+          "plugin": "layout",
+          "state": {
+            "containerSelector": "#chiasm-container",
+            "layout": "visualization"
+          }
+        },
+        "visualization": {
+          "plugin": "coloredRectangle",
+          "state": {
+            "color": "blue"
+          }
+        }
+      });
+      */
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Assignment 3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: gray;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 700)
+						.attr("height", 500);
+
+
+
+			d3.csv("legobarchart.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.numtypes, +b.numtypes);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+												
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+								
+				var labels = svg.selectAll("text")
+								.data(data)
+								.enter()
+								.append("text");
+
+				rects.attr("x", 165)
+					.attr("y", function(d, i) {
+						return i * 15 + 25;
+					})
+					.attr("width", function(d) {
+						return d.numtypes * 10;
+					})
+					.attr("height", 12)
+					.attr("fill", "blue")
+					.append("title")
+					.text(function(d) {
+						return + d.numtypes + " " + d.Theme + " sets released in 2014.";
+					});
+					
+				labels.text(function(d){
+								return d.Theme
+							})
+						.attr("x", 150)
+						.attr("y", function(d, i) {
+						return i * 15 + 35;
+					})
+					.attr("font-family", "sans-serif")
+					.attr("text-anchor","end")
+					.attr("font-size","10px")
+					;
+					
+					;
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

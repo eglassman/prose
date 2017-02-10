@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  background: #eee;
+  width: 960px;
+}
+
+
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+// standard dimension variables
+var width = 960,
+    height = 500;
+
+// basic SVG setup
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+// tick time
+var counter = 0;
+function tick() {
+  if (counter++ % 5 != 0) return;    // ease up on cpu
+
+  console.log(getTimeData())
+}
+
+d3.timer(tick);
+
+// get time function
+function getTimeData() {
+  var now = new Date;
+  var milliseconds = now.getMilliseconds();
+  var seconds = now.getSeconds() + milliseconds / 1000;
+  var minutes = now.getMinutes() + seconds / 60;
+  var hours = ((now.getHours() + 24) % 12 || 0) + minutes / 60;
+  return {date: now, ms: milliseconds, seconds: seconds, minutes: minutes, hours: hours}
+}
+
+</script>

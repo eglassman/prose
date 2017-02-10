@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Insta Cologne</title>
+			<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+			<script type="text/javascript" src="jquery-1.8.0.min.js"></script>
+			<script type="text/javascript" src="chart.js"></script>
+			<script type="text/javascript" src="instafeed.min.js"></script>
+</head>
+  <body>
+
+<h1>#Veedel Fotos</h1>
+	<p>Hier entsteht eine Anwendung, die per Klick auf ein Kölner Stadtviertel die neuesten Instagram-Fotos aus diesem #veedel aufruft.
+        <div id="instafeed"></div>
+				<div id="mapContainer1" class="map"></div>
+
+
+
+	</body>
+</html>
+
+<script type="text/javascript">
+    var feed = new Instafeed({
+        get: 'tagged',
+        tagName: 'Sülz',
+				sortBy: 'most-recent',
+        clientId: 'c2fefac7367c40cab3f7c19628c80833',
+    });
+    feed.run();
+</script>

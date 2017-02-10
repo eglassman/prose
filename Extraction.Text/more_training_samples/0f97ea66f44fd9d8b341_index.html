@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Draw a dataset without geo tools</title>
+	<style type="text/css">
+
+		body, canvas {
+			background-color: #C6D6DD;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+ 	<script type="text/javascript">
+ 		
+ 	(function($) {
+
+		// parameters
+		var width = 1000,
+			height = 800,
+			margin = 15,
+			zoom = 1,
+			panX = 0,
+			panY = 0,
+			url = 'https://rambo-test.cartodb.com/api/v2/sql?q=select cartodb_id, st_asgeojson(the_geom) from public.mnmappluto'
+			;
+
+
+		// private variables	
+		var min = [10000, 10000],
+			max = [-10000, -100000],
+			geometries  = [],
+			drawing = false,
+			canvas,
+			ctx,
+			startCoords = [0, 0],
+			last = [0,0],
+			dragged = false,
+			focus
+			;
+
+		canvas = document.createElement('canvas');
+		canvas.width = width;
+		canvas.height = height;
+
+		ctx = canvas.getContext('2d');
+
+		document.body.appendChild(canvas);
+
+		canvas.addEventListener('DOMMouseScroll',handleScroll,false);
+		canvas.addEventListener('mousewheel',handleScroll,false);
+		canvas.addEventListener('mousedown', handleMouseDown, false);
+		canvas.addEventListener('mousemove', handleMouseMove, false);
+		canvas.addEventListener('mouseup', handleMouseUp, false);
+
+		render();
+
+		function x(lon) {
+			return (lon + 180) / (360 / width);
+		}
+
+		function y(lat) {
+			return (90 - lat) / (180 / height);
+		}
+
+		function extractGeometries(geojsons) {
+			var geojson, coords, coord, point, points, i, j, l, ll;
+			
+			for (i = 0, l = geojsons.length; i < l; i++) {
+				geojson = geojsons[i];
+				coords = geojson.coordinates[0][0];
+
+				points = [];
+
+				for (j = 0, ll = coords.length; j < ll; j++) {
+					coord = coords[j];
+
+					// convert longitude, latitude to x,y pixels
+					point = [x(coord[0]), y(coord[1])];
+
+					setMin(point);
+
+					points.push(point);
+				}
+
+				if (points.length) {
+					geometries.push(points);
+				}
+			}
+						
+			for (i = 0, l = geometries.length; i < l; i++) {
+				points = geometries[i];
+
+				for (j = 0, ll = points.length; j < ll; j++) {
+					point = points[j];
+
+					setMax(point);
+				}
+			}
+
+		}
+
+		function setMin(point) {
+			min[0] = Math.min(min[0], point[0]);
+			min[1] = Math.min(min[1], point[1]);
+		}
+
+		function setMax(point) {
+			point[0] -= min[0];
+			point[1] -= min[1];
+			
+			max[0] = Math.max(max[0], point[0]);
+			max[1] = Math.max(max[1], point[1]);
+		}
+
+		function getScale() {
+			var mapWidth = width - margin * 2;
+			var mapHeight = height - margin * 2;
+
+			return Math.min(mapWidth / max[0], mapHeight / max[1]) * zoom;
+		}
+
+		function getCenter(scale) {
+
+			// todo: translate center with focus point
+
+			var center = [
+				(width - (scale * max[0])) / 2,
+				(height - (scale * max[1])) / 2
+			];
+
+			center[0] += panX;
+			center[1] += panY;
+
+			return center;
+		}
+
+		function drawPolygons() {
+			
+			drawing = true;
+
+			var scale = getScale();	
+
+			// center image
+			var center = getCenter(scale);
+
+
+			var points, point, pointx, pointy, polygons;
+
+			// draw each polygon
+			for (var i = 0, l = geometries.length; i < l; i++) {
+				points = geometries[i];
+
+				polygons = [];
+
+				for (var j = 0, ll = points.length; j < ll; j++) {
+					point = points[j];
+
+					pointx = (center[0] + (point[0] * scale));
+					pointy = (center[1] + (point[1] * scale));
+
+					polygons.push([pointx, pointy]);
+				}
+
+				if (polygons.length) {
+					draw(polygons);
+				}
+			}
+
+			drawing = false;
+		}
+				
+		function render() {
+
+			ctx.clearRect(0, 0, width, height);
+
+			$.getJSON(url).done(function(data) {
+
+				var geojsons = data.rows.map(function(row) {
+					return JSON.parse(row.st_asgeojson);
+				});
+
+				extractGeometries(geojsons);
+				drawPolygons();
+			}, this);
+
+		}
+
+		function draw(polygons) {
+			
+			ctx.beginPath();
+
+			var data, i, l;
+
+			data = polygons[0];
+			ctx.moveTo(data[0], data[1]);
+
+			for (i = 1, l = polygons.length; i < l; i++) {
+				data = polygons[i];
+
+				ctx.lineTo(data[0], data[1]);
+					
+			}
+
+			ctx.stroke();
+			ctx.closePath();
+			
+		}
+
+		function handleScroll(ev){
+			ev.preventDefault();
+			ev.stopPropagation();
+
+			var delta = ev.wheelDelta ? ev.wheelDelta / 30 : ev.detail ? -ev.detail : 0;
+
+			if (delta){
+				focus = [ev.offsetX, ev.offsetY];
+
+				scaleTo(delta);
+			}
+		}
+
+		function scaleTo(scale) {			
+			zoom += scale;
+
+			if (zoom <= 0) zoom = 0.1;
+
+			if (!drawing){
+				ctx.clearRect(0, 0, width, height);
+				drawPolygons();
+			}
+		}
+
+		function handleMouseDown(ev) {
+			dragged = true;
+
+			startCoords = [
+				ev.offsetX - last[0],
+				ev.offsetY - last[1]
+			];
+		}
+
+		function handleMouseUp(ev) {
+			dragged = false;
+			
+			last = [
+				ev.offsetX - startCoords[0],
+				ev.offsetY - startCoords[1]
+			];
+		}
+		
+		function handleMouseMove(ev) {
+			if (!dragged) return;
+
+			panX = ev.offsetX - startCoords[0];
+			panY = ev.offsetY - startCoords[1];
+
+			if (!drawing) {
+				ctx.clearRect(0, 0, width, height);
+				drawPolygons();
+			}
+		}
+
+
+	})(jQuery);
+
+
+ 	</script>
+</body>
+</html>

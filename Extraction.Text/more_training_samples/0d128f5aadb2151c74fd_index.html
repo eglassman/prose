@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>SVG image and CSV Data</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+        <style type="text/css">
+		  body {
+              background-color: #ebebeb;
+          }
+          svg {
+            background-color: #808080;
+          }
+		</style>
+	</head>
+	<body>
+        <p>SVG image</p>
+        <svg width="500" height="500">
+            <circle cx="250" cy="250" r="100" fill=#800000 />
+            <polygon points="250,250 175,350 150,325" fill=#ff9966 stroke="orange" stroke-width="1" />
+            <polygon points="250,250 325,350 350,325" fill=#ff9966 stroke="orange" stroke-width="1" />
+            <polygon points="250,250 350,175 325,150" fill=#ff9966 stroke="orange" stroke-width="1" />
+            <polygon points="250,250 175,150 150,175" fill=#ff9966 stroke="orange" stroke-width="1" />
+            <circle cx="250" cy="250" r="141.42" fill="none" stroke=#800000 stroke-width="5" />
+            <circle cx="150" cy="150" r="15" fill=#ffcc99 />
+            <circle cx="350" cy="150" r="15" fill=#ffcc99 />
+            <circle cx="350" cy="350" r="15" fill=#ffcc99 />
+            <circle cx="150" cy="350" r="15" fill=#ffcc99 />
+        </svg>
+		<script type="text/javascript">		
+			//Load in contents of CSV file
+			d3.csv("refugeeData.csv", function(data) {
+            //Now CSV contents have been transformed into
+			//an array of JSON objects.
+
+			//Log 'data' to the console, for verification.
+			console.log(data);
+			});
+		</script>
+    </body>
+</html>

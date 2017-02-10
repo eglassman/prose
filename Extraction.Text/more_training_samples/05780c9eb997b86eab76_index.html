@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ModelJS Example</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="model.js"></script>
+    <style>
+      body {
+        margin: 220px;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      First name: <input type="text" id="firstNameInput"><br>
+      Last name:  <input type="text" id="lastNameInput"><br>
+      Full name: <span id="fullNameSpan"></span>
+    </form>
+    <script>
+      var model = Model({
+        firstName: "",
+        lastName: ""
+      });
+
+      d3.select("#firstNameInput").on("input", function (e){
+        model.firstName = this.value;
+      });
+
+      d3.select("#lastNameInput").on("input", function (e){
+        model.lastName = this.value;
+      });
+
+      model.when(["firstName", "lastName"], function (firstName, lastName){
+        model.fullName = firstName + " " + lastName;
+      });
+
+      model.when("fullName", function (fullName){
+        d3.select("#fullNameSpan").text(fullName);
+        console.log("Full name updated.");
+      });
+
+    </script>
+  </body>
+</html>

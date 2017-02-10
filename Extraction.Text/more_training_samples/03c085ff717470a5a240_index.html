@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Exercise 4</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}	
+
+            .axis path,
+            .axis line {
+            	fill: none;
+            	stroke: black;
+            	shape-rendering: crispEdges;
+            }
+
+            .axis text {
+            	font-family: sans-serif;
+            	font-size: 11px;
+            }
+
+            .y.axis path,
+            .y.axis line{
+            	opacity: 0;
+            }
+	    
+		</style>
+	</head>
+	<body>
+
+		<h1>RSPB Big Garden Bird Watch Results 2015</h1>
+		<p>The Royal Society for the Protection of Birds (RSPB) is a conservation charity based in the UK.</p>
+		<p>The Big Garden Bird Watch is the world's biggest citizen based wildlife survey.</p>
+		<p>Over the course of one weekend over half a million people spent an hour observing the number and different types of bird species in their backgarden.</p>
+		<p>This bar chart shows the percentage of gardens in which the most common species were spotted in.</p> 
+		<p>Source: <a = href="https://www.rspb.org.uk/discoverandenjoynature/discoverandlearn/birdwatch/results.aspx">RSPB</a>, 2015</p>
+
+
+		<script type="text/javascript">	
+
+
+			var w = 700;
+			var h = 490;
+			var padding = [ 20, 10, 20, 100 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("RSPB_BigGardenBirdWatch_UK_2015.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.Percentage_Gardens, +b.Percentage_Gardens);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.Percentage_Gardens;	
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.Species; } ));
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.Species);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.Percentage_Gardens);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "steelblue")
+					.append("title")
+					.text(function(d) {
+						return d.Species + "'s were spotted in " + d.Percentage_Gardens + "% of gardens during the RSPB Big Garden Bird Watch Survey 2015";
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

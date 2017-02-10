@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Load D3 from site -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+ 
+    <!-- Tooltip CSS Styling -->
+    <style type="text/css">
+
+            rect:hover {
+                fill: orange;
+            }
+
+            #tooltip {
+                position: absolute;
+                width: 200px;
+                height: auto;
+                padding: 10px;
+                background-color: white;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+                -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+                -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+                box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+                pointer-events: none;
+            }
+
+            #tooltip.hidden {
+                display: none;
+            }
+
+            #tooltip p {
+                margin: 0;
+                font-family: sans-serif;
+                font-size: 16px;
+                line-height: 20px;
+            }
+
+        </style>
+    <!-- End CSS (Styling) -->
+ 
+  <body>
+    <h2>Bar Chart</h2>
+    <p>This is a data visualization using bar charts </p>
+    <h4>Click on this text to update chart with new values</h4>
+    <h3></h3>
+    
+    <div id="tooltip" class="hidden">
+            <p><strong>Important Label Heading</strong></p>
+            <p><span id="value">100</span>%</p>
+    </div>
+  
+  
+  <script type="text/javascript">  
+    var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+                            11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+
+            // Setup settings for graphic
+            var canvas_width = 500;
+            var canvas_height = 250;
+
+            // Maps domain to range (e.g. "A" to 0, "B" to 1)
+            var xScale = d3.scale.ordinal()  // ordinal data is usually categories (e.g. "A")
+                            .domain(d3.range(dataset.length))  // set ordinal's input domain
+                            .rangeRoundBands([0, canvas_width], 0.1); // output range snaps to nearest pixel boundaries, puts spacing
+                            // basically rangeBands() automatically calculates widths
+
+            var yScale = d3.scale.linear()
+                            .domain([0, d3.max(dataset)])
+                            .range([0, canvas_height]);
+
+            // Create SVG element
+            var svg = d3.select("h3")  // This is where we put our vis
+                .append("svg")
+                .attr("width", canvas_width)
+                .attr("height", canvas_height)
+
+            // Create Bars
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")  // Add rect svg, can also be say circle
+                .attr("x", function(d, i) {
+                    return xScale(i); // Start graphing at X
+                })
+                .attr("y", function(d) {  // Start graphing at Y
+                    return canvas_height - yScale(d); // Y naturally goes top to bottom, so flip
+                })
+                .attr("width", xScale.rangeBand())  // Width of the bar
+                .attr("height", function(d) {
+                    return yScale(d);   // Height of each bar
+                })
+                .attr("fill", "teal") // Color
+                .on("mouseover", function(d) {  // Create tooltip on mouseover
+                    var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() /2;
+                    var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + canvas_height / 2;
+                    // parseFloat means that even if result is a string, interpret as a float
+
+                    // Update the tooltip position and value
+                    d3.select("#tooltip")
+                        .style("left", xPosition + "px")
+                        .style("top", yPosition + "px")
+                        .select("#value")
+                        .text(d)
+
+                    d3.select("#tooltip").classed("hidden", false);  // Show the tooltip
+                })
+                .on("mouseout", function() {  // 'Destroy' tooltip on mouseout
+                    d3.select("#tooltip").classed("hidden", true);  // Hide the tooltip
+                });
+
+            // Create Text Labels
+            svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d){
+                    return d; // Value in array is the text
+                })
+                .attr("x", function(d, i) {
+                    return xScale(i) + xScale.rangeBand() / 2;
+                })
+                .attr("y", function(d) {
+                    return canvas_height - yScale(d) + 15;
+                })
+                .attr("font-family", "sans-serif") // Change text font
+                .attr("font-size", "14px") // Font size
+                .attr("text-anchor", "middle") // Align to middle
+                .attr("fill", "white");  // Color of font
+
+            // Do something on text click
+            d3.select("h4")
+                .on("click", function() {
+                    // Do Something
+                    var numValues = dataset.length;
+                    var maxValue = 25;  // Random's Max Number
+                    dataset = [];  // Initialize empty array
+                    for(var i=0; i<numValues; i++) {
+                        var newNumber = Math.floor(Math.random() * maxValue);  // Random int
+                        dataset.push(newNumber);
+                    }
+
+                    // Update Bars
+                    svg.selectAll("rect")
+                        .data(dataset)  // Update with new data
+                        .transition()  // Transition from old to new
+                        .delay(function(d, i) {
+                            return i / dataset.length * 500;  // Dynamic delay (each item delays a little longer)
+                        })
+                        //.delay(200)  // Wait in ms before animation (static)
+                        .duration(1000)  // Transition time - default 250ms
+                        .ease("linear")  // Transition easing - default 'variable' (i.e. has acceleration), also: 'circle', 'elastic', 'bounce', 'linear'
+                        .attr("y", function(d) {
+                            return canvas_height - yScale(d);
+                        })
+                        .attr("height", function(d) {
+                            return yScale(d);
+                        })
+                        .attr("fill", "teal");  // redraw
+
+                    // Update Text Labels
+                    svg.selectAll("text")
+                        .data(dataset)
+                        .transition()  // Transition from old to new
+                        .delay(function(d, i) {
+                            return i / dataset.length * 500;  // Dynamic delay (each item delays a little longer)
+                        })
+                        //.delay(200)  // Wait in ms before animation
+                        .duration(1000)  // Transition time - changed from default 250ms
+                        .ease("linear")  // Transition easing - default 'variable' (i.e. has acceleration), also: 'circle', 'elastic', 'bounce', 'linear'
+                        .text(function(d) {
+                            return d;
+                        })
+                        .attr("x", function(d, i) {
+                            return xScale(i) + xScale.rangeBand() /2;
+                        })
+                        .attr("y", function(d) {
+                            return canvas_height - yScale(d) + 15;
+                        });
+                });
+ 
+  </script>
+  
+  </body>
+</html>

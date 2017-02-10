@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Apples Consumption in the U.S.</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		
+        <style type="text/css">
+			
+			h1 {font-family: cambria,serif; line-height: 26px; font-size: 30px; color: dimgray; margin: 6px 6px 6px 6px;}
+            h2 {font-family: cambria,serif; line-height: 18px; font-size: 16px; color: dimgray; margin: 6px 6px 6px 6px;}
+            blockquote {margin-left: 130px;}
+            body {
+               	background-color: white; font-family: sans-serif; font-size: 11px; color: #4D4D4D; } 
+            
+            
+
+			svg {
+                background-color: white; padding-top: 5px; }
+            
+            rect {
+                fill: #ff4444;}
+            
+            rect:hover {
+                opacity: 0.6;}
+            
+            .axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+        </style>
+	
+    </head>
+	
+    <body>
+        <img src="http://cdn.sheknows.com/filter/l/gallery/red_apple.jpg" alt="apple" width="80" align=left padding-right="4">
+        <h1>Apples Consumption in the United States</h1>
+<h2>Per Capita Consumption in Retail Pounds Per Year, 1999-2002</h2>
+        <hr width="600" align="left"/>
+
+        <script type="text/javascript">	
+            
+            var w = 600;
+            var h = 1600;
+            padding=[-7, 10, 20, 290]
+			
+ var widthScale = d3.scale.linear()
+	.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.15);
+            
+           var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left"); 
+            
+            
+           var svg = d3.select("body")
+                    .append("svg")
+				    .attr("width", w)
+                    .attr("height", h);
+                
+            d3.csv("fruits-by-descriptor-uploaded-to-gist-3FINAL.csv", function(data) {
+				
+                data.sort(function(a, b) {return d3.descending(+a.Apples, +b.Apples);
+                                         });
+                
+  widthScale.domain([0, d3.max(data, function(d) {return +d.Apples;
+                                                 }) ]);              
+heightScale.domain(data.map(function(d) { return d.Descriptor; } ));  
+                
+                var rects = svg.selectAll("rect")
+					.data(data)
+					.enter()
+				    .append("rect");
+                    
+                rects.attr("x", padding[3])
+					.attr("y", function(d)                {return heightScale(d.Descriptor);
+                                                          })
+					.attr("width", function(d) {return widthScale(d.Apples);})
+					.attr("height", heightScale.rangeBand())
+                    .attr("fill", "#ff4444")                  
+                    .append("title")
+                    .text(function(d) {return d.Descriptor + "'s annual per capita consumption of APPLES, in retail pounds, is " + d.Apples;});      
+            
+    svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			});           
+                
+                
+                
+                
+               
+            
+            
+
+        </script>
+    <blockquote><p>Sources: Food Intakes Converted to Retail Commodities Databases (ARS) and Food Availability (Per Capita)<br />  Data System; <a href="http://www.ers.usda.gov/data-products/commodity-consumption-by-population-characteristics.aspx#27850">Table 1: Fruit Availablity;</a> United States Department of Agriculture, Economic Research Service, 1999-2002.</p></blockquote>
+	</body>
+</html>

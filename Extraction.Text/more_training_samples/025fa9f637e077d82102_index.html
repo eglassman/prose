@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Banská Bystrica Regional Election 2013 - North region vs. Hungarian speaking region</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/journal/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <style type="text/css">
+		text {
+		  font-family: sans-serif;
+		}
+		
+		.tick {
+		  fill-opacity: 0;
+		  stroke: #000000;
+		  stroke-width: 1;
+		}
+		
+		.domain {
+		    fill: none;
+			fill-opacity: 0;
+			stroke: black;
+			stroke-width: 1;
+		}
+		.axis line {
+			fill: none;
+			fill-opacity: 0;
+			stroke: black;
+			stroke-width: 1;
+			shape-rendering: crispEdges;
+		}
+		
+		.axis text {
+			font-family: sans-serif;
+			font-size: 15px;
+		}
+		.axis {
+		  
+		}
+		circle {
+		  fill-opacity: .5;
+		  stroke-opacity: 0.99;
+		  stroke-width: 1;
+		}
+
+		.zeroline {
+		  stroke: #000;
+		  stroke-width: 1;
+		  stroke-opacity: 1;
+		}
+		.centerline {
+		  stroke: #b00;
+		  stroke-width: 3;
+		  stroke-opacity: 1;
+		}
+		.estateline {
+		  stroke: #080;
+		  stroke-width: 3;
+		  stroke-opacity: 1;
+		}
+		.restline {
+		  stroke: #444;
+		  stroke-width: 3;
+		  stroke-opacity: 1;
+		}
+		.totalline {
+		  stroke: #888;
+		  stroke-width: 3;
+		  stroke-opacity: 1;
+		}
+		.label {
+		  font-family: sans-serif;
+		  font-size: 15px;
+		}
+		.center, .madari {
+		  fill: #b00;
+		  stroke: #b00;
+		}
+        .estate, .banska-bystrica, .brezno {
+		  fill: #080;
+		  stroke: #080;
+		}
+		
+	</style>    
+  </head>
+  <body>
+  <nav class="navbar navbar-default" role=navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand">Banská Bystrica Regional Election 2013 - North region vs. Hungarian speaking region</a>
+        </div>
+      </div>
+  </nav>
+  <div class="alert alert-info">Comparison of support for Mr.Kotleba in Hungarian speaking area, the northern regions and the rest of the region. Every bubble represents one municipality. The <strong>size</strong> of bubbles represents number of voters.</div>
+  <div id="chart"></div>
+<script>
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 550 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width])
+    .domain([0.8,2.4]);
+var y = d3.scale.linear()
+    .range([height, 0])
+    .domain([0,0.85]);
+var r = d3.scale.sqrt()
+    .domain([0, 19377])
+	.range([2, 20]);
+    
+var formatAsPercentage = d3.format("%");
+    
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(formatAsPercentage);
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+/*svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+ .append("text")
+  .attr("x", x(.35))
+  .attr("dx", ".71em")
+  .style("text-anchor", "end")
+  .text("");*/
+  
+svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+ .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 6)
+  .attr("dy", ".71em")
+  .style("text-anchor", "end")
+  .text("Mr.Kotleba's support");
+
+var line = d3.svg.line()
+    .x(
+    function(d) { 
+    return d[0]; })
+    .y(function(d) { return d[1]; });
+
+zeroline = Array([x(1.2),y(0)],[x(1.2),y(0.8)]);
+svg.append("path")
+      .datum(zeroline)
+      .attr("class", "zeroline")
+      .style("stroke-dasharray", ("3, 3"))
+      .attr("d", line);
+zeroline = Array([x(1.6),y(0)],[x(1.6),y(0.8)]);
+svg.append("path")
+      .datum(zeroline)
+      .attr("class", "zeroline")
+      .style("stroke-dasharray", ("3, 3"))
+      .attr("d", line);
+zeroline = Array([x(2),y(0)],[x(2),y(0.8)]);
+svg.append("path")
+      .datum(zeroline)
+      .attr("class", "zeroline")
+      .style("stroke-dasharray", ("3, 3"))
+      .attr("d", line);
+
+
+centerline = Array([x(0.8),y(0.35)],[x(1.2),y(0.35)]);
+svg.append("path")
+      .datum(centerline)
+      .attr("class", "centerline")
+      .attr("d", line);
+
+estateline = Array([x(1.6),y(0.61)],[x(2),y(0.61)]);
+svg.append("path")
+      .datum(estateline)
+      .attr("class", "estateline")
+      .attr("d", line);
+estateline = Array([x(2),y(0.71)],[x(2.4),y(0.71)]);
+svg.append("path")
+      .datum(estateline)
+      .attr("class", "estateline")
+      .attr("d", line);
+
+restline = Array([x(1.2),y(0.535)],[x(1.6),y(0.535)]);
+svg.append("path")
+      .datum(restline)
+      .attr("class", "restline")
+      .attr("d", line);
+
+
+totalline = Array([x(0.8),y(0.55)],[x(2.4),y(0.55)]);
+svg.append("path")
+      .datum(totalline)
+      .attr("class", "totalline")
+      .style("stroke-dasharray", ("10, 5"))
+      .attr("d", line);
+
+data2 = [
+{'x':0.85,'y':-0.02,'name':'Hungarian','color':'#b00'},
+{'x':1.32,'y':-0.02,'name':'Rest','color':'#444'},
+{'x':1.62,'y':-0.02,'name':'B.Bystrica reg.','color':'#080'},
+{'x':2.05,'y':-0.02,'name':'Brezno reg.','color':'#080'}
+]
+var texts2 = svg.selectAll(".text2")
+		.data(data2)
+      .enter().append("text")
+        //.attr('text-anchor',"middle")
+        //.attr('font-family', 'sans-serif')
+        .attr('font-size',15)
+        .attr('font-weight','bold')
+        .attr('fill',function(d) {return d.color;})
+        .attr('x',function(d) {return x(d.x);})
+        .attr('y',function(d) {return y(d.y);})
+        .text(function(d) {return d.name});
+
+d3.csv('north-south.csv', function(data) {
+  var nodes = svg.selectAll("svg")
+    .data(data)
+    .enter().append("svg:svg").append("svg:circle")
+    	.attr("cx", function (d) {
+    	  if (d.region == 'madari')
+    	    return x(1 + (Math.random()-0.5)/6);
+    	  else if (d.region == 'rest')
+    	    return x(1.4 + (Math.random()-0.5)/6); 
+          else if (d.region == 'banska-bystrica')
+            return x(1.8 + (Math.random()-0.5)/6); 
+          else
+            return x(2.2 + (Math.random()-0.5)/6);
+    	})
+    	.attr("cy", function (d) {return y(d.rate)})
+    	.attr("r", function (d) {return r(d.voted)})
+    	//.attr("stroke-width", function(d) {return d.r2})
+    	.attr("title", function(d) {return d.name;})
+    	.attr("class", function(d) {return d.region});
+});
+     
+</script>
+  </body>
+</html>
+

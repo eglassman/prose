@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			body {
+				background-color: #154657;
+			}
+			svg {
+				width:500px;
+				height:500px;	
+			}
+		</style>
+	</head>
+	<body>
+<p>data generation of renewable-energy</p>
+<svg width="500" height:"500">
+<line x1="0" y1="250" x2="500" y2="250" stroke="rgba(205,200,250,1)" stroke-width="6" />
+<line x1="0" y1="260" x2="500" y2="260" stroke="rgba(205,200,250,0.9)" stroke-width="6" />
+<line x1="0" y1="270" x2="500" y2="270" stroke="rgba(205,200,250,0.8)" stroke-width="6" />
+<line x1="0" y1="280" x2="500" y2="280" stroke="rgba(205,200,250,0.7)" stroke-width="6" />
+<line x1="0" y1="290" x2="500" y2="290" stroke="rgba(205,200,250,0.6)" stroke-width="6" />
+<line x1="0" y1="300" x2="500" y2="300" stroke="rgba(205,200,250,0.5)" stroke-width="6" />
+<line x1="0" y1="310" x2="500" y2="310" stroke="rgba(205,200,250,0.4)" stroke-width="6" />
+<line x1="0" y1="320" x2="500" y2="320" stroke="rgba(205,200,250,0.3)" stroke-width="6" />
+<line x1="0" y1="330" x2="500" y2="330" stroke="rgba(205,200,250,0.2)" stroke-width="6" />
+<line x1="0" y1="340" x2="500" y2="340" stroke="rgba(205,200,250,0.1)" stroke-width="6" />
+
+<circle cx= "350" cy="16" r="5" fill="rgba(255,255,255,0.9)" />
+<circle cx= "250" cy="34" r="3" fill="rgba(255,255,255,0.9)" />
+<circle cx= "410" cy="13" r="2" fill="rgba(255,255,255,0.8)" />
+<circle cx= "23" cy="11" r="1" fill="rgba(255,255,255,0.8)" />
+<circle cx= "377" cy="163" r="2" fill="rgba(255,255,255,0.8)" />
+
+</svg>
+
+	<script type="text/javascript">		
+		d3.select("svg").append("circle").attr("cx",200).attr("r",130).attr("cy",200).attr("fill","rgba(185,186,14,0.9")
+
+
+			//Load in contents of CSV file
+			d3.csv("renewable-energy-perc-of-total-energy-generation.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+	</script>
+
+	</body>
+</html>

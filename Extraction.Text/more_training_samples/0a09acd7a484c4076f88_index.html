@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+
+.map {
+  fill: none;
+  stroke: #777;
+  stroke-opacity: .5;
+  stroke-width: .5px;
+}
+
+.land {
+  fill: #999;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+
+</style>
+
+
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+<script src="pathlayout.js"></script>
+<script>
+var width = 600,
+    height = 500;
+
+var projection = d3.geo.mercator()
+    .scale(5*(width + 1) / 2 / Math.PI)
+    .translate([width / 2, height / 2])
+    .rotate([-125, -15, 0])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+d3.json("/mbostock/raw/4090846/world-50m.json", function(error, world) {
+d3.json("track.json", function(error, track) {
+
+    var color_scale = d3.scale.quantile().domain([1, 5]).range(colorbrewer.YlOrRd[5]);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var filter = svg.append("defs")
+        .append("filter")
+        .attr("id", "drop-shadow")
+        .attr("height", "130%");
+    filter.append("feGaussianBlur")
+        .attr("in", "SourceAlpha")
+        .attr("stdDeviation", 5)
+        .attr("result", "blur");
+
+     filter.append("feOffset")
+        .attr("in", "blur")
+        .attr("dx", 5)
+        .attr("dy", 5)
+        .attr("result", "offsetBlur");
+
+    var feMerge = filter.append("feMerge");
+
+    feMerge.append("feMergeNode")
+        .attr("in", "offsetBlur")
+    feMerge.append("feMergeNode")
+        .attr("in", "SourceGraphic");
+
+    svg.insert("path", ".map")
+        .datum(topojson.feature(world, world.objects.land))
+        .attr("class", "land")
+        .attr("d", path)
+        .style("filter", "url(#drop-shadow)");
+
+    svg.insert("path", ".map")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+
+
+    var dateText = svg.append("text")
+      .attr("id", "dataTitle")
+      .text("2013/11/"+track[0].day + " " + track[0].hour + ":00 class: " + track[0].class)
+      .attr("x", 70)
+      .attr("y", 20)
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "20px")
+      .attr("fill", color_scale(track[0].class));
+    
+    /* The trail is inserted here */
+    var trail = d3.layout.trail()
+        .positioner(function(d) {return [d.lon,d.lat];})
+        .coordType('coordinates');
+
+    var trail_layout = trail.data(track).layout();
+
+    var hayan_trail = svg.selectAll("line").data(trail_layout);
+
+    hayan_trail.enter()
+      .append('path')
+      .attr("d", path)
+      .style("stroke-width",7)
+      .attr("stroke", function(d){return color_scale(d.class);})
+      .style('stroke-dasharray', function(d) {
+        var node = d3.select(this).node();
+        if (node.hasAttribute("d")){
+          var l = d3.select(this).node().getTotalLength();
+          return l + 'px, ' + l + 'px';
+        }
+      })
+      .style('stroke-dashoffset', function(d) {
+        var node = d3.select(this).node();
+        if (node.hasAttribute("d"))
+          return d3.select(this).node().getTotalLength() + 'px';
+      })
+      .transition()
+      .delay(function(d,i) {return i*1000})
+      .duration(1000)
+      .ease("linear")
+      .style('stroke-dashoffset', function(d) {
+          return '0px';
+      });
+
+
+    var icon = svg.append("path")
+    .attr("d","m 20,-42 c -21.61358,0.19629 -34.308391,10.76213 -41.46346,18.0657 -7.155097,7.3036 -11.451337,17.59059 -11.599112,26.13277 0,14.45439 9.037059,26.79801 21.767213,31.69368 -14.965519,10.64929 -25.578236,6.78076 -37.671451,7.85549 C -4.429787,54.20699 14.03,37.263 23.12144,28.41572 32.2133,19.56854 34.6802,10.79063 34.82941,2.19847 c 0,-14.45219 -9.03405,-26.79679 -21.76113,-31.69364 14.90401,-10.54656 25.48889,-6.69889 37.55061,-7.77104 C 38.78869,-40.57565 29.11666,-41.95733 21.03853,-42 20.68954,-42.0105 20.34303,-42.0105 20,-42 z M 0.82306,-7.46851 c 4.72694,0 8.56186,4.27392 8.56186,9.54602 0,5.2725 -3.83492,9.54651 -8.56186,9.54651 -4.726719,0 -8.555958,-4.27401 -8.555958,-9.54651 0,-5.2721 3.829239,-9.54602 8.555958,-9.54602 z")
+    .attr("class","icon")
+    .attr("transform", "translate(" + projection([track[0].lon, track[0].lat])[0] + "," + projection([track[0].lon, track[0].lat])[1] + "), scale("+(0.15*track[0].class)+")")
+    .attr("fill", color_scale(track[0].class));
+
+
+    track.forEach(function(d, i){
+        icon.transition()
+        .ease("linear")
+        .delay(i*1000)
+        .duration(1000)
+        .attr("transform", "translate(" + projection([d.lon, d.lat])[0] + "," + projection([d.lon, d.lat])[1] + "), scale("+(0.15*d.class)+"), rotate("+(i*15)+")")
+        .attr("fill", color_scale(d.class));
+
+        dateText
+        .transition()
+        .ease("linear")
+        .delay(i*1000)
+        .duration(1000)
+        .text("2013/11/"+ d.day + " " + d.hour + ":00 class: " + d.class)
+        .attr("fill", color_scale(d.class));
+    });
+
+
+    });
+
+  
+
+});
+</script>

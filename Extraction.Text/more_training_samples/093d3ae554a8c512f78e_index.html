@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script  src="http://d3js.org/d3.v3.min.js" ></script>
+    <style>
+        svg {
+            border: 1px solid black;
+            display: block;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+(function(){
+    // create Chart class
+    var Chart = function() {
+        var width, height, barPadding, factor, len, svg;
+
+        var addComma = d3.format("0,000");
+
+        var init = function(options) {
+            width = options.width || 1000;
+            height = options.height || 1000;
+            barPadding = options.barPadding || 1;
+            factor = options.factor || 1;
+        };
+
+        var createSVG = function(){
+            svg = d3.select('body')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            return svg;
+        };
+
+        var appendElements = function(data, element) {
+            len = data.length;
+
+            return svg.selectAll(element)
+                .data(data)
+                .enter()
+                .append(element);
+        };
+
+        var drawElements = function(elements, key){
+            elements
+                .attr({
+                    x: function(d,i) { 
+                        return i *  (width /len);
+                    },
+                    y: function(d) {
+                        return height - (+d[key]/ factor);
+                    },
+                    width:  width/len - barPadding,
+                    height: function(d) {
+                        return +d[key] / factor;
+                    }
+                });
+        };
+
+        var addToolTip = function(elements, label, value) {
+            elements
+                .append('title')
+                .text(function(d){
+                    return d[label] + ': ' + addComma(d[value]);
+                });
+        };
+
+
+        return {
+            appendElements: appendElements,
+            drawElements: drawElements,
+            addToolTip: addToolTip,
+            createSVG: createSVG,
+            init: init
+        };
+
+    };
+
+    // start creating charts
+
+    // options for the charts
+    var options = {
+        width: 500,
+        height: 500,
+        barPadding: 1,
+        factor: 5500
+    };
+
+
+    // create chart 1
+    var chart1 = Chart();
+    chart1.init(options);
+    chart1.createSVG();
+
+    d3.csv('parks1.csv', function(data){
+        var rects = chart1.appendElements(data, 'rect');
+        chart1.drawElements(rects, 'visitors');
+        chart1.addToolTip(rects, 'park', 'visitors');
+    });
+
+
+    // create chart 2
+    var chart2 = Chart();
+    chart2.init(options);
+    chart2.createSVG();
+
+    d3.csv('parks2.csv', function(data){
+        var rects = chart2.appendElements(data, 'rect');
+        chart2.drawElements(rects, 'visitors');
+        chart2.addToolTip(rects, 'park', 'visitors');
+    });
+
+}());
+</script>
+
+</body>
+</html>

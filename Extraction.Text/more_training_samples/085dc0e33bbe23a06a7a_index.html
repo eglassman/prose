@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://x-tag.github.io/js/x-tag-components.js"></script>
+  <style>
+    .clock {
+      font-size: 11em;
+      font-family: monospace;
+      position:fixed;
+      text-align: center;
+      top:150;
+      left:40;
+      
+      color:white;
+      text-shadow: 
+        0px 0px 64px #000000,
+        0px 0px 32px #000000,
+        0px 0px 16px #000000,
+        0px 0px 8px #000000,
+        0px 0px 4px #000000,
+        0px 0px 2px #000000;
+    }
+  </style>
+</head>
+<body>
+  
+  <x-clock class="clock"></x-clock>
+  
+  <script>
+    xtag.register('x-clock', {
+      lifecycle: {
+        created: function(){
+          this.start();
+        }
+      },
+      methods: {
+        start: function(){
+          this.update();
+          this.xtag.interval = setInterval(this.update.bind(this), 1000);
+        },
+        stop: function(){
+          this.xtag.interval = clearInterval(this.xtag.interval);
+        },
+        update: function(){
+          this.textContent = new Date().toLocaleTimeString();
+        }
+      },
+      events: {
+        tap: function(){
+          if (this.xtag.interval) this.stop();
+          else this.start();
+        }
+      }
+    });
+  </script>
+</body>

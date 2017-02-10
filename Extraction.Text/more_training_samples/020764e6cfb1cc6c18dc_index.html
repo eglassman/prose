@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src= "https://cdnjs.com/libraries/d3-legend"></script>
+<link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+   <style>
+   // body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+      svg { width:100%; height:100%;}
+      .dots:hover{opacity: 0.7;}
+      .my-text {
+      font-size: 1em;
+      font-family: 'Poiret One', cursive;
+      } 
+  </style>
+</head>
+
+<body class="my-text">
+  <H1>Scatterplot - Iris Data Set</H1>
+  <script>
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+    
+    var xScale = d3.scale.linear().range([0,width]);
+    var yScale = d3.scale.linear().range([height,0]);
+    var color = d3.scale.category10()
+    
+    var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(10);
+    
+		var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left");
+        
+    var svg = d3.select("body").append("svg")
+      .attr("width",width+ margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("class","viewport")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        
+   function render(data){
+      xScale.domain(d3.extent(data,function(d){return d.sepal_length}));
+      yScale.domain(d3.extent(data,function(d){return d.petal_length}));
+      
+    svg.append("g")
+      .attr("class", "x-axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+       .attr("y",-25)
+       .attr("x", width)
+       .attr("dy", "1em")
+       .style("text-anchor", "end")
+       .text("Sepal Length (cm)");;
+      
+    svg.append("g")
+      .attr("class", "y-axis")
+      .call(yAxis)
+      .append("text")
+       .attr("transform", "rotate(-90)")
+       .attr("y", 5)
+       .attr("dy", "1em")
+       .style("text-anchor", "end")
+       .text("Petal Length (cm)");
+      
+      
+    var circles = svg.selectAll("circle").data(data);
+      circles.enter()
+             .append("circle")
+             .attr("r",10).attr("fill","none").attr("stroke-width", "5");
+    
+    circles
+          .attr("class","dots")
+      		.attr("cx", function (d){ return xScale(d.sepal_length); })
+          .attr("cy", function (d){ return yScale(d.petal_length); })
+          .attr("stroke", function (d){return color(d.species);});   
+      
+    circles.exit().remove();
+        
+    var legend = svg.selectAll("legend")
+      .data(color.domain())
+      .enter().append("g")
+      .attr("class","legend")
+      .attr("transform", function(d,i){return"translate(0," + i * 20 + ")";});
+      
+     legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+      
+     legend.append("text")
+       .attr("x",width - 24)
+       .attr("y", 9)
+       .attr("dy",".35em")
+       .style("text-anchor","end")
+       .text(function(d) {return d;});
+   
+   
+     var div = d3.select("body").append("div")
+       .style("position", "absolute")
+       .style("text-align","center")
+       .style("width","150px")
+       .style("height", "2.5em")
+       .style("font", "1em Poiret One")
+       .style("color", "yellow")
+       .style("background","black")
+       .style("border-radius", "6px")
+       .style("border", "solid 1px green")
+       .style("opacity", 0);
+     
+     
+     function mouseover(d) {
+       div.html ("Sepal Length: " + d.sepal_length + "<br />" 
+                 + "Petal Length : " + d.petal_length)
+                 .style("left", (d3.event.pageX + 9) + "px")
+                 .style ("top", (d3.event.pageY - 43) + "px")
+                 .style("opacity",1);
+       }
+    
+     function mouseout() {
+        div.style("opacity", 1e-6)
+           .style("left","1px")
+           .style("top", height+100);
+       }  
+    
+      d3.selectAll(".dots")
+         .on("mouseover", mouseover)
+         .on("mouseout", mouseout);
+       }   
+      
+    function type(d){
+        d.sepal_length = +d.sepal_length;
+        d.sepal_width  = +d.sepal_width;
+        d.petal_length = +d.petal_length;
+        d.petal_width  = +d.petal_width;
+        return d;
+      }
+    
+  
+    d3.csv("iris.csv", type, render);
+   
+    
+    
+  </script>
+</body>

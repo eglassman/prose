@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>
+
+<body>
+  <div>Ideation on conversion rate visuals</div>
+  <script>
+    var CONVERSION_RATES = [
+      {converted: 0.14, volume: 4190 + 25479},
+      {converted: 0.51, volume: 2526 + 2090},
+      {converted: 0.55, volume: 2034 + 1325},
+      {converted: 0.45, volume: 1281 + 1296},
+      {converted: 0.54, volume: 35 + 23},
+      {converted: 0.45, volume: 500 + 453},
+      {converted: 0.33, volume: 276 + 375},
+      {converted: 0.30, volume: 310 + 572},
+      {converted: 0.50, volume: 3 + 37},
+      {converted: 0.64, volume: 268 + 119}
+    ];
+    
+    var margin = {top: 10, right: 10, bottom: 10, left: 10};
+    var width = 960 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom - 30;
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr('id', 'transformGroup')
+
+    // Feel free to change or delete any of the code you see!
+    svg.append("rect")
+      .attr({x: 20, y: 10, width: width - 40, height: height - 20})
+      .style({ stroke: 'RGBA(44, 46, 47, 1)', fill:'none'})
+    
+    var totalVolume = CONVERSION_RATES.reduce(function(pv, cv){
+      return pv + cv.volume
+    },0)
+    CONVERSION_RATES.forEach(function(currentConversion, index){
+      CONVERSION_RATES[index].cumulVolume =  currentConversion.volume;
+
+      var prevConversion = CONVERSION_RATES[index - 1];
+      if (prevConversion){
+        CONVERSION_RATES[index].cumulVolume += prevConversion.cumulVolume
+      }
+    })
+    console.log(CONVERSION_RATES)
+    d3.select("#transformGroup").append('g').selectAll("circle").data(CONVERSION_RATES).enter().append('rect')
+      .attr({
+        x: function(d){return (width - 40) * (1 - d.converted)/2 + 20;},
+        y: function(d){
+          console.log(d.cumulVolume / totalVolume)
+          var barHeight = (height - 20) * (1 - d.cumulVolume / totalVolume);
+          return barHeight + 10;
+        },
+        width: function(d){return (width - 40) * d.converted;},
+        height: function(d){
+          var barHeight = (height - 20) * d.volume / totalVolume;
+          return barHeight;
+        },
+      })
+      .style({ fill: 'pink', opacity: 0.6})
+      // .transition().duration(1000)
+    
+    // d3.select("#transformGroup").append('g').selectAll("text").data(CONVERSION_RATES).enter().append('text')
+    //   .text(function(d){return Math.round(calcChanceOfOccurence(d.chance, d.n, d.hire)*1000)/10 + '%, ' +  Math.round(d.chance*100) + '% success, ' +  d.n + ', applicants'})
+    //   .attr({
+    //     x: 0, 
+    //     y: function(d){return 10 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (height - 20)}
+    //   })
+    //   .style({ fill: color, opacity:0.8})      
+    //   .transition().duration(1000)
+    //   .attr({
+    //     x: function(d){return 14 + 20 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (width - 40)}, 
+    //   })
+  </script>
+</body>

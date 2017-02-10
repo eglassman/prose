@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://riccardoscalco.github.io/textures/textures.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <meta charset="utf-8">
+    <title>Texture Test</title>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script>
+      var width = 500,
+          height = 500,
+
+          // An n X n grid of circles will be created.
+          n = 12,
+          x = d3.scale.linear()
+            .domain([0, n])
+            .range([0, width]),
+          y = d3.scale.linear()
+            .domain([0, n])
+            .range([0, height]),
+          radius = 20,
+          transitionDuration = 1000,
+          svg = d3.select("#example").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+            // Center the SVG with respect to default width of bl.ocks.
+            .style("position", "absolute")
+            .style("left", 960 / 2 - width / 2),
+
+          // Textures need to be generated multiple times,
+          // once for each color they are paired with.
+          textureGenerators = [
+            function(){
+              return textures.lines().thicker();
+            },
+            function(){
+              return textures.circles().size(5);
+            },
+            function(){
+              return textures.paths().d("squares").size(8);
+            }
+          ],
+          
+          // Create a scale that encapsulates texture mappings.
+          textureScale = d3.scale.ordinal()
+            .domain(["X", "Y", "Z"])
+            .range(textureGenerators),
+
+          // Create a scale that encapsulates colors.
+          // Colors from http://colorbrewer2.org/
+          colorScale = d3.scale.ordinal()
+            .domain(["A", "B", "C"])
+            .range(["#1b9e77", "#d95f02", "#7570b3"]),
+          
+          // Create a nested ordinal scale for color and texture.
+          colorTextureScale = d3.scale.ordinal()
+      
+            // The first level is for color.
+            .domain(colorScale.domain())
+            .range(colorScale.range().map(function(color){
+              
+              // The second level is for texture.
+              return d3.scale.ordinal()
+                .domain(textureScale.domain())
+                .range(textureScale.range().map(function(generateTexture){
+
+                  // Generate a new texture for each (color, texture) pair.
+                  return colorizeTexture(generateTexture(), color);
+                }))
+            }));
+
+
+      // Makes the given texture appear as the given color.
+      function colorizeTexture(texture, color){
+
+        // Use stroke, present on all textures.
+        var texture = texture.stroke(color);
+
+        // Use fill, present only on some textures (e.g. "circles", not "lines").
+        if(texture.fill){
+          texture.fill(color);
+        }
+
+        return texture;
+      }
+      
+      // Initialize defs for each (texture, color) pair.
+      colorTextureScale.range().forEach(function(scale){
+        scale.range().forEach(svg.call, svg);
+      });
+      
+      // Initialize the data grid.
+      var data = [];
+      for(var i = 0; i < n; i++){
+        for(var j = 0; j < n; j++){
+          data.push({
+            i: i,
+            j: j,
+
+            // "a" corresponds to color.
+            a: i < n / 3 ? "A" : i < (n * 2 / 3) ? "B" : "C",
+
+            // "b" corresponds to texture.
+            b: j < n / 3 ? "X" : j < (n * 2 / 3) ? "Y" : "Z"
+          });
+        }
+      }
+      
+      // Create the marks.
+      var marks = svg.selectAll(".mark")
+          .data(data)
+        .enter().append("circle")
+        
+          // The "mark" class is necessary, because
+          // selectAll("circle") conflicts with the circle texture.
+          .attr("class", "mark")
+
+          .attr("cx", function(d){ return x(d.i) + radius; })
+          .attr("cy", function(d){ return y(d.j) + radius; })
+
+          // Use the color scale for the stroke around each circle.
+          .style("stroke", function(d){ return colorScale(d.a); })
+
+          // Use the nested texture & color scale to define the texture.
+          .style("fill", function(d){
+            return colorTextureScale(d.a)(d.b).url();
+          });
+      
+      // Periodically set a random radius on each circle.
+      function randomizeSize(){
+        marks.transition().duration(transitionDuration)
+          .attr("r", function(){ return Math.random() * radius; });
+      }
+      randomizeSize();
+      setInterval(randomizeSize, transitionDuration);
+
+    </script>
+  </body>
+</html>

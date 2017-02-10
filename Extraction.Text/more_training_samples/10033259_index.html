@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  display: none;
+}
+
+.grid-background {
+  fill: #e2e3e3;
+}
+
+.grid line,
+.grid path {
+  display: none;
+}
+
+
+.brush .extent {
+  fill:#3300ff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var margin = {top: 20, right: 40, bottom: 20, left: 40},
+    width = 500 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([0,100])
+    .range([0, width]);
+
+var brush = d3.svg.brush()
+    .x(x)
+    .extent([30,70])
+    .on("brushend", brushended);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("rect")
+    .attr("class", "grid-background")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("class", "x grid")
+    .attr("transform", "translate(0," + height + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")");
+
+var gBrush = svg.append("g")
+    .attr("class", "brush")
+    .call(brush);
+
+gBrush.selectAll("rect")
+    .attr("height", height);
+
+function brushended() {
+  //Returns the brush extent at the JS console:
+  console.log(Math.round(brush.extent()[0]) + "," + Math.round(brush.extent()[1]))
+  }
+
+</script>

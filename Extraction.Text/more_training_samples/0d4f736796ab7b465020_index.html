@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Abalone</title>
+<style>
+svg {
+  font: 10px sans-serif;
+}
+
+.foreground path {
+  fill: none;
+  stroke: #222;
+  stroke-opacity: 0.35;
+  pointer-events: none;
+  stroke-width: 1.5px;
+}
+ 
+.axis .title {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+pre {
+  width: 900px;
+  margin: 10px 30px;
+  tab-size: 15;
+  font-size: 12px;
+}
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var margin = {top: 30, right: 40, bottom: 20, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 280 - margin.top - margin.bottom;
+
+var types = {
+  "Number": {
+    name: "Number",
+    coerce: function(d) { return +d; },
+    extent: d3.extent,
+    within: function(d, extent) { return extent[0] <= d && d <= extent[1]; }
+  },
+  "String": {
+    name: "String",
+    coerce: String,
+    extent: function (data) { return data.sort(); },
+    within: function(d, extent, dim) { return extent[0] <= dim.scale(d) && dim.scale(d) <= extent[1]; }
+  }
+};
+
+var dimensions = [
+  {
+    name: "Sex",
+    scale: d3.scale.ordinal().rangePoints([0, height]),
+    type: types["String"],
+    domain: ["M", "F", "I"]
+  },
+  {
+    name: "Length",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Diameter",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Height",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Whole weight",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Shucked weight",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Viscera weight",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Shell weight",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  },
+  {
+    name: "Rings",
+    scale: d3.scale.linear().range([height, 0]),
+    type: types["Number"]
+  }
+];
+
+var color = d3.scale.ordinal()
+  .range(["#1b9e77","#d95f02","#7570b3"]);
+
+var x = d3.scale.ordinal()
+    .domain(dimensions.map(function(dim) { return dim.name; }))
+    .rangePoints([0, width]);
+
+var line = d3.svg.line()
+    .defined(function(d) { return !isNaN(d[1]); });
+
+var yAxis = d3.svg.axis()
+    .orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var output = d3.select("body").append("pre");
+
+var dimension = svg.selectAll(".dimension")
+    .data(dimensions)
+  .enter().append("g")
+    .attr("class", "dimension")
+    .attr("transform", function(d) { return "translate(" + x(d.name) + ")"; });
+
+var colordimension = dimensions[0];
+
+d3.csv("abalone.csv", function(error, rawdata) {
+  if (error) throw error;
+
+  // take subset of data
+  data = d3.shuffle(rawdata).slice(0,750);
+
+  data.forEach(function(d) {
+    dimensions.forEach(function(p) {
+      d[p.name] = p.type.coerce(d[p.name]);
+    });
+  });
+
+  dimensions.forEach(function(dim) {
+    if (!("domain" in dim)) {
+      // detect domain using dimension type's extent function
+      dim.domain  = d3.functor(dim.type.extent)(data.map(function(d) { return d[dim.name]; }));
+    }
+    dim.scale.domain(dim.domain);
+  });
+
+  color.domain(colordimension.scale.domain());
+
+  svg.append("g")
+      .attr("class", "foreground")
+    .selectAll("path")
+      .data(data)
+    .enter().append("path")
+      .attr("d", draw)
+      .style("stroke", function(d) { return color(d[colordimension.name]); });
+
+  dimension.append("g")
+      .attr("class", "axis")
+      .each(function(d) { d3.select(this).call(yAxis.scale(d.scale)); })
+    .append("text")
+      .attr("class", "title")
+      .attr("text-anchor", "middle")
+      .attr("y", -9)
+      .text(function(d) { return d.name; });
+
+  // Add and store a brush for each axis.
+  dimension.append("g")
+      .attr("class", "brush")
+      .each(function(d) {
+        d3.select(this).call(d.brush = d3.svg.brush()
+          .y(d.scale)
+          .on("brushstart", brushstart)
+          .on("brush", brush));
+      })
+    .selectAll("rect")
+      .attr("x", -8)
+      .attr("width", 16);
+
+  output.text(d3.tsv.format(data));
+
+  function draw(d) {
+    return line(dimensions.map(function(dim) {
+      return [x(dim.name), dim.scale(d[dim.name])];
+    }));
+  }
+
+  function brushstart() {
+    d3.event.sourceEvent.stopPropagation();
+  }
+
+  // Handles a brush event, toggling the display of foreground lines.
+  function brush() {
+    var actives = dimensions.filter(function(p) { return !p.brush.empty(); }),
+        extents = actives.map(function(p) { return p.brush.extent(); });
+
+    var selected = [];
+
+    d3.selectAll(".foreground path").style("display", function(d) {
+      if (actives.every(function(dim, i) {
+          // test if point is within extents for each active brush
+          return dim.type.within(d[dim.name], extents[i], dim);
+        })) {
+        selected.push(d);
+        return null;
+      }
+      return "none";
+    });
+
+    output.text(d3.tsv.format(selected));
+  }
+});
+
+</script>

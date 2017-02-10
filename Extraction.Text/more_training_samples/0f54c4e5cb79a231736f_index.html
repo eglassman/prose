@@ -1,0 +1,197 @@
+<html>
+  <head>
+    <title> Scatter Plot and Transitional Chart </title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <style>
+      .container {
+        width: 944px;
+        height: 480px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      .div1 {
+        width: 944px;
+        border-bottom: 3px dashed black;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- div for scatter plot -->
+      <div class="div1"></div>
+
+      <!-- div for button -->
+      <div class="button">
+         <button class="btn btn-mini" id="btnTransition">Transition</button>
+      </div>
+
+      <!-- div for transitional chart -->
+      <div class="div2"></div>
+    </div>
+    
+    <script>
+    /**
+    * ============================================================================
+    * Scatterplot
+    * ----------------------------------------------------------------------------
+    */
+    //Width and height
+    var w = 940;
+    var h = 300;
+    var padding = 30;
+
+    /*
+    //Static dataset
+    var dataset = [
+            [5, 20], [480, 90], [250, 50], [100, 33], [330, 95],
+            [410, 12], [475, 44], [25, 67], [85, 21], [220, 88],
+            [600, 150]
+            ];
+    */
+
+    //Dynamic, random dataset
+    var dataset = [];					//Initialize empty array
+    var numDataPoints = 50;				//Number of dummy data points to create
+    var xRange = Math.random() * 1000;	//Max range of new x values
+    var yRange = Math.random() * 1000;	//Max range of new y values
+    for (var i = 0; i < numDataPoints; i++) {					//Loop numDataPoints times
+      var xPos = Math.round(Math.random() * xRange);	//New random integer
+      var yPos = Math.round(Math.random() * yRange);	//New random integer
+      dataset.push([xPos, yPos]);					//Add new number to array
+    }
+    //Create scale functions
+    var xScale = d3.scale.linear()
+               .domain([0, d3.max(dataset, function(d) { return d[0]; })])
+               .range([padding, w - padding * 2]);
+    var yScale = d3.scale.linear()
+               .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+               .range([h - padding, padding]);
+    var rScale = d3.scale.linear()
+               .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+               .range([2, 5]);
+    //Define X axis
+    var xAxis = d3.svg.axis()
+              .scale(xScale)
+              .orient("bottom")
+              .ticks(5);
+    //Define Y axis
+    var yAxis = d3.svg.axis()
+              .scale(yScale)
+              .orient("left")
+              .ticks(5);
+    //Create SVG element
+    var svg = d3.select(".div1")
+          .append("svg")
+          .attr("width", w)
+          .attr("height", h);
+    //Create circles
+    svg.selectAll("circle")
+       .data(dataset)
+       .enter()
+       .append("circle")
+       .attr("cx", function(d) {
+          return xScale(d[0]);
+       })
+       .attr("cy", function(d) {
+          return yScale(d[1]);
+       })
+       .attr("r", function(d) {
+          return rScale(d[1]);
+       });
+    //Create labels
+    svg.selectAll("text")
+       .data(dataset)
+       .enter()
+       .append("text")
+       .text(function(d) {
+          return d[0] + "," + d[1];
+       })
+       .attr("x", function(d) {
+          return xScale(d[0]);
+       })
+       .attr("y", function(d) {
+          return yScale(d[1]);
+       })
+       .attr("font-family", "sans-serif")
+       .attr("font-size", "11px")
+       .attr("fill", "red");
+
+    //Create X axis
+    svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + (h - padding) + ")")
+      .call(xAxis);
+
+    //Create Y axis
+    svg.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(" + padding + ",0)")
+      .call(yAxis);
+    
+    
+    /**
+    * ============================================================================
+    * Transitional graph
+    * ----------------------------------------------------------------------------
+    */
+    //Width and height
+		var w = 944;
+		var h = 400;
+		
+    var svg = d3.select(".div2")
+      .append("svg")
+      .attr("width", w)
+      .attr("height",h)
+    
+    var shape = svg.append("path")
+    		.attr("transform", "translate(100, 120)rotate(0)")  //initial condition, rotate is 0
+    		.style("stroke", "blue")
+    		.style("fill", "white")
+    		.attr("d", "m 0,-60 l 20,40 l 40,20 l -40,20 l -20,40 l -20,-40 l -40,-20 l 40,-20 z");
+
+    var btnTransition = d3.select("button#btnTransition");
+    btnTransition.on('click', function() {
+      if(btnTransition.text() == "Transition") {
+        shape
+          .style("fill", "white")
+          .transition()
+          .duration(1000)	//set the time of the transition
+          .style("fill","blue")
+          .attr("transform", "translate(800,120)rotate(180)")
+          .attr("transform", "translate(800,120)rotate(180)")
+          .attr("d", "m 0,-60 l 40,20 l 20,40 l -20,40 l -40,20 l -40,-20 l -20,-40 l 20,-40 z")
+          .attr("transform", "translate(800,120)rotate(180)")
+          .each("end",function() { 	//this is to make an event will start exactly at the end of a transition
+            svg.append("circle")
+            	.attr("cx", 800)
+              .attr("cy", 120)
+              .attr("r",250)
+              .style("fill", "green")
+              .style("opacity", "0")
+              .transition(10)
+              .duration(700)
+              .attr("r",0)
+              .style("fill", "yellow")
+              .style("opacity",1)
+              .remove()
+          });
+        d3.select("button#btnTransition").text("Reset");
+      } 
+
+      else {
+        shape
+          .transition()
+          .duration(1000)
+          .attr("transform", "translate(100,120)rotate(0)")
+          .style("stroke", "blue")
+          .style("fill", "none")
+          .attr("d", "m 0,-60 l 20,40 l 40,20 l -40,20 l -20,40 l -20,-40 l -40,-20 l 40,-20 z");
+        
+        d3.select("button#btnTransition").text("Transition");
+      }
+    })
+    
+    </script>
+  </body>
+</html>

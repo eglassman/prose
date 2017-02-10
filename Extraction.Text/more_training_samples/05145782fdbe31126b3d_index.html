@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <button type="button" id="clear">CLS</button>
+    
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      var centerX = canvas.width / 2;
+      var centerY = canvas.height / 2;
+      var radius = 60;
+
+      context.beginPath();
+      context.arc(1/2 * centerX, centerY, radius, 0, 2 * Math.PI, false);
+      context.fillStyle = 'red';
+      context.fill();
+      context.lineWidth = 2;
+      context.strokeStyle = '#fff';
+      context.stroke();
+
+      context.beginPath();
+      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+      context.fillStyle = 'green';
+      context.fill();
+      context.lineWidth = 2;
+      context.strokeStyle = '#fff';
+      context.stroke();
+
+      context.beginPath();
+      context.arc(3/2 * centerX, centerY, radius, 0, 2 * Math.PI, false);
+      context.fillStyle = 'blue';
+      context.fill();
+      context.lineWidth = 2;
+      context.strokeStyle = '#fff';
+      context.stroke();
+      
+      d3.select('#clear').on('click', function() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      }, false);
+      
+    </script>
+  </body>
+</html>

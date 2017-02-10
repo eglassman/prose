@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+	<style>
+		circle {
+			stroke:white;
+		}
+		circle.node {
+			fill:lightgrey;
+		}
+		circle.rood {
+			fill:red;
+		}
+		circle.groen {
+			fill:green;
+		}
+		circle.geel {
+			fill:yellow;
+		}
+	</style>
+<body>
+	<div id="viz">
+	</div>
+	<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script>
+var width = 960,
+	height = 500;
+	
+var svg = d3.select("#viz").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append('g')
+    	.attr('transform','translate('+width/2+','+height/2+')');
+
+var node = svg.append('g');
+	
+var buttons = ['rood', 'geel', 'groen'];
+
+var nodeb = node.append('g');
+var nodeg = node.append('g');
+
+var nodec = nodeg.append('circle')
+	.attr('class','node')
+	.attr('r',200);
+
+var buttong = nodeb.selectAll('ibuttons')
+	.data(buttons)
+  .enter().append('g')
+	.attr('transform',function(d,i) {return 'rotate('+((i*40)-220)+') translate(0,120)'})
+	.on('click', function(d) {
+		nodec.attr('class',d)
+	});
+buttong.append('circle')
+  	.attr('class',function(d) {return d})
+	.attr('r',60);
+node.on('mouseover', function(d) {
+	buttong
+		.transition()
+			.attr('transform',function(d,i) {return 'rotate('+((i*40)-220)+') translate(0,180)'})
+	})
+	.on('mouseout', function(d) {
+	buttong
+		.transition()
+		.delay(1000)
+			.attr('transform',function(d,i) {return 'rotate('+((i*40)-220)+') translate(0,120)'});
+	})
+	</script>
+</body>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Module 5 exercise: Free lunch and non-population</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			   	font-family: Helvetica, Arial sans-serif;
+			}
+
+			h1 {
+	        	font-size: 22px;
+	        	margin: 20px 0 0 10px;
+			}
+
+			p {
+	        	font-size: 16px;
+	        	margin: 10px 0 0 10px;
+			}
+
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover{
+				fill: red;
+			}
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: Helvetica, Arial sans-serif;
+				font-size: 11px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<h1>STUDENTS WHO QUALIFY FOR FREE LUNCH</h1>
+		<p>The percentage of Palm Beach County public school students who qualify for free lunch has risen steadily since 2008, as has the percentage of non-white students.</p>
+
+		<script type="text/javascript">		
+
+			var w = 700;
+			var h = 600;
+			var padding = [20, 10, 30, 120];
+
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(10)
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.ticks(10)
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h)
+
+
+			d3.csv("FRlunch-nonwhite.csv", function(data) {
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.Percentfreelunch;
+					}), 
+					d3.max(data, function(d) {
+						return +d.Percentfreelunch;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.Percentnonwhite;
+					}),
+					d3.min(data, function(d) {
+						return +d.Percentnonwhite;
+					})
+				]);
+
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+				circles.attr("cx", function(d) {
+						return xScale(d.Percentfreelunch);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.Percentnonwhite);
+					})
+					.attr("r", 0.1)
+					.attr("fill", "dodgerblue")
+					.append("title")
+					.text(function(d) {
+						return d.Percentfreelunch + "% of students qualified for free lunch in " + d.YEAR + ", and " + d.Percentnonwhite + "% of students were nonwhite";
+					});
+
+				circles.sort(function(a, b) {
+						return d3.ascending(+a.Percentnonwhite, +b.Percentnonwhite);
+					})
+					.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(1000)
+					.attr("r", 5);
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] + 10) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 10) + ",0)")
+					.call(yAxis);
+	  				});
+
+		</script>
+		<p>Source: <a href="http://nces.ed.gov/ccd/elsi/">National Center for Education Statistics</a></p>
+
+	</body>
+</html>

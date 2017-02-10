@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>SVG from Data with D3</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+ 
+	</head>
+	<body>
+ 
+		<h1>NEET</h1>
+		<h2>Young people Not in Employment, Education or Training</h2>
+ 
+		<h3>Intro</h3>
+		<div id="intro">
+		<p>Youth inactivity presents the share of <strong>young people not in employment, education or training (NEET)</strong>.</p>
+		<p>Young people in education include those attending part-time or full-time education, but exclude those in non-formal education and in educational activities of very short duration.</p>
+		<p class="smaller">Employment is defined according to the <abbr title="International Labour Organization">ILO</abbr> Guidelines and covers all those who have been in paid work for at least one hour in the reference week of the survey or were temporarily absent from such work. Young people who are NEET are at risk of becoming socially excluded, with income below the poverty-line and without the skills to improve their economic situation.</p>
+		</div>
+ 
+		<h3>NEET in <abbr title="Organisation for Economic Co-operation and Development">OECD</abbr> countries</h3>
+		<h4>20-24 year-olds not in employment, education or training</h4>
+		<p class="chart">% in same age group [Source <a href="https://data.oecd.org/" target="_blank">OECD</a>, 2013]</p>
+		
+		<script type="text/javascript">
+
+			//SVG 
+			var w = 700;
+			var h = 550;
+			var padding = [ 20, 10, 30, 120 ];  //Top, right, bottom, left
+
+
+			var widthScale = d3.scale.linear()
+							.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+							.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.tickFormat(function(d) {
+								return d + "%"})
+							.orient("bottom"); // xScale labels 
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var avg = d3.scale.ordinal()
+							.rangeBands([ padding[0], h ], 0);
+
+			var svg = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("height", h);
+
+
+
+
+			d3.csv("neet_def_gdp.csv", function(data) {
+				data.sort(function(a, b) {
+					return d3.descending(+a.neet_2013, +b.neet_2013);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.neet_2013;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { 
+					return d.OECD_Country;
+				} ));
+				
+				avg.domain(data.map(function(d) { 
+					return d.neet_2013; 
+				} ));
+	
+
+			var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.OECD_Country);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.neet_2013);
+					})
+					.attr("height", heightScale.rangeBand())
+
+					// Changing color to "Spain" bar
+					.attr("class", function(d) {
+           				if (d.OECD_Country == "Spain") {return "bar_Sp"}
+            			else {return ""}
+					})	
+
+					.append("title")
+					.text(function(d) {
+						return d.neet_2013 + "% " + "of young people NEET in " + d.OECD_Country;
+					});
+
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					// Next line sets xScale line above chart - (Change xAxis.orient to "top" then)
+					//.attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+
+			// Loading data to plot average line
+			var dataSum = d3.sum(data, function(d) { return +d.neet_2013; });
+
+			var avgLineLabelxPosition = heightScale.rangeBand()
+			var avgLineLabelyPosition = widthScale(dataSum/data.length) + padding[3];
+
+					/*Console logs for control */
+					//console.log(dataSum = d3.sum(data, function(d) { return +d.neet_2013; })); // Shows totals right!
+					//console.log(data.length); // Shows number of values right!
+					//console.log(dataSum/data.length); // Shows avg right!
+
+
+			// Drawing a line for average
+	 		var line = d3.svg.line()
+	    			.x(function(d, i) { 
+	    				return widthScale(dataSum/data.length) + padding[3]; 
+	    			})
+	    			.y(function(d, i) { 
+	    				return avg(d.neet_2013); 
+	    			}); 
+	   
+	  			svg.append("path")
+	      			.datum(data)
+	      			.attr("class", "avg")
+	      			.attr("d", line);
+
+	      	// Label for average line
+				svg.append("g")
+				   	.append("text")
+				   	.attr("class", "avgText")
+				    .attr("y", avgLineLabelxPosition) //up down
+				    .attr("x", avgLineLabelyPosition) //left right
+				    .text("Average " + parseFloat(dataSum/data.length).toFixed(1) + "%");
+
+			});
+
+
+		</script>
+ 
+ 
+		
+		<h3>NEET, Deficit and GDP - a trio playing together?</h3>
+		<p>Some more nice charts coming soon! In the meanwhile, enjoy the 18<sup>th</sup> century D3.js...</p>
+		
+		<figure>
+			<img src="http://upload.wikimedia.org/wikipedia/commons/3/3f/Playfair_Barchart.gif" alt="W. Playfair's bar chart" border="1" />
+			<figcaption>Wiliam Playfair's bar chart, which first appeared in his Commercial and Political Atlas, was published in 1786.</figcaption>
+		</figure>
+		<p>...</p>
+ 
+		<footer><hr />Rubén Valero | 2015 | Data Visualization and Infographics with D3!</footer>
+	</div>
+ 
+	</body>
+</html>

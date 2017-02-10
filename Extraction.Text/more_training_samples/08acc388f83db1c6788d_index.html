@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Franny's File</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #999966;
+			}
+			h1 {
+				color: white;
+				font-family: Helvetica,sans-serif;
+				font-size: 15px;
+			}
+			h2 {
+				color: white;
+				font-family: Helvetica,sans-serif;
+				font-size: 20px;
+			}
+						
+			p {
+				color: white;
+				font-family: "Times New Roman",Times,serif;
+				font-size: 15px;
+			}
+		
+			svg {
+				background-color: white;
+			}
+			</style>
+	</head>
+	<body>
+	<p>
+			Data Visualization and Infographics with D3<br>
+			Module 3 Exercise - Bar Chart <br>
+			April 4, 2015<br>
+			</p>
+	<h2>
+			Sugar Consumption Per Capita in 1961 Around the World <br>
+			</h2>
+			<p>
+			source:	FAOSTAT - Food and Agriculture Organization of the United Nations Statistics Division	</p>
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 840)
+						.attr("height", 2400);
+
+
+
+			d3.csv("sugarconsumption.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(a.y1961, b.y1961);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 15;
+					})
+					.attr("width", function(d) {
+						return d.y1961 * 5;
+					})
+					.attr("height", 8)
+					.append("title")
+					.text(function(d) {
+						return d.Country + "'s daily per capita consumption of sugar in grams is " + d.y1961;
+					});
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

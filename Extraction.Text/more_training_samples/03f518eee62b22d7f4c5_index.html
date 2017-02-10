@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--d3.js -->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+
+<!--c3.js -->
+  <script src="https://rawgit.com/masayuki0812/c3/master/c3.js"></script>
+  <link href="https://rawgit.com/masayuki0812/c3/master/c3.css" rel="stylesheet" type="text/css" />
+
+  <meta charset="utf-8">
+<title>testing c3</title>
+</head>
+<body>
+  <div id="chart"></div>
+
+<script>
+var chart = c3.generate({
+    data: {
+      url: 'https://gist.githubusercontent.com/aaizemberg/03f518eee62b22d7f4c5/raw/3181d2be8a44d40fd4b3875f4b2f2880106301f0/data.csv',
+        x: 'x',
+//      xFormat: '%Y-%m-%d'
+  },
+  tooltip: {
+    grouped: false
+  },
+  color: {
+    pattern: ['#e41a1c', '#377eb8', '#4daf4a']
+  },
+  axis: {
+    y: { 
+      show: false 
+    },
+    x: {
+      type: 'timeseries',
+      tick: { 
+        format: '%d/%m',
+        count: 7
+      }
+    }
+  }
+});  
+</script>  
+  
+</body>
+</html>

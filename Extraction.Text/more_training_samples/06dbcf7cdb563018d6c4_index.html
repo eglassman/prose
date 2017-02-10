@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Investment in R+D by country</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		
+	</head>
+	<body>
+
+		<svg width="500" height="200">
+			<circle cx="300" cy="140" r="50" fill="violet" />
+			<text x="208" y="100" fill="charcoal" font-size="42" font-weight="bold" font-family="Helvetica">Lorem ipsum</text>
+		</svg>
+
+		<script type="text/javascript">
+			//loading the csv data
+			d3.csv('R&D.csv', function(data)
+				{
+					console.log(data);
+				});
+		</script>
+
+	</body>
+</html>

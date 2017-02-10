@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Custom Projections</title>
+</head>
+<body>
+
+  <style>
+  .graticule {
+    fill: none;
+    stroke: #777;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+  }
+  </style>
+
+  <div class="container">
+    <h1>Custom Projections</h1>
+
+    <div id="map-container"></div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+  var width  = 800,
+      height = 400;
+
+  // https://en.wikipedia.org/wiki/Sinusoidal_projection
+  function rawSinusoidal(λ, φ)  {
+    return [λ * Math.cos(φ), φ];
+  }
+
+  var custom = d3.geo.projection(rawSinusoidal)
+    .scale(120)
+    .translate([width / 2, height / 2]);
+
+  var graticule = d3.geo.graticule();
+
+  var pathGenerator = d3.geo.path()
+    .projection(custom);
+
+  var div = d3.select('#map-container');
+
+  d3.json('countries.topojson', function(error, data) {
+
+    if (error) { throw error; }
+
+    var features = topojson.feature(data, data.objects.countries);
+
+    var svg = div.selectAll('svg.map').data([data]);
+
+    svg.enter().append('svg')
+      .classed('map', true);
+
+    svg
+      .attr('width',  width)
+      .attr('height', height);
+
+    svg.exit().remove();
+
+    var lines = svg.selectAll('path.graticule').data([graticule()]);
+
+    lines.enter().append('path')
+      .classed('graticule', true);
+
+    lines
+      .attr('d', pathGenerator);
+
+    // Path Element
+    var path = svg.selectAll('path.countries').data([features]);
+
+    path.enter().append('path')
+      .classed('countries', true);
+
+    path
+      .attr('d', pathGenerator);
+
+    path.exit().remove();
+
+  });
+  </script>
+
+</body>
+</html>

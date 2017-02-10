@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Doctor Who Earth-Based Time Travel Adventures</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		
+		<style type="text/css">
+			
+			body {
+                background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+            }
+
+            h1 {
+				font-size: 20x;
+				margin: 10px 0 0 0;
+             
+            }
+            h2 {
+                font-size: 18px;
+                margin: 10px 0 0 0;
+			}
+            
+            h3 {
+                font-size: 16px;
+                margin: 10px 0 0 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: #E0DED8;
+			}
+                                              
+            rect:hover {
+                fill: #A5D867;
+                transition: fill 0.5s;
+            }
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+            
+		</style>
+			
+	</head>
+	
+	
+	
+	<body>
+        
+        <h1>Doctor Who Earth-Based Time Travel Adventures</h1>       
+                
+        <h2>(DW1) Hartnell through (DW11) Smith</h2>
+
+		<h3>Time Jumps between 100 and 1000 years - By Episode. Adapted from: <a href="http://www.theguardian.com/news/datablog/2010/aug/20/doctor-who-time-travel-information-is-beautiful">Guardian Data Blog</a>, 2010</h3>
+		
+		<p>The premise of Doctor Who is that he is a Time Lord, capable of ridiculously epic travels throughout time and space - even if it is billions of years into the past or future and/or numerous time jumps in a single episode / story arc. </p>
+		<p></p>
+		<p>This dataset represents a fraction of his Earth-based Time Travel. The Time Jumps are the Sum of DateTo and DateFrom per the episode Date references themselves as scripted) ... the glory of Science Fiction!</p>
+		<p></p>
+					
+								
+		<script type="text/javascript">	
+            
+            
+            //Create the SVG
+        
+            
+            var w = 500;
+			var h = 300;
+			var padding = [ 10, 20, 50, 160 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+            
+            
+//Load in contents of CSV file 
+
+			d3.csv("DW EARTH Time Journeys_000s_LE.csv", function(data) {
+                
+                //Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+					console.log(data);
+                                           
+                        
+                //Sort the data
+                        
+            data.sort(function(a, b) {
+					return d3.descending(+a.TimeJumpYrs, +b.TimeJumpYrs);
+				});
+                        
+                        
+                    //If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+                        
+                      
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.TimeJumpYrs;
+				}) ]);
+
+                        
+				heightScale.domain(data.map(function(d) { return d.EpTitle; } ));
+                        
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+                        
+
+                rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.EpTitle);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.TimeJumpYrs);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#AC98DB")
+					.append("title")
+					.text(function(d) {
+						return d.DWactor + "'s Time Jump in Years as The Doctor is " + d.TimeJumpYrs;
+					});
+
+                        
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.EpTitle);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.TimeJumpYrs);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#AC98DB")
+					.append("title")
+					.text(function(d) {
+						return d.DWactor + "'s Time Jump in Years as The Doctor is " + d.TimeJumpYrs;
+					});
+
+                        
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.EpTitle);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.TimeJumpYrs);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#AC98DB")
+					.append("title")
+					.text(function(d) {
+						return d.DWactor + "'s Time Jump in Years as The Doctor is " + d.TimeJumpYrs;
+					});
+
+                        
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis)
+                    // Add "Years" unit of measure text to x-axis
+                    .append("text")
+				    .attr("x", 125)
+                    .attr("dy", +30)
+                    .text("Time Jump - Years");
+
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+
+                               
+			});
+
+
+
+
+        </script>
+           
+            
+  	</body>
+</html>

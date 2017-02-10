@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Fog of War with Hexbin</title>
+<style>
+
+</style>
+</head>
+<body>
+<svg width="500" height="500" />
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="d3.hexbin.js" charset="utf-8" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+    vertices = [[303,348],[354,364],[261,285],[368,403],[315,330],[435,120],[121,275],[98,257],[299,474],[388,369],[216,256],[309,286],[38,287],[131,132],[230,241],[260,334],[189,187],[247,192],[229,219],[224,473],[180,211],[101,157],[198,235],[137,221],[139,228],[130,219],[294,251],[110,189],[201,277],[145,251],[176,261],[170,263],[180,259],[178,264],[83,416],[365,185],[313,196],[198,333],[255,227],[287,171],[333,318],[155,453],[120,242],[82,211],[76,263],[98,234],[142,190],[346,151],[466,220],[250,25],[467,302]];
+
+    hexbin = d3.hexbin()
+      .size([500,500])
+      .radius(25)
+      .x(function (d) {return d.x})
+      .y(function (d) {return d.y})
+
+    fullpoints = [];
+
+    vertices.forEach(function (d) {
+      fullpoints.push({x: d[0], y: d[1], type: "data"})
+    })
+
+    d3.range(20).forEach(function (d) {
+      d3.range(20).forEach(function (p) {
+        fullpoints.push({x: d * 25, y: p * 25, type: "hex"})
+      })
+    })
+
+    hexdata = hexbin(fullpoints);
+
+    console.log(hexdata)
+
+    d3.select("svg").selectAll("circle")
+      .data(fullpoints.filter(function (d) {return d.type === "data"}))
+      .enter()
+      .append("circle")
+      .attr("cx", function (d) {return d.x})
+      .attr("cy", function (d) {return d.y})
+      .style("fill", "#fff3b1")
+      .style("stroke-width", "2px")
+      .style("stroke", "#766400")
+      .attr("r", 3);
+
+    d3.select("svg").selectAll("path")
+      .data(hexdata)
+      .enter()
+      .append("path")
+      .attr("d", function (d) {return hexbin.hexagon(26); })
+      .attr("transform", function(d) { console.log(d); return "translate(" + d.x + "," + d.y + ")"; })
+      .style("fill", "#001276")
+      .style("stroke", "#001276")
+      .style("stroke-width", "10px")
+      .style("stroke-opacity", 0.5)
+      .on("click", defog)
+
+    function defog(d) {
+      d3.selectAll("path")
+        .filter(function (p) {
+          return Math.abs(p.x - d.x) < 65 && Math.abs(p.y - d.y) < 65 && d.filter(function (d) {return d.type === "data"}).length === 0 && p.filter(function (p) {return p.type === "data"}).length === 0;
+        })
+        .transition()
+        .duration(1000)
+        .style("opacity", 0);
+
+      d3.select(this)
+        .transition()
+        .duration(500)
+        .style("fill", "#fff3b1")
+        .style("opacity", 0.5)
+        .transition()
+        .duration(1000)
+        .style("opacity", 0);
+
+    }
+
+    </script>
+</body>
+</html>

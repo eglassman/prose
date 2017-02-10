@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+</head>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<body>
+  <svg width=1000 height=500 style="background-color:orange">
+    
+    <rect x=180	 y=86 
+          width=511 height=100 
+          fill="#00a33b" 
+          stroke="#004c13" stroke-width=12 
+          stroke-opacity=0.528
+          stroke-dasharray="41 23 12 12"
+          stroke-dashoffset=530
+          transform="translate(17)rotate(10)">
+    </rect>
+    
+   
+    
+    <circle cx=284 cy=86 r=25 fill='purple'>    
+    </circle>
+  </svg>
+  
+  <script>
+    var svg = d3.select('svg');
+		var circle = svg.append('circle')
+    	.attr({
+    		cx: 65,
+      	cy: 63,
+      	r:55,
+    	})
+    	.style({
+    		fill: "#336699"
+    	});
+    
+    function breathe(){
+      circle.transition().duration(1200).attr({ 
+      	transform: 'scale(' + Math.random() + ')'
+      }).each('end', breathe);
+    }
+    breathe();
+    
+    console.log("you are now rocking with d3", d3);
+  </script>
+</body>
+
+

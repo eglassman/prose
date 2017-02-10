@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+.grid-background {
+  fill: #bfbfbf;
+}
+
+.grid line {
+  stroke: #000000;
+}
+
+.grid .minor line {
+  stroke-opacity: .5;
+}
+
+.grid text {
+  display: none;
+}
+
+.axis line {
+  stroke: #000000;
+}
+
+.axis path,
+.grid path {
+  display: none;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var margin = {top: 200, right: 10, bottom: 200, left: 10},
+    width = 1000 - margin.right - margin.left, //length of the ruler
+    height = 500 - margin.top - margin.bottom; //height of the ruler
+
+  
+var x = d3.scale.linear()
+    .domain([0, 10]) //changes scale of axis
+    .range([0, width]); //where first tick mark starts a
+  
+var xnew = d3.scale.linear()
+    .domain([0,10])
+    .range([50, width + 50]);
+  
+var y = d3.scale.linear()
+    .range([0, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); //placement of ruler
+
+svg.append("rect") //creates a rectangle
+    .attr("class", "grid-background")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("class", "grid")
+    .attr("transform", "translate(0," + height + ")") //transforms where tick marks start
+    .call(d3.svg.axis().scale(x).ticks(20).tickSize(-height)) 
+    .call(d3.svg.axis().scale(x).ticks(100).tickSize(-12)) //number and height of white ticks
+    .call(d3.svg.axis().scale(x).ticks(100).tickSize(-12))
+  .selectAll(".tick")
+    .data(x.ticks(10), function(d) { return d; })
+  .exit()
+    .classed("minor", true);
+
+svg.append("g")
+    .attr("class", "grid")
+    .attr("transform", "translate(0," +  + ")") //transforms where tick marks start
+    .call(d3.svg.axis().scale(xnew).ticks(10).tickSize(12))  
+  
+svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + height + ")") //moves axis labels on x and y axis
+    .call(d3.svg.axis().scale(x).ticks(10).tickFormat('')); //divides axis
+
+</script>

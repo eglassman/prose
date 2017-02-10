@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sorting Elements</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #ddddff;
+			}
+
+				h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: orange;
+			}
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+	<h1><strong>World Population in 1950</strong></h1>
+	<p></p>
+	<p>World Population Prospects 1950-2100. Source: <a href="http://esa.un.org/Wpp/unpp/panel_population.htm">United Nations, Department of Economic and Social Affairs, Population Division</a>, 2011</p>
+
+		<script type="text/javascript">	
+
+		var w = 1000;
+			var h = 600;
+			var padding = [ 20, 20, 20, 100 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+	
+	        var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("worldpopulationbycountry.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a["1950"], +b["1950"]);
+
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d["1950"];
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.Country; } ));
+
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.Country);
+					})
+					.attr("width", function(d) {
+						return widthScale(d["1950"]);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "steelblue")
+					.append("title")
+					.text(function(d) {
+						return d.Country + "'s population (1000s) in 1950 was " + d["1950"];
+					});
+
+					svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+					svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 5) + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+
+	</body>
+</html>

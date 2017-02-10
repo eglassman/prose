@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Line Chart Examples</title>
+
+    <style type="text/css">
+    path.line {
+        fill: none;
+        stroke-width: 2px;
+    }
+    path.domain {
+        fill: none;
+        stroke: black;
+        stroke-width: 1px;
+        shape-rendering: crispEdges;
+    }
+    text {
+        font-family: arial;
+    }
+    </style>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+
+    <div id="chart" style="width:760; float:left"></div>
+    <div id="legend" style="width:200; float:left"></div>
+
+</body>
+<script type="text/javascript">
+var margin = {
+    top: 20,
+    right: 30,
+    bottom: 30,
+    left: 60
+},
+    width = 760 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
+
+var data;
+
+var colours = d3.scale.ordinal()
+                .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"]);
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .tickFormat(d3.format(".0f"))
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .tickFormat(d3.format(",.0f"))
+    .orient("left");
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var line = d3.svg.line()
+    .interpolate("linear")
+    .x(function(d) {
+        return x(+d.date);
+    })
+    .y(function(d) {
+        return y(+d.values);
+    });
+
+d3.tsv('data.tsv', function(error, dataset) {
+
+    var names = d3.keys(dataset[0]).filter(function(key) {
+        return key !== "Date";
+    });
+
+    var series = names.map(function(name) {
+        return {
+            name: name,
+            values: dataset.map(function(d) {
+                return {
+                    date: d.Date,
+                    values: +d[name]
+                };
+            })
+        };
+    });
+
+    data = series;
+
+    var all = names.concat(["all"])
+
+    colours.domain(all);
+
+    d3.select("#legend").selectAll("p")
+        .data(all).enter()
+        .append("p")
+        .style("color", function(d, i) {
+            return colours(d);
+        })
+        .text(function(d, i) {
+            return d;
+        })
+        .on("click", change);
+
+    var maxNew = dataMax(data);
+
+    x.domain(d3.extent(dataset, function(d, i) {
+        return +d.Date;
+    }));
+
+    y.domain([0, maxNew]);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    change("all");
+
+    function change(x) {
+
+        var dataFiltered = seriesFilter(x);
+
+        var lines = svg.selectAll("path.line")
+            .data(dataFiltered);
+
+        lines.enter()
+            .append("path")
+            .attr("class", "line")
+            .attr("d", function(d) {
+                return line(d.values);
+            })
+            .attr("id", function (d) {
+                return d.name;
+            })
+            .attr("stroke", function(d, i) { 
+                return colours(d.name);
+            });
+
+        lines.transition()
+            .duration(2000)
+            .attr("d", function(d) {
+                return line(d.values);
+            })
+            .attr("stroke", function(d, i) { 
+                return colours(d.name);
+            });
+
+        lines.exit()
+            .transition()
+            .duration(2000)
+            .remove();
+    }
+
+    function dataMax(x) {
+        var maxer;
+        d3.max(x, function(d) {
+            var temp = [];
+            d.values.forEach(function(e, j) {
+                temp[j] = e.values;
+            })
+            maxer = Math.max.apply(null, temp);
+        });
+        return maxer;
+    }
+
+    function seriesFilter(x) {
+        var ans;
+        if (x === "all") {
+            ans = series;
+        } else {
+            ans = series.filter(function(d) {
+                return d.name !== x;
+            });
+        }
+
+        return ans
+    }
+})
+</script>
+
+</html>

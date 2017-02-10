@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,600);
+      body {font-family: "Source Code Pro", Consolas, monaco, monospace; line-height: 160%; font-size: 14px;  margin: 0; }
+      #tooltip {
+        color: #454545;
+        opacity: .9;
+        background: #eee;
+        padding: 5px;
+        border: none;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 10;
+        visibility: hidden;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      #circle circle {
+        fill: none;
+        pointer-events: all;
+      }
+      path.group {
+        fill-opacity: .8;
+      }
+      path.chord {
+        fill-opacity: .8;
+        stroke: #000;
+        stroke-width: .25px;
+      }
+      #circle:hover path.fade {
+        display: none;
+      }
+      aside {padding: 20px;}
+      h1, h3 {font-size: 14px; font-weight: normal; padding-left: 40px;}
+    </style>
+  </head>
+  <body>
+    <section id="diagram"></section>
+    <div id="tooltip"></div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+    <script src="mapper.js"></script>
+    <script>
+      //*******************************************************************
+      //  CREATE MATRIX AND MAP
+      //*******************************************************************
+      d3.csv('gurus.csv', function (error, data) {
+        var mpr = chordMpr(data);
+
+        mpr
+          .addValuesToMap('who')
+          .setFilter(function (row, a, b) {
+            return (row.who === a.name && row.overlap === b.name)
+          })
+          .setAccessor(function (recs, a, b) {
+            if (!recs[0]) return 0;
+            return +recs[0].years;
+          });
+        drawChords(mpr.getMatrix(), mpr.getMap());
+      });
+      //*******************************************************************
+      //  DRAW THE CHORD DIAGRAM
+      //*******************************************************************
+      function drawChords (matrix, mmap) {
+        var w = 980, h = 800, r1 = h / 2, r0 = r1 - 100;
+
+        var fill = d3.scale.category10();
+
+        var chord = d3.layout.chord()
+            .padding(.02)
+            .sortSubgroups(d3.descending)
+            .sortChords(d3.descending);
+
+        var arc = d3.svg.arc()
+            .innerRadius(r0)
+            .outerRadius(r0 + 20);
+
+        var svg = d3.select("#diagram").append("svg")
+            .attr("width", w)
+            .attr("height", h)
+          .append("svg:g")
+            .attr("id", "circle")
+            .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+
+            svg.append("circle")
+                .attr("r", r0 + 20);
+
+        var rdr = chordRdr(matrix, mmap);
+        chord.matrix(matrix);
+
+        var g = svg.selectAll("g.group")
+            .data(chord.groups())
+          .enter().append("svg:g")
+            .attr("class", "group")
+            .on("mouseover", mouseover)
+            .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+
+        g.append("svg:path")
+            .style("stroke", "none")
+            .style("fill", function(d) { return fill(d.index); })
+            .attr("d", arc);
+
+        g.append("svg:text")
+            .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
+            .attr("dy", ".35em")
+            .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+            .attr("transform", function(d) {
+              return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+                  + "translate(" + (r0 + 26) + ")"
+                  + (d.angle > Math.PI ? "rotate(180)" : "");
+            })
+            .text(function(d) { return rdr(d).gname; });
+
+          var chordPaths = svg.selectAll("path.chord")
+                .data(chord.chords())
+              .enter().append("svg:path")
+                .attr("class", "chord")
+                .style("stroke", function(d) { return d3.rgb(fill(d.target.index)).darker(); })
+                .style("fill", function(d) { return fill(d.target.index); })
+                .attr("d", d3.svg.chord().radius(r0))
+                .on("mouseover", function (d) {
+                  d3.select("#tooltip")
+                    .style("visibility", "visible")
+                    .html(chordTip(rdr(d)))
+                    .style("top", function () { return (d3.event.pageY - 100)+"px"})
+                    .style("left", function () { return (d3.event.pageX - 100)+"px";})
+                })
+                .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+
+          function chordTip (d) {
+            var p = d3.format(".0%"), q = d3.format("0d")
+            return "Chord info:<br/>"
+              + q(d.svalue) + " years overlap with " + d.sname + " and " + d.tname
+          }
+
+          function groupTip (d) {
+            var guru = d.gname, q = d3.format("0d");
+
+            switch (guru) {
+              case "g1": return "Guru Nanak"; //+ " lived for 70 years";
+                  break;
+              case "g2": return "Guru Angad"; // + " lived for 48 years";
+                  break;
+              case "g3": return "Guru Amar Das"; // + " lived for 95 years";
+                  break;
+              case "g4": return "Guru Ram Das"; // + " lived for 47 years";
+                  break;
+              case "g5": return "Guru Arjun Dev"; // + " lived for 43 years";
+                  break;
+              case "g6": return "Guru Har Gobind"; // + " lived for 49 years";
+                  break;
+              case "g7": return "Guru Har Rai"; // + " lived for 31 years";
+                  break;
+              case "g8": return "Guru Har Krishan"; // + " lived for 8 years";
+                  break;
+              case "g9": return "Guru Tegh Bahadar"; // + " lived for 54 years";
+                  break;
+              case "g10": return "Guru Gobind Singh"; // + " lived for 42 years";
+                  break;
+              default : return d.gname;
+
+            }
+          }
+
+          function mouseover(d, i) {
+            d3.select("#tooltip")
+              .style("visibility", "visible")
+              .html(groupTip(rdr(d)))
+              .style("top", function () { return (d3.event.pageY - 80)+"px"})
+              .style("left", function () { return (d3.event.pageX - 130)+"px";})
+
+            chordPaths.classed("fade", function(p) {
+              return p.source.index != i
+                  && p.target.index != i;
+            });
+          }
+      }
+
+    </script>
+
+    <aside>
+      <h1><a href="http://en.wikipedia.org/wiki/Chord_diagram">Chord diagram</a> to explore the overlap in years between different <a href="http://en.wikipedia.org/wiki/Sikh_gurus">Sikh gurus</a> life spans.</h1>
+      <h3>Key:</h3>
+      <ul>
+        <li>g1: Guru Nanak</li>
+        <li>g2: Guru Angad</li>
+        <li>g3: Guru Amar Das</li>
+        <li>g4: Guru Ram Das</li>
+        <li>g5: Guru Arjun Dev</li>
+        <li>g6: Guru Har Gobind</li>
+        <li>g7: Guru Har Rai</li>
+        <li>g8: Guru Har Krishan</li>
+        <li>g9: Guru Tegh Bahadar</li>
+        <li>g10: Guru Gobind Singh</li>
+      </ul>
+    </aside>
+    
+  </body>
+</html>

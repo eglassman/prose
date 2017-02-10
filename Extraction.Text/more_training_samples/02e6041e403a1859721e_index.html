@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg  { width:100%; height: 100% }
+  </style>
+</head>
+
+<body>
+  <script>
+    function myFunction(){
+      var sq2=Math.sqrt(2), pi=Math.PI;
+
+      // actually want to do this for many i,j combinations at the same time, for which D3 should be particularly handy 
+      var first=10, second=30; // 0<n<40,i<>j
+
+      // defining the 4 control points to start with 
+      var P0={start:{x:first-0.5,  					y:0}};
+      var P1={start:{x:P0.start.x, 			y:second-1}};
+      var P2={start:{x:P1.start.x-0.5, 	y:P1.start.y+0.5}};
+      var P3={start:{x:0, 							y:P2.start.y}};
+
+      // calculating different parameters to describe the same path
+      function av(a,b){
+        return {x:(a.x+b.x)/2,
+                y:(a.y+b.y)/2};}
+      var Pmid={start:av(P1.start,P2.start)};
+      Pmid.end={x: sq2/4*(first+second-1)};
+      Pmid.end.y = Pmid.end.x;
+      var r={start:0.5,
+             end : Math.abs(first-second)/sq2};
+      var angle={start: -pi/4};
+          angle.end   = angle.start+pi/2*Math.sign(second-first);
+      var L0={start:(P1.start.y-P0.start.y),
+              end:0},
+          L1={start:(P2.start.x-P3.start.x),
+              end:0};
+      return function(d, i, a) {
+        return function(t){
+          function interpolate_scalar(ip,t){
+            ip.move =  ip.start * (1-t)+ip.end * t;
+            return ip;}
+          function interpolate(ip,t){
+            ip.move={x:ip.start.x*(1-t)+ip.end.x*t,
+                     y:ip.start.y*(1-t)+ip.end.y*t};
+            return ip;}
+          Pmid=interpolate(Pmid,t); // is straight, should be cycloid 
+          angle=interpolate_scalar(angle,t);
+          L0=interpolate_scalar(L0,t); // shrinks now, should link curves  
+          L1=interpolate_scalar(L1,t); // shrinks now, should link curves
+          r=interpolate_scalar(r,t); // is straight, should be cycloid   
+          // just some trigonometry 
+          var c=Math.cos(angle.move), s=Math.sin(angle.move);
+          var Pc={move:{x:Pmid.move.x-r.move/sq2*c,
+                        y:Pmid.move.y+r.move/sq2*s}};
+          var ang=angle.move-pi/4;
+          var sa=Math.sin(ang), ca=Math.cos(ang);
+          var rs=r.move*sa, rc=r.move*ca;
+          P1.move={x:Pc.move.x-rs,
+                   y:Pc.move.y-rc};
+          P2.move={x:Pc.move.x+rc,
+                   y:Pc.move.y-rs};
+          P0.move={x:P1.move.x-L0.move*ca,
+                   y:P1.move.y+L0.move*sa};
+          var P0a={move:{x:(first-0.5)*Math.cos(t*pi/4), y:(first-0.5)*Math.sin(pi*t/4)}};
+          P3.move={x:P2.move.x+L1.move*sa,
+                   y:P2.move.y+L1.move*ca};
+          var P3a={move:{x:(second-0.5)*Math.sin(t*pi/4), y:(second-0.5)*Math.cos(t*pi/4)}};
+          return ("M"+P0a.move.x+","+P0a.move.y+
+                  " L"+P1.move.x+","+P1.move.y+
+                  " A"+r.move+","+r.move+" 0 0,1 "+P2.move.x+","+P2.move.y+
+                  " L"+P3a.move.x+","+P3a.move.y);
+        };
+      };
+    }
+
+    
+    // generating some SVG      
+    var svg = d3.select("body").append("svg");
+    svg.append("rect")
+      .attr({x: 0, y: 0, width: 400, height: 400})
+      .style({ fill: "#a72d1a"});
+    var g=svg.append("g").attr("transform","scale(10)");
+    // some reference lines  
+    g.append("line")
+    	.attr("x2",40)
+    	.attr("y2",40)
+    	.style({stroke: "green",fill:"none", "stroke-width":0.2});
+    g.append("circle")
+    	.attr('r',9.5)
+    	.style({stroke: "green",fill:"none", "stroke-width":0.2});
+    g.append("circle")
+    	.attr('r',29.5)
+    	.style({stroke: "green",fill:"none", "stroke-width":0.2});
+    // the morphing line
+    g.append("path")
+    	.style({ stroke: "yellow",fill:"none", "stroke-width":0.2})    
+    	.transition()
+    	.duration(5000)
+    	.attrTween("d",myFunction());
+    // also see http://bl.ocks.org/cloudshapes/5662135
+  </script>
+</body>

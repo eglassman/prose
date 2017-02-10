@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>OECD Total Government Spend By Country</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #ecf0f1;
+				text-align: center;
+				font-family: helvetica, calibri, arial, sans-serif;
+			}
+			h1 {
+				font-size: 45px;
+				}
+			h2 {
+				font-size: 30px;
+				}
+			
+			svg {
+				background-color: none;
+				text-align: center;
+			}
+			rect {
+				fill: #2c3e50;
+				border-color: #95a5a6;
+				border-width: 2px;
+				}
+
+			rect:hover {
+				fill: #1abc9c;
+				}
+			
+			.vert {
+				-ms-transform: rotate(-90deg); /* IE 9 */
+				-webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+				transform: rotate(-90deg);
+			}
+				
+				
+		</style>
+	</head>
+	<body>
+
+		<script type="text/javascript">		
+
+			d3.select("body")
+				.append("h1")
+				.text("OECD Total Government Spend (USD) on Higher Education")
+				.append("h2")
+				.text("by Country");
+				
+			var h = 700;
+			var w = 800;
+			var barPadding = 2;
+			
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h)
+						;
+
+d3.csv("index.csv", function(data) {
+			data.sort(function(a, b) {
+					//return d3.descending(a.govExpend, b.govExpend);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					return d3.descending(+a.govExpend, +b.govExpend);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});	
+
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", function (d, i) {
+							return i * (w / data.length);
+							})
+					.attr("y", function (d) {
+							return h - (d.govExpend / 200) - 100;
+							})
+					.attr("height", function (d) {
+							return d.govExpend / 200;
+						})
+					.attr("width",w / data.length - barPadding)
+					.append("title")
+					.text(function(d) {
+						return d.country + "'s total gov expend is " + d.govExpend;
+					});
+					
+				svg.selectAll("text")
+					.data(data)
+					.enter()
+					.append("text")
+					.text(function(d) {
+						return d.country;
+						})
+					.attr("text-anchor", "end")
+					.attr("x", -610)
+					.attr("class", "vert")
+					.attr("y", function(d, i) {
+						return i * (w / data.length) + 15;
+						})
+					.attr("font-family", "sans-serif")
+					.attr("font-size", "11px")
+					.attr("fill", "#c0392b")
+					.attr("vertical-align", "middle")
+					;				
+								
+					
+			});
+
+
+		</script>
+
+	</body>
+</html>

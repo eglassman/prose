@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.arc text,
+.wedge text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path,
+.wedge path {
+  stroke: #fff;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 960,
+    height = 500,
+    radius = Math.min(width, height) / 2;
+
+var color = d3.scale.ordinal()
+    .range(["#fef0d9", "#fdcc8a", "#fc8d59", "#bdbdbd"])
+		.domain(["New", "Open", "Reopened", "Closed"]);
+  
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(radius - 70);
+
+var wedge = d3.svg.arc()
+    .outerRadius(radius - 70)
+    .innerRadius(0);
+
+var labelWedge = d3.svg.arc()
+    .outerRadius(radius - 110)
+    .innerRadius(radius - 110);
+  
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.count; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+d3.csv("data.csv", type, function(error, data) {
+  if (error) throw error;
+	
+  console.log("data", data);
+  data.sort(function(a, b) {
+    order = {"New":1, "Open":2, "Reopened": 3, "Closed": 4}
+    
+  	return d3.ascending(order[a.current_status], order[b.current_status]) || 
+      		 d3.ascending(order[a.prior_status], order[b.prior_status]);
+	});
+  
+  nested = d3.nest()
+    .key(function(d){ return d.current_status; })
+  	.rollup(function(d){ return d3.sum(d, function(d){ return d.count; })})
+  	.entries(data);
+  
+  nested.forEach(function(d) {
+   	d.current_status = d.key;
+   	d.count = d.values;
+    delete d["key"];
+    delete d["values"];
+  });
+  
+  console.log("nested", nested);
+  
+  var g = svg.selectAll(".arc")
+      .data(pie(nested))
+    .enter().append("g")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.current_status); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d.data.current_status; });
+  
+ 	var g = svg.selectAll(".wedge")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "wedge");
+
+  g.append("path")
+      .attr("d", wedge)
+      .style("fill", function(d) { return color(d.data.prior_status); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + labelWedge.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d.data.prior_status; });
+  
+});
+
+function type(d) {
+  d.count = +d.count;
+  return d;
+}
+
+</script>

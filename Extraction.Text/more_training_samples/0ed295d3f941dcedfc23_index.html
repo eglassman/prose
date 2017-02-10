@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Setting Attribute Values from Data</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+
+			svg {
+				background-color: white;
+				font-family: sans-serif;
+			}
+
+			h1 {font-size: 24px;
+				margin: 0;
+
+			}
+
+			p {font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg{
+				background-color: white;
+			}
+
+			circle:hover { fill:orange;
+			}
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering; crispEdges;
+			}
+
+				.axis text {
+					font-family: sans-serif;
+					font-size: 10px;
+				}
+
+
+		</style>
+	</head>
+	<body>
+
+		<h1> WIC Participants by State </h>
+		<p> The Special Supplemental Nutrition Program for Women, Infants, and Children (WIC) provides Federal grants to States for supplemental foods, health care referrals, and nutrition education for low-income pregnant, breastfeeding, and non-breastfeeding postpartum women, and to infants and children up to age five who are found to be at nutritional risk.
+
+
+		</p>
+
+
+		<script type="text/javascript">		
+
+			var w = 700; //this creates a dymanic chart to re-size if you need to quickly. This is referenced below
+			var h = 900;
+			var padding = [20, 20, 30, 100] ;//top, right, bottom, left
+
+			var xScale = d3.scale.linear()
+									.range([ padding[3], w - padding[1] - padding[3]]);
+
+			var yScale = d3.scale.linear()
+							.range([ padding[0], h - padding[2] ] );
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient ("bottom")
+							.ticks(10);
+
+			var yAxis = d3.svg.axis()
+						.scale(yScale)
+						.orient("left")
+						.ticks(20);
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)//added the variable from above "w" and "h" to keep chart dynamic 
+						.attr("height", h);
+
+
+
+			d3.csv("School Lunch Programs By State_2009-2012 CSV1.csv", function(data) {
+
+		    function getYValue(d) {
+		    	//remove comma
+		    	var value = d.NationalSchoolLunchProgramparticipantsFY2009
+		    	value = value.replace(/,/g, '')
+		    	return parseInt(value)
+		    }
+
+
+			xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.WICParticipants;
+					}), 
+					d3.max(data, function(d) {
+						return +d.WICParticipants;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return getYValue(d);
+					}),
+					d3.min(data, function(d) {
+						return getYValue(d);
+					})
+				]);
+
+				var circles = svg.selectAll("circle")
+							.data(data)
+							.enter()
+							.append("circle");
+
+				circles.attr("cx", function(d){
+					return xScale(d.WICParticipants);
+				})
+					.attr("cy", function(d) {
+						var v = +d.NationalSchoolLunchProgramparticipantsFY2009
+						//this shows the problem
+						console.log(v, yScale(v), getYValue(d), yScale(getYValue(d))) 
+						return yScale(getYValue(d));
+					})
+					.attr("r", .1)
+					.attr("fill","lightseagreen")
+					.append("title")
+					.text(function(d) {
+						return d.State + " has " + d.WICParticipants + " WIC Participants and " + d.NationalSchoolLunchProgramparticipantsFY2009 + " School Lunch Participants "
+					});
+
+					circles.sort(function(a, b) {
+						return d3.ascending(+a.WICParticipants, +b.WICParticipants);
+					})
+					.transition()
+					.delay(function(d, i) {
+						return i;
+					})
+					.duration(2000)
+					.attr("r", 4);
+					
+
+
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

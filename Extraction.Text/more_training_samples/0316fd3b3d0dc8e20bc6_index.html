@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Line Chart</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<style>
+ .g_main {
+    cursor:pointer;
+    pointer-events: all;
+  }
+ .g_maindisabled {
+    cursor:none;
+    pointer-events: none;
+ }
+.frame {
+  fill: none;
+  stroke: #000;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+#params  {
+  font:35px "Helvetica Neue";
+}
+.axis line,
+.axis circle {
+  fill: none;
+  stroke: #777;
+  stroke-dasharray: 1,4;
+}
+
+.axis :last-of-type circle {
+  stroke: #333;
+  stroke-dasharray: none;
+}
+
+.line {
+  fill: none;
+  stroke: red;
+  stroke-width: 1.5px;
+}
+input {
+  vertical-align: middle;
+  font:20px "Helvetica Neue";
+}
+#sub {
+    font:35px "Helvetica Neue";
+}
+</style>
+<body>
+<div id="info" style="position:absolute;left:690px">
+  <span style="font-size:25px">f(&#x3b1;) = (1+ecos(n&#x3b1;))</span>
+</div>
+<div id="paramsAll" style="position:absolute;left:690px;top:50px">
+  <form name="mainA" onsubmit="return updateE()" action="" method="get">
+  E :  <input  id="_e" type="number" min="0" max="20"  value="1" step="0.1">
+  <br>
+  <input type="submit" id="sub" value="Redraw">
+  </form>
+</div>
+<div id="paramsOne" style="position:absolute;left:690px;top:530px">
+  <form name="mainB" onsubmit="return update()" action="" method="get">
+  N :  <input id="na" disabled size="1" type="number" min="0" max="10" value="5" step="1"> /
+  <input id="nb" disabled size="1" type="number" min="1" max="10" value="2" step="1">
+  <br>
+  E :  <input  disabled id="e" type="number" min="0" max="5"  value="1" step="0.1">
+  <br>
+  <p id="equation"  style="font-size:25px"></p>
+  </form>
+</div>
+
+
+
+<script type="text/javascript">
+// note, chart is translated from margins
+// axes are not part of the graph
+// axes are rendered within the margin area
+// clipPath is used
+
+var  nValues =  [ 1,2,3,  4,  5,6,
+                  1/2,3/2,5/2,7/2,9/2,11/2,
+                  1/3,2/3,4/3,5/3,7/3,8/3,
+                  1/4,3/4,5/4,7/4,9/4,11/4,
+                  1/5,2/5,3/5,4/5,6/5,7/5
+                ];
+
+
+var uValues = [1,2,3,4,5,6, 1 ,3, 5 ,7 ,8, 11, 1,2,4,5,7,8,1,3,5,7,9,11,1,2,3,4,6,7];
+var dValues = [1,1,1,1,1,1, 2, 2, 2 ,2 ,2,2  , 3,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5]
+
+
+var e = 1;
+
+var _charts = [];
+var width = 960;
+var height = 530;
+var padding = 15;
+var svg = d3.select("body").append("svg").attr("width", width).attr("height",height);
+
+//width 500/2
+for (var i=0;i<nValues.length;i++) {
+  var options = {
+    svg: svg,
+    width:500,
+    height:500,
+    _x: (i%6)*100,
+    _y: Math.floor(i/6)*100,
+    n : nValues[i]
+  }
+  _charts.push(polarChart(options));
+}
+
+//polarChart = polarChart(options);
+
+
+
+
+function polarChart(options) {
+  // scaleString
+  // transformString
+
+  var _chart = {},
+    _x = options._x,
+    _y = options._y,
+    _svg  = options.svg,
+    width = options.width || 960,
+    height = options.height || 500,
+    _gridx = options.gridX || 0,
+    _gridy = options.gridY || 0,
+    _n = options.n || 5/2,
+    _factor = options.factor || 1,
+    _data,
+    _zoomed =false,
+    _radius = Math.min(width,height)/2,
+    _r,_line;
+    _scale = 0.2
+
+   _gridx = _x + _radius*_scale;
+   _gridy = _y + _radius*_scale;
+   console.log(_gridx,_x);
+
+  _chart.render = function() {
+
+    _data= computeDatas();
+
+    var main =_svg.append("g")
+    .attr("class","g_main")
+    .attr("transform", "translate(" +_gridx+","+_gridy+")scale(0.2)")
+    main.append("rect").attr("x",-_radius).attr("y",-_radius).attr("width",options.width).attr("height",options.height)
+    .style('visibility', 'hidden').attr('class', 'click-capture');
+    renderAxes(main);
+    line = d3.svg.line.radial()
+    .radius(function(d){; return (_r(d[1])); })  // will change between -1 and 1
+    .angle(function(d) { ;return d[0];});
+    _chart.main = main;
+    renderBody(main);
+
+
+  }
+  _chart.zoomed = function(value) {
+    if (!arguments.length) return zoomed;
+    zoomed = value;;
+    return _chart;
+  }
+  _chart.n = function(value) {
+    if (!arguments.length) return _n;
+    _n = value;;
+    return _chart;
+  }
+  _chart.e = function(value) {
+    if (!arguments.length) return _factor;
+    _factor = value;
+    console.log("switched factor",value,_factor);
+    return _chart;
+  }
+  _chart.update = function(){
+    console.log("*****",_factor);
+    data = computeDatas();
+    updateBody(this.main);
+  }
+  function computeDatas() {
+    return data = d3.range(-16*Math.PI, 16*Math.PI, .01).map(function(t) {
+      return [t,  (1+_factor*Math.cos((_n)*t))/(1+_factor)];
+    });
+  }
+  function renderAxes(main) {
+    var axesG = main.append('g').attr("class","axes");
+
+
+    renderRadiusAxes(axesG);
+    renderDegreeAxes(axesG);
+  }
+  function renderRadiusAxes(axesG) {
+    _r = d3.scale.linear()
+    .domain([0, 1])
+    .range([0, _radius]);
+
+    var ra = axesG.append("g")
+      .attr("class", "r axis")
+      .selectAll("g")
+      .data(_r.ticks(10).slice(0))
+      .enter().append("g");
+
+    ra.append("circle")
+        .attr("r", function(d,i){console.log("=>",d,i,_r(d));return _r(d)});
+
+    ra.append("text")
+        .attr("y", function(d) { return -_r(d) - 4; })
+        .attr("transform", "rotate(50)")
+        .style("text-anchor", "middle")
+        .text(function(d) { return d; });
+  }
+  function renderDegreeAxes(axesG) {
+    var ga = axesG.append("g")
+      .attr("class", "a axis")
+      .selectAll("g")
+        .data(d3.range(0, 360, 15))
+      .enter().append("g")
+        .attr("transform", function(d) { return "rotate(" + (d-90) + ")"; });
+
+    ga.append("line")
+        .attr("x2", _radius);
+
+    ga.append("text")
+        .attr("x", _radius + 6)
+        .attr("dy", ".35em")
+        .style("text-anchor", function(d) { return d < 270 && d > 90 ? "end" : null; })
+        .attr("transform", function(d) { return d < 270 && d > 90 ? "rotate(180 " + (_radius + 6) + ",0)" : null; })
+        .text(function(d) { return d + "°"; });
+  }
+
+  function updateBody(main) {
+    main.select("path").datum(data).transition().duration(3000).attr("d",line);
+  }
+  function renderBody(main) {
+    var path =
+     main.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("d", line);
+  }
+  function attachEventListener(_chart) {
+    console.log('attach listener');
+    _chart.main.on("click",function(d,i){
+      console.log('GO');
+      _chart.zoomed = !_chart.zoomed
+      if (_chart.zoomed) {
+          var div = d3.select("#paramsOne").transition(2000).style("top","950px");
+         _chart.main.transition().duration(2000).attr()
+            .attrTween("transform", function() {
+              var originalTransform = "translate(" +( padding+width / 2) + "," + (padding+ height / 2) + ") scale(1) rotate(360)"
+              console.log(originalTransform)
+              return d3.interpolateString(originalTransform, "translate(" +_gridx+","+_gridy+") scale(0.2) rotate(0)");
+          })
+          .each("end", function() {
+
+            for (var _i=0;_i<_charts.length;_i++) {
+              if (_charts[_i]==_chart) {
+
+              } else {
+               _charts[_i].main.classed("g_main",true);
+               _charts[_i].main.classed("g_maindisabled",false)
+               _charts[_i].main.transition(750).style("opacity",1);
+              }
+            }
+          });
+      } else {
+
+        for (var _i=0;_i<_charts.length;_i++) {
+          if (_charts[_i]==_chart) {
+            // update FORM INFO
+            var n = nValues[_i];
+            var u = uValues[_i];
+            var d = dValues[_i];
+            console.log(n,u,d,_i);
+            d3.select("#na").datum(u).attr("value",function(d){return d});
+            d3.select("#nb").datum(d).attr("value",function(d){return d});
+            d3.select("#e").datum(e).attr("value",function(d){return d});
+            // text is normal text
+            // html is true html (espaced entities and all the stuff)
+            d3.select("#equation").html("f(&#x3b1;) = ("+e+" * e * cos("+u+"/"+d+" * &#x3b1;)");
+
+            var div = d3.select("#paramsOne").transition(2000).ease("bounce").style("top","150px");
+
+
+
+            _chart.main.transition().duration(2000).attr()
+            .attrTween("transform", function() {
+              var originalTransform = "translate(" +_gridx+","+_gridy+") scale(0.2) rotate(0)";
+              console.log(originalTransform)
+              return d3.interpolateString(originalTransform, "translate(" + (padding+ width / 2) + "," + (padding+height / 2) + ") scale(1) rotate(360)");
+            });;
+          } else {
+            _charts[_i].main.classed("g_main",false);
+            _charts[_i].main.classed("g_maindisabled")
+            _charts[_i].main.transition(750).style("opacity",0);
+          }
+        }
+
+
+      }
+    })
+  }
+  _chart.render();
+  attachEventListener(_chart);
+  return _chart;
+}
+
+
+function updateE() {
+  console.log('START');
+  var newValue = parseFloat(document.getElementById("_e").value,10);
+  e = newValue;
+  for (var i=0;i<_charts.length;i++) {
+    _charts[i].e(newValue);
+    _charts[i].update();
+  }
+  return false;
+}
+
+
+</script>

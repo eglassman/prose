@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="http://code.shutterstock.com/rickshaw/src/css/graph.css">  
+  
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script src="http://code.shutterstock.com/rickshaw/rickshaw.js"></script>
+</head>
+<body>
+
+<div id="chart_container">
+  <div id="chart"></div>
+</div>
+
+<pre>
+DATA = http://code.shutterstock.com/rickshaw/examples/data/data.json
+  [
+	{
+		"color": "blue",
+		"name": "New York",
+		"data": [ { "x": 0, "y": 40 }, { "x": 1, "y": 49 }, { "x": 2, "y": 38 }, { "x": 3, "y": 30 }, { "x": 4, "y": 32 } ]
+	}, {
+		"name": "London",
+		"data": [ { "x": 0, "y": 19 }, { "x": 1, "y": 22 }, { "x": 2, "y": 29 }, { "x": 3, "y": 20 }, { "x": 4, "y": 14 } ]
+	}, {
+		"name": "Tokyo",
+		"data": [ { "x": 0, "y": 8 }, { "x": 1, "y": 12 }, { "x": 2, "y": 15 }, { "x": 3, "y": 11 }, { "x": 4, "y": 10 } ]
+	}
+]
+</pre>
+  
+<script>
+
+var ajaxGraph = new Rickshaw.Graph.Ajax( {
+
+	element: document.getElementById("chart"),
+	width: 400,
+	height: 300,
+	renderer: 'line',
+	dataURL: 'http://code.shutterstock.com/rickshaw/examples/data/data.json',
+	onData: function(d) { d[0].data[0].y = 80; return d },
+	series: [
+		{
+			name: 'New York',
+			color: '#ff0000',
+		}, {
+			name: 'London',
+			color: '#ff0000',
+		}, {
+			name: 'Tokyo',
+			color: '#00ff00'
+		}
+	]
+} );
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  background: #eee;
+  margin: auto;
+  position: relative;
+}
+
+text {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  fill: #444;
+}
+
+.hour line {
+  stroke: #888;
+}
+
+.hour.hand {
+  line-width: 3px;
+}
+
+.minute line {
+  stroke: #888;
+}
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+d3.timer(tick);
+
+function hands() {
+  var now = new Date();
+  var milliseconds = now.getMilliseconds();
+  var seconds = now.getSeconds() + milliseconds / 1000;
+  var minutes = now.getMinutes() + seconds / 60;
+  var hours = ((now.getHours() + 24) % 12 || 0) + minutes / 60;
+  return [
+    {field: "hours", color: "#444", length: 90, strokeWidth: 9, index: .555, spacing: 0.1, value: hours / 12},
+    {field: "minutes", color: "#444", length: 145, strokeWidth: 6, index: .597, spacing: 0.115, value: minutes / 60},
+    {field: "seconds", color: "#2ac", length: 160, strokeWidth: 3, index: .6348, spacing: 0.015, value: seconds / 60}
+  ];
+}
+
+var width = 960,
+    height = 500,
+    radius = 94;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+// minute hands
+var minutedomain = d3.range(60);
+var minuteangle = d3.scale.linear()
+  .domain([0,60])
+  .range([180,-180])
+
+var minutemarks = svg.selectAll(".minute.axis")
+    .data(minutedomain)
+  .enter().append("g")
+    .attr("class", "minute")
+    .attr("transform", function(d) { return "rotate(" + -minuteangle(d) + ")"; })
+
+minutemarks
+  .append("line")
+  .attr("stroke-linecap", "round")
+  .attr("x1", 155)
+  .attr("x2", 165)
+  .attr("y1", 0)
+  .attr("y2", 0);
+
+// hour hands
+var hourdomain = d3.range(12);
+var hourangle = d3.scale.linear()
+  .domain([0,12])
+  .range([180,-180])
+
+var hourmarks = svg.selectAll(".hour.axis")
+    .data(hourdomain)
+  .enter().append("g")
+    .attr("class", "hour")
+    .attr("transform", function(d) { return "rotate(" + -hourangle(d) + ")"; })
+
+hourmarks
+  .append("line")
+  .attr("stroke-linecap", "round")
+  .attr("stroke-width", 3)
+  .attr("x1", 150)
+  .attr("x2", 170)
+  .attr("y1", 0)
+  .attr("y2", 0);
+
+var field = svg.selectAll("g.field")
+    .data(hands)
+  .enter().append("g")
+  .attr("class", "field");
+
+field.append("line")
+  .attr("class", function(d) { return d.field + " hand"; })
+  .attr("stroke-width", function(d) { return d.strokeWidth; })
+  .attr("stroke-linecap", "round")
+  .attr("x1", function(d) { return d.strokeWidth/2; })
+  .attr("x2", function(d) { return d.length; })
+  .attr("y1", 0)
+  .attr("y2", 0);
+
+var counter = 0;
+function tick() {
+  if (counter++ % 3 != 0) return;    // ease up on cpu
+
+  field.data(hands)
+    .select("line")
+      .attr("transform", function(d) { return "rotate(" + (360*d.value-90)+ ")" })
+      .style("stroke", function(d) { return d.color; });
+}
+</script>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="http://benfred.github.io/venn.js/venn.js"></script>
+
+</head>
+<body>
+<div class="simple_example"></div>
+<script>
+// define sets and set set intersections
+var sets = [{"label":"1st","size":325},{"label":"2nd","size":285},{"label":"3rd","size":706},{"label":"Crew","size":885},{"label":"Male","size":1731}],
+overlaps = [{"sets":[0,4],"size":180},{"sets":[1,4],"size":179},{"sets":[2,4],"size":510},{"sets":[3,4],"size":862},{"sets":[0,2],"size":0},{"sets":[1,2],"size":0},{"sets":[0,1],"size":0},{"sets":[0,2],"size":0},{"sets":[0,3],"size":0},{"sets":[2,3],"size":0},{"sets":[0,1],"size":0},{"sets":[2,3],"size":0},{"sets":[1,3],"size":0},{"sets":[1,2],"size":0},{"sets":[0,3],"size":0},{"sets":[1,3],"size":0}];
+// get positions for each set
+sets = venn.venn(sets, overlaps);
+// draw the diagram in the simple_example div
+venn.drawD3Diagram(d3.select(".simple_example"), sets, 300, 300);
+</script>
+</body>
+</html>

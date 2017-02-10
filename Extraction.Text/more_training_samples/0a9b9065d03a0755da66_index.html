@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Excercise module 2</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			body{
+				margin-left : 4em;
+				margin-right : 4em;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<h3>Number of cash care recipients by sex and age group 2005</h3>
+		<p>
+			Each bar is an age group, and the length of the bar is the
+			number of recipients in the year.
+			
+			Then the data is for each of the sexes in the same
+			age groups.
+			
+			I eliminated summation rows for men, women and both sexes in this
+			dataset. Also, only one year is currently shown. I'll need to 
+			work on the visual coding during the course :-)
+			
+		</p>
+
+	<svg width=400 height=400>
+		<defs>
+	    <filter id="dropShadow" x="0" y="0" width="200%" height="200%">
+	      <feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" />
+	      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2" />
+	      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+	    </filter>
+	  </defs>
+	</svg>
+	
+		<script type="text/javascript">		
+
+			function drawYear(data,year){
+
+				var svg = d3.select("svg");
+
+				// Sort the data
+				//data.sort(function(a, b) {
+				//	return d3.ascending(parseInt(a["2005"]),parseInt(b["2005"]));
+				//});
+
+				svg.selectAll("rect")
+					.data(data)
+					.enter()
+					.append("rect")
+					.attr("x",0)
+					.attr("y", function(d,i){
+						return i * 15;
+					})
+					.attr("width",function(d){
+						return d[year] / 100;
+					})
+					.attr("fill", function(d){
+						// Different colors for each age group
+						if(d["Category"].indexOf("24") > -1) return "#ffffb2";
+						if(d["Category"].indexOf("29") > -1) return "#fed976";
+						if(d["Category"].indexOf("34") > -1) return "#feb24c";
+						if(d["Category"].indexOf("39") > -1) return "#fd8d3c";
+						if(d["Category"].indexOf("44") > -1) return "#fc4e2a";
+						if(d["Category"].indexOf("45") > -1) return "#e31a1c";
+						else return "#b10026";
+						})
+					.attr("height",12)
+					.attr("stroke","black")
+					.attr("filter","url(#dropShadow)")
+					.append("title")
+					.text(function(d){
+						return d["Category"];
+					});
+					
+			}
+	
+			//Load in contents of CSV file
+			d3.csv("Number of Cash for Care recipients by year and sex2.csv", function(data) {
+				drawYear(data,"2005");
+			})
+
+	</script>
+
+	</body>
+</html>

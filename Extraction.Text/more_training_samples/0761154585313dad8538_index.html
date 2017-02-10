@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Transition Delays</title>
+		<script type="text/javascript" src="../d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Tahoma, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 44px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 20px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Chicago Crime Types vs. Percent of Arrests</h1>
+
+		<p>Chicago crime data through the past year, upated regularly. Source: <a href="http://catalog.data.gov/dataset/crimes-one-year-prior-to-present-e171f">Data.Gov</a>, 2015</p>
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 50, 50 ];  //Top, right, bottom, left
+
+
+
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(15);
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("chicagocrimes_arrests_locationpercent.csv", function(data) {
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.crime_count_all;
+					}), 
+					d3.max(data, function(d) {
+						return +d.crime_count_all;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.percent_crime_all;
+					}),
+					d3.min(data, function(d) {
+						return +d.percent_crime_all;
+					})
+				]);
+
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+				circles.attr("cx", function(d) {
+						return xScale(d.crime_count_all);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.percent_crime_all);
+					})
+					.attr("r", 0.1)
+					.attr("fill", "#6b6ecf")
+					.append("title")
+					.text(function(d) {
+						return d.crime_description + " accounts for " + d.crime_count_all + " crimes, " + d.percent_crime_all + "% of which resulted in arrest";
+					});
+
+				circles.sort(function(a, b) {
+						return d3.descending(+a.crime_count_all, +b.crime_count_all);
+					})
+					.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(2000)
+					.attr("r", 6);
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] + 10) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 10) + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

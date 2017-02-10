@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Cleaning Up</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: gold;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Measels Immunization Coverage</h1>
+
+		<p>WHO Measels Immunization coverage amongst 1 year olds for the year 2000, percentage by country. Source: <a href="http://apps.who.int/gho/data/node.main.A826?lang=en">WHO</a></p>
+
+		<script type="text/javascript">		
+
+
+			var w = 1000;
+			var h = 2200;
+			var padding = [ 20, 10, 30, 300 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("measelsimmunizationcoverages.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.ascending(+a.pct2000, +b.pct2000);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.pct2000;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.COUNTRY; } ));
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.COUNTRY);
+					})
+					.attr("width", function(d) {
+						return widthScale(d.pct2000);
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "purple")
+					.append("title")
+					.text(function(d) {
+						return d.COUNTRY + "'s percentage measels immunization coverage amongst 1 year olds for 2000 is " + d.pct2000;
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

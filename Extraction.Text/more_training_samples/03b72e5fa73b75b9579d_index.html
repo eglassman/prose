@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Reference Overlay Example</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
+  <style>
+	body {
+	  padding: 0;
+	  margin: 0;
+	  font-family: 'Noto Sans', sans-serif;
+	}
+	
+	html,body,#map {
+	  height: 100%;
+	}
+	
+	.leaflet-top-pane {
+	  pointer-events: none;
+	}
+	
+	#footer {
+	  position: absolute;
+	  bottom: 0;
+	  left: 0;
+	  right: 0;
+	  background: #777;
+	  z-index: 999;
+	  overflow: auto;
+	  padding: 5px;
+	  opacity: 0.95;
+	  color: #fff;
+	}
+	
+	.info {
+	  padding: 6px 8px;
+	  font: 14px/16px Arial, Helvetica, sans-serif;
+	  background: #FFF;
+	  background: rgba(255,255,255,0.8);
+	  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	  border-radius: 5px;
+	}
+	
+	.info h4 {
+	  margin: 0 0 5px;
+	  color: #777;
+	}
+	
+	.legend {
+	  text-align: left;
+	  line-height: 18px;
+	  color: #fff;
+	  background-color:rgba(119,119,119,0.7);
+	}
+	
+	.legend i {
+	  width: 18px;
+	  height: 18px;
+	  float: left;
+	  margin-right: 8px;
+	  opacity:0.9;
+	}
+  </style>
+</head>
+
+<body>
+  <div class="dark" id="map"></div>
+
+  <div id="footer">
+    <div class="container" style="padding-left:20px;">
+      <h2>World Hunger, 2010</h2>
+
+      <h4>Prevalence of undernourishment as a percentage of total population - <br />reported by IFPRI as a component of the <a href="http://www.ifpri.org/ghi/2013" target="_blank">Global Hunger Index (GHI)</a></h4>
+    </div>
+  </div>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+  <script src='https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script> 
+  
+  <script>
+        var map = L.map('map', {maxZoom:8});
+        // DEFINE THE BASE LAYER (THE LOWER PART OF THE SANDWICH) HERE
+	L.mapbox.tileLayer('landplanner.map-a58i5dfz', {
+	  maxZoom: 17,
+	  attribution: "<a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox<\/a>",
+	}).addTo(map);
+	map.setView([10, 0], 3);
+	// GRAB THE TOPOJSON (USED AS THE MIDDLE PART OF THE SANDWICH) HERE
+	$.getJSON('countries2.json', function(data) {
+	  var countries_geojson = topojson.feature(data, data.objects.countries).features;
+	
+	  // DEFINE THEMATIC COLORS - COLOBREWER2 IS A GREAT SOURCE
+	  function getColor(d) {
+	    return d > 50 ? '#8C2D04' : 
+	           d > 40 ? '#CC4C02' : 
+	           d > 30 ? '#EC7014' : 
+	           d > 20 ? '#FE9929' : 
+	           d > 10 ? '#FEC44F' : 
+	           d > 5 ? '#FEE391' : 
+	           d > 2 ? '#FFFFD4' : 
+	           '#fff';
+	  }
+	
+	  function style(feature) {
+	    return {
+	      weight: 0.5,
+	      opacity: 0.8,
+	      color: '#e2e3e3',
+	      fillOpacity: 0.9,
+	      fillColor: getColor(feature.properties.ghi2013dat)
+	    };
+	  }
+	  // DEFINE HOVER STYLE HERE
+	  function highlightFeature(e) {
+	    var layer = e.target;
+	    layer.setStyle({
+	      weight: 5,
+	      color: '#666',
+	      dashArray: '',
+	      fillOpacity: 0.4
+	    });
+	    if (!L.Browser.ie && !L.Browser.opera) {
+	      layer.bringToFront();
+	    }
+	  }
+	  var nations;
+	
+	  function resetHighlight(e) {
+	    nations.resetStyle(e.target);
+	  }
+	
+	  function zoomToFeature(e) {
+	    map.fitBounds(e.target.getBounds());
+	  }
+	
+	  function onEachFeature(feature, layer) {
+	    layer.on({
+	      mouseover: highlightFeature,
+	      mouseout: resetHighlight,
+	      click: zoomToFeature
+	    });
+	  }
+	  nations = L.geoJson(countries_geojson, {
+	    style: style,
+	    onEachFeature: onEachFeature
+	  }).addTo(map);
+	  map.attributionControl.addAttribution('Country data provided by <a href="http://www.ifpri.org/ghi/2013" target="_blank">IFPRI<\/a>');
+	  var legend = L.control({
+	    position: 'topright'
+	  });
+	  // ADD A LEGEND HERE
+	  legend.onAdd = function(map) {
+	    var div = L.DomUtil.create('div', 'info legend'),
+	      grades = [0, 2, 5, 10, 20, 30, 40, 50],
+	      labels = [],
+	      // CUSTOMIZE THE LEGEND LABEL TEXT IN THIS ARRAY:
+	      labelText = ['No Data', '2-5%', '5-10%', '10-20%', '20-30%', '30-40%', '40-50%', '>50%'],
+	      from, to;
+	    for (var i = 0; i < grades.length; i++) {
+	      from = grades[i];
+	      to = grades[i + 1];
+	      rowlab = labelText[i];
+	      labels.push('<i style="background:' + getColor(from + 1) + '"><\/i> ' + rowlab);
+	    }
+	    div.innerHTML = labels.join('<br>');
+	    return div;
+	  };
+	  legend.addTo(map);
+	});
+	
+	// ADD THE REFERENCE OVERLAY (THE TOP OF THE SANDWICH) HERE:
+	var topPane = L.DomUtil.create('div', 'leaflet-top-pane', map.getPanes().mapPane);
+	var topLayer = new L.mapbox.tileLayer('landplanner.map-9fnue2aa', {
+	  maxZoom: 17
+	}).addTo(map);
+	topPane.appendChild(topLayer.getContainer());
+	topLayer.setZIndex(7);
+  </script>
+</body>
+</html>

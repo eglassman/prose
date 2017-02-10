@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Simple SVG and loading data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+
+	<style>
+		html, body {
+			font-family: Helvetica;
+		}
+
+		svg {
+			margin-bottom: 20px;
+		}
+
+		svg rect {
+			fill: #72bcd4;
+		}
+	</style>
+	<body>
+		<h3>Free and reduced lunch in Iowa</h3>
+		<p>This graph shows all the schools in Iowa where 50% or more of their students are on a free or reduced lunch program. A total of 64 school districts are shown.</p>
+		<svg></svg>
+		<script type="text/javascript">		
+			// Create empty SVG so we can append data to it later
+			var svg = d3.select("svg")
+				.attr("width", 500)
+				.attr("height", 850);
+
+			// Load CSV data
+			d3.csv("ia_free_reduced_50_higher.csv", function(data) {
+				// Sort desc
+				// data.sort(function(a, b) {
+				// 	return d3.descending( a['FreeOrReducedPercent'], b['FreeOrReducedPercent'] );
+				// });
+
+				// Create rectangles and append to DOM
+				var rects = svg.selectAll("rect")
+					.data(data)
+					.enter()
+					.append("rect");
+
+				// Set attributes
+				rects.attr("x", 0)
+					.attr("y", function(d, num) {
+						return num * 14;
+					})
+					.attr("width", function(d) {
+						return d['FreeOrReducedPercent'] * 2;
+					})
+					.attr("height", 12)
+					.append("title")
+					// Tooltip
+					.text(function(d) {
+						return 'The percentage of students on free or reduced lunch at ' + d['Name'] + 'High School is ' + d['FreeOrReducedPercent'] + '%.';
+					});
+			});
+		</script>
+	</body>
+</html>

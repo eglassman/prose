@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Color to hex and rgba conversion</title>
+    <script type="text/javascript" src="color-convert.js"></script>
+    <script type="text/javascript">
+      function update_rgba_hex() {
+        var cname = document.getElementById('cname').value;
+        document.getElementById('rgba').innerHTML = color_convert.to_rgba(cname);
+        document.getElementById('hex').innerHTML = color_convert.to_hex(cname);
+        var canvas, context;
+        canvas = document.getElementById('swatch');
+        context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = cname;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    </script>
+  </head>
+  <body>
+    <p>Enter a color <input size="30" id="cname" oninput="update_rgba_hex();"/> <button onclick="update_rgba_hex();">Check it</button></p>
+    <p>rgba: <code id="rgba"></code></p>
+    <p>hex: <code id="hex"></code></p>
+    <div>
+      <canvas id="swatch" width="50" height="50"></canvas>
+    </div>
+  </body>
+</html>

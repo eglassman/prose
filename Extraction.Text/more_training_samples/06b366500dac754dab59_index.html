@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Creating SVG Elements from Data</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+            
+            h1 {
+                font-size: 24px;
+                margin: 0;
+            }
+            
+            p {
+                font-size: 14px;
+                margin: 10 px 0 0 0;
+            }
+
+			svg {
+				background-color: white;
+			}
+            
+            circle:hover {
+                fill: orange;
+            }
+            
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: grey;
+                shape-rendering: crispEdges;
+            }
+            
+            .axis text{
+                fill: grey;
+                font-size: 11px;
+                font-family: sans-serif;
+            }
+
+
+		</style>
+	</head>
+	<body>        
+        <H1>The number of grant applications by year 2011-2014</H1>
+        <p>This horizontal bar chart displays the number of grant applications for events organized in the Provence of Groningen.</p>
+		<script type="text/javascript">		
+
+            var w = 500;           
+            var h = 400;              
+            var padding = [20, 10, 50, 70]; // Top, right, bottom, left
+            
+            var nl = d3.locale({ 
+                "decimal": ",",
+                "thousands": ".",
+                "grouping": [3],
+                "currency": ["€", ""],
+                "dateTime": "%a %b %e %X %Y",
+                "date": "%d-%m-%Y",
+                "time": "%H:%M:%S",
+                "periods": ["AM", "PM"],
+                "days": ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+                "shortDays": ["zo", "ma", "di", "wo", "do", "vr", "za"],
+                "months": ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+                "shortMonths": ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"]
+            })
+            
+            var xScale = d3.scale.linear().range([padding[3], w - padding[1] - padding [3]]);
+            var yScale = d3.scale.linear().range([padding[0], h - padding[2]]);
+            
+            var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(nl.numberFormat("thousands"));
+            var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+			var svg = d3.select("body")
+					 	.append("svg")
+					 	.attr("width", w)
+					 	.attr("height", h);
+          
+			d3.csv("evenementen.csv", function(dataset) {
+                
+                xScale.domain([d3.min(dataset, function(d){ return +d.verleend_bedrag}), d3.max(dataset, function(d){ return +d.verleend_bedrag})]);    
+                yScale.domain([d3.max(dataset, function(d){ return +d.aantal_bezoekers}), d3.min(dataset, function(d){ return +d.aantal_bezoekers})]); 
+                
+
+				svg.selectAll("circle")
+					.data(dataset)
+					.enter()
+					.append("circle")
+                    .filter(function(d) { return d.beslissing_gs === "Subsidie verlenen" })
+					.attr({
+                        cx: function(d) {return xScale(+d.verleend_bedrag);},
+				        cy: function(d) {return yScale(+d.aantal_bezoekers);},
+                        r: 2,
+                        fill: "steelblue"
+                    })
+                    .append("title")
+					.text(function(d) {
+						return "Verleend bedrag: " + d.verleend_bedrag + " en aantal bezoekers " + d.aantal_bezoekers;
+					});
+                
+                svg.append("g")
+                    .attr({
+                        class: "x axis",
+                        transform: "translate(0,"+ (h - padding[2] + 0) + ")"
+                    })        
+                    .call(xAxis);
+                
+                svg.append("g")
+                    .attr({
+                        class: "y axis",
+                        transform: "translate(" + (padding[3] - 0) + ",0)"
+                    })        
+                    .call(yAxis);
+                              
+                
+			});
+
+
+		</script>
+
+	</body>
+</html>

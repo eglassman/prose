@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+     <meta charset="UTF-8"> 
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    <script src="sparkline2.js"> </script>
+    <script src="loadfactor.js"></script>
+    <script src="bar.js"></script>
+    <script src="loadfactorbox.js"></script>
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+	<title>test</title>
+	<style type="text/css">
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 15px;
+  background-color: rgb(255,255,238);
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 14pt;
+}
+table {
+	margin-bottom:15;
+}
+.header {
+  font-size: 14pt;
+  text-align: center;
+}
+.subheader {
+  font-size: 12pt;
+  text-align: center;
+}
+.frame{
+  fill:none;
+  stroke: rgb(201,201,201);
+}
+
+  .bar {
+    fill: rgb(231,231,231);
+    stroke: rgb(201,201,201);
+  }
+.sparkline {
+      fill: none;
+      stroke: rgb(230,0,145);
+      stroke-width: 1.5px;
+    }
+    .otherline {
+      fill: none;
+      stroke: rgb(230,0,145);
+      stroke-width: 0.5px;
+    }
+
+    .future {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1px;
+      shape-rendering: crispEdges;
+      opacity: 0.5;
+    }
+    .sparkcircle {
+      fill: rgb(230,0,145);
+      stroke: none;
+    }
+    .zeroline {
+      opacity:0.5;
+    }   
+    .ops2 {
+      stroke-width: 1px;
+    }
+    .value {
+      color:rgb(150,150,148);
+    }
+    .airline,.debt {
+      padding: 0px 5px 0px 5px;
+    }
+    .value, .value2 {
+      text-align: right;
+      padding: 0px 5px 0px 5px;
+    }
+    .container:hover {
+      fill:yellow;
+      opacity:0.5;
+    }
+    .separator {
+      border-bottom:1px solid rgb(231,231,231);
+    }
+    .separatorhead {
+      border-bottom:3px solid rgb(231,231,231);
+    }
+    .separatorcategory {
+      border-right:3px solid rgb(231,231,231);
+    }
+    .smallsepline {
+      stroke-width:1px;
+      stroke:rgb(210,210,210);
+    }
+    .bar text {
+    fill: white;
+    font: 10px sans-serif;
+    text-anchor: end;
+  }
+
+    </style>
+</head>
+
+
+<body>
+<input id="picker" ></input>
+<p id="headline" height="12px">adf</p>
+<script>
+
+var data=[];
+
+    var yesterday = moment().subtract(1, 'days')._d;
+    var day = yesterday.getDate();
+    if ((""+day).length <2)
+    	day = "0"+day;
+    var month = yesterday.getMonth()+1;
+    if ((""+month).length <2)
+    	month = "0"+month;
+    var year = (yesterday.getYear()-100)+"";
+
+
+    var startDate = day+"."+month+"."+year;
+    var endDate = startDate;
+
+
+d3.select("#headline")
+	.text("Авиационная деятельность за период " +startDate+" - "+endDate); 
+
+var tableGlobal = d3.select("body").append("table").attr("cellspacing","0px").attr("id", "tableGlobal");
+               theadGlobal = tableGlobal.append("thead"),
+               tbodyGlobal = tableGlobal.append("tbody");
+               tbodyGlobal.classed("report", true);  
+var headersGlobal = ["Показатель","Количество"];
+
+          theadGlobal.append("tr").selectAll("th")
+            .data(headersGlobal)
+            .enter()
+            .append("th")
+            .text(function(d) {return d;})
+            .attr("colspan", function(d,i) {
+              if (i==1) return 3;
+              if (i==2) return 3;
+              if (i==3) return 3;
+              if (i==4||i==5) return 3;
+
+            })
+            .classed("separatorcategory", true)
+            .classed("separatorhead", true)
+            .classed("header", true);
+
+
+
+var table = d3.select("body").append("table").attr("cellspacing","0px").attr("id", "table");
+               thead = table.append("thead"),
+               tbody = table.append("tbody");
+               tbody.classed("report", true);
+               thead.classed("separatorhead", true);  
+
+          var headers = ["АК","Пассажиров", "Загрузка", "Рейсов", "Выручка"];
+         // var subheaders = ["","Количество", "Динамика", "Величина", "Динамика","Количество","Динамика","Сумма","Динамика", "Сумма", "Динамика"];
+         var subheaders = ["","Количество", "Динамика", "Величина", "Динамика","Количество","Динамика","Сумма","Динамика", "Средний рейс"];
+
+          thead.append("tr").selectAll("th")
+            .data(headers)
+            .enter()
+            .append("th")
+            .text(function(d) {return d;})
+            .attr("colspan", function(d,i) {
+              if (i==1) return 3;
+              if (i==2) return 3;
+              if (i==3) return 3;
+              if (i==4) return 5;
+
+            })
+            .attr("text-anchor","middle")
+            .classed("separatorcategory", true)
+            .classed("header", true);
+
+          thead.append("tr").selectAll("th")
+            .data(subheaders)
+            .enter()
+            .append("th")
+            .text(function(d) {return d;})
+            .classed("subheader", true)
+            .attr("colspan", function(d,i) {
+              if (i==1||i==3||i==5||i==7||i==9) return 2;
+
+            })
+            .classed("separatorhead",true)
+            .classed("separatorcategory",function(d,i){
+              return (i==0)||(i==2)||(i==4)||(i==6)||(i==10);
+            });
+
+
+$('#picker').daterangepicker({
+	ranges: {
+           'Вчера': [moment().zone("+03:00").subtract(1, 'days'), moment().zone("+03:00").subtract(1, 'days')],
+           'Позавчера': [moment().zone("+03:00").subtract(2, 'days'), moment().zone("+03:00").subtract(2, 'days')],
+           'Эта неделя': [moment().zone("+03:00").startOf('isoWeek'), moment().zone("+03:00").subtract(1, 'days')],
+           'Прошлая неделя': 
+           		[moment().zone("+03:00").startOf('isoWeek').subtract(7,'days'), 
+           			moment().zone("+03:00").endOf('isoWeek').subtract(7,'days')],
+           'Этот месяц': [moment().zone("+03:00").startOf('month'), moment().zone("+03:00").subtract(1, 'days')],
+           'Прошлый месяц': 
+           		[moment().zone("+03:00").subtract(1, 'month').startOf('month'), 
+           			moment().zone("+03:00").subtract(1, 'month').startOf('month').endOf('month')],
+           'Этот год': [moment().zone("+03:00").startOf('year'), moment().zone("+03:00").subtract(1, 'days')]
+        },
+        locale: {
+      	format: 'DD.MM.YY'
+    	},
+    	startDate: startDate, 
+    	endDate: endDate,
+    	locale: {
+    		applyLabel: 'OK',
+    		cancelLabel:"Отмена",
+    		customRangeLabel:"Другой",
+    		firstDay: 1,
+    		"daysOfWeek": [
+            "Вс",
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб"
+        ],
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        ],
+
+
+    	}
+    	
+    });
+
+
+$('#picker').on('cancel.daterangepicker', function (ev, picker) {
+    $('#picker').val('');
+    alert("Cancelled event fired!");
+});
+
+$('#picker').on('apply.daterangepicker', function (ev, picker) {
+	periodStart = parsedate(picker.startDate.format('DD.MM.YY'));
+  	periodEnd = parsedate(picker.endDate.format('DD.MM.YY'));
+  	periodLength = (periodEnd-periodStart)/1000/60/60/24+1;
+
+ 	
+
+    $(".report").empty();
+    var total2 = [];
+	total.forEach(function(d) {
+		total2.push(jQuery.extend(true, {}, d));
+	});
+
+    data = groupData(total2);
+	printData(data);
+	d3.select("#headline")
+	.text("Авиационная деятельность за период " +picker.startDate.format('DD.MM.YY')+" - "+picker.endDate.format('DD.MM.YY')); 
+});
+
+
+
+
+
+
+    Date.prototype.getWeek = function() {
+        var onejan = new Date(this.getFullYear(), 0, 1);
+        return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    }
+
+
+
+    var parsedatefull = d3.time.format("%d.%m.%Y %H:%M").parse;
+    var parsedate = d3.time.format("%d.%m.%y").parse;
+    var periodStart = parsedate(startDate);
+    var periodEnd = parsedate(endDate);
+    var dynamicsDepth = 5;
+
+    var periodLength = (periodEnd-periodStart)/1000/60/60/24+1;
+    var total = [];
+
+// read files
+
+init = function() {
+
+	d3.tsv("grouping.txt", function(grouping) {
+	d3.tsv("capacity.txt", function(capacity) {
+
+	d3.tsv("billing.txt", function(data) {
+
+
+   airlines =[];
+   groups = [];
+   aircraft = [];
+   seats = [];
+
+   for (var i=0;i<grouping.length; i++)
+   {
+    airlines.push(grouping[i].payer);
+    groups.push(grouping[i].Group);
+   };
+
+   for (var i=0;i<capacity.length; i++)
+   {
+    aircraft.push(capacity[i].aircraft);
+    seats.push(+capacity[i].Seats);
+   };
+
+     var keys = Object.keys(data[0]);
+	  data.forEach(function(d){
+	    
+	    var keys = Object.keys(d);
+	    d.documentNumber = d[keys[0]];
+	    d.documentDate = parsedate(d[keys[1]]);
+	    d.flight = d[keys[2]];
+	    d.route = d[keys[3]];
+	    d.aircraftType = d[keys[4]];
+	    d.aircraftId = d[keys[5]];
+	    d.owner =d[keys[6]];
+	    d.payer = d[keys[7]];
+
+	    aliasIndex = airlines.indexOf(d.payer);
+	    if (aliasIndex>-1)
+	      d.alias = groups[aliasIndex];
+	    else
+	      d.alias = "Прочее";
+
+	    seatsIndex = aircraft.indexOf(d.aircraftType);
+	    
+	    if (aliasIndex>-1)
+	      d.seats = seats[seatsIndex];
+	    else
+	      d.seats = 5;    
+
+	    d.arrivalDateTime = parsedatefull(d[keys[8]]);
+	    d.departureDateTime = parsedatefull(d[keys[9]]);
+	    d.serviceName = d[keys[10]];
+	    d.serviceUnits = d[keys[11]];
+	    d.serviceQuantity = +d[keys[12]].replace(",",".").replace(" ","");
+	    d.servicePrice = +d[keys[13]].replace(",",".").replace(" ","");
+	    d.serviceVAT = +d[keys[14]];
+	    d.serviceSum = d[keys[15]].replace(" ","");
+	    d.serviceSum = d.serviceSum.replace(",",".");
+	    d.currency = d[keys[16]];
+
+	    for (var i=0;i<keys.length;i++) {
+	      delete d[keys[i]];
+	    };
+
+
+	  });
+
+
+	var departures = 0;
+	data.forEach(function(d) {
+		if (d.arrivalDateTime ==null)
+	      		d.arrivalDateTime = d.documentDate;
+	    if (d.departureDateTime ==null)
+	      		d.departureDateTime = d.documentDate;
+	    if (d.serviceName.indexOf("взл")>-1)
+	                departures+=+d.seats;
+	});
+	//console.log("seats "+departures);
+
+	
+departure = d3.nest()
+	      .key(function(d) {
+	        return d.alias;
+	      })
+	      .key(function(d) {
+
+	        month = d.departureDateTime.getMonth();
+	        if (month.length<2)
+	        	month = "0"+month;
+	        
+	        date = d.departureDateTime.getDate();
+	        if (date.length<2)
+	        	date = "0"+date;
+
+	        return d.departureDateTime.getFullYear()+"."+ month +"."+date;
+	      })
+	      .rollup(function(leaves,i){
+	      		totalFlights = d3.sum(leaves, function(d) {
+	              //console.log(d.serviceName, " ",d.serviceName.indexOf("взл"));
+	              res = 0;
+	              if (d.serviceName.indexOf("взл")>-1) {
+	                res=1;
+	              }
+	              return res;
+	          });
+	        paxDepartingDom = d3.sum(leaves, function(d) {
+	          res =0;
+	          if ((d.serviceName.indexOf("аэров")>-1)&&(d.serviceName.indexOf("убыв")>-1)&&(!(d.serviceName.indexOf("МВЛ")>-1))) {
+	              res=+d.serviceQuantity;
+	            }
+	          return res;
+	        });
+
+	        paxDepartingInt = d3.sum(leaves, function(d) {
+	          res =0;
+	          if ((d.serviceName.indexOf("аэров")>-1)&&(d.serviceName.indexOf("убыв")>-1)&&
+	            ((d.serviceName.indexOf("МВЛ")>-1))) {
+	              res=+d.serviceQuantity;
+	            }
+	          return res;
+	        });
+
+	        sum = d3.sum(leaves, function(d){
+	          return +d.serviceSum;
+	        });
+
+
+	        seats = d3.sum(leaves,function(d){
+	              res = 0;
+	              if (d.serviceName.indexOf("взл")>-1) {
+	                res=+d.seats;
+	              }
+	              return res;
+	        })
+
+	        paxDeparting = paxDepartingInt + paxDepartingDom;
+
+	        flightInt = paxDepartingInt > paxDepartingDom ;
+
+	        month = leaves[0].documentDate.getMonth();
+	        if (month.length<2)
+	        	month = "0"+month;
+	        
+	        date = leaves[0].documentDate.getDate();
+	        if (date.length<2)
+	        	date = "0"+date;
+
+	        return ({"flights":totalFlights,
+	                  "seats":seats, 
+
+	                'paxTotal':paxDeparting,
+	                "flightInt":flightInt,
+
+	                "currency":leaves[0].currency,
+	                "date": leaves[0].documentDate.getFullYear()+"."+ month +"."+date,
+	                "serviceSum":sum}); 
+	      })
+	      .sortKeys(d3.ascending)
+	      .entries(data);
+
+
+
+
+
+	 arrival = d3.nest()
+	      .key(function(d) {
+	        return d.alias;
+	      })
+	      .key(function(d) {
+	      	
+	        month = d.arrivalDateTime.getMonth();
+	        if (month.length<2)
+	        	month = "0"+month;
+	        
+	        date = d.arrivalDateTime.getDate();
+	        if (date.length<2)
+	        	date = "0"+date;
+
+	        return d.arrivalDateTime.getFullYear()+"."+ month +"."+date;
+	      })
+	      .rollup(function(leaves,i){
+	      	totalFlights = 0;
+
+        paxArrivingDom = d3.sum(leaves, function(d) {
+          res =0;
+          if ((d.serviceName.indexOf("аэров")>-1)&&(d.serviceName.indexOf("приб")>-1)&&
+            (!(d.serviceName.indexOf("МВЛ")>-1))) {
+              res=d.serviceQuantity;
+            }
+          return res;
+        });
+
+
+        paxArrivingInt = d3.sum(leaves, function(d) {
+          res =0;
+          if ((d.serviceName.indexOf("аэров")>-1)&&(d.serviceName.indexOf("приб")>-1)&&
+            ((d.serviceName.indexOf("МВЛ")>-1))) {
+              res=d.serviceQuantity;
+            }
+          return res;
+        });
+
+
+
+	        seats = d3.sum(leaves,function(d){
+	              res = 0;
+	              if (d.serviceName.indexOf("взл")>-1) {
+	                res=+d.seats;
+	              }
+	              return res;
+	        });
+	        //console.log("total "+paxArrivingDom);
+	        paxArriving = paxArrivingInt+ paxArrivingDom;
+	        flightInt = paxArrivingInt > paxArrivingDom;
+	        sum = 0;
+	        
+	        month = leaves[0].documentDate.getMonth();
+	        if (month.length<2)
+	        	month = "0"+month;
+	        
+	        date = leaves[0].documentDate.getDate();
+	        if (date.length<2)
+	        	date = "0"+date;
+
+
+	        return ({"flights":totalFlights,
+	                 "seats":seats, 
+	                'paxTotal':paxArriving,
+	                "flightInt":flightInt,
+
+	                "currency":leaves[0].currency,
+	                "date":leaves[0].documentDate.getFullYear()+"."+ month +"."+date,
+	                "serviceSum":sum
+	            }); 
+	      })
+	      .sortKeys(d3.ascending)
+	      .entries(data);
+
+
+
+
+	total = new Array();
+	for (var i=0; i<departure.length; i++) {
+		temp= new Array();
+		temp = temp.concat(departure[i].values);
+		temp = temp.concat(arrival[i].values);
+
+
+		temp = d3.nest()
+					.key(function(d) {
+						//console.log(d);
+						return d.key;
+					})
+					.sortKeys(d3.ascending)
+	      			.entries(temp);
+
+		test = {"key":departure[i].key, "days":temp};
+				//console.log(temp.length);
+				//console.log(test);
+
+		total.push(test);
+	};
+
+total.forEach(function(d) {
+	d.days.forEach(function(d2){
+		d2.paxTotal = d3.sum(d2.values,function(d){
+				              return +d.values.paxTotal;
+				        });
+		d2.seats = d3.sum(d2.values,function(d){
+				              return +d.values.seats;
+				        });
+		d2.flights = d3.sum(d2.values,function(d){
+				              return +d.values.flights;
+				        });
+		d2.serviceSum = d3.sum(d2.values,function(d){
+				              return +d.values.serviceSum;
+				        });
+        d2.flightInt = d2.values[0].values.flightInt;
+		d2.currency = d2.values[0].values.currency;
+		dateparts = d2.key.split(".");
+		d2.key = new Date(dateparts[0],dateparts[1],dateparts[2]);
+
+		delete d2.values;
+
+	});
+
+
+
+});
+
+
+
+//total2 = total.slice(0);
+
+//var total2 = jQuery.extend(true, {}, total);
+
+var total2 = [];
+total.forEach(function(d) {
+	total2.push(jQuery.extend(true, {}, d));
+});
+
+
+console.log(total);
+console.log(total2);
+
+data = groupData(total2);
+	printData(data);
+//console.log(total);
+
+	//return data;
+
+	}); // end of billing
+	});// END of grouping
+	  
+	}); // end of CAPACITY
+
+
+};
+
+
+//group data
+
+groupData = function(data) {
+
+	data.forEach(function(d) {
+		//console.log(d.days);
+		d.days = d3.nest()
+					.key(function(d2) {
+						
+	        			return Math.ceil(((d2.key-periodEnd)/1000/3600/24)/periodLength);
+	      			})
+	      			.rollup(function(leaves) {
+	      				
+	      				totalFlights = d3.sum(leaves, function(d) {
+	      					return d.flights;
+	      				});
+
+	      				seats = d3.sum(leaves, function(d) {
+	      					return d.seats;
+	      				});
+
+	      				paxTotal = d3.sum(leaves, function(d) {
+	      					return d.paxTotal;
+	      				});
+	      				paxTotal = d3.sum(leaves, function(d) {
+	      					return d.paxTotal;
+	      				});
+	      				serviceSum = d3.sum(leaves, function(d) {
+	      					return d.serviceSum;
+	      				});
+
+  					   return ({"flights":totalFlights,
+		                "seats":seats, 
+		                'paxTotal':paxTotal,
+		                "flightInt":leaves[0].flightInt,
+
+		                "currency":leaves[0].currency,
+		                "date":leaves[0].key,
+		                "serviceSum":serviceSum});  
+	      			})
+				    .sortKeys(d3.ascending)
+	      			.entries(d.days);
+	});
+
+
+
+
+	  data.forEach(function(d){
+	  	d.thisPeriod = null;
+	    d.days.forEach(function(d2){
+	      d2.key=+d2.key;
+	      if (d2.key==0)
+	      	d.thisPeriod = d2;
+	    });
+
+	    if (d.thisPeriod==null)
+	    	d.thisPeriod = {
+	    		"key":0,
+	    		"values":{
+		    		"flights":0,
+		    		"paxTotal":0,
+		    		"flightInt":false,
+		    		"seats":0,
+		    		"currency":"RUB",
+		    		"serviceSum":0
+	    		}
+	    	}
+
+	    d.days = d.days.sort(function(a,b){
+
+	      return (a.key-b.key);
+	    });
+	});
+
+
+
+	  data = data.sort(function(a,b){
+	   return -(a.thisPeriod.values.paxTotal-b.thisPeriod.values.paxTotal); // sort Descending
+	  // return -(a.key-b.key);
+	  }); 
+
+
+
+	  return data; 
+
+	};
+
+
+// output files
+
+
+printData = function(data) {
+
+	            for (var j=0;j<data.length;j++)
+          {
+
+            // ПОДГОТОВКА ДАННЫХ
+
+            //if ((data[j].weekFlights>0)||(data[j].weekPax>0))
+            //{
+
+
+            // СОЗДНИЕ ГРАФИКОВ
+            tbody2 = tbody.append("tr").attr("height","20px");
+
+            var pax = bar()
+                  .x(function(d) {
+                            return d;
+                          })
+                  .maxvalue(data[0].thisPeriod.values.paxTotal)
+                  .width(80);
+            var loadfactor = bar()
+                  .x(function(d) {
+                            return d;
+                          })
+                  .maxvalue(100)
+                  .width(80);
+
+            var flights = bar()
+                  .x(function(d) {
+                            return d;
+                          })
+                  .maxvalue(data[0].thisPeriod.values.flights)
+                  .width(80);
+            
+            var revenue = bar()
+                  .x(function(d) {
+                            return d;
+                          })
+                  .maxvalue(data[0].thisPeriod.values.serviceSum/1000)
+                  .width(80);
+
+           var revenuePerFlight = bar()
+                  .x(function(d) {
+                            return d;
+                          })
+                  .maxvalue(d3.max(data, function(d) {
+                    return d.thisPeriod.values.serviceSum/d.thisPeriod.values.flights/1000;
+                  }))
+                  .width(80);
+                              
+            var paxDynamics = sparkline()
+                              .y(function(d) {
+                                    return d.values.paxTotal;
+                                  })
+                                  .x(function(d) {
+                                    return d.key;
+                                  })
+                                  .width(80);
+
+
+            var flightsDynamics = sparkline()
+                                  .y(function(d) {
+                                    return d.values.flights;
+                                  })
+                                  .x(function(d) {
+                                    return d.key;
+                                  })
+                                  .width(80);
+
+            var sumDynamics = sparkline()
+                                  .y(function(d) {
+                                    return d.values.serviceSum/1000;
+                                  })
+                                  .x(function(d) {
+                                    return d.key;
+                                  })
+                                  .width(80);
+            var avgsumDynamics = sparkline()
+                                  .y(function(d) {
+                                    if (d.values.flights ==0)
+                                      return 0
+                                    else
+                                      return d.values.serviceSum/d.values.flights;
+                                  })
+                                  .x(function(d) {
+                                    return d.key;
+                                  })
+                                  .width(80);
+            var loadfactorDynamics = sparkline()
+                                  .y(function(d) {
+                                    if (d.seats==0)
+                                      return 0
+                                    else
+                                      return d.values.paxTotal/d.values.seats*100;
+                                  })
+                                  .x(function(d) {
+                                    return d.key;
+                                  })
+                                  .width(80);
+
+            //var loadFactor = loadfactor();
+            //var loadFactorBox = loadfactorbox();
+
+            // Вывод имени авиакомпании
+            tbody2.append("td")
+                  .text(data[j].key)
+                  .attr("width","95px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("separatorcategory",true);
+
+            // Вывод количества пассажиров за неделю
+            tbody2.append("td")
+                  .text(data[j].thisPeriod.values.paxTotal.toLocaleString())
+                  //.datum([data[j].weekPax])
+                  //.call(pax)
+                  .attr("width","20px")
+                  .classed("airline",true)
+                  .classed("value", true)                  
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+                  //.classed("separatorcategory",true);
+
+            // Вывод количества пассажиров за неделю столбик
+            tbody2.append("td")
+                 // .text(data[j].weekPax.toLocaleString())
+                  .datum([data[j].thisPeriod.values.paxTotal])
+                  .call(pax)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("value", true)                  
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+                 // .classed("separatorcategory",true);
+
+
+            // Вывод динамики пассажиропотока
+            tbody2.append("td")
+                  .datum(data[j].days.filter(function(d) {
+                    return (d.key>-dynamicsDepth)&&(d.key<=0)
+                  }))
+                  .call(paxDynamics)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("separatorcategory",true);
+            //Вывод  загрузки
+            tbody2.append("td")
+                  .text(function(d) {
+                    r=0;
+                    if (data[j].thisPeriod.values.seats>0)
+                      r = Math.round((data[j].thisPeriod.values.paxTotal/data[j].thisPeriod.values.seats*100)).toLocaleString();
+                    return r;
+
+                })
+                  .attr("width","20px")
+                  .classed("airline",true)
+                  .classed("value", true) 
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+                  //.classed("separatorcategory",true);
+
+              // Вывод загрузки столбик
+                tbody2.append("td")
+                  .datum(function(d) {
+                    if (data[j].thisPeriod.values.seats==0)
+                      return [0]
+                    else
+                      return [data[j].thisPeriod.values.paxTotal/data[j].thisPeriod.values.seats*100];
+                  })
+                  .call(loadfactor)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+                  //.classed("separatorcategory",true);
+
+            //Вывод динамики загрузка
+            tbody2.append("td")
+                  .datum(data[j].days.filter(function(d) {
+                    return (d.key>-dynamicsDepth)&&(d.key<=0)
+                  }))
+                  .call(loadfactorDynamics)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("separatorcategory",true);
+
+
+            // Вывод количества рейсов
+            tbody2.append("td")
+                  .text(data[j].thisPeriod.values.flights)
+                  .attr("width","20px")
+                  .classed("airline",true)
+                  .classed("value", true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+                 // .classed("separatorcategory",true);
+
+            // Вывод количества рейсов столбик
+            tbody2.append("td")
+                  //.text(data[j].weekFlights)
+                  .datum([data[j].thisPeriod.values.flights])
+                  .call(flights)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("value", true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+ //                 .classed("separatorcategory",true);
+
+
+
+            //Вывод динамики рейсов
+            tbody2.append("td")
+                  .datum(data[j].days.filter(function(d) {
+                    return (d.key>-dynamicsDepth)&&(d.key<=0)
+                  }))
+                  .call(flightsDynamics)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("separatorcategory",true);
+
+            //Вывод количества выручки
+            tbody2.append("td")
+                  .text(Math.round(data[j].thisPeriod.values.serviceSum/1000).toLocaleString())
+
+                  .attr("width","20px")
+                  .classed("airline",true)
+                  .classed("value", true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+
+            //Вывод количества выручки столбик
+            tbody2.append("td")
+                  //.text(Math.round(data[j].weekServiceSum).toLocaleString())
+                  .datum([data[j].thisPeriod.values.serviceSum/1000])
+                  .call(revenue)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("value", true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  });
+                         
+            //Вывод динамики выручки
+            tbody2.append("td")
+                  .datum(data[j].days.filter(function(d) {
+                    return (d.key>-dynamicsDepth)&&(d.key<=0)
+                  }))
+                  .call(sumDynamics)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("separatorcategory",true);
+
+            //Вывод средней цены рейса
+            tbody2.append("td")
+                  .text(function(d) { 
+                    t=0;
+                    if (data[j].thisPeriod.values.flights>0)
+                      t=Math.round(data[j].thisPeriod.values.serviceSum/data[j].thisPeriod.values.flights/1000).toLocaleString();
+                    return t;
+                  })                    
+                  .attr("width","20px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("value", true);
+
+            //Вывод средней цены рейса столбик
+            tbody2.append("td")
+                  //.text(Math.round(data[j].weekServiceSum/data[j].weekFlights).toLocaleString())
+                  .datum([data[j].thisPeriod.values.serviceSum/data[j].thisPeriod.values.flights/1000])
+                  .call(revenuePerFlight)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("value", true);
+           // Динамика средней цены рейса
+/*
+
+            tbody2.append("td")
+                  .datum(data[j].days.filter(function(d) {
+                    return (d.key>-dynamicsDepth)&&(d.key<=0)
+                  }))
+                  .call(avgsumDynamics)
+                  .attr("width","80px")
+                  .classed("airline",true)
+                  .classed("separator",function(d) {
+                    return ((j+1)%3==0); 
+                  })
+                  .classed("value", true)
+                  .classed("separatorcategory",true); */
+
+          }
+
+          	
+			console.log(data);
+
+			var paxTotal=0,
+				paxTotalDom=0,
+				paxTotalInt=0,
+				flightsTotal=0,
+				flightsTotalDom=0,
+				flightsTotalInt=0;
+
+
+			for (var i=0;i<data.length;i++) {
+				paxTotal+= data[i].thisPeriod.values.paxTotal;
+				flightsTotal+= data[i].thisPeriod.values.flights;
+				if (data[i].thisPeriod.values.flightInt==true){
+					paxTotalInt+=data[i].thisPeriod.values.paxTotal;
+					flightsTotalInt+=data[i].thisPeriod.values.flights;
+				}
+				else {
+					paxTotalDom+=data[i].thisPeriod.values.paxTotal;
+					flightsTotalDom+=data[i].thisPeriod.values.flights;
+				};
+
+			};
+
+          	console.log(paxTotal);
+
+            tbodyGlobal2 = tbodyGlobal.append("tr").attr("height","10px").attr("width","95px");
+            tbodyGlobal2.append("td")
+            	.text("Пассажиров")
+             	//.classed("separator",true)
+
+                .classed("separatorcategory",true);
+                           	
+            tbodyGlobal2.append("td")
+            	.text(paxTotal.toLocaleString())
+            	//.classed("separator",true)
+                .classed("value2", true)
+                .classed("separatorcategory",true);
+
+            
+            tbodyGlobal2 = tbodyGlobal.append("tr").attr("height","10px");
+            tbodyGlobal2.append("td")
+            	.text("ВВЛ")
+            	//.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+
+            tbodyGlobal2.append("td")
+            	.text(paxTotalDom.toLocaleString())
+            	//.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+            
+            tbodyGlobal2 = tbodyGlobal.append("tr").attr("height","10px");
+            tbodyGlobal2.append("td")
+            	.text("МВЛ")
+            	.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+
+            tbodyGlobal2.append("td")
+            	.text(paxTotalInt.toLocaleString())
+            	.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+
+            tbodyGlobal2 = tbodyGlobal.append("tr").attr("height","10px");
+            tbodyGlobal2.append("td")
+            	.text("Рейсов")
+             	//.classed("separator",true)
+
+                .classed("separatorcategory",true);
+                           	
+            tbodyGlobal2.append("td")
+            	.text(flightsTotal.toLocaleString())
+            	//.classed("separator",true)
+                .classed("value2", true)
+                .classed("separatorcategory",true);       
+
+            tbodyGlobal2 = tbodyGlobal.append("tr").attr("height","10px");
+            tbodyGlobal2.append("td")
+            	.text("ВВЛ")
+            	//.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+
+            tbodyGlobal2.append("td")
+            	.text(flightsTotalDom.toLocaleString())
+             	//.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);           	
+
+            tbodyGlobal2 = tbodyGlobal.append("tr").attr("height","10px");
+            tbodyGlobal2.append("td")
+            	.text("МВЛ")
+            	.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+
+            tbodyGlobal2.append("td")
+            	.text(flightsTotalInt.toLocaleString())            
+            	.classed("separator",true)
+                .classed("value", true)
+                .classed("separatorcategory",true);
+
+};
+
+
+$(function(){
+
+	init();
+});
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <style>
+      body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+      svg { width: 100%; height: 100%; }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      var margin = {top: 0, right: 0, bottom: 0, left: 0};
+      var width = 960 - margin.left - margin.right;
+      var height = 500 - margin.top - margin.bottom;
+      var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var nbPoints = 500;
+      var X = 100, Y = 100;
+      var cell = 5;
+      var points = [];
+      for (var i = 0; i < nbPoints; i++) {
+      	points.push([cell * Math.floor(Math.random() * X), cell * Math.floor(Math.random() * Y)]);
+      	svg.append('circle').datum(points[i])
+        	.each(function(d) {
+          	d3.select(this).attr({cx: d[0], cy: d[1], r: 1, class: 'c' + i})
+        })
+      }
+      
+      
+      var lines = {};
+      for (var i = 0; i < nbPoints; i++) {
+      	for (var j = 0; j < nbPoints; j++) {
+        	var pi = points[i], pj = points[j];
+          if (i !== j && pi[0] !== pj[0] && pi[1] !== pj[1]) {
+          	var slope = (pj[1] - pi[1]) / (pj[0] - pi[0]);
+            var b;
+            if (slope === -Infinity) {slope === Infinity;}
+            if (!lines.hasOwnProperty(slope)) {
+              lines[slope] = {};
+            }
+            if (pj[0] !== pi[0]) {
+            	b = pi[1] - slope * pi[0];
+            } else {
+              b = pi[0];
+            }
+            if (!lines[slope].hasOwnProperty(b)) {
+                lines[slope][b] = [i, j];
+            } else {
+              if (lines[slope][b].indexOf(i) < 0) {lines[slope][b].push(i);} 
+             	if (lines[slope][b].indexOf(j) < 0) {lines[slope][b].push(j);} 
+            }
+          }
+        }
+      }
+      var maxLine = 0, maxSlope, maxB;
+      Object.keys(lines).forEach(function(slope) {
+      	Object.keys(lines[slope]).forEach(function(b) {
+        	if (lines[slope][b].length > maxLine) {
+            maxLine = lines[slope][b].length;
+            maxSlope = +slope;
+            maxB = +b;
+          }
+        })
+      })
+      console.log(maxLine, maxSlope, maxB);
+      if (maxSlope === Infinity) {
+        svg.append('path').attr('d', 'M' + maxB + ',0V500');
+      } else {
+        svg.append('path')
+          .attr('d', 'M0,' + maxB +'L500,' + (maxB + 500 * maxSlope)); 
+      }
+      svg.selectAll('path').style({stroke:'red', fill: 'none', 'stroke-width': 1})
+      lines[maxSlope][maxB].forEach(function (i) {
+        svg.select('.c' + i).style('fill', 'pink').attr('r', 5);})
+    </script>
+  </body>
+  

@@ -1,0 +1,76 @@
+<link href="nv.d3.css" rel="stylesheet" type="text/css">
+
+<style> 
+#chart1 svg { 
+   height: 500px; 
+   min-width: 100px; 
+   min-height: 100px; 
+}
+</style> 
+
+<body> 
+<div id="chart1"> 
+   <svg></svg> 
+</div> 
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="nv.d3.min.js"></script>
+<script>
+
+jsondata = [
+{ 
+values: [
+{"Year":1980,"Winner":"Paul Siederman and Joe Baldini","DogsEaten":9.1,"Country":"United States","NewRecord":0},
+{"Year":1981,"Winner":"Thomas DeBerry ","DogsEaten":11,"Country":"United States","NewRecord":0},
+{"Year":1982,"Winner":"Steven Abrams ","DogsEaten":11,"Country":"United States","NewRecord":0},
+{"Year":1983,"Winner":"Luis Llamas ","DogsEaten":19.5,"Country":"Mexico","NewRecord":0},
+{"Year":1984,"Winner":"Birgit Felden ","DogsEaten":9.5,"Country":"Germany","NewRecord":0},
+{"Year":1985,"Winner":"Oscar Rodriguez ","DogsEaten":11.75,"Country":"United States","NewRecord":0},
+{"Year":1986,"Winner":"Mark Heller ","DogsEaten":15.5,"Country":"United States","NewRecord":0},
+{"Year":1987,"Winner":"Don Wolfman ","DogsEaten":12,"Country":"United States","NewRecord":0},
+{"Year":1988,"Winner":"Jay Green ","DogsEaten":14,"Country":"United States","NewRecord":0},
+{"Year":1989,"Winner":"Jay Green ","DogsEaten":13,"Country":"United States","NewRecord":0},
+{"Year":1990,"Winner":"Mike DeVito ","DogsEaten":16,"Country":"United States","NewRecord":0},
+{"Year":1991,"Winner":"Frank Dellarosa ","DogsEaten":21.5,"Country":"United States","NewRecord":1},
+{"Year":1992,"Winner":"Frank Dellarosa ","DogsEaten":19,"Country":"United States","NewRecord":0},
+{"Year":1993,"Winner":"Mike DeVito ","DogsEaten":17,"Country":"United States","NewRecord":0},
+{"Year":1994,"Winner":"Mike DeVito ","DogsEaten":20,"Country":"United States","NewRecord":0},
+{"Year":1995,"Winner":"Edward Krachie ","DogsEaten":19.5,"Country":"United States","NewRecord":0},
+{"Year":1996,"Winner":"Edward Krachie ","DogsEaten":22.25,"Country":"United States","NewRecord":1},
+{"Year":1997,"Winner":"Hirofumi Nakajima ","DogsEaten":24.5,"Country":"Japan","NewRecord":1},
+{"Year":1998,"Winner":"Hirofumi Nakajima ","DogsEaten":19,"Country":"Japan","NewRecord":0},
+{"Year":1999,"Winner":"Steve Keiner ","DogsEaten":20.25,"Country":"United States","NewRecord":0},
+{"Year":2000,"Winner":"Kazutoyo 'The Rabbit' Arai ","DogsEaten":25.13,"Country":"Japan","NewRecord":1},
+{"Year":2001,"Winner":"Takeru Kobayashi ","DogsEaten":50,"Country":"Japan","NewRecord":1},
+{"Year":2002,"Winner":"Takeru Kobayashi ","DogsEaten":50.5,"Country":"Japan","NewRecord":1},
+{"Year":2003,"Winner":"Takeru Kobayashi ","DogsEaten":44.5,"Country":"Japan","NewRecord":0},
+{"Year":2004,"Winner":"Takeru Kobayashi ","DogsEaten":53.5,"Country":"Japan","NewRecord":1},
+{"Year":2005,"Winner":"Takeru Kobayashi ","DogsEaten":49,"Country":"Japan","NewRecord":0},
+{"Year":2006,"Winner":"Takeru 'Tsunami' Kobayashi ","DogsEaten":53.75,"Country":"Japan","NewRecord":1},
+{"Year":2007,"Winner":"Joey Chestnut ","DogsEaten":66,"Country":"United States","NewRecord":1},
+{"Year":2008,"Winner":"Joey Chestnut ","DogsEaten":59,"Country":"United States","NewRecord":0},
+{"Year":2009,"Winner":"Joey Chestnut ","DogsEaten":68,"Country":"United States","NewRecord":1},
+{"Year":2010,"Winner":"Joey Chestnut ","DogsEaten":54,"Country":"United States","NewRecord":0}
+]
+}];
+
+// see http://nvd3.org/examples/discreteBar.html
+
+nv.addGraph(function() {
+  var chart = nv.models.discreteBarChart()
+     .x(function(d) { return d.Year })
+     .y(function(d) { return d.DogsEaten })
+     .tooltips(true)
+     .showValues(false)
+     .transitionDuration(250);
+
+ d3.select('#chart1 svg')
+     .datum(jsondata)
+     .call(chart);
+
+  nv.utils.windowResize(chart.update);
+
+  return chart;
+});
+</script> 
+</body> 

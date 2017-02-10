@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <style>
+      body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+      svg { width: 100%; height: 100%; }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      var margin = {top: 20, right: 10, bottom: 20, left: 10};
+      var width = 960 - margin.left - margin.right;
+      var height = 500 - margin.top - margin.bottom;
+      var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      console.log("you are now rocking with d3", d3);
+      
+      var nextPoint = function(p,d,theta) {
+        rad = theta * Math.PI/180.0
+        m = Math.tan(rad)
+        x = Math.cos(rad)*d + p.x
+        y = Math.sin(rad)*d + p.y
+        return {x:x, y:y}
+      }
+      //https://upload.wikimedia.org/wikipedia/commons/7/72/Turtle-Graphics_Polyspiral.svg
+      var lineData = []
+      var theta = -1
+      var d = 5;
+      var p = {x:312, y:250}
+      //lineData.push(p)
+      for (i = 0; i < 100; i+=1) {
+        p = nextPoint(p, d, theta)
+        lineData.push(p)
+        theta -= 89.5
+        d += 5
+     	}
+      
+      
+      var lineFunction = d3.svg.line()
+                         .x(function(d) { return d.x; })
+                         .y(function(d) { return d.y; })
+                         .interpolate("linear");
+      
+      var lineGraph = svg.append("path")
+                            .attr("d", lineFunction(lineData))
+                            .attr("stroke", "black")
+                            .attr("stroke-width", 1)
+                            .attr("fill", "none");
+    </script>
+  </body>
+  

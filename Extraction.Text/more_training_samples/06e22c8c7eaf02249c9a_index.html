@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Budget for Connecticut State IT Projects</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	<body>
+
+		<script type="text/javascript">
+            // Page Setup - need a very wide screen
+            var body = d3.select("body");
+            var svg = body.append("svg")
+                        .attr("width", 1800)
+                        .attr("height", 2300);
+
+
+			//Load in contents of CSV file
+			d3.csv("ctitportfolio.csv", function(data) {
+       
+                // For some reason not working, maybe they are treated as strings?
+                // data.sort( function(a,b) {
+                //     return d3.ascending(a.TotalBudget, b.TotalBudget);
+                // });
+
+                d3.select("svg").selectAll('rect')
+                    .data(data)
+                    .enter()
+                    .append('rect')
+                    .attr("x", 0)
+                    .attr("y", function(d,i) {
+                        return i * 15;
+                    })
+                    // in future, use .attr("class","somethingSpecial")
+                    // Color code for what degree of priority that project is.
+                    .style("fill",
+                        function(d) {
+                            switch(d.Level) {
+                                case "1":
+                                    return "red";
+                                case "2":
+                                    return "yellow";
+                                case "3":
+                                    return "green";
+                                default:
+                                    return "black";
+                            }
+                        })
+                    .attr("height", 12)
+                    .attr("width", function(d) {
+                        return d.TotalBudget / 20000;
+                    })
+                    .append("title")
+                    .text(function(d) {
+                        return d.ProjectName + " : costs " + d.TotalBudget;
+                    });
+			    });
+		</script>
+
+	</body>
+</html>

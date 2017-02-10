@@ -194,7 +194,9 @@ namespace Extraction.Text
 				return;
 			}
 
-			string[] fileEntries = Directory.GetFiles("training_samples");
+			string[] fileEntries1 = Directory.GetFiles("training_samples");
+			string[] fileEntries2 = Directory.GetFiles("more_training_samples");
+			string[] fileEntries = fileEntries1.ToList().Concat(fileEntries2.ToList()).ToArray();
 			foreach (string fileName in fileEntries)
 			{
 				string text_new = File.ReadAllText(fileName);
@@ -270,7 +272,9 @@ namespace Extraction.Text
 				return;
 			}
 
-			string[] fileEntries = Directory.GetFiles("training_samples");
+			string[] fileEntries1 = Directory.GetFiles("training_samples");
+			string[] fileEntries2 = Directory.GetFiles("more_training_samples");
+			string[] fileEntries = fileEntries1.ToList().Concat(fileEntries2.ToList()).ToArray();
 			foreach (string fileName in fileEntries)
 			{
 				string text_new = File.ReadAllText(fileName);

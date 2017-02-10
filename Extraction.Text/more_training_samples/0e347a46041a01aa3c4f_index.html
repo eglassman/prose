@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <style>
+     body {
+     	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+     } 
+    </style>
+  </head>
+  <body><svg></svg></body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+function collatz(n) {
+  var ret = { count: 0, max: n};
+  if (n === undefined || n === 0) {return ret; }
+  while (n != 1) {
+    ret.count = ret.count + 1;
+    if (n % 2 === 0) { n = n / 2;}
+    else { n = ((3*n)+1)/2; }
+    if (n > ret.max) { ret.max = n}
+  }
+  return ret;
+}
+
+var data = d3.range(5200).map(function(d) { return collatz(d)});
+
+// mess with width to see different patterns.
+var width = 960;
+var height = 500;
+var countColor = d3.scale.linear()
+.domain(d3.extent(data, function(d) { return d.count;}))
+	.range(["#CFE2D8","#1F201F"])
+	.interpolate(d3.interpolateHsl);
+
+var maxColor = d3.scale.linear()
+.domain(d3.extent(data, function(d) { return d.max;}))
+	.range(["#DBD6E9","#11111B"])
+	.interpolate(d3.interpolateHsl);
+d3.select("svg").attr({
+	width: width,
+	height: height
+});
+var c = d3.select("svg").append("g");
+c.attr("transform", "translate(0,38)");
+
+c.append("text").classed("label",true).attr("transform","translate(0, -11)").text("Mouse over a box.");
+
+c.selectAll("rect").data(data)
+	.enter()
+	.append("rect")
+.attr("x",  function(d, i) { return (i % (width/16)) * 16})
+.attr("y",  function(d, i) { return (Math.floor(i / (width/16)) * 16 )})
+.attr("id", function(d, i) { return i; })
+.attr("width", 10)
+.attr("height",10)
+.attr("fill", function(d) { return countColor(d.count) })
+.attr("stroke", function(d) { return maxColor(d.max) })
+.attr("stroke-width", "2px")
+.on("mouseover", function(d,i) { d3.select(".label").text(i + " took " + d.count + " cycles and reached a max of " + d.max)});
+</script>
+</html>

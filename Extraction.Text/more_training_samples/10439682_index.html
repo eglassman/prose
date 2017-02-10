@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>MPLD3</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="mpld3_defaults.js"></script>
+    <script src="viz.js"></script>
+
+</head>
+
+<body>
+    <div id="test" ></div>
+
+    <script type="text/javascript">
+    function get_data(N){
+        return viz.sim.linear([{
+            mu: [1, 1],
+            std: [0.5, 0.5]
+        }, {
+            mu: [2, 2],
+            std: [0.5, 0.5]
+        }], N);        
+    }
+
+    var data = get_data(100);
+    draw_test(data);
+
+    var inputScale = d3.scale.quantize()
+        .domain([0, 1])
+        .range([5, 20, 60, 200, 100, 65, 30, 2]);
+
+    !function loop(){
+        d3.transition()
+            .ease("linear")
+            .duration(10000)
+            .tween("transform", function (){
+                return function (t){
+                    draw_test(get_data(inputScale(t)));
+                }
+            })
+    }();
+
+    function draw_test(data) {
+        var chart = viz.mpld3.scatter();
+
+        chart.x(function(d) {
+            return d.features[0]
+        });
+        chart.y(function(d) {
+            return d.features[1]
+        });
+        chart.c(function(d) {
+            return d.label;
+        });
+
+        var fig = new viz.plot.figure(chart(data));
+        fig.draw("#test");
+    }
+    </script>
+</body>
+
+</html>

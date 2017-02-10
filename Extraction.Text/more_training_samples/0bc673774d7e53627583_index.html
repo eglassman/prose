@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>OECD Government Spending on Higher Education</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<link rel="stylesheet" type="text/css" href="chartStylescatter.css">
+	</head>
+	<body>
+		<div id="container">
+		<div id="header">
+		<h1 class="left">TOTAL GOVERNMENT VS HOUSEHOLD EXPENDITURE (per capita) ON HIGHER EDUCATION</h1>
+		<h2 class="left">A comparison of OECD member countries (including Russia) by total government expenditure</br>(at all levels) and household expenditure in U.S. Dollars in 2011.</h2>
+		</div>
+		<div id="dropdowns">
+		</div>
+		<div id = "wrapper">
+		<div id="leftdiv">
+		
+		<div id="tooltip" class="hidden">
+        <p><strong><span id="tooltipHeading">Important Label Heading</span></strong></p>
+        <p><span id="value">100</span></p>
+		<p><span id="value2">100</span></p>
+		<p><span id="value3">100</span></p>
+		</div>
+</div>
+		<script type="text/javascript">		
+		
+			var w = 740;
+			var h = 630;
+			var padding = [ 20, 10, 30, 80 ];  //Top, right, bottom, left
+
+
+
+			var xScale = d3.scale.linear()
+								.range([padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] - 30 ]);
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(15)
+							.tickFormat(function (d) {
+									return "$" + d;})
+							;
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.ticks(10)
+							.tickFormat(function (d) {
+									return "$" + d;})
+							;
+
+			var svg = d3.select("#leftdiv")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+				
+						
+			d3.csv("OECD Tertiary Education Spending by funding source.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.governmentExpendituresTotal, +b.governmentExpendituresTotal);
+				});
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+					return +d.expendituresOfHouseholds / +d.popnM;
+					}),
+					d3.max(data, function(d) {
+					return +d.expendituresOfHouseholds / +d.popnM;
+				}) ]);
+								
+				yScale.domain([ 
+					d3.max(data, function(d) {
+					return +d.governmentExpendituresTotal / +d.popnM;
+						}),
+					d3.min(data, function(d) {
+					return +d.governmentExpendituresTotal / +d.popnM;
+					})						
+						]);
+
+				var circles = svg.append("g")
+								.attr("clip-path", "url(#chart-area)")
+								.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+				
+				
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] - 30 + 10) + ")")
+					.call(xAxis);
+				
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 10) + ",0)")
+					.call(yAxis);
+					
+				svg.append("text")
+					.attr("class", "x label")
+					.attr("text-anchor", "middle")
+					.attr("x", w/2)
+					.attr("y", h - 15)
+					.text("average household expenditure on higher education (per capita)");
+
+				svg.append("text")
+					.attr("class", "y label")
+					.attr("text-anchor", "middle")
+					.attr("x", 0)
+					.attr("y", 0)
+					.attr("dy",20)
+					.attr("dx",-(w/2)+padding[0]+50)
+					.attr("transform", "rotate(-90)")
+					.text("total government expenditure (all levels) on higher education (per capita)");	
+				
+				
+				svg.append("clipPath")                  //Make a new clipPath
+					.attr("id", "chart-area")           //Assign an ID
+					.append("rect")                     //Within the clipPath, create a new rect
+					.attr("x", padding[3]- 10)                 //Set rect's position and size…
+					.attr("y", padding [0] -10)
+					.attr("width", w - padding[1] - padding [3])
+					.attr("height", h);
+				
+				
+				
+				
+				circles.attr("cx", -100)
+					.attr("cy", h + 50)
+					.attr("r", 2)
+					;
+					
+				circles.sort(function(a,b){
+								return d3.ascending(+a.expendituresOfHouseholds, b.expendituresOfHouseholds);
+								})
+						.transition()
+						.delay(function(d,i){
+						return i * 100;
+						})
+						.duration(2000)
+						.attr("cx", function(d) {
+							return xScale(d.expendituresOfHouseholds / d.popnM);
+							})
+						.attr("cy", function(d) {
+						return yScale(d.governmentExpendituresTotal / d.popnM);
+							})
+						.each("end", function(d){
+							d3.select(this)
+							.transition()
+							.delay(function(d,i){
+							return i * 50;
+								})
+							.duration(1000)
+							.attr("r", 5);
+							});
+					
+				circles.on("mouseover", function(d) {
+							var coordinates = [0, 0];
+							coordinates = d3.mouse(this);
+							var x = coordinates[0] + 45;
+							var y = coordinates[1] + 87;	
+																					
+							//Update the tooltip position and value
+							d3.select("#tooltip")
+							  .style("left", x + "px")
+							  .style("top", y + "px")
+							  .select("#tooltipHeading")							  
+							  .text(d.country + "'s Higher Education Spending Per Capita:");
+							
+							d3.select("#tooltip")
+							  .select("#value")
+							  .text("Government Expenditure (All Levels), per capita: $" + (d.governmentExpendituresTotal / d.popnM));
+							  
+							
+							d3.select("#tooltip")
+							  .select("#value2")
+							  .text("Household expenditure on Higher Education, per capita: $" + (d.expendituresOfHouseholds / d.popnM));
+							  
+							  d3.select("#tooltip")
+							  .select("#value3")
+							  .text("population (2011): " + d.popnM + "m");
+							  
+							  
+							  
+							//Show the tooltip
+							d3.select("#tooltip").classed("hidden", false);
+							
+							d3.select(this)
+							.transition()
+							.duration(500)
+							.attr("r", 30)
+							;
+														
+							});
+				circles.on("mouseout", function(d) {
+							
+							d3.select("#tooltip").classed("hidden", true);
+							d3.select(this)
+							.transition()
+							.duration(500)
+							.attr("r", 5);
+							});	
+
+											
+			});
+	
+		</script>
+		</div>
+		<div id="rightdiv">
+		<p class="left"></br><b>Data source(s) used:</b></br>
+		UNESCO-OECD-Eurostat (UOE) data collection on education statistics, compiled on the basis of national administrative sources, reported by Ministries of Education or National Statistical Offices.</p>
+		</br><p><b>Key Statistical Concept:</b></br>
+		Countries report expenditures by sources of funds: Government (central, regional, local); International agencies and other foreign sources; Households and Other private entities (including firms and religious institutions and other non-profit organisations). Three types of financial transactions can be distinguished: -dicircle expenditure/payments on educational institutions -Intergovernmental transfers for education -Transfers to students or households and to other private entities.</p>
+		</br><p><b>Other Aspects:</b></br>
+		Financial year is in general identical to the calendar year and thus running from 1st of January to 31st of December, with some exceptions for Canada, Japan and the United Kingdom where the financial year is running from 1st of April to 31st of March and for the United States where the financial year is running from 1st of July to 30th of June.</p>
+		</div>
+		<div id="source">
+		<p>SOURCE: <a href="http://stats.oecd.org/Index.aspx?DataSetCode=RFIN1">OECD</a>, 2015</p>.</p>
+		</div>
+		</div>
+		</div>
+	</body>
+</html>

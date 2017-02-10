@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <script type="text/javascript" src="matrix.js"></script>
+    <style type="text/css">
+
+rect {
+  fill: steelblue;
+  fill-opacity: .8;
+  stroke: white;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="canvas"></div>
+    <script type="text/javascript">
+
+var plot = MatrixPlot();
+
+setInterval(function() {
+  plot.update({
+    collection: {
+      items: function() { return d3.zip(d3.range(10 + ~~(Math.random() * 50))); }
+    }
+  });
+}, 2500);
+
+    </script>
+  </body>
+</html>

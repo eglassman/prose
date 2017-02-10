@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.feature--state {
+  fill: #bbb;
+}
+
+.feature--station {
+  fill: steelblue;
+  fill-opacity: .8;
+}
+
+.feature--railroad {
+  fill: none;
+  fill-opacity: .8;
+  stroke: #d77;
+}
+
+.feature--state :hover,
+.feature--station :hover {
+  fill: #eba;
+}
+
+.feature--state .active {
+  fill: orange;
+}
+
+.feature--railroad {
+  pointer-events: none;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="./railroads.js"></script>

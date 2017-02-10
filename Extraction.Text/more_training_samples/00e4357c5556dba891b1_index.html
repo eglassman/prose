@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style>
+			body { 
+				font-family: helvetica, sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+
+		<p>For now, just some rectangles...</p>
+		<svg width="500" height="500">
+			<rect x="10" y="20" width="400" height="30" style="fill:rgb(2,100,117)"/>
+			<rect x="10" y="60" width="400" height="30" style="fill:rgb(194,163,79)"/>
+			<rect x="10" y="100" width="400" height="30" style="fill:rgb(251,184,41)"/>
+		</svg>
+
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("arrestsbyage2012.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

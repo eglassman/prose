@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Letter Count Bar Chart</title>
+	<style>
+    body,
+textarea {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+body {
+  margin: 5px;
+  padding: 0px;
+
+  background-color: whitesmoke;
+}
+
+svg {
+  /* bl.ocks.org defaults to 960px x 500px space */
+  /* account for margin in final width/height */
+  width: 950px;
+  height: 490px;
+}
+
+textarea {
+  font-size: 11pt;
+
+  /* position this on top of the svg */
+  position: fixed;
+  top: 5px;
+  left: 5px;
+
+  margin: 0px;
+  padding: 5px;
+
+  width: 400px;
+  height: 75px;
+
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+
+  /* try changing the color in the block editor! */
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/*
+ * we will style both html elements and svg elements in css,
+ * but how we style them is a little different. make sure you
+ * understand the difference between an id and class in css too!
+ */
+
+ #bounds {
+  fill: white;
+
+  /* use stroke, not border, for svg elements */
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}
+
+rect.bar {
+  stroke: none;
+  fill: #00543c;
+}
+
+#x-axis text,
+#y-axis text {
+  font-size: 10pt;
+}
+
+/* path: axis line, line: tick marks */
+
+#x-axis line {
+  fill: none;
+  stroke: none;
+}
+
+#x-axis path,
+#y-axis path,
+#y-axis line {
+  fill: none;
+
+  /* use stroke, not border, for svg elements */
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}
+  </style>
+  <!-- include d3.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" type="text/javascript"></script>
+
+  <!-- include google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,300italic" rel="stylesheet" type="text/css">
+
+  <!-- custom stylesheet for our visualization -->
+  <link href="style.css" rel="stylesheet" type="text/css">
+
+  <!-- our javascript code for counting letters -->
+  <script src="count.js" type="text/javascript"></script>
+
+  <!-- our javascript code for our bar chart -->
+  <script src="chart.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <!-- we will place our visualization in this svg -->
+  <svg></svg>
+
+  <!-- we will place the text that we'll analyze here -->
+  <textarea></textarea>
+
+  <script type="text/javascript">
+  /*
+   * lets add a rectangle around our entire svg to help debug
+   */
+
+  // we can select specific elements in the "DOM" using d3
+  var svg = d3.select("body").select("svg");
+
+  // get the calculated bounding box of the svg
+  var bounds = svg.node().getBoundingClientRect();
+  console.log("svg bounds:", bounds);
+
+  // add the rectangle to the svg
+  // https://github.com/mbostock/d3/wiki/SVG-Shapes#svg_rect
+  var border = svg.append("rect")
+      .attr("id", "bounds")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", bounds.width)
+      .attr("height", bounds.height);
+
+  /*
+   * whoa, look at all those chained methods! this is very
+   * common, but doesn't work with everything. see:
+   * http://alignedleft.com/tutorials/d3/chaining-methods
+   */
+
+  // suppose we wanted rounded corners. instead of chaining we could do:
+  border = border.attr("rx", 10);
+  border = border.attr("ry", 10);
+
+  // we will style this rectangle in css using its id
+  // take a look at the css file
+
+  /*
+   * load sample text to analyze. this external file request will be handled
+   * asynchronously, meaning the browser will not wait for the file and will
+   * instead continue executing the rest of this script. when the load is done,
+   * the callback function will be called.
+   */
+  d3.text("peter.txt", function(error, data) { // anonymous function
+    if (error) {
+      console.warn(error);
+      return;
+    }
+
+    console.log(data);
+
+    /*
+     * now we need to select the textarea from the DOM
+     * https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
+     * https://github.com/mbostock/d3/wiki/Selections#text
+     */
+    d3.select("body").select("textarea").text(data);
+
+    // we should draw the bar chart after the data is loaded
+    drawBarChart();
+  });
+
+
+  // bonus material (cover only if time)
+
+  /*
+   * it would be nice to change the text and see our bar chart update! we can
+   * do that by adding an event listener. every time a key press is completed
+   * (the key is pressed down, and fully released), we will update our data
+   * and our resulting visualization.
+   */
+  d3.select("body").select("textarea")
+    .on("keyup", drawBarChart);
+    
+ /*
+ * updates the letter counts based on the textarea and redraws the
+ * entire histogram
+ */
+var updateData = function() {
+  // get the textarea "value" (i.e. currently entered text)
+  var text = d3.select("body").select("textarea").node().value;
+
+  // calculate the letter count
+  var count = countLetters(text);
+
+  /*
+   * you will find there are a lot of JavaScript functions that are not
+   * supported in all browsers. for consistency, we will convert our
+   * count object to a d3 map to avoid any issues.
+   */
+  count = d3.map(count);
+
+  /*
+   * speaking of non-standard functions, try out console.table!
+   * remove this line if it doesn't work on your browser
+   */
+  try {
+    console.table(count);
+  }
+  catch (e) {
+    console.log(count);
+  }
+
+  return count;
+};
+
+/*
+ * our massive function to draw a bar chart. note some stuff in here
+ * is bonus material (for transitions and updating the text)
+ */
+var drawBarChart = function() {
+  // get the data we want to visualize
+  var count = updateData();
+
+  // make sure we have at least 1 letter to draw
+  if (count.keys().length < 1) {
+    return;
+  }
+
+  // get the svg we want to draw on
+  var svg = d3.select("body").select("svg");
+
+  /*
+   * we will need to map our data domain to our svg range, which
+   * means we need to calculate the min and max of our data
+   */
+
+  var countMin = 0; // always include 0 on a bar chart
+  var countMax = d3.max(count.values());
+  console.log("count bounds:", [countMin, countMax]);
+
+  /*
+   * before we draw, we should decide what kind of margins we
+   * want. this will be the space around the core plot area,
+   * where the tick marks and axis labels will be placed
+   * http://bl.ocks.org/mbostock/3019563
+   */
+  var margin = {
+    top:    15,
+    right:  35, // leave space for y-axis
+    bottom: 30, // leave space for x-axis
+    left:   50
+  };
+
+  // now we can calculate how much space we have to plot
+  var bounds = svg.node().getBoundingClientRect();
+  var plotWidth = bounds.width - margin.right - margin.left;
+  var plotHeight = bounds.height - margin.top - margin.bottom;
+
+  /*
+   * okay now somehow we have to figure out how to map a count value
+   * to a bar height, decide bar widths, and figure out how to space
+   * bars for each letter along the x-axis
+   *
+   * this is where the scales in d3 come in very handy
+   * https://github.com/mbostock/d3/wiki/Scales
+   */
+
+  /*
+   * the counts are easiest because they are numbers and we can use
+   * a simple linear scale, but the complicating matter is the
+   * coordinate system in svgs:
+   * https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Positions
+   *
+   * so we want to map our min count (0) to the max height of the plot area
+   */
+  var countScale = d3.scale.linear()
+    .domain([countMin, countMax])
+    .range([plotHeight, 0])
+    .nice(); // this rounds the domain a bit for nicer output
+
+  /*
+   * the letters need an ordinal scale instead, which is used for
+   * categorical data. we want a bar space for all letters, not just
+   * the ones we found
+   */
+  var letterScale = d3.scale.ordinal()
+    // range, between-bar padding, outside padding
+    .rangeRoundBands([0, plotWidth], 0.1, 0)
+    .domain(letters); // global
+
+  /*
+   * to make translating and scaling easier, we place elements into
+   * svg groups first
+   */
+  var plot = svg.select("g#plot");
+
+  if (plot.size() < 1) { // need if statement if we redraw bar chart
+    plot = svg.append("g")
+      .attr("id", "plot")
+      .attr("transform", translate(margin.left, margin.top));
+  }
+
+  /*
+   * time to bind each data element to a rectangle in our visualization
+   */
+  var bars = plot.selectAll("rect")
+    .data(count.entries(), function(d) { return d.key; });
+
+  /*
+   * okay, this is where things get weird. d3 uses an enter, update,
+   * exit pattern for dealing with data. think of it as new data,
+   * existing data, and old data. for the first time, everything is new!
+   * http://bost.ocks.org/mike/join/
+   */
+
+  /*
+   * we use the enter() selection to add new bars for every
+   * new data element
+   */
+  bars.enter()
+    .append("rect")
+    .attr("class", "bar")
+    .attr("x", function(d) { return letterScale(d.key);})
+    .attr("width", letterScale.rangeBand())
+    .attr("y", function(d) { return countScale(d.value);})
+    .attr("height", function(d) {
+      return plotHeight - countScale(d.value);
+    });
+
+  /* start optional for updating bar chart each keypress */
+
+  /*
+   * what about when we get new text? can we do something fancy?
+   * OF COURSE WE CAN. but, we will get to that stuff later. here
+   * is just a preview.
+   *
+   * we will transition form the old bar height to the new one.
+   */
+  bars.transition()
+    .attr("y", function(d) { return countScale(d.value);})
+    .attr("height", function(d) {
+      return plotHeight - countScale(d.value);
+    });
+
+  /*
+   * some letters may no longer be present, so lets
+   * remove those bars
+   */
+  bars.exit()
+    .transition()
+    .attr("y", function(d) { return countScale(countMin);})
+    .attr("height", function(d) {
+      return plotHeight - countScale(countMin);
+    })
+    .remove();
+
+  /* end optional for updating bar chart each keypress */
+
+  /*
+   * okay we need some axis labels. thankfully, d3 has built-in
+   * functionality for this so we don't have to calculate how to
+   * draw each label or tick mark.
+   */
+
+  // we use these to automatically generate axis lines and tick marks
+  // explicitly, we are using d3.svg.axis() to generate a line function
+  // that we will call later to generate actual lines. (yes, a function
+  // can return another function in javascript!)
+  var xAxis = d3.svg.axis()
+    .scale(letterScale)
+    .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+    .scale(countScale)
+    .orient("left");
+
+  if (plot.select("g#y-axis").size() < 1) {
+    // add x-axis (remember where 0, 0 is located)
+    plot.append("g")
+      .attr("id", "x-axis")
+      .attr("transform", "translate(0, " + plotHeight + ")")
+      .call(xAxis);
+
+    // add y-axis
+    plot.append("g")
+      .attr("id", "y-axis")
+      // .attr("transform", "translate(" + plotWidth + ", 0)")
+      .call(yAxis);
+  }
+  else {
+    // need the if/else if we keep redrawing to update scale
+    // instead of re-plot it
+    plot.select("g#y-axis").call(yAxis);
+  }
+
+  // we will style these in css!
+};
+
+/*
+ * helper method to easily create translate commands
+ */
+var translate = function(x, y) {
+  return "translate(" + String(x) + ", " + String(y) + ")";
+};
+ /* array of all lowercase letters */
+var letters = "SOUTHERN NORTHERN TENDERLOIN BAYVIEW CENTRAL MISSION INGLESIDE TARAVAL RICHMOND PARK".split(" ");
+
+/*
+ * try this out in the console! you can access any variable or function
+ * defined globally in the console
+ *
+ * and, you can right-click output in the console to make it global too!
+ */
+
+/*
+ * removes any character (including spaces) that is not a letter, and
+ * that is not a letter, and converts all letters to lowercase
+ */
+var onlyDistricts = function(text) {
+  /*
+   * regular expressions:
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+   */
+
+  var notDistrict = /[^a-z]/g;
+  return text.toLowerCase().replace(notDistrict, "");
+};
+
+/*
+ * counts all of the letters in the input text and stores the counts as
+ * object properties
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+ */
+var countLetters = function(input) {
+  // var text = onlyDistricts(input);
+  var count = {};
+
+  /*
+   * we want 0s for letters that aren't present, so we will go ahead
+   * and initialize that now
+   */
+  // for (var i = 0; i < letters.length; i++) {
+  //   count[letters[i]] = 0;
+  // }
+
+  /*
+   * you can loop through strings as if they are arrays
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for
+   */
+  for (var i = 0; i < input.length; i++) {
+    var letter = input[i];
+
+    // check if we have seen this letter before
+    if (count.hasOwnProperty(letter)) {
+      count[letter] += 1;
+    }
+    else {
+      count[letter] = 1;
+    }
+  }
+
+  return count;
+};
+  </script>
+</body>
+
+</html>

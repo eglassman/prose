@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Correlation Matrix VII</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<style>
+</style>
+</head>
+<body>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="d3.hexbin.min.js"></script>
+<script>
+
+//These attributes could be derived from the data
+attributes = ["carat","depth","table","price","x","y","z"];
+attributeMatrix = [];
+
+attributes.forEach(function (a, x) {
+  attributes.forEach(function (b, y) {
+    //create an n-by-n matrix based on pairs of attributes
+    attributeMatrix.push({a: a, b: b, x: x, y: y})
+  })
+})
+
+colors = d3.scale.ordinal()
+  .range(["#827abf", "#f62150", "#6f89b6", "#f5e0b7", "#5b1e37", "#b9e3c5"]);
+
+var faintGray = "#f0f0f0";
+
+d3.select("body")
+  .append("svg")
+  .attr("height", 1140)
+  .attr("width", 1140)
+
+d3.json("diamonds.json", small_scatterplots);
+
+function small_scatterplots(data) {
+
+  console.log("data", data);
+  console.log("attributeMatrix", attributeMatrix);
+
+  //format data as numbers
+  data.forEach(function (d) {
+    attributes.forEach(function (att) {
+      d[att] = Number(d[att])
+    })
+  })
+
+  //create scales dynamically for each attribute's extent
+  scale = {};
+  attributes.forEach(function (att) {
+    scale[att] = d3.scale.linear();
+    attExtent = d3.extent(data, function (d) {return d[att]});
+    scale[att].domain(attExtent).range([5,95]);
+  })
+
+  var height = 100;
+  var width = 100;
+  var padding = 7;
+
+  var rows = attributes.length;
+  var columns = rows;
+  console.log('rows', rows);
+
+  //bind the matrix array to a grid of g elements
+  d3.select("svg")
+    .selectAll("g")
+    .data(attributeMatrix)
+    .enter()
+    .append("g")
+    .attr("transform", function (d) {
+      return "translate(" + 
+        ((d.x * (width + padding)) + padding) + "," + 
+        ((d.y * (height + padding)) + padding) + 
+        ")" 
+    });
+
+  ////////////////////////////////////////////////////////////
+  // setup the hexbin layout
+  var hexbin = d3.hexbin()
+    .size([width, height])
+    .radius(5);
+
+  var x = d3.scale.identity()
+    .domain([0, width]);
+
+  var y = d3.scale.linear()
+    .domain([0, height])
+    .range([height, 0]);
+
+  ////////////////////////////////////////////////////////////
+  // draw the grid of small multiples charts
+  d3.selectAll("g")
+    .each(function (matrix, i) {
+
+      //index i is only used for coloring
+      var row = Math.floor(i % rows);
+      var col = Math.floor(i / rows);
+  
+      //background/border
+      d3.select(this).append("rect")
+        .style("fill", "white")
+        .style("stroke", "silver")
+        .style("stroke-width", 1)
+        .attr("height", height)
+        .attr("width", width);
+        
+      // if we are comparing an attribute with itself
+      if (matrix.a === matrix.b) {
+  
+        // show a label
+        d3.select(this)
+          .append("text")
+          .attr("x", 50)
+          .style("text-anchor", "middle")
+          .attr("y", 50)
+          .style("font-family", "Roboto")
+          .style("font-weight", 400)
+          .text(matrix.a)
+  
+      } else {
+
+        d3.select(this).select("rect")
+          .style("fill", "white")
+          .style("stroke", "silver");
+/*     
+      // draw scatterplot points
+      d3.select(this).selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("r", 2)
+        .style("fill", colors(row + col))
+        .attr("cx", function (d) {return scale[matrix.a](d[matrix.a])})
+        .attr("cy", function (d) {return height - scale[matrix.b](d[matrix.b])})
+*/      
+
+      ////////////////////////////////////////////////////////////
+      // draw hexbin scatterplot
+
+      // create the points for the hexbin layout
+      var points = data.map(function(d) {
+        return [
+          scale[matrix.a](d[matrix.a]), 
+          height - scale[matrix.b](d[matrix.b])
+        ];
+      })
+
+      var hexbinData = hexbin(points);
+
+      var color = d3.scale.linear()
+        .domain([0, d3.max(hexbinData, function(d) {
+          return d.length;
+        })])
+        .range([faintGray, colors(row + col)]) 
+        .interpolate(d3.interpolateLab);
+
+      d3.select(this).append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+          .attr("class", "mesh")
+          .attr("width", width)
+          .attr("height", height);
+
+      d3.select(this)
+        .append("g")
+        .attr("clip-path", "url(#clip)")
+        .selectAll(".hexagon")
+          .data(hexbinData)
+          .enter().append("path")
+          .attr("class", "hexagon")
+          .attr("d", hexbin.hexagon())
+          .attr("transform", function(d) { 
+            return "translate(" + d.x + "," + d.y + ")"; 
+          })
+          .style("fill", function(d) {
+            return color(d.length) 
+          })
+          .style("stroke", faintGray);
+    }
+
+  })
+
+
+}
+
+</script>
+</body>
+</html>

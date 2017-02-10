@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!------------------------------------------------------------------>
+      <!-- BEGIN HEADER                                                 -->
+      <!------------------------------------------------------------------>
+      <meta charset="utf-8">
+      <title>Collisions with Pedestrians in NYC</title>
+      <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+      <script src="http://d3js.org/topojson.v1.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="index.css">
+      <!------------------------------------------------------------------>
+      <!-- END HEADER                                                   -->
+      <!------------------------------------------------------------------>
+   </head>
+   <body>
+      <!------------------------------------------------------------------>
+      <!-- BEGIN BODY                                                   -->
+      <!------------------------------------------------------------------>
+      <h1>PEDESTRIANS VERSUS CARS IN<br>NEW YORK CITY</h1>
+      <p>In January 2014, Mayor de Blasio launched a working group to implement <a href="http://www.nyc.gov/html/visionzero/pages/home/home.shtml">Vision Zero</a> and prevent pedestrian fatalities.  This report examines data available from <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95">NYC OpenData</a> on motor vehicle collisions as reported by the New York Police Department from July 2012 to March 2015.</p>     
+
+      <script type="text/javascript">
+
+         /////////////////////////////////////////////////////////////////////  
+         // GLOBAL
+         ///////////////////////////////////////////////////////////////////// 
+
+         // Transition Times 
+         var time_load=2000,
+             time_update=1000;
+
+         // Positions of Elements of Page
+         var width_picker=500,
+             height_picker=100,
+             width_map=700, //600,
+             height_map=600,
+             width_map_annotation=250,
+             height_map_annotation=100,
+             width_plot=500.0,
+             height_plot=height_map/2,
+             width_grid=(width_map+width_plot)/2,
+             height_grid=500,
+             width_gplot=(width_map+width_plot)-width_grid,
+             height_gplot=height_grid,
+             width_bar=width_plot,
+             height_bar=height_map/2,
+             x_map=0,
+             x_map_annotation=25,
+             x_plot=x_map+width_map,
+             x_grid=x_map,
+             x_picker=width_map,
+             x_bar=x_map+width_map,
+             y_picker=0,
+             y_map=160,
+             y_map_annotation=50,
+             y_grid=y_map+height_map,
+             y_bar=y_map,
+             y_plot=y_bar+height_bar,
+             x_gplot=x_grid+width_grid,
+             y_gplot=y_grid;
+
+             
+         // Positions of Bar
+         var pad_top_bar=35,
+             pad_bottom_bar=175,
+             pad_right_bar=50,
+             pad_left_bar=75,
+             pad_xaxis_bar=130,
+             //pad_yaxis_bar=25,
+             pad_title_bar=30;
+         var svg_bar=d3.select("body")
+                       .append("svg")
+                       .attr("id","svg_bar") 
+                       .attr("width",width_bar)
+                       .attr("height",height_bar)
+                       .attr("style","position:absolute; top: "+y_bar+"; left: "+x_bar+";");
+
+        // Positions of Plot
+         var pad_top_plot=15,
+             pad_bottom_plot=65,
+             pad_right_plot=pad_right_bar,
+             pad_left_plot=pad_left_bar,
+             pad_xaxis_plot=40,
+             pad_yaxis_plot=55;
+         var svg_plot=d3.select("body")
+                        .append("svg")
+                        .attr("id","svg_plot") 
+                        .attr("width",width_plot)
+                        .attr("height",height_plot)
+                        .attr("style","position:absolute; top: "+y_plot+"; left: "+x_plot+";");
+
+
+         // Positions of Grid
+         var pad_top_grid=100,
+             pad_bottom_grid=55+110,
+             pad_right_grid=50,
+             pad_left_grid=100,
+             pad_xaxis_grid=50,
+             pad_yaxis_grid=45;
+         var xr=(width_grid-pad_right_grid-pad_left_grid)/24.0/2.0,
+             yr=(height_grid-pad_bottom_grid-pad_top_grid)/12.0/2.0, 
+             maxr=xr;
+         if (yr > maxr) maxr=yr;
+         var svg_grid=d3.select("body")
+                        .append("svg")
+                        .attr("id","svg_grid") 
+                        .attr("width",width_grid)
+                        .attr("height",height_grid)
+                        .attr("style","position:absolute; top: "+y_grid+"; left: "+x_grid+";");
+
+        // Positions of Gridplot
+         var pad_top_gplot=pad_top_grid,
+             pad_bottom_gplot=pad_bottom_grid,
+             pad_right_gplot=50,
+             pad_left_gplot=100,
+             pad_xaxis_gplot=40,
+             pad_yaxis_gplot=55;
+         var svg_gplot=d3.select("body")
+                         .append("svg")
+                         .attr("id","svg_gplot") 
+                         .attr("width",width_gplot)
+                         .attr("height",height_gplot)
+                         .attr("style","position:absolute; top: "+y_gplot+"; left: "+x_gplot+";");
+
+         // Which Data You're Displaying
+         var tflag_set=0; // Numbers
+         var tbname_set=""; // New York City
+
+
+         /////////////////////////////////////////////////////////////////////  
+         // DATAPICKER
+         /////////////////////////////////////////////////////////////////////  
+         var svg_picker=d3.select("body").append("svg")
+                          .attr("class","picker")
+                          .attr("id","svg_picker")
+                          .attr("width",width_picker)
+                          .attr("height",height_picker)
+                          .attr("style","position:absolute; top: "+y_picker+"; left: "+x_picker+";");
+         var tpad_picker=25,pad_picker=15,rad_picker=20;
+         svg_picker.append("text")
+                   .attr("x",pad_picker).attr("y",tpad_picker)
+                   .attr("text-anchor","start")
+                   .text("Select data units:");
+         var x_button=pad_picker,
+             y_button=tpad_picker+pad_picker,
+             w_button=width_picker/4-pad_picker*3/2,
+             h_button=height_picker/2-pad_picker/2;
+         svg_picker.append("rect")
+                   .attr("class","picker number")
+                   .attr("id","pickernumberrect")
+                   .attr("x",x_button).attr("y",y_button)
+                   .attr("width",w_button).attr("height",h_button)
+                   .attr("rx",rad_picker).attr("ry",rad_picker)
+                   .attr("fill","rgb(180,180,180)")
+                   .append("title")
+                   .text("Click to display data as number of pedestrian injuries and fatalities");
+         svg_picker.append("text")
+                   .attr("class","picker number")
+                   .attr("x",x_button+w_button/2)
+                   .attr("y",y_button+h_button*0.64)
+                   .attr("text-anchor","middle")
+                   .text("Number");
+         x_button=x_button+w_button+pad_picker;
+         w_button=width_picker*3/4-pad_picker*3/2;
+         svg_picker.append("rect")
+                   .attr("class","picker perpop")
+                   .attr("id","pickerperpoprect")
+                   .attr("x",x_button).attr("y",y_button)
+                   .attr("width",w_button).attr("height",h_button)
+                   .attr("rx",rad_picker).attr("ry",rad_picker)
+                   .attr("fill","rgb(250,250,250)")
+                   .append("title")
+                   .text("Click to display data as number of pedestrian injuries and fatalities per million people of the population");
+         svg_picker.append("text")
+                   .attr("class","picker perpop")
+                   .attr("x",x_button+w_button/2)
+                   .attr("y",y_button+h_button*0.64)
+                   .attr("text-anchor","middle")
+                   .text("Number per Million Population");
+      
+
+         /////////////////////////////////////////////////////////////////////  
+         // MAP
+         /////////////////////////////////////////////////////////////////////  
+         var projection=d3.geo.mercator()
+                        .center([-73.94,40.70])
+                        .scale(58000)
+                        .translate([width_map/2+30,height_map/2+5]);
+
+         var path=d3.geo.path()
+                  .projection(projection);
+
+         var svg_map=d3.select("body").append("svg")
+                       .attr("class","map")
+                       .attr("id","svg_map")
+                       .attr("width",width_map)
+                       .attr("height",height_map)
+                       .attr("style","position:absolute; top: "+y_map+"; left: "+x_map+";");
+                     //.attr("transform","translate(30,40)")
+
+         d3.json("nycbb_topojson.json",function(error,nyc) {
+  
+            if (error) return console.error(error);
+ 
+            var data_SI=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[0]),
+                data_MN=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[1]),
+                data_BX=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[2]),
+                data_BK=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[3]),
+                data_QN=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[4]);
+
+            svg_map.append("path")
+                   .attr("class","map borough SI")
+                   .attr("id","mapboroughSI")
+                   .datum(data_SI)
+                   .attr("d",path);
+            svg_map.append("path")
+                   .attr("class","map borough MN")
+                   .datum(data_MN)
+                   .attr("d",path);
+            svg_map.append("path")
+                   .attr("class","map borough BX")
+                   .datum(data_BX)
+                   .attr("d",path);
+            svg_map.append("path")
+                   .attr("class","map borough BK")
+                   .datum(data_BK)
+                   .attr("d",path);
+            svg_map.append("path")
+                   .attr("class","map borough QN")
+                   .datum(data_QN)
+                   .attr("d",path);
+
+            // Annotation
+            svg_map.append("foreignObject")
+                   .attr("class","map annotation")
+	             .attr("width",width_map_annotation)
+                   .attr("height",height_map_annotation)
+	             .attr("x",x_map_annotation)
+                   .attr("y",y_map_annotation)
+	             .append("xhtml:body")
+	             .append("xhtml:div")
+                   .html("The colors in this map indicate the average number of pedestrian injuries and fatalities per month in each borough.  Darker indicates a larger number.  Click on a borough to update the plots with data for that borough only.  Click on the background to return to full city data.");
+
+
+            // Fill in colors and numbers
+
+            var colorScale_map=d3.scale.linear();
+
+            d3.csv("Clean_NYPD_Collisions_OverallAvg_ByBorough.csv", function(error,data) {
+               if (error) return console.log(error);
+               colorScale_map.range([0,125])
+                             .domain([d3.min(data,function(d){return +d.AvgInjuredKilledByMonth;}),
+                                      d3.max(data,function(d){return +d.AvgInjuredKilledByMonth;})]);
+
+               for (var ii=0;ii<5;ii++)
+               {
+                  var br="";
+                  switch (d3.round(data[ii].Borough)){
+                     case 0: br="SI"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[0]); break;
+                     case 1: br="MN"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[1]); break;
+                     case 2: br="BK"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[3]); break;
+                     case 3: br="QN"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[4]); break;
+                     case 4: br="BX"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[2]); break;
+                  }
+                  svg_map.selectAll(".map.borough."+br)
+                         .transition()
+                         .duration(time_load)
+                         .style("fill","rgb("+d3.round(125-colorScale_map(+data[ii].AvgInjuredKilledByMonth))+","+
+                                              d3.round(255-colorScale_map(+data[ii].AvgInjuredKilledByMonth))+","+
+                                              d3.round(190-colorScale_map(+data[ii].AvgInjuredKilledByMonth))+")");
+                  //svg_map.append("text")
+                  //       .attr("class","map borough "+br+" annotation")
+                  //       .attr("x",0)
+                  //       .attr("y",0)
+                  //       .attr("transform","translate("+path.centroid(bdata)+")")
+                  //       .attr("text-anchor","middle")
+                  //       .text(d3.round(data[ii].AvgInjuredKilledByMonth));
+               }
+
+            }); // d3.csv("Clean_NYPD_Collisions_OverallAvg_ByBorough.csv"
+
+
+            // Event listeners
+            d3.selectAll(".map.borough.SI")
+              .on("click",function(){
+                 tbname_set="_STATEN ISLAND";
+                 restrokeMapBorder("SI",2);
+                 restrokeMapBorder("MN",1);
+                 restrokeMapBorder("BK",1);
+                 restrokeMapBorder("QN",1);
+                 restrokeMapBorder("BX",1);
+                 updateTitle("STATEN ISLAND");
+                 reloadBar(tbname_set,tflag_set);
+                 reloadPlot(tbname_set,tflag_set);
+                 reloadGrid(tbname_set,tflag_set);
+                 reloadGplot(tbname_set,tflag_set);
+                 d3.event.stopPropagation();
+              });
+            d3.selectAll(".map.borough.MN")
+              .on("click",function(){
+                 tbname_set="_MANHATTAN";
+                 restrokeMapBorder("SI",1);
+                 restrokeMapBorder("MN",2);
+                 restrokeMapBorder("BK",1);
+                 restrokeMapBorder("QN",1);
+                 restrokeMapBorder("BX",1);
+                 updateTitle("MANHATTAN");
+                 reloadBar(tbname_set,tflag_set);
+                 reloadPlot(tbname_set,tflag_set);
+                 reloadGrid(tbname_set,tflag_set);
+                 reloadGplot(tbname_set,tflag_set);
+                 d3.event.stopPropagation();
+              });
+            d3.selectAll(".map.borough.BK")
+              .on("click",function(){
+                 tbname_set="_BROOKLYN";
+                 restrokeMapBorder("SI",1);
+                 restrokeMapBorder("MN",1);
+                 restrokeMapBorder("BK",2);
+                 restrokeMapBorder("QN",1);
+                 restrokeMapBorder("BX",1);
+                 updateTitle("BROOKLYN");
+                 reloadBar(tbname_set,tflag_set);
+                 reloadPlot(tbname_set,tflag_set);
+                 reloadGrid(tbname_set,tflag_set);
+                 reloadGplot(tbname_set,tflag_set);
+                 d3.event.stopPropagation();
+               });
+            d3.selectAll(".map.borough.QN")
+              .on("click",function(){
+                 tbname_set="_QUEENS";
+                 restrokeMapBorder("SI",1);
+                 restrokeMapBorder("MN",1);
+                 restrokeMapBorder("BK",1);
+                 restrokeMapBorder("QN",2);
+                 restrokeMapBorder("BX",1);
+                 updateTitle("QUEENS");
+                 reloadBar(tbname_set,tflag_set);
+                 reloadPlot(tbname_set,tflag_set);
+                 reloadGrid(tbname_set,tflag_set);
+                 reloadGplot(tbname_set,tflag_set);
+                 d3.event.stopPropagation();
+              });
+            d3.selectAll(".map.borough.BX")
+              .on("click",function(){
+                 tbname_set="_BRONX";
+                 restrokeMapBorder("SI",1);
+                 restrokeMapBorder("MN",1);
+                 restrokeMapBorder("BK",1);
+                 restrokeMapBorder("QN",1);   
+                 restrokeMapBorder("BX",2);
+                 updateTitle("THE BRONX");
+                 reloadBar(tbname_set,tflag_set);
+                 reloadPlot(tbname_set,tflag_set);
+                 reloadGrid(tbname_set,tflag_set);
+                 reloadGplot(tbname_set,tflag_set);
+                 d3.event.stopPropagation();
+              });   
+            d3.selectAll("#svg_map")
+              .on("click",function(){
+                 tbname_set="";
+                 restrokeMapBorder("SI",1);
+                 restrokeMapBorder("MN",1);
+                 restrokeMapBorder("BK",1);
+                 restrokeMapBorder("QN",1);
+                 restrokeMapBorder("BX",1);
+                 updateTitle("NEW YORK CITY");
+                 reloadBar(tbname_set,tflag_set);
+                 reloadPlot(tbname_set,tflag_set);
+                 reloadGrid(tbname_set,tflag_set);
+                 reloadGplot(tbname_set,tflag_set);
+                 d3.event.stopPropagation();
+               });
+
+
+         }); // d3.json("nycbb_topojson.json"
+
+         /////////////////////////////////////////////////////////////////////  
+         // BAR
+         ///////////////////////////////////////////////////////////////////// 
+
+         // Setup
+         var xScale_bar=d3.scale.linear()
+                          .range([0,width_bar-pad_right_bar-pad_left_bar]);
+         var yScale_bar=d3.scale.ordinal()
+                          .rangeRoundBands([pad_top_bar,height_bar-pad_bottom_bar],0.3);
+         var xAxis_bar=d3.svg.axis()
+                         .scale(xScale_bar) 
+                         .orient("bottom");
+         var yAxis_bar=d3.svg.axis()
+                         .scale(yScale_bar)
+                         .orient("left");
+
+         d3.csv("Clean_NYPD_Collisions.csv", function(error,data) {
+
+            if (error) return console.log(error);
+
+            // Calculate Average and Standard Deviation Pre- and Post-Working Group
+            mnsd=calcMean(data,tflag_set);
+
+            xScale_bar.domain([0,d3.max(mnsd,function(d){
+                                                return +d.mn+(+d.sd);
+                                             })]);
+            yScale_bar.domain(mnsd.map(function(d) { return d.name; } ));
+
+            svg_bar.selectAll("rect").data(mnsd).enter().append("rect")
+                   .attr("class","bar rects")
+                   .attr("x",pad_left_bar)
+                   .attr("y",function(d)
+                             {
+                               return yScale_bar(d.name);
+                             })
+                   .attr("width",0)
+                   .attr("height",yScale_bar.rangeBand());
+            svg_bar.selectAll("line[id='barlinemain']").data(mnsd).enter().append("line").attr("id","barlinemain")
+                   .attr("class","bar error")
+                   .attr("x1",pad_left_bar)
+                   .attr("x2",pad_left_bar)
+                   .attr("y1",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2;
+                              })
+                   .attr("y2",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2;
+                              });
+            svg_bar.selectAll("line[id='barlineleft']").data(mnsd).enter().append("line").attr("id","barlineleft")
+                   .attr("class","bar error")
+                   .attr("x1",pad_left_bar)
+                   .attr("x2",pad_left_bar)
+                   .attr("y1",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2;
+                              })
+                   .attr("y2",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2;
+                              });
+            svg_bar.selectAll("line[id='barlinerght']").data(mnsd).enter().append("line").attr("id","barlinerght")
+                   .attr("class","bar error")
+                   .attr("x1",pad_left_bar)
+                   .attr("x2",pad_left_bar)
+                   .attr("y1",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2;
+                              })
+                   .attr("y2",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2;
+                              });
+
+            svg_bar.append("g")
+                   .attr("class","bar x axis")
+                   .attr("transform","translate("+pad_left_bar+","+(height_bar-pad_bottom_bar)+")")
+                   .call(xAxis_bar);
+            svg_bar.append("text")
+                   .attr("x",pad_left_bar+(width_bar-pad_left_bar-pad_right_bar)/2)
+                   .attr("y",height_bar-pad_xaxis_bar)
+                   .attr("class","bar label")
+                   .attr("text-anchor","middle")
+                   .text("Number of Pedestrian Injuries and Fatalities Per Month");
+            svg_bar.append("text") // To Fill in Later 
+                   .attr("class","bar y label")
+                   .attr("id","barylabel2")
+                   .attr("x",pad_left_bar+(width_bar-pad_left_bar-pad_right_bar)/2)
+                   .attr("y",height_bar-pad_xaxis_bar+15)
+                   .attr("text-anchor","middle")
+                   .attr("opacity","0.0")
+                   .text("Per Million Population");
+            svg_bar.append("g")
+                   .attr("class","bar y axis")
+                   .attr("transform","translate("+pad_left_bar+",0)")
+                   .call(yAxis_bar);
+            svg_bar.append("text")
+                   .attr("x",pad_left_bar+(width_bar-pad_left_bar-pad_right_bar)/2)
+                   .attr("y",pad_title_bar)
+                   .attr("class","bar label")
+                   .attr("text-anchor","middle")
+                   .text("Effect of Vision Zero Working Group");
+
+            // Load Bars
+            svg_bar.selectAll("rect")
+                   .transition()
+                   .duration(time_load)
+                   .attr("width",function(d){
+                                    return xScale_bar(+d.mn);
+                                 });
+            svg_bar.selectAll("line[id='barlinemain']")
+                   .transition()
+                   .duration(time_load)
+                   .attr("x1",function(d)
+                              {
+                                return pad_left_bar+xScale_bar(+d.mn-(+d.sd));
+                              })
+                   .attr("x2",function(d)
+                              {
+                                return pad_left_bar+xScale_bar(+d.mn+(+d.sd));
+                              });
+            svg_bar.selectAll("line[id='barlineleft']")
+                   .transition()
+                   .duration(time_load)
+                   .attr("x1",function(d)
+                              {
+                                return pad_left_bar+xScale_bar(+d.mn-(+d.sd));
+                              })
+                   .attr("x2",function(d)
+                              {
+                                return pad_left_bar+xScale_bar(+d.mn-(+d.sd));
+                              })
+                   .attr("y1",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2-yScale_bar.rangeBand()/4;
+                              })
+                   .attr("y2",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2+yScale_bar.rangeBand()/4;
+                              });
+            svg_bar.selectAll("line[id='barlinerght']")
+                   .transition()
+                   .duration(time_load)
+                   .attr("x1",function(d)
+                              {
+                                return pad_left_bar+xScale_bar(+d.mn+(+d.sd));
+                              })
+                   .attr("x2",function(d)
+                              {
+                                return pad_left_bar+xScale_bar(+d.mn+(+d.sd));
+                              })
+                   .attr("y1",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2-yScale_bar.rangeBand()/4;
+                              })
+                   .attr("y2",function(d)
+                              {
+                                return yScale_bar(d.name)+yScale_bar.rangeBand()/2+yScale_bar.rangeBand()/4;
+                              });
+
+         }); //d3.csv("Clean_NYPD_Collisions.csv"
+
+         svg_bar.append("foreignObject")
+                .attr("class","bar annotation")
+	              .attr("width",width_bar-pad_right_bar)
+                .attr("height",110)
+	              .attr("x",0)
+                .attr("y",height_bar-pad_xaxis_bar+25)
+	              .append("xhtml:body")
+	              .append("xhtml:div")
+                .html("The average number of pedestrian injuries and fatalities per month before and after the Vision Zero working group was established.  The error bars are standard deviations.  There does appear to be a decrease in injuries and fatalities after the working group was established, but a statistical analysis should be done.");
+
+         /////////////////////////////////////////////////////////////////////  
+         // PLOT
+         ///////////////////////////////////////////////////////////////////// 
+
+         // Setup
+         var xScale_plot=d3.time.scale()
+                           .range([pad_left_plot,width_plot-pad_right_plot]);
+         var yScale_plot=d3.scale.linear()
+                           .range([height_plot-pad_bottom_plot,pad_top_plot]);
+         var xAxis_plot=d3.svg.axis()
+                          .scale(xScale_plot) 
+                          .orient("bottom")
+                          .tickFormat(d3.time.format("%b"));
+         var yAxis_plot=d3.svg.axis()
+                          .scale(yScale_plot)
+                          .orient("left");
+
+         d3.csv("Clean_NYPD_Collisions.csv", function(error,data) {
+
+            if (error) return console.log(error);
+
+            // Points
+            xScale_plot.domain(d3.extent(data,function(d){
+                                                 return new Date(+d.Year,+d.Month);
+                                               }));
+            yScale_plot.domain([0,d3.max(data,function(d){
+                                                 return +d.Ninjured+(+d.Nkilled);
+                                              })]);
+            svg_plot.selectAll("circle")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr("class","plot points")
+                    .attr("cx",function(d)
+                               {
+                                  return xScale_plot(new Date(+d.Year,+d.Month));
+                               })
+                    .attr("cy",yScale_plot(0))
+                    .attr("r",4);
+
+            var line = d3.svg.line()
+                             .x(function(d) { return xScale_plot(new Date(+d.Year,+d.Month)); })
+                             .y(function(d) { return yScale_plot(0); });
+            svg_plot.append("path")
+                    .datum(data)
+                    .attr("class", "plot line")
+                    .attr("d", line);
+
+            // Axes and Labels
+            svg_plot.append("g")
+                    .attr("class","plot x axis")
+                    .call(xAxis_plot)
+                    .attr("transform","translate(0,"+(height_plot-pad_bottom_plot)+")");
+            svg_plot.append("text")
+                    .attr("class","plot x label")
+                    .attr("x",pad_left_plot+(width_plot-pad_left_plot-pad_right_plot)/2.0)
+                    .attr("y",height_plot-pad_bottom_plot+pad_xaxis_plot)
+                    .text("Month")
+                    .attr("text-anchor","middle");
+            svg_plot.append("g")
+                    .attr("class","plot y axis")
+                    .attr("transform","translate("+pad_left_plot+",0)")
+                    .call(yAxis_plot);
+            var xtext=pad_left_plot-pad_yaxis_plot,
+                ytext=(height_plot-pad_bottom_plot-pad_top_plot)/2.0+pad_top_plot;
+            svg_plot.append("text")
+                    .attr("class","plot y label")
+                    .attr("x",xtext)
+                    .attr("y",ytext)
+                    .attr("text-anchor","middle")
+                    .attr("transform","rotate(-90,"+xtext+","+ytext+")")
+                    .text("Number of Injuries + Fatalities");
+            svg_plot.append("text") // To Fill in Later 
+                    .attr("class","plot y label")
+                    .attr("id","plotylabel2")
+                    .attr("x",xtext)
+                    .attr("y",ytext+15)
+                    .attr("text-anchor","middle")
+                    .attr("transform","rotate(-90,"+xtext+","+ytext+")")
+                    .attr("opacity","0.0")
+                    .text("Per Million Population");
+
+            // Vision Zero Working Group Line
+            svg_plot.append("line")
+                    .attr("class","plot marker")
+                    .attr("x1",xScale_plot(new Date(2014,1,15)))
+                    .attr("y1",(yScale_plot.range())[0])
+                    .attr("x2",xScale_plot(new Date(2014,1,15)))
+                    .attr("y2",(yScale_plot.range())[1]);
+            svg_plot.append("text")
+                    .attr("class","plot annotation")
+                    .attr("x",xScale_plot(new Date(2014,1,15)))
+                    .attr("y",(yScale_plot.range())[1])
+                    .attr("text-anchor","start")
+                    .text("Vision Zero working");
+            svg_plot.append("text")
+                    .attr("class","plot annotation")
+                    .attr("x",xScale_plot(new Date(2014,1,15))+3)
+                    .attr("y",(yScale_plot.range())[1]+10)
+                    .attr("text-anchor","start")
+                    .text("group established");
+
+            // Caption
+            svg_plot.append("text")
+                    .attr("class","plot description")
+                    .attr("x",7)
+                    .attr("y",height_plot-7)
+                    .attr("text-anchor","start")
+                    .text("It seems like there are more accidents in the winter months.  Why?  See below.");
+
+         
+            // "Load" Points and Line
+            svg_plot.selectAll(".plot.points")
+                    .transition()
+                    .duration(time_load)
+                    .attr("cy",function(d)
+                               {
+                                  return yScale_plot(+d.Ninjured+(+d.Nkilled));
+                               });
+            line.y(function(d) { return yScale_plot(+d.Ninjured+(+d.Nkilled)); });
+            svg_plot.selectAll(".plot.line")
+                    .transition()
+                    .duration(time_load)
+                    .attr("d", line);
+
+         }); //d3.csv("Clean_NYPD_Collisions.csv"
+
+
+         /////////////////////////////////////////////////////////////////////  
+         // GRID
+         ///////////////////////////////////////////////////////////////////// 
+
+         // Setup
+         var xScale_grid=d3.scale.linear();
+         var yScale_grid=d3.scale.linear();
+         var rScale_grid=d3.scale.linear();
+         var cScale_grid=d3.scale.linear();
+         var xAxis_grid=d3.svg.axis()
+                          .scale(xScale_grid)
+                          .orient("bottom")
+         var yAxis_grid=d3.svg.axis()
+                          .scale(yScale_grid)
+                          .orient("left");
+
+         d3.csv("Clean_NYPD_Collisions_ByMonthOnlyHour_withSunlight.csv", function(error,data) {
+
+            if (error) return console.log(error);
+
+            // Points
+            xScale_grid.range([pad_left_grid,width_grid-pad_right_grid])
+                       .domain([d3.min(data,function(d){ 
+                                               return +d.Hour;
+                                            }),
+                                d3.max(data,function(d){
+                                               return +d.Hour;
+                                            })]);
+            yScale_grid.range([height_grid-pad_bottom_grid,pad_top_grid])
+                       .domain([d3.min(data,function(d){ 
+                                               return +d.Month;
+                                            }),
+                                d3.max(data,function(d){
+                                               return +d.Month;
+                                            })]);
+            rScale_grid.range([0,maxr])
+                       .domain([0,
+                                d3.max(data,function(d){
+                                               return +d.Ninjuredkilled;
+                                            })]);
+            cScale_grid.range([135,0])
+                       .domain([d3.min(data,function(d){
+                                               return +d.NightDay;
+                                            }),
+                                d3.max(data,function(d){
+                                               return +d.NightDay;
+                                            })]);
+
+            rdata=[{Hour:0},{Hour:1},{Hour:2},{Hour:3},{Hour:4},{Hour:5},{Hour:6},{Hour:7},{Hour:8},{Hour:9},{Hour:10},
+                   {Hour:11},{Hour:12},{Hour:13},{Hour:14},{Hour:15},{Hour:16},{Hour:17},{Hour:18},{Hour:19},{Hour:20},
+                   {Hour:21},{Hour:22},{Hour:23}];
+            svg_grid.selectAll("rect[id='rectshow']")
+                    .data(rdata)
+                    .enter()
+                    .append("rect")
+                    .attr("id","rectshow")
+                    .attr("class",function(d)
+                                  {
+                                     return "grid select hh"+d3.round(+d.Hour).toString()+" show";
+                                  })
+                    .attr("x",function(d)
+                               {
+                                  return xScale_grid(+d.Hour)-xr;
+                               })
+                    .attr("y",pad_top_grid-yr)
+                    .attr("width",xr*2)
+                    .attr("height",yr*13*2)
+                    .attr("rx",10)
+                    .attr("ry",10)
+                    .attr("fill","rgb(122,122,122)")
+                    .attr("stroke","none")
+                    .attr("opacity","0.0");
+                    //.on("click",function(){
+                    //              d3.selectAll(".grid.select").attr("opacity","0.0");
+                    //              d3.select(this).attr("opacity","1.0");
+                    //              reloadGplot(tbname_set,tflag_set,this);
+                    //            });
+
+            svg_grid.selectAll("circle")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr("class","grid points")
+                    .attr("cx",function(d)
+                               {
+                                  return xScale_grid(+d.Hour);
+                               })
+                    .attr("cy",function(d)
+                               {
+                                  return yScale_grid(+d.Month);
+                               })
+                    .attr("r",0.1)
+                    .attr("fill",function(d){
+                                    return "rgb(0,0,0)";
+                                  });
+           
+            // Invisible rect to sense clicking
+            svg_grid.selectAll("rect[id='rectclick']")
+                    .data(rdata)
+                    .enter()
+                    .append("rect")
+                    .attr("id","rectclick")
+                    .attr("class",function(d)
+                                  {
+                                     return "grid select hh"+d3.round(+d.Hour).toString();
+                                  })
+                    .attr("x",function(d)
+                               {
+                                  return xScale_grid(+d.Hour)-xr;
+                               })
+                    .attr("y",pad_top_grid-yr)
+                    .attr("width",xr*2)
+                    .attr("height",yr*13*2)
+                    .attr("rx",10)
+                    .attr("ry",10)
+                    .attr("opacity","0.0")
+                    .on("mouseover",function(){
+                                       d3.selectAll(".grid.select.show").attr("opacity","0.0");
+                                       var classpick=d3.select(this).attr("class").split(" ")[2];
+                                       d3.selectAll(".grid.select."+classpick+".show").attr("opacity","1.0");
+                                       reloadGplot(tbname_set,tflag_set,classpick);
+                                    })
+                    .on("mouseleave",function(){
+                                        d3.selectAll(".grid.select.show").attr("opacity","0.0");
+                                        reloadGplot(tbname_set,tflag_set);
+                                    });
+
+            // Labels
+            svg_grid.append("g")
+                    .attr("class","grid x axis")
+                    .attr("transform","translate(0,"+(height_grid-pad_bottom_grid+maxr)+")")
+                    .call(xAxis_grid);
+            svg_grid.append("text")
+                    .attr("class","grid x label")
+                    .attr("x",pad_left_grid+(width_grid-pad_left_grid-pad_right_grid)/2.0)
+                    .attr("y",height_grid-pad_bottom_grid+pad_xaxis_grid)
+                    .text("Hour of Day")
+                    .attr("text-anchor","middle");
+            svg_grid.append("g")
+                    .attr("class","grid y axis")
+                    .attr("transform","translate("+(pad_left_grid-maxr)+",0)")
+                    .call(yAxis_grid);
+            var xtext=pad_left_grid-pad_yaxis_grid,
+                ytext=(height_grid-pad_bottom_grid-pad_top_grid)/2.0+pad_top_grid;
+            svg_grid.append("text")
+                    .attr("class","grid y label")
+                    .attr("x",xtext)
+                    .attr("y",ytext)
+                    .attr("text-anchor","middle")
+                    .attr("transform","rotate(-90,"+xtext+","+ytext+")")
+                    .text("Month of Year");
+
+         
+            // "Load" Points
+            svg_grid.selectAll(".grid.points")
+                    .transition()
+                    .duration(time_load)
+                    .attr("r",function(d)
+                              {
+                                 return rScale_grid(+d.Ninjuredkilled);
+                              })
+                    .attr("fill",function(d){
+                                    return "rgb("+(135-d3.round(cScale_grid(+d.NightDay)))+","+
+                                                  (206-d3.round(cScale_grid(+d.NightDay)))+","+
+                                                  (250-d3.round(cScale_grid(+d.NightDay)))+")";
+                                 });           
+
+         }); //d3.csv("Clean_NYPD_Collisions_ByMonthHour_withSunlight.csv"
+
+         svg_grid.append("foreignObject")
+                 .attr("class","grid annotation")
+	               .attr("width",width_grid-pad_left_grid/2-pad_right_grid)
+                 .attr("height",110)
+	               .attr("x",pad_left_grid/2)
+                 .attr("y",height_grid-105)
+	               .append("xhtml:body")
+	               .append("xhtml:div")
+                 .html("The radius of the circles indicates the average number of injuries and fatalities per month for that month and time.  A lighter color indicates more daylight.  At 6pm (hour=18:00), the larger circles are darker in color, meaning that in months where it was darker at 6pm there were more accidents compared to month where there was still daylight at 6pm.  Therefore, the increase in accidents in the winter seems to be due to a decrease in daylight during those months.");
+
+         svg_grid.append("text")
+                 .attr("class","grid description")
+                 .attr("x",width_grid-10)
+                 .attr("y",pad_top_grid*3/4)
+                 .attr("text-anchor","end")
+                 .text("Hover over a column in this plot...");
+
+
+
+         /////////////////////////////////////////////////////////////////////  
+         // GRIDPLOT
+         ///////////////////////////////////////////////////////////////////// 
+
+         // Setup
+         var xScale_gplot=d3.scale.linear();
+         var yScale_gplot=d3.scale.linear()
+                            .range([height_gplot-pad_bottom_gplot,pad_top_gplot]);
+         var xAxis_gplot=d3.svg.axis()
+                           .scale(xScale_gplot)
+                           .orient("bottom")
+         var yAxis_gplot=d3.svg.axis()
+                           .scale(yScale_gplot)
+                           .orient("left");
+         var cScale_gplot=d3.scale.linear();
+
+         d3.csv("Clean_NYPD_Collisions_ByMonthOnlyHour_withSunlight.csv", function(error,data) {
+
+            if (error) return console.log(error);
+
+
+            // Points
+            xScale_gplot.range([pad_left_gplot,width_gplot-pad_right_gplot])
+                        .domain([d3.min(data,function(d){ 
+                                                return +d.Month;
+                                             }),
+                                 d3.max(data,function(d){
+                                                return +d.Month;
+                                             })]);
+            yScale_gplot.range([height_gplot-pad_bottom_gplot,pad_top_gplot])
+                        .domain([0,d3.max(data,function(d){
+                                                  return +d.Ninjuredkilled;
+                                               })]);
+            cScale_gplot.range([135,0])
+                        .domain([d3.min(data,function(d){
+                                                return +d.NightDay;
+                                             }),
+                                 d3.max(data,function(d){
+                                                return +d.NightDay;
+                                             })]);
+
+            var line=d3.svg.line()
+                       .x(function(d) { return xScale_gplot(+d.Month); })
+                       .y(function(d) { return yScale_gplot(+d.Ninjuredkilled); });
+
+            var Nhour=24;
+            for (var hh=0;hh<Nhour;hh++)
+            {
+               // Create New Data Set
+               var jj=0,mdata=[];
+               for (var ii=0;ii<data.length;ii++)
+               {
+                  if (+data[ii].Hour==hh) 
+                  {
+                     mdata[jj]={Month:+data[ii].Month,Ninjuredkilled:0};
+                     jj++;
+                  }
+               }
+               mdata.sort(compareMo);
+               // Plot line
+               svg_gplot.append("path")
+                        .datum(mdata)
+                        .attr("class","gplot line hh"+hh.toString())
+                        .attr("stroke","black")
+                        .attr("d",line);
+            }
+           
+           
+            // Axes and Labels
+            svg_gplot.append("g")
+                     .attr("class","gplot x axis")
+                     .call(xAxis_gplot)
+                     .attr("transform","translate(0,"+(height_gplot-pad_bottom_gplot)+")");
+            svg_gplot.append("text")
+                     .attr("class","gplot x label")
+                     .attr("x",pad_left_gplot+(width_gplot-pad_left_gplot-pad_right_gplot)/2.0)
+                     .attr("y",height_gplot-pad_bottom_gplot+pad_xaxis_gplot)
+                     .text("Month of Year")
+                     .attr("text-anchor","middle");
+            svg_gplot.append("g")
+                     .attr("class","gplot y axis")
+                     .attr("transform","translate("+pad_left_gplot+",0)")
+                     .call(yAxis_gplot);
+            var xtext=pad_left_gplot-pad_yaxis_gplot,
+                ytext=(height_gplot-pad_bottom_gplot-pad_top_gplot)/2.0+pad_top_gplot;
+            svg_gplot.append("text")
+                     .attr("class","gplot y label")
+                     .attr("x",xtext)
+                     .attr("y",ytext)
+                     .attr("text-anchor","middle")
+                     .attr("transform","rotate(-90,"+xtext+","+ytext+")")
+                     .text("Number of Injuries + Fatalities");
+            svg_gplot.append("text") // To Fill in Later 
+                     .attr("class","gplot y label")
+                     .attr("id","gplotylabel2")
+                     .attr("x",xtext)
+                     .attr("y",ytext+15)
+                     .attr("text-anchor","middle")
+                     .attr("transform","rotate(-90,"+xtext+","+ytext+")")
+                     .attr("opacity","0.0")
+                     .text("Per Million Population");
+
+            // "Load" Points and Line
+            for (var hh=0;hh<Nhour;hh++)
+            {
+               // Create New Data Set
+               var jj=0,mdata=[];
+               for (var ii=0;ii<data.length;ii++)
+               {
+                  if (+data[ii].Hour==hh) 
+                  {
+                     mdata[jj]={Month:+data[ii].Month,Ninjuredkilled:+data[ii].Ninjuredkilled};
+                     jj++;
+                  }
+               }
+               mdata.sort(compareMo);
+               // Plot line
+               svg_gplot.selectAll(".gplot.line.hh"+hh.toString())
+                        .datum(mdata)
+                        .transition()
+                        .duration(time_load)
+                        .attr("stroke","black")
+                        .attr("d",line);
+
+            }
+
+
+
+         }); //d3.csv("Clean_NYPD_Collisions.csv"
+
+         svg_gplot.append("text")
+                  .attr("class","gplot description")
+                  .attr("x",10)
+                  .attr("y",pad_top_gplot*3/4)
+                  .attr("text-anchor","start")
+                  .text("...to highlight the corresponding line in this plot.");
+
+
+
+
+         /////////////////////////////////////////////////////////////////////  
+         // FUNCTIONS
+         /////////////////////////////////////////////////////////////////////
+         function compareMo(a,b) {
+           if (+a.Month < +b.Month) {return -1;}
+           if (+a.Month > +b.Month) {return 1;}
+           return 0;
+         }  
+         var calcMean=function(data,tflag) {
+            date_wkgrp=new Date(2014,1,15);
+            var mn_before=0,mn_after=0,sd_before=0,sd_after=0,
+                N_before=0,N_after=0;
+            for (var ii=0;ii<data.length;ii++)
+            {
+               if((new Date(+data[ii].Year,+data[ii].Month)) <= date_wkgrp)
+               {
+                  switch(tflag) {
+                     case 0: mn_before=mn_before+(+data[ii].Ninjured)+(+data[ii].Nkilled); break;
+                     case 1: mn_before=mn_before+(+data[ii].NinjuredPer1000000)+(+data[ii].NkilledPer1000000); break;
+                  }
+                  N_before=N_before+1.0;
+               }
+               else
+               {
+                  switch(tflag) {
+                     case 0: mn_after=mn_after+(+data[ii].Ninjured)+(+data[ii].Nkilled); break;
+                     case 1: mn_after=mn_after+(+data[ii].NinjuredPer1000000)+(+data[ii].NkilledPer1000000); break;
+                  }
+                  N_after=N_after+1.0;
+               }
+            }
+            mn_before=mn_before/N_before;
+            mn_after=mn_after/N_after;
+
+            for (var ii=0;ii<data.length;ii++)
+            {
+               if((new Date(+data[ii].Year,+data[ii].Month)) <= date_wkgrp)
+               {
+                  switch(tflag) {
+                     case 0: sd_before=sd_before+Math.pow(((+data[ii].Ninjured)+(+data[ii].Nkilled)-mn_before),2); break;
+                     case 1: sd_before=sd_before+Math.pow(((+data[ii].NinjuredPer1000000)+(+data[ii].NkilledPer1000000)-mn_before),2); break;
+                  }                  
+               }
+               else
+               {
+                  switch(tflag) {
+                     case 0: sd_after=sd_after+Math.pow(((+data[ii].Ninjured)+(+data[ii].Nkilled)-mn_after),2); break;
+                     case 1: sd_after=sd_after+Math.pow(((+data[ii].NinjuredPer1000000)+(+data[ii].NkilledPer1000000)-mn_after),2); break;
+                  }
+               }
+            }
+            sd_before=Math.sqrt(sd_before/(N_before-1.0));
+            sd_after=Math.sqrt(sd_after/(N_after-1.0));
+
+            return [{name:"Before",mn:mn_before,sd:sd_before},
+                    {name:"After",mn:mn_after,sd:sd_after}];
+         }; 
+         var restrokeMapBorder = function(br,th) {
+            d3.selectAll(".map.borough."+br).style("stroke-width",th+"px");
+         };
+         var updateTitle = function(bname) {
+            d3.select("h1").html("PEDESTRIANS VERSUS CARS IN<br>"+bname);
+         };
+         var updateMapAnnotation = function(itext) {
+              svg_map.selectAll(".map.annotation")
+                     .html("The colors in this map indicate the average number of pedestrian injuries and fatalities "+itext+"per month in each borough.  Darker indicates a larger number.  Click on a borough to update the plots with data for that borough only.  Click on the background to return to full city data.");
+         };
+         var updateBarAnnotation = function(itext) {
+              svg_bar.selectAll(".bar.annotation")
+                     .html("The average number of pedestrian injuries and fatalities "+itext+"per month before and after the Vision Zero working group was established.  The error bars are standard deviations.  There does appear to be a decrease in injuries and fatalities after the working group was established, but a statistical analysis should be done.");
+         };
+         var updateGridAnnotation = function(itext) {
+              svg_grid.selectAll(".grid.annotation")
+                      .html("The radius of the circles indicates the average number of injuries and fatalities "+itext+"per month for that month and time.  A lighter color indicates more daylight.  At 6pm (hour=18:00), the larger circles are darker in color, meaning that in months where it was darker at 6pm there were more accidents compared to month where there was still daylight at 6pm.  Therefore, the increase in accidents in the winter seems to be due to a decrease in daylight during those months.");
+         }
+         var reloadMap = function(tflag) {
+            d3.json("nycbb_topojson.json",function(error,nyc) {
+  
+               if (error) return console.error(error);
+               var colorScale_map=d3.scale.linear();
+
+               d3.csv("Clean_NYPD_Collisions_OverallAvg_ByBorough.csv", function(error,data) {
+                  if (error) return console.log(error);
+                  colorScale_map.range([0,125])
+                                .domain([d3.min(data,function(d){
+                                                        switch(tflag) {
+                                                          case 0: return +d.AvgInjuredKilledByMonth; break;
+                                                          case 1: return +d.AvgInjuredKilledByMonthPer1000000Pop; break;
+                                                        }}),
+                                         d3.max(data,function(d){
+                                                        switch(tflag) {
+                                                          case 0: return +d.AvgInjuredKilledByMonth; break;
+                                                          case 1: return +d.AvgInjuredKilledByMonthPer1000000Pop; break;
+                                                        }})]);
+                  for (var ii=0;ii<5;ii++)
+                  {
+                     var br="";
+                     switch (d3.round(data[ii].Borough)){
+                        case 0: br="SI"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[0]); break;
+                        case 1: br="MN"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[1]); break;
+                        case 2: br="BK"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[3]); break;
+                        case 3: br="QN"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[4]); break;
+                        case 4: br="BX"; bdata=topojson.feature(nyc,nyc.objects.nyc_geojson.geometries[2]); break;
+                     }
+                     var dval=0;
+                     switch(tflag) {
+                        case 0: dval=(+data[ii].AvgInjuredKilledByMonth); break;
+                        case 1: dval=(+data[ii].AvgInjuredKilledByMonthPer1000000Pop); break;
+                     }
+                     svg_map.selectAll(".map.borough."+br)
+                            .transition()
+                            .duration(time_load)
+                            .style("fill","rgb("+d3.round(125-colorScale_map(dval))+","+
+                                                 d3.round(255-colorScale_map(dval))+","+
+                                                 d3.round(190-colorScale_map(dval))+")");
+                  }
+               }); 
+            });
+         };
+         var reloadBar = function(bname,tflag) {
+
+            var xScale_bar=d3.scale.linear()
+                             .range([0,width_bar-pad_right_bar-pad_left_bar]);
+            var xAxis_bar=d3.svg.axis()
+                            .scale(xScale_bar) 
+                            .orient("bottom");
+            d3.csv("Clean_NYPD_Collisions"+bname+".csv", function(nerror,ndata) {
+
+               if (nerror) return console.log(nerror);
+               mnsd=calcMean(ndata,tflag);
+               xScale_bar.domain([0,d3.max(mnsd,function(d){
+                                                   return +d.mn+(+d.sd);
+                                                })]);
+
+               svg_bar.selectAll("rect")
+                      .data(mnsd)
+                      .transition()
+                      .duration(time_update)
+                      .attr("width",function(d){
+                                       return xScale_bar(+d.mn);
+                                    });
+               svg_bar.selectAll("line[id='barlinemain']")
+                      .data(mnsd)
+                      .transition()
+                      .duration(time_update)
+                      .attr("x1",function(d)
+                                 {
+                                   return pad_left_bar+xScale_bar(+d.mn-(+d.sd));
+                                 })
+                      .attr("x2",function(d)
+                                 {
+                                   return pad_left_bar+xScale_bar(+d.mn+(+d.sd));
+                                });
+               svg_bar.selectAll("line[id='barlineleft']")
+                      .data(mnsd)
+                      .transition()
+                      .duration(time_update)
+                      .attr("x1",function(d)
+                                 {
+                                   return pad_left_bar+xScale_bar(+d.mn-(+d.sd));
+                                 })
+                      .attr("x2",function(d)
+                                 {
+                                   return pad_left_bar+xScale_bar(+d.mn-(+d.sd));
+                                 });
+               svg_bar.selectAll("line[id='barlinerght']")
+                      .data(mnsd)
+                      .transition()
+                      .duration(time_update)
+                      .attr("x1",function(d)
+                                 {
+                                   return pad_left_bar+xScale_bar(+d.mn+(+d.sd));
+                                 })
+                      .attr("x2",function(d)
+                                 {
+                                   return pad_left_bar+xScale_bar(+d.mn+(+d.sd));
+                                 });
+               d3.selectAll(".bar.x.axis")
+                 .transition()
+                 .duration(time_update)
+                 .call(xAxis_bar);
+               var lopac="";
+               switch(tflag) {
+                  case 0: lopac="0.0"; break;
+                  case 1: lopac="1.0"; break;
+               }
+               d3.selectAll("#barylabel2")
+                 .transition()
+                 .duration(time_update)
+                 .attr("opacity",lopac);
+
+            });
+         };
+         var reloadPlot = function(bname,tflag) {
+            var xScale_plot=d3.time.scale()
+                              .range([pad_left_plot,width_plot-pad_right_plot]);
+            var yScale_plot=d3.scale.linear()
+                              .range([height_plot-pad_bottom_plot,pad_top_plot]);
+            var yAxis_plot=d3.svg.axis()
+                             .scale(yScale_plot)
+                             .orient("left");
+
+            d3.csv("Clean_NYPD_Collisions"+bname+".csv", function(nerror,ndata) {
+
+               if (nerror) return console.log(nerror);
+               xScale_plot.domain(d3.extent(ndata,function(d){
+                                                     return new Date(+d.Year,+d.Month);
+                                                   }));
+               yScale_plot.domain([0,d3.max(ndata,function(d){
+                                                     switch(tflag) {
+                                                        case 0: return +d.Ninjured+(+d.Nkilled); break;
+                                                        case 1: return +d.NinjuredPer1000000+(+d.NkilledPer1000000); break;
+                                                     }
+                                                  })]);
+               // "Load" Points
+               d3.selectAll(".plot.points")
+                 .data(ndata)
+                 .transition()
+                 .duration(time_update)
+                 .attr("cy",function(d)
+                            {
+                               switch(tflag) {
+                                  case 0: return yScale_plot(+d.Ninjured+(+d.Nkilled)); break;
+                                  case 1: return yScale_plot(+d.NinjuredPer1000000+(+d.NkilledPer1000000)); break;
+                               }
+                            });
+               // "Load" Lines
+               var line = d3.svg.line()
+                                .x(function(d) { return xScale_plot(new Date(+d.Year,+d.Month)); })
+                                .y(function(d) {
+                                      switch(tflag) {
+                                         case 0: return yScale_plot(+d.Ninjured+(+d.Nkilled)); break;
+                                         case 1: return yScale_plot(+d.NinjuredPer1000000+(+d.NkilledPer1000000)); break;
+                                      }
+                                   });
+               svg_plot.selectAll(".plot.line")
+                       .datum(ndata)
+                       .transition()
+                       .duration(time_update)
+                       .attr("d", line);
+
+               // Labels
+               d3.selectAll(".plot.y.axis")
+                 .transition()
+                 .duration(time_update)
+                 .call(yAxis_plot);
+               var xtext=pad_left_plot-pad_yaxis_plot,
+                   ytext=(height_plot-pad_bottom_plot-pad_top_plot)/2.0+pad_top_plot;   
+               var lopac="";
+               switch(tflag) {
+                  case 0: lopac="0.0"; break;
+                  case 1: lopac="1.0"; break;
+               }
+               d3.selectAll("#plotylabel2")
+                 .transition()
+                 .duration(time_update)
+                 .attr("opacity",lopac);
+               
+            });
+         };
+         var reloadGrid = function(bname,tflag) {
+            var xScale_grid=d3.scale.linear();
+            var yScale_grid=d3.scale.linear();
+            var rScale_grid=d3.scale.linear();
+            var cScale_grid=d3.scale.linear();
+
+            d3.csv("Clean_NYPD_Collisions_ByMonthOnlyHour_withSunlight"+bname+".csv", function(nerror,ndata) {
+
+               if (nerror) return console.log(nerror);
+               rScale_grid.range([0,maxr])
+                          .domain([0,
+                                   d3.max(ndata,function(d){
+                                                   switch(tflag) {
+                                                      case 0: return +d.Ninjuredkilled; break;
+                                                      case 1: return +d.NinjuredkilledPer1000000; break;
+                                                   }
+                                                 })]);
+               cScale_grid.range([135,0])
+                          .domain([d3.min(ndata,function(d){
+                                                   return +d.NightDay;
+                                                }),
+                                   d3.max(ndata,function(d){
+                                                   return +d.NightDay;
+                                                })]);
+ 
+               // "Load" Points
+               svg_grid.selectAll(".grid.points")
+                       .data(ndata)
+                       .transition()
+                       .duration(time_update)
+                       .attr("r",function(d)
+                                 {
+                                    switch(tflag) {
+                                       case 0: return rScale_grid(+d.Ninjuredkilled); break;
+                                       case 1: return rScale_grid(+d.NinjuredkilledPer1000000); break;
+                                    }
+                                 })
+                       .attr("fill",function(d){
+                                       return "rgb("+(135-d3.round(cScale_grid(+d.NightDay)))+","+
+                                                     (206-d3.round(cScale_grid(+d.NightDay)))+","+
+                                                     (250-d3.round(cScale_grid(+d.NightDay)))+")";
+                                    });
+            });
+         };
+         var reloadGplot = function(bname,tflag,classpick) {
+            var Nargs=arguments.length;
+            var xScale_gplot=d3.scale.linear();
+            var yScale_gplot=d3.scale.linear()
+                               .range([height_gplot-pad_bottom_gplot,pad_top_gplot]);
+            var yAxis_gplot=d3.svg.axis()
+                              .scale(yScale_gplot)
+                              .orient("left");
+
+            d3.csv("Clean_NYPD_Collisions_ByMonthOnlyHour_withSunlight"+bname+".csv", function(nerror,ndata) {
+
+               if (nerror) return console.log(nerror);
+
+               xScale_gplot.range([pad_left_gplot,width_gplot-pad_right_gplot])
+                           .domain([d3.min(ndata,function(d){ 
+                                                   return +d.Month;
+                                                }),
+                                    d3.max(ndata,function(d){
+                                                   return +d.Month;
+                                                })]);
+               yScale_gplot.range([height_gplot-pad_bottom_gplot,pad_top_gplot])
+                           .domain([0,d3.max(ndata,function(d){
+                                                      switch(tflag) {
+                                                          case 0: return +d.Ninjuredkilled; break;
+                                                          case 1: return +d.NinjuredkilledPer1000000; break;
+                                                       }
+                                                   })]);
+
+               d3.selectAll(".gplot.y.axis")
+                 .transition()
+                 .duration(time_update)
+                 .call(yAxis_gplot);
+               var lopac="";
+               switch(tflag) {
+                  case 0: lopac="0.0"; break;
+                  case 1: lopac="1.0"; break;
+               }
+               d3.selectAll("#gplotylabel2")
+                 .transition()
+                 .duration(time_update)
+                 .attr("opacity",lopac);
+
+
+               // "Load" Points and Line
+               var line=d3.svg.line()
+                          .x(function(d) { return xScale_gplot(+d.Month); })
+                          .y(function(d) { return yScale_gplot(+d.Ninjuredkilled);});
+               var Nhour=24;
+               for (var hh=0;hh<Nhour;hh++)
+               {
+                  // Create New Data Set
+                  var jj=0,mdata=[];
+                  for (var ii=0;ii<ndata.length;ii++)
+                  {
+                     if (+ndata[ii].Hour==hh) 
+                     {
+                        switch(tflag) {
+                           case 0: mdata[jj]={Month:+ndata[ii].Month,Ninjuredkilled:+ndata[ii].Ninjuredkilled}; break;
+                           case 1: mdata[jj]={Month:+ndata[ii].Month,Ninjuredkilled:+ndata[ii].NinjuredkilledPer1000000}; break;
+                        }    
+                        jj++;
+                     }
+                  }
+                  mdata.sort(compareMo);
+                  // Plot line
+                  svg_gplot.selectAll(".gplot.line.hh"+hh.toString())
+                           .classed("highlight",function(d){
+                                                  if (Nargs == 3) {return d3.selectAll(".grid.select."+classpick+".show").classed("hh"+hh.toString());}
+                                                  else {return false;}
+                                                })
+                           .datum(mdata)
+                           .transition()
+                           .duration(time_update)
+                           .attr("d",line);
+               }
+            });
+         };
+
+
+         /////////////////////////////////////////////////////////////////////  
+         // EVENT LISTENERS
+         ///////////////////////////////////////////////////////////////////// 
+
+         // Picker: clicks
+         d3.selectAll(".picker.number")
+           .on("click",function(){
+              tflag_set=0;
+              // Update Buttons
+              d3.selectAll("#pickernumberrect").attr("fill","rgb(180,180,180)");
+              d3.selectAll("#pickerperpoprect").attr("fill","rgb(250,250,250)");
+              // Load New Data
+              updateMapAnnotation(" ");
+              updateBarAnnotation(" ");
+              updateGridAnnotation(" ");
+              reloadMap(tflag_set);
+              reloadBar(tbname_set,tflag_set);
+              reloadPlot(tbname_set,tflag_set);
+              reloadGrid(tbname_set,tflag_set);
+              reloadGplot(tbname_set,tflag_set);
+           });
+         d3.selectAll(".picker.perpop")
+           .on("click",function(){
+              tflag_set=1;
+              // Update Buttons
+              d3.selectAll("#pickerperpoprect").attr("fill","rgb(180,180,180)");
+              d3.selectAll("#pickernumberrect").attr("fill","rgb(250,250,250)");
+              // Load New Data
+              updateMapAnnotation("per million population ");
+              updateBarAnnotation("per million population ");
+              updateGridAnnotation("per million population ");
+              reloadMap(tflag_set);
+              reloadBar(tbname_set,tflag_set);
+              reloadPlot(tbname_set,tflag_set);
+              reloadGrid(tbname_set,tflag_set);
+              reloadGplot(tbname_set,tflag_set);
+           });
+
+
+      </script>
+
+      <!------------------------------------------------------------------>
+      <!-- END BODY                                                     -->
+      <!------------------------------------------------------------------>
+   </body>
+</html>

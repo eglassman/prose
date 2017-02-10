@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Women in Parliament</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+            body {
+                background-color: white;
+                font-family: Helvetica, Arial, sans-serif;
+                color:black;
+            }
+            
+            h1 {
+                font-size: 28px;
+                font-family: georgia, serif;
+                margin: 10px 0 30px; 0;
+            }
+            
+            p {                
+                font-size: 1em;
+                margin: 10px 0 0 0;
+            }
+            
+			svg {
+				background-color: white;
+                padding-top: 5px;
+                padding-left: 5px;
+			}
+
+            rect:hover {
+                fill: #F2BF30;
+            }
+            
+            .axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 0.8em;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+            
+		</style>
+	</head>
+	<body>
+
+        <h1>Women's representation in national parliaments</h1>
+        
+        <p>Proportion of seats held by women in national parliaments - source: <a href="http://mdgs.un.org/unsd/mdg/Data.aspx">United Nations</a></p>
+        
+		<script type="text/javascript">	
+            
+            // 1. setting the size of the svg
+            var w = 900;
+            var h = 3150;
+            var padding = [10, 10, 30, 150]; // 0 top, 1 right, 2 bottom, 3 left
+            
+            // 2. setting scales
+            
+            // 2.1. width
+            var widthScale = d3.scale.linear()
+                                        .range([0, w - padding[1] - padding[3] ]);
+            
+            //2.2 height
+            var heightScale = d3.scale.ordinal()
+                                        .rangeRoundBands([padding[0], h - padding[2]], 0.1);
+            
+            // 3. setting the axis
+            
+            var xAxis = d3.svg.axis()
+                                .scale(widthScale)
+                                .orient("bottom");
+            
+            var yAxis = d3.svg.axis()
+                                .scale(heightScale)
+                                .orient("left");
+
+            // 4. appending the svg to the page
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+            
+		  //5. fecthing the data    
+           d3.csv("womeninparliament2014.csv", function(data) {
+          
+            // 6. sorting the data   
+            data.sort(function(a, b) {
+					return d3.descending(+a["2014"], +b["2014"]);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+            
+            //  7. setting the width scale to the data
+               widthScale.domain([0, d3.max(data, function(d) {
+                   return +d["2014"];
+               }) ]);
+               
+            // 8. setting the height scale to the data
+               heightScale.domain(data.map(function(d) {
+                                           return d.Country 
+               }));
+
+            // 9. drawing the rectangles with the data   
+            var rects = svg.selectAll("rect")
+                            .data(data)
+                            .enter()
+                            .append("rect");
+            
+                rects.attr("x", padding[3])
+                    .attr("y", function(d) {
+                        return heightScale(d.Country);
+                })
+                    .attr("width", function(d) {
+                        return widthScale (d["2014"]);
+                })
+                    .attr("height", heightScale.rangeBand())
+                    .attr("fill", "#852800")
+                    .append("title")
+                    .text(function(d) {
+                        return d.Country + " has " + d["2014"] + " women in parliament";
+                });
+               
+           
+            // 10. drawing the axis
+               svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+                    .call(xAxis);
+               
+               svg.append("g")
+                    .attr("class", "y axis")
+                    .attr("transform", "translate(" + padding[3] + ",0)")
+                    .call(yAxis);
+               
+              
+           
+               
+           });
+			
+
+
+		</script>
+
+	</body>
+</html>

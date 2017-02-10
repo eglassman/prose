@@ -1,0 +1,41 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Loading markers from CSV</title>
+
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+<style>
+.wrap {
+    max-width:500px;
+    margin:0 auto;
+}
+#geojson {
+    width:100%;
+}
+</style>
+</head>
+<body>
+<div class='wrap'>
+    <br />
+    GeoJSON
+    <textarea class="topcoat-textarea" id='geojson'></textarea>
+    <br />
+    Low Zoom
+    <br />
+    <input id='low-zoom' />
+    <br />
+    High Zoom
+    <br />
+    <input id='high-zoom' />
+    <br />
+    <button id='compute'>Compute</button>
+    <br />
+    Tiles required
+    <h1 id='count'>0</h1>
+</div>
+<script src='bundle.js'></script>
+</body>
+</html>

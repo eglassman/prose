@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>My first bar chart with titles with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 300)
+						.attr("height", 400);
+
+
+
+			d3.csv("zombiologia.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(a.grade1T, b.grade1T);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.grade1T, +b.grade1T);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 10;
+					})
+					.attr("width", function(d) {
+						return d.grade1T * 30;
+					})
+					.attr("height", 8)
+					.append("title")
+					.text(function(d) {
+						return "#"+ d.student + " student´s grade is " + d.grade1T;
+					});
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

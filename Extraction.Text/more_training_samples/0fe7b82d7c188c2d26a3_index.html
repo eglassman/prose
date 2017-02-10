@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+body{
+	margin: 0px;
+	font: 10px sans-serif;
+}
+
+path.team{
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+}
+
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+circle{
+	stroke-width: 2px;
+	stroke: steelblue;
+}
+
+.name{
+	text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, 0 -2px 0 #fff, -2px 0 0 #fff;
+	fill: black;
+}
+
+
+</style>
+
+<body></body>
+
+<script src="/1wheel/raw/67b47524ed8ed829d021/d3-3.5.5.js"></script>
+<script src="/1wheel/raw/67b47524ed8ed829d021/lodash-3.8.0.js"></script>
+<script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-jetpack.js'></script>
+<script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-starterkit.js'></script>
+
+
+<script>
+
+d3.csv('raw.csv', function(res){
+	data = res
+
+	var parseTime = d3.time.format('%Y%m%d').parse
+
+	teams = _.uniq(data.map(ƒ('hTeam'))).map(function(d){
+		return {id: d, games: []}
+	})
+
+	idToTeam = d3.nest().key(ƒ('id')).rollup(ƒ(0)).map(teams)
+
+	data.forEach(function(d){
+		var date = parseTime(d.date)
+		var hWon = +d.hScore > +d.vScore
+
+		idToTeam[d.hTeam].games.push({date: date, won: hWon})
+		idToTeam[d.vTeam].games.push({date: date, won: !hWon})
+	})
+
+	teams.forEach(function(team){
+		team.games.forEach(function(d, i){
+			d.wins = d.won + (i ? team.games[i - 1].wins : 0)
+			d.percent = d.wins/(i + 1)
+		})
+
+		team.percent = _.last(team.games).percent
+	})
+	
+	c = d3.conventions({height: 500})
+
+	x = d3.time.scale().range(c.x.range()).domain([data[0], _.last(data)].map(ƒ('date', parseTime)))
+	c.y.domain([.2, .8])
+
+	c.drawAxis()
+
+	line = d3.svg.line()
+			.x(ƒ('date', x))
+			.y(ƒ('percent', c.y))
+
+	c.svg.dataAppend(teams, 'path.team')
+			.attr('d', ƒ('games', line))
+
+	d3.select(self.frameElement).style("height", d3.select('svg').attr('height') + "px");
+})
+
+
+
+
+
+// c.yAxis.ticks(2)
+
+// c.drawAxis()
+
+// var line = d3.svg.line()
+// 		.x(ƒ('year', c.x))
+// 		.y(ƒ('height', c.y))
+
+// c.svg.dataAppend(players, 'path.player')
+// 		.attr('d', ƒ('years', line))
+
+// c.svg.dataAppend(players, 'circle.start')
+// 		.attr({cx: ƒ('stop', c.x), cy: ƒ('stopHeight', c.y)})
+// 		.attr({r: 3, fill: 'white'})
+
+// c.svg.dataAppend(players, 'circle.stop')
+// 		.attr({cx: ƒ('start', c.x), cy: ƒ('startHeight', c.y)})
+// 		.attr({r: 3, fill: 'steelblue'})
+
+// c.svg.dataAppend(players, 'text.name')
+// 		.attr({x: ƒ('start', c.x), y: ƒ('startHeight', c.y)})
+// 		.text(ƒ('name'))
+// 		.attr({'text-anchor': 'end', 'dy': '.33em', 'dx': '-.5em'})
+
+
+
+</script>

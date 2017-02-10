@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #808080;
+				font-family:Arial, sans-serif;
+				font-size:12px;
+			}
+
+			h2 {
+				color: #fff;
+			}
+			
+			p {
+				color: #ddd;
+			}
+			
+			svg {
+				background-color: white;
+			}
+			
+			rect:hover {
+				fill: #2E2E31;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: Arial,sans-serif;
+				font-size: 10px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+			.barlabel {
+				font-size:10px;
+			}
+
+		</style>
+	</head>
+	<body>
+ 
+		<p>Click here to change to data for 25-34 year olds, 2013</p>
+
+		<script type="text/javascript">		
+
+			var margin = {top: 15, right: 30, bottom: 20, left: 120};
+// 			var padding = {top: 60, right: 60, bottom: 60, left: 60};
+			var w = 960 - margin.left - margin.right;
+			var	h = 750 - margin.top - margin.bottom;
+			
+			var dataset;
+							
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w + margin.right + margin.left)
+						.attr("height", h + margin.top + margin.bottom);
+			
+			var widthScale = d3.scale.linear()
+				.range( [ 0, w ] );
+				
+			var heightScale = d3.scale.ordinal()
+				.rangeRoundBands( [ 0, h ], 0.10 );
+
+			var xAxis = d3.svg.axis()
+				.scale(widthScale)
+				.orient("bottom");
+			
+			var yAxis = d3.svg.axis()
+				.scale(heightScale)
+				.orient("left");
+			
+			d3.csv("suicides_2013_states_15-24_25-34.csv", function(data) {	
+				
+				dataset = data;
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.rate_per_100k_15_24 || 0, +b.rate_per_100k_15_24 || 0);
+				});
+
+				widthScale.domain( [ 0, d3.max(data, function(d) {
+					return +d.rate_per_100k_25_34 || 0;
+				}) ]);
+				
+				heightScale.domain(data.map(function(d) { return d.state; } ));
+				
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", margin.left)
+					.attr("y", function(d) {
+						return heightScale(d.state);
+					})
+					.attr("width", function(d) {
+						if (d.rate_per_100k_15_24 === "NA"){
+							return widthScale(0);
+						}
+						else{
+						return widthScale(d.rate_per_100k_15_24);
+					}
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#5288BE")
+					.append("title")
+// 					.text(function(d) {
+// 						return d.state + "'s rate of suicide deaths per 100,000 in " + d.year + " is " + d.rate_per_100k_15_24;
+// 					});
+					;
+				
+				//add data labels	
+				svg.selectAll("text")
+					.data(dataset)
+					.enter()
+					.append("text")
+					.text(function(d) {
+						return d.rate_per_100k_15_24;
+					})
+					.attr("x", function(d) {
+						if (d.rate_per_100k_15_24 === "NA"){
+							return margin.left;
+						}
+						else{
+							return widthScale(d.rate_per_100k_15_24) + margin.left - 3;
+					}
+					})
+					.attr("y", function(d) {
+						return heightScale(d.state) + heightScale.rangeBand() - 3;
+					})
+					.attr("class", "barlabel")
+					.attr("text-anchor", function(d) {
+						if (d.rate_per_100k_15_24 === "NA"){
+							return "start";
+						}
+						else{
+							return "end";
+						}
+					})
+					.style("fill", function(d) {
+						if (d.rate_per_100k_15_24 === "NA"){
+							return "#000";
+						}
+						else{
+							return "#fff";
+						}
+					})
+				
+				//add axes
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + margin.left + "," + (h-margin.top) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + margin.left + " , 0)")
+					.call(yAxis);
+
+			d3.select("p")
+		    .on("click", function() {
+		    //sort on different category within loaded csv
+				data.sort(function(a, b) {
+					return d3.descending(+a.rate_per_100k_25_34 || 0, +b.rate_per_100k_25_34 || 0);
+				});
+
+		    	//define axes based on new data
+				widthScale.domain( [ 0, d3.max(data, function(d) {
+					return +d.rate_per_100k_25_34;
+				}) ]);
+				
+				heightScale.domain(data.map(function(d) { return d.state; } ));
+
+				//update rects	- the rects are being resorted but titles are not being updated, commented out for now
+				svg.selectAll("rect")
+					.data(dataset)
+					.transition()
+					.duration(1000)
+					.attr("x", margin.left)
+					.attr("y", function(d) {
+						return heightScale(d.state);
+					})
+					.attr("width", function(d) {
+						if (d.rate_per_100k_25_34 === "NA"){
+							return widthScale(0);
+						}
+						else{
+						return widthScale(d.rate_per_100k_25_34);
+					}
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "#5288BE")
+					.selectAll("title")
+// 					.text(function(d) {
+// 						return d.state + "'s Rate of suicide deaths per 100,000 in " + d.year + " is " + d.rate_per_100k_25_34;
+// 					})
+					;
+
+				//update data labels	
+				svg.selectAll("text")
+					.data(dataset)
+					.transition()
+					.duration(1000)
+					.text(function(d) {
+						return d.rate_per_100k_25_34;
+					})
+					.attr("x", function(d) {
+						if (d.rate_per_100k_25_34 === "NA"){
+							return margin.left;
+						}
+						else{
+							return widthScale(d.rate_per_100k_25_34) + margin.left - 3;
+					}
+					})
+					.attr("y", function(d) {
+						return heightScale(d.state) + heightScale.rangeBand() - 3;
+					})
+					.attr("class", "barlabel")
+					.attr("text-anchor", function(d) {
+						if (d.rate_per_100k_25_34 === "NA"){
+							return "start";
+						}
+						else{
+							return "end";
+						}
+					})
+					.style("fill", function(d) {
+						if (d.rate_per_100k_25_34 === "NA"){
+							return "#000";
+						}
+						else{
+							return "#fff";
+						}
+					})
+	
+				svg.select(".x.axis")
+					.transition()
+					.duration(1000)
+					.call(xAxis);
+
+				svg.select(".y.axis")
+					.transition()
+					.duration(1000)
+					.call(yAxis);
+					
+				console.log(data);
+						    
+			});
+
+			});
+
+    
+		</script>
+		<p>Note: States with missing values have death totals that have been suppressed due to low numbers.</p>
+ 
+	</body>
+</html>

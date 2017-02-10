@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+
+path {
+  stroke: white;
+  stroke-width: 0.25px;
+  fill: lightgrey;
+
+}
+
+/* colors from http://colorbrewer2.org/ */
+
+ /* Currently in Negotiations */
+.country.id840 { fill: #1b9e77; }  /* United States */
+.country.id96 { fill: #1b9e77; } /* Brunei */  
+.country.id152 { fill: #1b9e77; } /* Chile */ 
+.country.id554 { fill: #1b9e77; } /* New Zealand */ 
+.country.id702 { fill: #1b9e77; } /* Singapore */ 
+.country.id36 { fill: #1b9e77; } /* Australia */
+.country.id604 { fill: #1b9e77; } /* Peru */
+.country.id704 { fill: #1b9e77; } /* Vietnam */
+.country.id458 { fill: #1b9e77; } /* Malaysia */
+.country.id484 { fill: #1b9e77; } /* Mexico */
+.country.id124 { fill: #1b9e77; } /* Canada */
+.country.id392 { fill: #1b9e77; } /* Japan */
+
+/* Announced Interest */
+.country.id158 { fill: #d95f02; } /* Republic of China */ 
+.country.id410 { fill: #d95f02; } /* Republic of Korea */ 
+.country.id188 { fill: #d95f02; } /* Costa Rica */
+.country.id170 { fill: #d95f02; } /* Colombia */
+.country.id764 { fill: #d95f02; } /* Thailand */
+.country.id418 { fill: #d95f02; } /* Laos */
+.country.id360 { fill: #d95f02; } /* Indonesia */
+.country.id608 { fill: #d95f02; } /* The Phillipines */
+
+/* Potential Future Members */
+.country.id356 { fill: #7570b3; } /* India */
+.country.id156 { fill: #7570b3; } /* China */
+.country.id50 { fill: #7570b3; } /* Bangladesh */
+.country.id116 { fill: #7570b3; } /* Cambodia */
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+<script src="legend.js"></script>
+<script>
+var width = 720,
+    height = 530;
+
+var projection = d3.geo.mercator()
+    .center([-24, 30 ])
+    .scale(150)
+    .rotate([-180,0])
+    .translate([250,250]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("id", "trans-pacific partnership map");
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var g = svg.append("g")
+
+// load and display the World
+d3.json("world-110m2.json", function(error, topology) {
+    g.selectAll("path")
+      .data(topojson.object(topology, topology.objects.countries)
+          .geometries)
+    .enter()
+      .append("path")
+      .attr("class", function(d) { return "country id" + d.id; }) 
+      .attr("d", path)
+
+});
+
+// draw the legend
+categoricalData = ["Currently in negotiations","Announced interest in joining", "Potential future members"]
+
+categoricalColors = ["#1b9e77", "#d95f02", "#7570b3"]
+
+ordinalScale = d3.scale.ordinal()
+  .domain(categoricalData)
+  .range(categoricalColors)
+
+verticalLegend = d3.svg.legend()
+  .labelFormat("none")
+  .cellPadding(5)
+  .orientation("vertical")
+  .units("")
+  .cellWidth(25).cellHeight(18)
+  .inputScale(ordinalScale)
+  .cellStepping(10);
+
+d3.select("svg").append("g")
+  .attr("transform", "translate(350,360)")
+  .attr("class", "legend")
+  .call(verticalLegend);
+
+</script>
+</body>
+</html>

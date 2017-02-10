@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Difference Chart</title>
+</head>
+<meta charset="utf-8">
+<style>
+
+svg{
+  background-color: #eee;
+  margin-top: 20px;
+}
+
+path.domain {
+  fill: none;
+}
+
+g.tick > line {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+</style>
+<body>
+<div id="viz"></div>
+</body>
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 500,
+    height = 500;
+
+xScale = d3.scale.linear().domain([0,10]).range([40,760]);
+yScale = d3.scale.linear().domain([0,10]).range([60,830]);
+
+svg = d3.select('#viz')
+    .append('svg')
+    .attr({width: width, height: height});
+
+  svg.append("g").attr("class","linechart");
+
+  linechart = d3.select("g.linechart");
+
+d3.json("bush_obama.json", createLineChart);
+
+function createLineChart(data) {
+
+  data.forEach(function(d) {
+    d.b_a = parseInt(d.b_a);
+    d.o_a = parseInt(d.o_a);
+  });
+
+  b_aExtent = d3.extent(data, function(d) {return d.b_a});
+  o_aExtent = d3.extent(data, function(d) {return d.o_a});
+
+  chartExtent = ([Math.min(b_aExtent[0],o_aExtent[0]) - 5, Math.max(b_aExtent[1],o_aExtent[1]) + 5]);
+
+  xScale = d3.scale.linear().domain([data.length, 0]).range([20,480]);
+  yScale = d3.scale.linear().domain(chartExtent).range([480,20]);
+
+  var axis = d3.svg.axis().scale(yScale)
+    .orient("right")
+    .ticks(8)
+    .tickSize(-460)
+    .tickSubdivide(true);
+
+  b_aLine = d3.svg.line().x(function(d,i) {return xScale(i)}).y(function(d) {return yScale(d.b_a)}).interpolate("linear");
+  o_aLine = d3.svg.line().x(function(d,i) {return xScale(i)}).y(function(d) {return yScale(d.o_a)}).interpolate("linear");
+
+  b_aDifference = d3.svg.area().x(function(d,i) {return xScale(i)})
+  .y(function(d) {return yScale(Math.max(d.b_a,d.o_a))})
+  .y0(function(d) {return yScale(d.o_a)})
+  .interpolate("linear");
+  
+  o_aDifference = d3.svg.area().x(function(d,i) {return xScale(i)})
+  .y(function(d) {return yScale(Math.max(d.o_a,d.b_a))})
+  .y0(function(d) {return yScale(d.b_a)})
+  .interpolate("linear");
+
+  linechart.append("g").attr("transform", "translate(480,0)").call(axis);
+
+  linechart.append("path")
+  .style("fill", "green")
+  .style("fill-opacity", .5)
+  .attr("class", "difference")
+  .attr("d", b_aDifference(data))
+
+  linechart.append("path")
+  .style("fill", "red")
+  .style("fill-opacity", .5)
+  .attr("class", "difference")
+  .attr("d", o_aDifference(data))
+
+  linechart.append("path")
+  .style("fill", "none")
+  .style("stroke-width", "1px")
+  .style("stroke", "darkgreen")
+  .attr("class", "line")
+  .attr("d", b_aLine(data))
+
+  linechart.append("path")
+  .style("fill", "none")
+  .style("stroke-width", "1px")
+  .style("stroke", "darkred")
+  .attr("class", "line")
+  .attr("d", o_aLine(data))
+}
+
+</script>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Map & Globe</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+    <!-- Leaflet.js, a geographic mapping library. -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" /> 
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+
+    <!-- A functional reactive model library. github.com/curran/model -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+
+    <!-- Chiasm core and plugins. github.com/chiasm-project -->
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.1.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-links/chiasm-links-v0.2.1.js"></script>
+
+    <!-- Custom Chiasm plugins for this example. -->
+    <script src="globe.js"></script>
+    <script src="chiasm-leaflet.js"></script>
+
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      /* Make the container fill the page using CSS. */
+      #chiasm-container {
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="chiasm-container"></div>
+
+    <script>
+
+      var chiasm = Chiasm();
+
+      chiasm.plugins.layout = ChiasmLayout;
+      chiasm.plugins.links = ChiasmLinks;
+      chiasm.plugins.globe = Globe;
+      chiasm.plugins.leaflet = ChiasmLeaflet;
+
+      chiasm.setConfig({
+        "layout": {
+          "plugin": "layout",
+          "state": {
+            "containerSelector": "#chiasm-container",
+            "layout": {
+              "orientation": "horizontal",
+              "children": [
+                "leafletMap",
+                "d3Globe",
+              ]
+            }
+          }
+        },
+        "leafletMap": {
+          "plugin": "leaflet",
+          "state": {
+            "center": [-4.592, 39.859],
+            "zoom": 5
+          }
+        },
+        "d3Globe": {
+          "plugin": "globe"
+        },
+        "links": {
+          "plugin": "links",
+          "state": {
+            "bindings": [
+              "leafletMap.zoom -> d3Globe.zoom",
+              "leafletMap.center <-> d3Globe.center"
+            ]
+          }
+        }
+      });
+    
+    </script>
+  </body>
+</html>

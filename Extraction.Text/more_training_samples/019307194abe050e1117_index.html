@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>http://stackoverflow.com/questions/32521887/animate-objects-in-force-layout-in-d3-js/32523428#32523428</title>
+    <link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.css">
+    <style>
+        body {
+            background: black;
+            margin:0;
+            padding:0;
+        }
+
+        #histogram rect{
+            -webkit-transition: all 0.1s linear;
+            -moz-transition: all 0.1s linear;
+            -o-transition: all 0.1s linear;
+            transition: all 0.1s linear;
+        }
+
+        #bubble-cloud {
+            background: url("http://dummyimage.com/100x100/111/333?text=sample") 0 0;
+            width: 960px;
+            height: 470px;
+            /*overflow: hidden;*/
+            position: relative;
+            margin:0 auto;
+        }
+        svg {
+            outline: rgba(242,216,28,1);
+            overflow: visible;
+        }
+    </style>
+</head>
+<body>
+<div id="bubble-cloud"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/elapsedTime/elapsed-time-2.0.js"></script>
+<script src="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/fps-histogram.js"></script>
+<script src="https://gitcdn.xyz/repo/cool-Blue/d3-lib/master/plot/plot-transform.js"></script>
+<script>
+    // helpers
+    var random = function(min, max) {
+        if (max == null) {
+            max = min;
+            min = 0;
+        }
+        return min + Math.floor(Math.random() * (max - min + 1));
+        },
+        metrics = d3.select('#bubble-cloud').append("div")
+            .attr("id", "metrics")
+            .style("white-space", "pre"),
+        elapsedTime = outputs.ElapsedTime("#metrics", {
+            border: 0, margin: 0, "box-sizing": "border-box",
+            padding: "0 0 0 6px", background: "black", "color": "orange"
+        })
+            .message(function(value) {
+                var this_lap = this.lap().lastLap, aveLap = this.aveLap(this_lap)
+                return 'alpha:' + d3.format(" >7,.3f")(value)
+                    + '\tframe rate:' + d3.format(" >4,.1f")(1 / aveLap) + " fps"
+            }),
+        hist = d3.ui.FpsMeter("#metrics", {display: "inline-block"}, {
+            height: 10, width: 100,
+            values: function(d){return 1/d},
+            domain: [0, 60]
+        }),
+
+    // mock data
+        colors = [
+        {
+            fill: 'rgba(242,216,28,0.3)',
+            stroke: 'rgba(242,216,28,1)'
+        },
+        {
+            fill: 'rgba(207,203,196,0.3)',
+            stroke: 'rgba(207,203,196,1)'
+        },
+        {
+            fill: 'rgba(0,0,0,0.2)',
+            stroke: 'rgba(100,100,100,1)'
+        }
+    ];
+
+    // initialize
+    var container = d3.select('#bubble-cloud');
+    var $container = $('#bubble-cloud');
+    var containerWidth = 960;
+    var containerHeight = 470 - elapsedTime.selection.node().clientHeight;
+    var svgContainer = container
+        .append('svg')
+        .attr('width', containerWidth)
+        .attr('height', containerHeight);
+
+    var data = [],
+        rmin = 30,
+        rmax = 60;
+
+    d3.range(0, 3).forEach(function(j){
+        d3.range(0, 8).forEach(function(i){
+            var r = random(rmin, rmax);
+            data.push({
+                text: 'text' + i,
+                category: 'category' + j,
+                x: random(rmax, containerWidth - rmax),
+                y: random(rmax, containerHeight - rmax),
+                r: r,
+                fill: colors[j].fill,
+                stroke: colors[j].stroke,
+                get v() {
+                    var d = this;
+                    return {x: d.x - d.px || 0, y: d.y - d.py || 0}
+                },
+                set v(v) {
+                    var d = this;
+                    d.px = d.x - v.x;
+                    d.py = d.y - v.y;
+                },
+                get s() {
+                    var v = this.v;
+                    return Math.sqrt(v.x * v.x + v.y * v.y)
+                },
+                set s(s1){
+                    var s0 = this.s, v0 = this.v;
+                    if(!v0 || s0 == 0) {
+                        var theta = Math.random() * Math.PI * 2;
+                        this.v = {x: Math.cos(theta) * s1, y: Math.sin(theta) * s1}
+                    } else this.v = {x: v0.x * s1/s0, y: v0.y * s1/s0};
+                },
+                set sx(s) {
+                    this.v = {x: s, y: this.v.y}
+                },
+                set sy(s) {
+                    this.v = {y: s, x: this.v.x}
+                },
+            });
+        })
+    });
+
+    // collision detection
+    // derived from http://bl.ocks.org/mbostock/1748247
+    function collide(alpha, s0) {
+        var quadtree = d3.geom.quadtree(data);
+        return function(d) {
+            var drt = d.rt;
+            boundaries(d, drt);
+            var r = drt + rmax,
+                nx1 = d.x - r,
+                nx2 = d.x + r,
+                ny1 = d.y - r,
+                ny2 = d.y + r;
+            quadtree.visit(function(quad, x1, y1, x2, y2) {
+                if (quad.point && (quad.point !== d)) {
+                    var x = d.x - quad.point.x,
+                        y = d.y - quad.point.y,
+                        l = Math.sqrt(x * x + y * y),
+                        r = drt + quad.point.rt;
+                    if (l < r) {
+                        l = (l - r) / l * (1 + alpha);
+                        d.x -= x *= l;
+                        d.y -= y *= l;
+                        quad.point.x += x;
+                        quad.point.y += y;
+                    }
+                }
+                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+            });
+        };
+        function boundaries(d, _drt) {
+            var moreThan, v0,
+                drt = _drt || d.rt;
+            // boundaries
+
+            //reflect off the edges of the container
+            // check for boundary collisions and reverse velocity if necessary
+            if((moreThan = d.x > (containerWidth - drt)) || d.x < drt) {
+                d.escaped |= 2;
+                // if the object is outside the boundaries
+                //   manage the sign of its x velocity component to ensure it is moving back into the bounds
+                if(~~d.v.x) d.sx = d.v.x * (moreThan && d.v.x > 0 || !moreThan && d.v.x < 0 ? -1 : 1);
+                //   if vx is too small, then steer it back in
+                else d.sx = (~~Math.abs(d.v.y) || Math.min(s0, 1)*2) * (moreThan ? -1 : 1);
+                // clear the boundary without affecting the velocity
+                v0 = d.v;
+                d.x = moreThan ? containerWidth - drt : drt;
+                d.v = v0;
+                // add a bit of hysteresis to quench limit cycles
+            } else if (d.x < (containerWidth - 2*drt) && d.x > 2*drt) d.escaped &= ~2;
+
+            if((moreThan = d.y > (containerHeight - drt)) || d.y < drt) {
+                d.escaped |= 4;
+                if(~~d.v.y) d.sy = d.v.y * (moreThan && d.v.y > 0 || !moreThan && d.v.y < 0 ? -1 : 1);
+                else d.sy = (~~Math.abs(d.v.x) || Math.min(s0, 1)*2) * (moreThan ? -1 : 1);
+                v0 = d.v;
+                d.y = moreThan ? containerHeight - drt : drt;
+                d.v = v0;
+            }  else  if (d.y < (containerHeight - 2*drt) && d.y > 2*drt) d.escaped &= ~4;
+        }
+    }
+    // prepare layout
+    var force = d3.layout
+        .force()
+        .size([containerWidth, containerHeight])
+        .gravity(0.001)
+        .charge(100)
+        .friction(.8)
+        .on("start", function() {
+            elapsedTime.start(100);
+        });
+
+    // load data
+    force.nodes(data)
+        .start();
+
+    // create item groups
+    var node = svgContainer.selectAll('.node')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('class', 'node')
+        .call(force.drag);
+
+    // create circles
+    var circles = node.append('circle')
+        .classed('circle', true)
+        .attr('r', function (d) {
+            return d.r;
+        })
+        .style('fill', function (d) {
+            return d.fill;
+        })
+        .style('stroke', function (d) {
+            return d.stroke;
+        })
+        .each(function(d){
+            // add dynamic r getter
+            var n= d3.select(this);
+            Object.defineProperty(d, "rt", {get: function(){
+                return +n.attr("r")
+            }})
+        });
+
+    // create labels
+    node.append('text')
+        .text(function(d) {
+            return d.text
+        })
+        .classed('text', true)
+        .style({
+            'fill': '#ffffff',
+            'text-anchor': 'middle',
+            'font-size': '10px',
+            'font-weight': 'bold',
+            'text-transform': 'uppercase',
+            'font-family': 'Tahoma, Arial, sans-serif'
+        })
+        .attr('x', function (d) {
+            return 0;
+        })
+        .attr('y', function (d) {
+            return - rmax/5;
+        });
+
+    node.append('text')
+        .text(function(d) {
+            return d.category
+        })
+        .classed('category', true)
+        .style({
+            'fill': '#ffffff',
+            'font-family': 'Tahoma, Arial, sans-serif',
+            'text-anchor': 'middle',
+            'font-size': '8px'
+        })
+        .attr('x', function (d) {
+            return 0;
+        })
+        .attr('y', function (d) {
+            return rmax/4;
+        });
+
+    var lines = node.append('line')
+        .classed('line', true)
+        .attr({
+            x1: function (d) {
+                return - d.r + rmax/10;
+            },
+            y1: function (d) {
+                return 0;
+            },
+            x2: function (d) {
+                return d.r - rmax/10;
+            },
+            y2: function (d) {
+                return 0;
+            }
+        })
+        .attr('stroke-width', 1)
+        .attr('stroke',  function (d) {
+            return d.stroke;
+        })
+        .each(function(d){
+            // add dynamic x getter
+            var n= d3.select(this);
+            Object.defineProperty(d, "lxt", {get: function(){
+                return {x1: +n.attr("x1"), x2: +n.attr("x2")}
+            }})
+        });
+
+    // put circle into movement
+    force.on('tick', function t(e){
+        var s0 = 0.25, k = 0.3;
+
+        a = e.alpha ? e.alpha : force.alpha();
+
+        elapsedTime.mark(a);
+        if(elapsedTime.aveLap.history.length)
+            hist(elapsedTime.aveLap.history);
+
+        for ( var i = 0; i < 2; i++) {
+            circles
+                .each(collide(a, s0));
+        }
+
+
+        // regulate the speed of the circles
+        data.forEach(function reg(d){
+            if(!d.escaped) d.s =  (s0 - d.s * k) / (1 - k);
+        });
+
+        node.attr("transform", function position(d){return "translate(" + [d.x, d.y] + ")"});
+
+        force.alpha(0.05);
+    });
+
+    // animate
+    window.setInterval(function(){
+        var tinfl = 3000, tdefl = 1000, inflate = "elastic", deflate = "cubic-out";
+
+        for(var i = 0; i < data.length; i++) {
+            if(Math.random()>0.8) data[i].r = random(rmin,rmax);
+        }
+        var changes = circles.filter(function(d){return !d.scheduled && d.r != d.rt});
+        changes.filter(function(d){return d.r > d.rt})
+            .transition("r").duration(tinfl).ease(inflate)
+            .attr('r', function (d) {
+                return d.r;
+            })
+            .call(transFlag);
+        changes.filter(function(d){return d.r < d.rt})
+            .transition("r").duration(tdefl).ease(deflate)
+            .attr('r', function (d) {
+                return d.r;
+            })
+            .call(transFlag);
+        // this runs with an error of less than 1% of rmax
+        changes = lines.filter(function(d){return !d.scheduled && d.r != d.rt});
+        changes.filter(function(d){return d.r > d.rt})
+            .transition("l").duration(tinfl).ease(inflate)
+            .attr({
+                x1: function lx1(d) {
+                    return -d.r + rmax / 10;
+                },
+                x2: function lx2(d) {
+                    return d.r - rmax / 10;
+                }
+            })
+            .call(transFlag);
+        changes.filter(function(d){return d.r < d.rt})
+            .transition("l").duration(tdefl).ease(deflate)
+            .attr({
+                x1: function lx1(d) {
+                    return -d.r + rmax / 10;
+                },
+                x2: function lx2(d) {
+                    return d.r - rmax / 10;
+                }
+            })
+            .call(transFlag);
+
+        function transFlag(transition){
+            transition.each("start", function(d){
+                d.scheduled = true;
+            })
+                .each("end", function(d){
+                    window.setTimeout(function(){d.scheduled = false;}, tinfl)
+                })
+        }
+
+    }, 2 * 500);
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="bullet.css" />
+<body></body>
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  padding-top: 40px;
+  position: relative;
+  width: 960px;
+}
+
+.bullet { font: 10px sans-serif; }
+.bullet .axis line, .bullet .axis path { stroke: #666; stroke-width: .5px; fill: none; }
+.bullet .measure.s0 { fill: steelblue; }
+.bullet .measure.s1 { fill: lightsteelblue; }
+
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="bullet.js"></script>
+<script>
+
+var margin = {top: 5, right: 40, bottom: 30, left: 40},
+    width = 450 - margin.left - margin.right,
+    height = 60 - margin.top - margin.bottom;
+
+var chart = d3.bullet()
+    .orient("left")
+    .width(width)
+    .height(height)
+    .markers([85])
+    .measures([92])
+
+
+function base_chart(){
+    return d3.select("body").append("svg")
+      .attr("class", "bullet")
+      .attr("width", chart.width() + margin.left + margin.right)
+      .attr("height", chart.height() + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+  }
+
+d3.select("body").append("h2").text("Passing tests showing correctness")
+
+d3.select("body").append("p").text("Testing 2 to 5 ranges")
+base_chart().call(chart.ranges([90,100]))
+base_chart().call(chart.ranges([80,90,100]))
+base_chart().call(chart.ranges([70,80,90,100]))
+base_chart().call(chart.ranges([65,70,80,90,100]))
+
+d3.select("body").append("p").text("Testing ability to specify accessors as functions")
+chart.markers(function(){return [85]})
+    .measures(function(){return [92]})
+    .ranges(function(){return [80,90,100]})
+base_chart().call(chart)
+
+d3.select("body").append("p").text("Testing 2 markers")
+chart.markers([85, 75])
+base_chart().call(chart)
+
+d3.select("body").append("p").text("Testing 2 measures")
+d3.select("body").append("p").text("Measure 2 may undershoot or overshoot measure 1, which below is always 85")
+chart.markers([89])
+base_chart().call(chart.measures([85,92]))
+base_chart().call(chart.measures([85,70]))
+chart.orient("right")
+base_chart().call(chart.measures([85,92]))
+base_chart().call(chart.measures([85,70]))
+
+d3.select("body").append("p").text("Testing alternate orientations")
+chart.measures([92])
+base_chart().call(chart.orient("right"))
+chart.width(height).height(width)
+base_chart().call(chart.orient("top"))
+base_chart().call(chart.orient("bottom"))
+chart.width(width).height(height).orient("left")
+
+d3.select("body").append("h2").text("Failing tests (things I'd like to add/fix later)")
+
+d3.select("body").append("p").text("Chart does not render properly when missing markers, measures, and ranges (also range length 1)")
+base_chart().call(chart.markers([]))
+chart.markers([92])
+base_chart().call(chart.measures([]))
+chart.measures([85])
+base_chart().call(chart.ranges([]))
+base_chart().call(chart.ranges([100]))
+chart.ranges([80,90,100])
+
+d3.select("body").append("p").text("Ranges that don't start at 0 (90%-100%, negative only, zero in middle)")
+d3.select("body").append("p").text("This means that we can no longer implictly start at 0 (big breaking change)")
+d3.select("body").append("p").text("Ranges that don't include 0 should render the measure as an X not a bar")
+
+base_chart().call(chart.ranges([90,95, 100]).markers([98]).measures([94]))
+base_chart().call(chart.ranges([-10,-40, -80]).markers([-5]).measures([-33]))
+base_chart().call(chart.ranges([-10, 0, 10]).markers([-5]).measures([-3]))
+
+
+</script>

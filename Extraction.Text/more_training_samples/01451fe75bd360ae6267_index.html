@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var svg = d3.select(document.body).append('svg')
+  .attr('width', 500)
+  .attr('height', 500);
+
+
+var c = svg.append('circle');
+
+
+var v = 10;
+var circle = circleComponent();
+
+update();
+setInterval(update, 2000);
+
+
+function circleComponent() {
+  function draw(selection) {
+    // .enter() and .exit() won't this wont work, since we didn't use .data()
+    // selection.enter()
+    //   .append('circle');
+
+    selection
+      .attr('class', 'circle')
+      .attr('r', v)
+      .attr('cx', v)
+      .attr('cy', v)
+      .style('fill', '#333');
+
+    // selection.exit()
+    //   .remove();
+  }
+  
+  return draw;
+}
+
+
+function update() {
+  c.datum({v: v += 10});
+  c.call(circle);
+}
+
+
+function v(d) {
+  return d.v;
+}
+</script>

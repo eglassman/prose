@@ -1,0 +1,68 @@
+<!doctype html>
+<style>
+html, body {
+  margin: 0;
+}
+#myMap {
+  width: 960px;
+  height: 500px;
+}
+</style>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://d3js.org/topojson.v1.min.js" charset="utf-8"></script>
+<script src="https://developer.mapsense.co/mapsense.js" charset="utf-8"></script>
+<link  type="text/css"  href="https://developer.mapsense.co/mapsense.css" rel="stylesheet"/>
+
+<div id="myMap"></div>
+<script>
+var map = mapsense.map("#myMap")
+  .center({lon: -2.410886, lat: 37.787041})
+  .zoom(1);
+
+var basemapLayer = mapsense.basemap().apiKey("key-3ebd0952e8b1450f84c6f5e95d139bd4")
+map.add(basemapLayer.style("sketch"))
+
+var radius = d3.scale.sqrt()
+  .range([1.5, 7]);
+
+var color = d3.scale.sqrt()
+  .range(["#359", "#fb5"])
+  .interpolate(d3.interpolateLab);
+
+d3.json("user_locations.json", function(error, raw) {
+  var data = [];
+  raw[0][1].forEach(function(d,i) {
+    if (i % 3 == 0) {
+      data.push({
+        pos: [null,d] 
+      })
+    }
+    if (i % 3 == 1) {
+      data[data.length-1].pos[0]= d;
+    }
+    if (i % 3 == 2) {
+      data[data.length-1].mag = d;
+    };
+  });
+
+  color.domain(d3.extent(data.map(function(d) { return d.mag; })));
+
+  radius.domain(d3.extent(data.map(function(d) { return d.mag; })));
+
+
+  map.add(mapsense.geoJson()
+    .features(data.map(function(d) {
+      return {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": d.pos
+        },
+        "properties": {
+          "mag": d.mag
+        }
+      }
+    }))
+  );
+});
+</script>

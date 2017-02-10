@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+  .arc path {
+    stroke: white;
+  }
+  .arc {
+    cursor: pointer;
+  }
+</style>
+
+<body>
+
+<script src="http://d3js.org/d3.v3.js"></script>
+
+<script>
+
+itemData = {
+  itemName: 'itemName',
+  hour: 1,
+  cost: 5
+}
+
+items = [
+  {
+    name: "A",
+    cost: 2,
+    color: 'steelblue'
+  },
+    {
+    name: "B",
+    cost: 2.5,
+    color: 'tomato'
+  },
+  {
+    name: "C",
+    cost: 1,
+    color: 'mediumturquoise'
+  },
+  {
+    name: "D",
+    cost: 3,
+    color: 'plum'
+  }
+]
+
+newItem = function () {
+  var index = Math.floor(Math.random() * (items.length));
+  var time = Math.floor(Math.random() * (23));
+
+  return {
+    itemName: items[index].name,
+    cost: items[index].cost,
+    hour: time
+  };
+}
+
+var data = []
+
+for (var i = 0; i < 1000; i++) {
+  data.push(newItem());
+}
+
+itemBuckets = [];
+
+fillBuckets = function (item) {
+  var bucketData = [];
+  var totalSales = 0;
+
+  for (var i = 0; i < 24; i++) {
+    bucketData[i] = 0;
+  }
+
+  data.filter(function(d) { return d.itemName === item.name; })
+      .forEach(function(itemSale){
+        bucketData[itemSale.hour]++;
+        totalSales += itemSale.cost;
+      });
+
+  itemBuckets.push({
+    name: item.name,
+    totalSales: totalSales,
+    buckets: bucketData,
+    color: item.color
+  })
+};
+
+items.forEach(function(item){
+  fillBuckets(item);
+});
+
+maxSales = d3.max(itemBuckets, function (bucket)
+  { return bucket.totalSales; })
+//should this be on a per item level?
+maxCount = d3.max(itemBuckets.reduce(function(previousValue, currentValue) {
+  return previousValue.concat(currentValue.buckets);
+}, []));
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 900 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom
+    cellSize =  width / 25
+    radius = height/2
+    smallRadius = width/26;
+
+var svg = d3.select('body').append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+
+var arc = d3.svg.arc()
+  .outerRadius(radius)
+  .innerRadius(0);
+
+var newArc = d3.svg.arc()
+    .outerRadius(smallRadius)
+    .innerRadius(0);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.totalSales; });
+
+var pieGroup = svg.append('g').attr('class', 'pieGroup')
+                  .attr('transform', 'translate(' + width/2 + ',' + height/2 +')');
+
+var punchGroup = svg.append('g').attr('class', 'punchGroup')
+                    .attr('transform', 'translate(' +  smallRadius * 2 + ',' + 0 +')');;
+
+var paths = null;
+
+var g = pieGroup.selectAll('.arc')
+  .data(pie(itemBuckets));
+
+g.enter().append('g')
+  .attr('class', 'arc')
+  .style('fill', function(d) { return d.data.color; })
+  .on('click', function(d) { refreshPunches(d.data)});
+
+g.exit().remove();
+
+paths = g.append('path').attr('d', arc);
+
+var refreshPunches = function(data) {
+  // move pie chart to half size
+
+  paths.transition().attr('d', newArc);
+
+  svg.select('.pieGroup').transition()
+      .attr('transform', 'translate(' + smallRadius + ',' + height/2 + ')');
+
+  //disply heat map with data.color
+  updatePunches(data);
+}
+
+var updatePunches = function (data) {
+  var punches = punchGroup.selectAll('circle')
+                  .data(data.buckets);
+
+  punches.enter().append('circle')
+    .attr('cx', function(d, i) {
+      return smallRadius * (i+1);
+    })
+    .attr('cy', height/2);
+
+  punches.transition()
+    .style('fill', data.color)
+    .attr('r', function(d) {
+      return (smallRadius / 2) * Math.random();
+    });
+}
+
+</script>

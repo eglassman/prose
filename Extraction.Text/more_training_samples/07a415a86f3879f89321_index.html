@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Museums In Land Salzburg</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.2/mapbox-gl.js'></script>
+  
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.2/mapbox-gl.css' rel='stylesheet'/>
+  
+  
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+  
+
+
+    <style>
+        #menu {
+            background: #fff;
+            position: absolute;
+            z-index: 1;
+            top: 10px;
+            right: 10px;
+            border-radius: 3px;
+            width: 120px;
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        #menu a {
+            font-size: 13px;
+            color: #404040;
+            display: block;
+            margin: 0;
+            padding: 0;
+            padding: 10px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+        
+        #menu a:last-child {
+            border: none;
+        }
+        
+        #menu a:hover {
+            background-color: #f8f8f8;
+            color: #404040;
+        }
+        
+        #menu a.active {
+            background-color: #3887be;
+            color: #ffffff;
+        }
+        
+        #menu a.active:hover {
+            background: #3074a4;
+        }
+    </style>
+ 
+   
+    <nav id="menu"></nav>
+    <div id="map"></div>
+  
+
+    <script>
+        // Provide access token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiaGFuaWUiLCJhIjoiSHVmUjNMZyJ9.WEkbOuijCFL3p9pA6jimDQ';
+      
+      
+
+        // check browser support
+        if (!mapboxgl.supported()) {
+            alert('Your browser does not support Mapbox GL');
+        } else {
+          
+          
+
+            //Setup mapbox-gl map
+            var map = new mapboxgl.Map({
+                container: 'map', // container id
+
+                // Accessing hosted style:
+                //style: 'mapbox://styles/hanie/ciiwfbx9x00tqaxlz9p3m2vg5',
+
+                // Accessing streets data from Mapbox:            
+                style: 'mapbox://styles/mapbox/streets-v8',
+                center: [12.978, 47.488], // starting position
+                zoom: 7.5,
+                //pitch: 60, // pitch in degrees
+                //bearing: -60 // bearing in degrees
+            });
+        }
+      
+      
+        //map.scrollZoom.disable()
+
+
+        map.on('style.load', function() {
+            map.addSource('SL_Districts', {
+                type: 'vector',
+                url: 'mapbox://hanie.8i1e8v95'
+            });
+            map.addLayer({
+                id: 'SL_Districts',
+                type: 'fill',
+                source: 'SL_Districts',
+                'source-layer': 'SL_Districts',
+                layout: {
+                    visibility: 'visible'
+                },
+                paint: {
+                    'fill-color': 'rgba(206,33,209,1)',
+                    'fill-opacity': 0.2,
+                    'fill-outline-color': 'rgba(101,17,102,5)'
+                }
+            }, 'water'); // 'water' is the second argument to underlay the districts under water
+            			       // https://www.mapbox.com/mapbox-gl-js/example/geojson-layer-in-stack/
+        });
+      	
+
+
+        // Setting up point layer hosted on Mapbox account : (map.addSource + map.addLayer)
+
+        map.on('style.load', function() {
+            map.addSource('museums', { // defining "source" object random/uniqe id
+                type: 'vector',
+                url: 'mapbox://hanie.b7cs2olw' // mapbox://'mapbox map ID'
+            });
+            map.addLayer({
+                'id': 'museums', // defining "layer" object random/uniqe id
+                'type': 'circle',
+                'source': 'museums', // the same id defined in map.addSource above
+                'paint': {
+                    'circle-radius': 7,
+                    'circle-color': 'rgba(117,20,101,1)',
+                    'circle-blur': '1'
+                },
+                'source-layer': 'museum_salzburg_update' 
+                 // name of the dataset uploaded on Mapbox account
+            });
+        });
+        addLayer('Museums', 'museums');
+      
+      
+        addLayer('Districts', 'SL_Districts');
+
+        function addLayer(name, id) {
+            var link = document.createElement('a');
+            link.href = '#';
+            link.className = 'active';
+            link.textContent = name;
+
+            link.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var visibility = map.getLayoutProperty(id, 'visibility');
+
+                if (visibility === 'visible') {
+                    map.setLayoutProperty(id, 'visibility', 'none');
+                    this.className = '';
+                } else {
+                    this.className = 'active';
+                    map.setLayoutProperty(id, 'visibility', 'visible');
+                }
+            };
+
+            var layers = document.getElementById('menu');
+            layers.appendChild(link);
+        }
+      
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body,
+textarea {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+body {
+  margin: 5px;
+  padding: 0px;
+
+  background-color: whitesmoke;
+}
+
+svg {
+  /* bl.ocks.org defaults to 960px x 500px space */
+  /* account for margin in final width/height */
+  width: 950px;
+  height: 490px;
+}
+
+textarea {
+  font-size: 11pt;
+
+  /* position this on top of the svg */
+  position: fixed;
+  top: 5px;
+  left: 5px;
+
+  margin: 0px;
+  padding: 5px;
+
+  width: 400px;
+  height: 75px;
+
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+
+  /* try changing the color in the block editor! */
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/*
+ * we will style both html elements and svg elements in css,
+ * but how we style them is a little different. make sure you
+ * understand the difference between an id and class in css too!
+ */
+
+ #bounds {
+  fill: white;
+
+  /* use stroke, not border, for svg elements */
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}
+
+rect.bar {
+  stroke: none;
+  fill: #00543c;
+}
+
+#x-axis text,
+#y-axis text {
+  font-size: 10pt;
+}
+
+/* path: axis line, line: tick marks */
+
+#x-axis line {
+  fill: none;
+  stroke: none;
+}
+
+#x-axis path,
+#y-axis path,
+#y-axis line {
+  fill: none;
+
+  /* use stroke, not border, for svg elements */
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}
+
+  </style>
+</head>
+
+<body>
+  <script>
+    // Feel free to change or delete any of the code you see!
+    var svg = d3.select("body").append("svg")
+    svg.append("rect")
+      .attr({x: 100, y: 10, width: 700, height: 480})
+      .style({ fill: "#a72d1a"})
+      .transition().duration(3000).ease("bounce")
+      .style({ fill: "#5db9e3"})
+
+    console.log("you are now rocking with d3", d3);
+  </script>
+</body>

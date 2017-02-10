@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="sampler.js"></script>
+  <script src="matrix.js"></script>
+  <script src="polyk.js"></script>
+</head>
+<style>
+  body {
+    background-color: #192247;
+  }
+</style>
+
+
+<body>
+<svg width=960 height=500>
+  <g transform="translate(-50,0)" opacity=0>
+	<path id="outer" fill="none" stroke="#fff" stroke-width="0.8" stroke-miterlimit="10" d="M174.7,85c-24.5,14-57,18-45.8,45.7
+		c9.5,23.4-28.2,15.1-45.8-25.7s20.5-65.8,45.8-65.8S196.7,72.5,174.7,85Z"/>
+	<path id="inner" fill="none" stroke="#fff" stroke-width="0.8" stroke-miterlimit="10" d="M128.4,64.4c-1.9-0.1-5.9,6-5.9,6s-2.3-3.6-1-7.4
+		c1.4-3.8,3.4-3.5,5-3.1C128.3,60.2,141.8,65.1,128.4,64.4z"/>
+  </g>
+  <g id="output">
+  </g>
+</svg>
+
+
+  <script>
+    var svg = d3.select("svg");
+    var inner = d3.select("#inner")
+    var outer = d3.select("#outer")
+    var numSamples = 200;
+    var numLines = 10;
+    
+    var scale = 4;
+    
+    var line = d3.svg.line()
+      .x(function(d) { return d.x })
+      .y(function(d) { return d.y })
+      .interpolate("linear-closed")
+      //.interpolate("cardinal-closed")
+      .interpolate("basis-closed")
+    
+    var output = d3.select("#output")
+    
+    function interpolate(rotate) {
+      var ins = Sampler.getSamples(inner.node(), numSamples);
+      var outs = Sampler.getSamples(outer.node(), numSamples);
+      //var ins = generateRect(20, 100, 99, 62, 63)
+      //var outs = generateRect(20, 0, 0, 310, 310)
+      var c = centroid(ins);
+      // we center our shapes on 0,0 to rotate about center
+      var zeroer = new Matrix()
+        .translate(-c.x, -c.y) 
+        .scale(1)
+      var inmorph = new Matrix()
+        .scale(scale)
+        .rotate(rotate*0.1)
+      var morpher = new Matrix()
+        .scale(scale)
+        .rotate(-rotate)
+      var placer = new Matrix()
+        .translate(450, 240)
+
+      ins.forEach(function(d) {
+        transformer(d, zeroer)
+        transformer(d, inmorph)
+        transformer(d, placer)
+      })
+      outs.forEach(function(d) {
+        transformer(d, zeroer);
+        transformer(d, morpher)
+        transformer(d, placer);
+      })
+      
+      //verify center
+      transformer(c, zeroer)
+      transformer(c, placer)
+
+      output.append("circle")
+      .attr({
+        r: 3,
+        fill: "orange",
+        cx: c.x,
+        cy: c.y
+      })
+
+
+      
+      var rayd = generateRays(150);
+            
+      var inpoly = toPolyK(ins)
+      var ind = rayd.map(function(ray) {
+        var point = PolyK.Raycast(inpoly, c.x, c.y, ray.dx, ray.dy);
+        return {
+          x: c.x + ray.dx * point.dist,
+          y: c.y + ray.dy * point.dist,
+          perp: point.norm
+        }
+      })
+      
+      var outpoly = toPolyK(outs)
+      var outd = rayd.map(function(ray) {
+        var point = PolyK.Raycast(outpoly, c.x, c.y, ray.dx, ray.dy);
+        return {
+          x: c.x + ray.dx * point.dist,
+          y: c.y + ray.dy * point.dist,
+          perp: point.norm
+        }
+      })
+      //console.log(outd)
+      
+      
+      var outdc = output.selectAll("circle.outd")
+      .data(outd)
+      outdc.enter().append("circle").classed("outd", true)
+      outdc.attr({
+        r: 2,
+        cx: function(d) { return d.x },
+        cy: function(d) { return d.y },
+        fill: "orange"
+      })
+      
+      var lines = [];
+      d3.range(numLines+1).forEach(function(index) {
+        var samples = []
+        var ratio = index / numLines;
+        var i, x, y;
+        var last;
+        for(i = 0; i < ind.length; i++) {
+          x = ind[i].x * (1 - ratio) + outd[i].x * (ratio);
+          y = ind[i].y * (1 - ratio) + outd[i].y * (ratio);
+          var p = {x: x, y: y}
+          samples.push(p)
+        }
+        lines.push(samples)
+      })
+      
+      // draw the lines we are interpolating along
+      
+      var interps = output.selectAll("line.interps")
+      .data(ind)
+      interps
+      	.enter().append("line").classed("interps", true)
+      interps
+        .attr({
+          x1: function(d,i) { return d.x },
+          y1: function(d,i) { return d.y },
+          x2: function(d,i) { return outd[i].x },
+          y2: function(d,i) { return outd[i].y },
+          stroke: "#cf6ccf",
+          "stroke-width": 2,
+          "stroke-opacity": 0.2
+        })
+        
+      /*
+      var blended = output.selectAll("path.blend")
+      	.data(lines)
+      blended
+      	.enter()
+      	.append("path").classed("blend", true)
+      blended
+        .attr({
+          d: function(d) { return line(d) },
+          fill: "none",
+          stroke: "#ff005d",
+          "stroke-width": 2,
+        })
+      */
+      
+      var groups = output.selectAll("g.line").data(lines)
+      groups
+      	.enter().append("g").classed("line", true)
+      var circles = groups
+        .selectAll("circle")
+        .data(function(d) { return d })
+      circles
+        .enter().append("circle")
+      circles
+        .attr({
+          r: 1,
+          fill: "white",
+          cx: function(d) { return d.x },
+          cy: function(d) { return d.y }
+        })
+        
+    }
+    
+    interpolate(90);
+
+        
+
+    function generateRect(num, x, y, width, height) {
+      var points = []
+      var sideNum = Math.floor(num/4) + 1;
+      // top
+      d3.range(sideNum).forEach(function(i) {
+        points.push({ x: x + i * width/sideNum, y: y })
+      })
+      // right
+      d3.range(sideNum).forEach(function(i) {
+        points.push({ x: x + width, y: y + i * height/sideNum })
+      })
+      // bottom
+      d3.range(sideNum).forEach(function(i) {
+        points.push({ x: x + width - i * width/sideNum, y: y + height })
+      })
+      // left
+      d3.range(sideNum).forEach(function(i) {
+        points.push({ x: x, y: y + height - i * height/sideNum })
+      })
+      return points;
+    }
+    
+    function generateRays(num) {
+      var rays = d3.range(num).map(function(i) {
+        var theta = i/num*2*Math.PI
+        var dx = Math.sin(theta);
+        var dy = Math.cos(theta); 
+        return {dx: dx, dy: dy}
+      })
+      return rays;
+    }
+    
+    var rot = electron()
+      .cb(function(omega) {
+        console.log("omega", omega)
+        interpolate(omega*180/Math.PI)
+      })
+      .update(svg)
+    
+    // "electron" dial component.
+    function electron() {
+      var cx = 75;
+      var cy = 75;
+      var radius = 50;
+      var dial
+      var cb = function() {};
+      
+      var drag = d3.behavior.drag()
+        .on("drag", function() {
+          var mx = d3.mouse(this)[0];
+          var my = d3.mouse(this)[1];
+          var omega = Math.atan2(mx - cx, my - cy);
+          var nx = radius * Math.sin(omega);
+          var ny = radius * Math.cos(omega);
+          dial.attr({
+            cx: cx + nx,
+            cy: cy + ny
+          })
+          if(cb) cb(omega)
+        })
+      
+      this.update = function(g) {
+        var ring = g.append("circle")
+          .attr({
+            cx: cx,
+            cy: cy,
+            r: radius,
+            fill: "none",
+            stroke: "#3dfbff",
+            "stroke-width": 4
+          });
+
+        dial = g.append("circle")
+          .attr({
+            cx: cx + radius,
+            cy: cy,
+            r: 10,
+            fill: "#3dfbff"
+          });
+        dial.call(drag);
+      }
+      this.cb = function(arg) {
+        if(arg) {
+          cb = arg;
+          return this;
+        }
+        return this.cb;
+      }
+      return this;
+    }
+    
+    
+    
+    
+  </script>
+</body>
+

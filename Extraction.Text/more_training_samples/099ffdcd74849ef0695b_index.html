@@ -1,0 +1,271 @@
+<!doctype HTML>
+<meta charset = 'utf-8'>
+<html>
+  <head>
+    <link rel='stylesheet' href='http://nvd3.org/assets/css/nv.d3.css'>
+    
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js' type='text/javascript'></script>
+    <script src='http://d3js.org/d3.v3.min.js' type='text/javascript'></script>
+    <script src='http://timelyportfolio.github.io/rCharts_nvd3_tests/libraries/widgets/nvd3/js/nv.d3.min-new.js' type='text/javascript'></script>
+    <script src='http://nvd3.org/assets/lib/fisheye.js' type='text/javascript'></script>
+    
+    <style>
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    </style>
+    
+  </head>
+  <body >
+    
+    <div id = 'chart2fd8292db6e' class = 'rChart nvd3'></div>    
+    <script>
+ $(document).ready(function(){
+      drawchart2fd8292db6e()
+    });
+    function drawchart2fd8292db6e(){  
+      var opts = {
+ "dom": "chart2fd8292db6e",
+"width":    800,
+"height":    400,
+"x": "Date",
+"y": "value",
+"group": "Item",
+"type": "multiChart",
+"multi": {
+ "x": {
+ "type": "bar",
+"yAxis":      1 
+},
+"y": {
+ "type": "bar",
+"yAxis":      1 
+},
+"z": {
+ "type": "line",
+"yAxis":      2 
+} 
+},
+"id": "chart2fd8292db6e" 
+},
+        data = [
+ {
+ "Date":          16280,
+"Item": "x",
+"value": 30131.45152712 
+},
+{
+ "Date":          16279,
+"Item": "x",
+"value": 37883.46802583 
+},
+{
+ "Date":          16278,
+"Item": "x",
+"value": 38769.05741869 
+},
+{
+ "Date":          16277,
+"Item": "x",
+"value": 32879.13717097 
+},
+{
+ "Date":          16276,
+"Item": "x",
+"value": 38402.03181142 
+},
+{
+ "Date":          16275,
+"Item": "x",
+"value": 35774.53537844 
+},
+{
+ "Date":          16274,
+"Item": "x",
+"value": 30335.80130432 
+},
+{
+ "Date":          16273,
+"Item": "x",
+"value": 38047.30819538 
+},
+{
+ "Date":          16272,
+"Item": "x",
+"value": 32438.57701309 
+},
+{
+ "Date":          16271,
+"Item": "x",
+"value": 37176.12809036 
+},
+{
+ "Date":          16280,
+"Item": "y",
+"value": 4716.237356537 
+},
+{
+ "Date":          16279,
+"Item": "y",
+"value": 3652.091620956 
+},
+{
+ "Date":          16278,
+"Item": "y",
+"value":  3589.89576553 
+},
+{
+ "Date":          16277,
+"Item": "y",
+"value": 4945.309623028 
+},
+{
+ "Date":          16276,
+"Item": "y",
+"value": 4878.796224482 
+},
+{
+ "Date":          16275,
+"Item": "y",
+"value": 3993.134762277 
+},
+{
+ "Date":          16274,
+"Item": "y",
+"value": 4696.612651227 
+},
+{
+ "Date":          16273,
+"Item": "y",
+"value": 4693.818025873 
+},
+{
+ "Date":          16272,
+"Item": "y",
+"value": 3878.682631417 
+},
+{
+ "Date":          16271,
+"Item": "y",
+"value":  3960.76382848 
+},
+{
+ "Date":          16280,
+"Item": "z",
+"value": 81.57822659705 
+},
+{
+ "Date":          16279,
+"Item": "z",
+"value": 88.25794748729 
+},
+{
+ "Date":          16278,
+"Item": "z",
+"value":  87.8684411943 
+},
+{
+ "Date":          16277,
+"Item": "z",
+"value": 80.46814498259 
+},
+{
+ "Date":          16276,
+"Item": "z",
+"value": 83.87893837644 
+},
+{
+ "Date":          16275,
+"Item": "z",
+"value": 80.53453898523 
+},
+{
+ "Date":          16274,
+"Item": "z",
+"value": 84.85638580052 
+},
+{
+ "Date":          16273,
+"Item": "z",
+"value": 84.66611665441 
+},
+{
+ "Date":          16272,
+"Item": "z",
+"value": 86.54164484935 
+},
+{
+ "Date":          16271,
+"Item": "z",
+"value": 83.03898560815 
+} 
+]
+  
+      if(!(opts.type==='pieChart')) {
+        var data = d3.nest()
+          .key(function(d){
+            return opts.group === undefined ? 'main' : d[opts.group]
+          })
+          .entries(data);
+      }
+      
+      //loop through to give an expected x and y
+      //then give the type and yAxis hopefully provided by R
+      data.forEach(function(variables) {
+  	    variables.values.forEach(function(values){
+			    values.x = values[opts.x];
+			    values.y = values[opts.y];
+		    });
+        variables.type = opts.multi[variables.key].type;
+        variables.yAxis = opts.multi[variables.key].yAxis;
+	    });
+    
+      
+      nv.addGraph(function() {
+        var chart = nv.models[opts.type]()
+          //.x(function(d) { return d[opts.x] })
+          //.y(function(d) { return d[opts.y] })
+          .width(opts.width)
+          .height(opts.height)
+         
+        
+          
+        chart.xAxis
+  .tickFormat(function(d) {
+        return d3.time.format('%d-%m-%Y')(new Date( d * 86400000 ));
+      })
+
+        
+        
+        // here is the problem we need yAxis1 and yAxis2
+        // for now let's manually specify
+        
+        // here is how we could force the y Axis range or limits
+        // as an example 0 to 100000
+        chart.yDomain1( [0,100000] );
+        
+        // format so 10000 appears as 10,000
+        chart.yAxis1.tickFormat( d3.format( '0,0.0f ' ) )
+        
+        chart.yDomain2 ( [ 0, 100 ] );
+        
+    
+       d3.select('#' + opts.id)
+        .append('svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
+
+       nv.utils.windowResize(chart.update);
+       return chart;
+      });
+    };
+</script>
+    
+    <script></script>    
+  </body>
+</html>

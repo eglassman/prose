@@ -1,0 +1,30 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Trix + React</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.9.5/trix.min.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Trix + React</h1>
+    <p><a href="http://requestb.in/us2a5mus?inspect" target="_blank">Inspect previous requests</a></p>
+    <form action="http://requestb.in/us2a5mus" method="post">
+      <input id="x" type="hidden" name="content">
+      <trix-editor class="trix-content" input="x"></trix-editor>
+      <div class="custom-buttons">
+        <button type="button" onclick="document.querySelector('trix-editor').editor.activateAttribute('h2')">h2</button>
+        <button type="button" onclick="document.querySelector('trix-editor').editor.activateAttribute('h3')">h3</button>
+      </div>
+      <button class="submit">Submit</button>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/0.9.5/trix.js"></script>
+    <script>
+      Trix.config.blockAttributes['h2'] = {tagName: 'h2'};
+      Trix.config.blockAttributes['h3'] = {tagName: 'h3'};
+    </script>
+  </body>
+</html>

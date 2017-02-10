@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <style>
+    .axis path{
+    stroke: black;
+    fill:none;
+    }
+
+    .axis{
+      font-family: calibri;
+      font-size: 8pt;
+    }
+  </style>
+  <script type="text/javascript">
+  function draw(data){
+
+    // Function to parse date
+    var format = d3.time.format("%b %Y");
+
+    function agg_odds(leaves){
+
+      // Returning the mean of all odds for a particular Month-Year
+      return {
+        'MonthYear' : format.parse(leaves[0]["MonthYear"]),
+        'Mean_Odds' : d3.mean(leaves,function(d){return d['Mean_Odds'];}),
+        'Count' : d3.sum(leaves,function(d){return 1;}),
+        'Season' : leaves[0]["Season"],
+        'Country' : leaves[0]["Country"]
+      }
+
+      }
+
+    // Setting Margin, Width and Height
+    var margin = 75,
+    width = 1200 - margin,
+    height = 500 - margin;
+
+    // Appending SVG Element with width and height
+    var svg = d3.select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+    // Nesting my dataset by all games from a specific Month+Year and sending to agg_odds function (Returning mean of odds for particular Month-Year)
+    var FranceS2012 = d3.nest()
+    .key(function(d){
+      return d['MonthYear'];
+      })
+    .rollup(agg_odds)
+    .entries(data);
+
+    // Returning max odds from FranceS2012 dataset
+    var max_odds = d3.max(FranceS2012,function(d){
+      return d.values['Mean_Odds'];
+    });
+
+    // Creating fake scale for a specific (August to June) chamnpionship, starting with August of previous year
+    var x_scale = d3.time.scale()
+    .domain([new Date(1900,07,01),new Date(1901,05,01)])
+    .range([margin,width-margin]);
+
+    // Creating y-scale for odds with 1 as lowest minimum value (odds can't be less than 1)
+    var y_scale = d3.scale.linear()
+    .domain([1,max_odds])
+    .range([height-margin,margin]);
+
+    //Creating axis element
+    var x_axis = d3.svg.axis()
+    .scale(x_scale)
+    .tickFormat(d3.time.format('%b'));
+
+    // Creating axis element
+    var y_axis = d3.svg.axis()
+    .scale(y_scale)
+    .orient("left");
+
+    // Drawing x axis
+    d3.select("svg")
+    .append("g")
+    .attr("class","x axis")
+    .attr("transform","translate(0," + (height - margin) + ")")
+    .call(x_axis);
+
+    // Drawing y axis
+    d3.select("svg")
+    .append("g")
+    .attr("class","y axis")
+    .attr("transform","translate(" + margin + ",0)")
+    .call(y_axis);
+
+
+    // Overwriting Scale for specific Season 2012 (Aug 2011 to June 2012)
+    var x_scale = d3.time.scale()
+    .domain([new Date(2011,07,01),new Date(2012,05,01)])
+    .range([margin,width-margin]);
+    
+    // Drawing circles to svg element for the mean of odds for each month of the season (Size being different compared to number of games played in month)
+    d3.select("svg")
+    .selectAll("circle.FranceS2012")
+    .data(FranceS2012).
+    enter().append("circle")
+    .attr("class","FranceS2012")
+    .attr("cx", function(d){
+      return x_scale(d.values["MonthYear"]);})
+    .attr("cy", function(d){return y_scale(d.values["Mean_Odds"]);})
+    .attr("r",function(d){ return d.values["Count"] / 20;})
+    .style("fill","#1b9e77");
+
+    // Debugger to see outcome of drawing
+    debugger;
+
+    // Exiting the circles and removing them, note the class had been created earlier as FranceS2012
+    d3.select("svg")
+    .selectAll("circle.FranceS2012").remove();
+
+    // Debugger to see end result. One circle still present
+    debugger;
+}
+  </script>
+</head>
+<body>
+
+  <script type="text/javascript">
+
+  //Functions to return/parse Date
+  var MonthYear = d3.time.format("%b %Y");
+  var format = d3.time.format("%d/%m/%Y");
+
+  d3.tsv("https://gist.githubusercontent.com/kaltera/1fd4d6f8e919d753e225/raw/8616c6165eae3f301f6230ed9b522d7a62c7c029/France2012.tsv",function(d){
+
+    // Getting the final result of each game
+    var result = d['FTR'];
+    
+    // Calculating the mean of each betting company for that particular result
+    var mean_odds = d3.mean([d['B365' + result + ''],d['BW' + result + ''],d['IW' + result + ''],d['LB' + result + ''],d['VC' + result + ''],d['WH' + result + '']]);
+
+    // Parsing the date to origin_date
+      var origin_date = format.parse(d['Date']);
+
+      return{
+
+        // Returning "MonthYear" as the Month and Year of the Game. Returning Season (here only 2012). Returning Country (here only France). Returning Mean of the odds calculated earlier
+        'MonthYear' : MonthYear(origin_date),
+        'Season' : d['Year'],
+        'Country' : d['Div'],
+        'Mean_Odds' : mean_odds
+      }
+  },draw);
+  </script>
+</body>
+</html>

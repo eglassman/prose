@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>SVG intro</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+ 
+  <style>
+    circle {
+      fill-opacity:0.5;
+      stroke-opacity:0.5;
+    }
+   
+  </style>
+	
+</head>
+
+<body>
+  
+  
+  <script>
+   
+    var outerWidth = 300;
+    var outerHeight = 250;
+    var circleRadius = 5;
+    var xColumn = "gdp";
+    var yColumn = "population";
+    var rColumn = "population";
+    var rMin = 2; rMax = 10;
+    var r = 2;
+    
+    var svg = d3. select("body").append("svg")
+    	.attr("width", outerWidth)
+    	.attr("height", outerHeight);
+    
+    
+    var xScale = d3.scale.log().range([0,outerWidth]);
+    var yScale = d3.scale.log().range([outerHeight,0]);
+    var rScale = d3.scale.linear().range([rMin,rMax]);
+
+    
+    function render(data) {
+      xScale.domain(d3.extent(data, function(d) { return d[xColumn]; }));
+      yScale.domain(d3.extent(data, function(d) { return d[yColumn]; }));
+      rScale.domain(d3.extent(data, function(d) { return d[rColumn]; }));
+      
+      var circles = svg.selectAll("circle").data(data);
+      circles.enter().append("circle").attr("r", circleRadius);
+      
+      circles
+      	.attr("cx", 		function (d) { return 	  xScale(d[xColumn]); })
+      	.attr("cy", 		function (d) { return 	  yScale(d[yColumn]); })
+      	.attr("r",  		function (d) { return 	  rScale(d[rColumn]); })
+      
+      circles.exit().remove();
+    }
+    
+    
+  	function type(d) {
+			// country_code,population,gdp
+      d.population = +d.population;
+      d.gdp = +d.gdp;
+      return d;
+    }
+  
+    d3.csv("countries_population_GDP.csv", type, render);
+    
+    
+  </script>
+</body>
+ , 

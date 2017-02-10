@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.0/mapbox-gl.css' rel='stylesheet' />
+  
+  <script src="selector.js"></script>
+
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    #map { 
+      position:absolute; 
+      width: 100%;
+      height: 100%;
+    }
+    svg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    nav {
+      position: absolute;
+      top: 40px;
+      left: 20px;
+      z-index: 1;
+    }
+    #circle {
+      background-color: rgba(20, 20, 20, 0.1);
+      font-family: Helvetica, sans-serif;
+      color: #3b83bd;
+      padding: 5px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      border: 1px solid #111;
+    }
+    #circle.active {
+      background-color: rgba(250, 250, 250, 0.9);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a id="circle" class="active">draw circle</a>
+  </nav>
+  <div id="map"></div>
+  <script>
+  
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZW5qYWxvdCIsImEiOiJjaWhtdmxhNTIwb25zdHBsejk0NGdhODJhIn0.2-F2hS_oTZenAWc0BMf_uw'
+    
+    //Setup mapbox-gl map
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/enjalot/cihmvv7kg004v91kn22zjptsc',
+      center: [-0.1,51.5119112],
+      zoom: 13.5,
+    })
+    map.dragPan.disable();
+    map.scrollZoom.disable();
+    
+    // Setup our svg layer that we can manipulate with d3
+    var container = map.getCanvasContainer()
+    var svg = d3.select(container).append("svg")
+
+    var active = true;
+    var circleControl = new circleSelector(svg)
+      .projection(project)
+      .inverseProjection(function(a) {
+        return map.unproject({x: a[0], y: a[1]});
+      })
+      .activate(active);
+    
+    d3.select("#circle").on("click", function() {
+      active = !active;
+      circleControl.activate(active)
+      if(active) {
+        map.dragPan.disable();
+      } else {
+        map.dragPan.enable();
+      }
+      d3.select(this).classed("active", active)
+    })
+    
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.Navigation());
+    
+    function project(d) {
+      return map.project(getLL(d));
+    }
+    function getLL(d) {
+      return new mapboxgl.LngLat(+d.lng, +d.lat)
+    }
+  
+    d3.csv("dots.csv", function(err, data) {
+      //console.log(data[0], getLL(data[0]), project(data[0]))
+      var dots = svg.selectAll("circle.dot")
+        .data(data)
+      
+      dots.enter().append("circle").classed("dot", true)
+      .attr("r", 1)
+      .style({
+        fill: "#0082a3",
+        "fill-opacity": 0.6,
+        stroke: "#004d60",
+        "stroke-width": 1
+      })
+      .transition().duration(1000)
+      .attr("r", 6)
+
+      circleControl.on("update", function() {
+        svg.selectAll("circle.dot").style({
+          fill: function(d) {
+            var thisDist = circleControl.distance(d);
+            var circleDist = circleControl.distance()
+            if(thisDist < circleDist) {
+              return "#ff8eec";
+            } else {
+              return "#0082a3"
+            }
+          }
+        })
+      })
+      circleControl.on("clear", function() {
+        svg.selectAll("circle.dot").style("fill", "#0082a3")
+      })
+      
+      function render() {
+        dots.attr({
+          cx: function(d) { 
+            var x = project(d).x;
+            return x
+          },
+          cy: function(d) { 
+            var y = project(d).y;
+            return y
+          },
+        })
+        
+        circleControl.update(svg)
+      }
+
+      // re-render our visualization whenever the view changes
+      map.on("viewreset", function() {
+        render()
+      })
+      map.on("move", function() {
+        render()
+      })
+
+      // render our initial visualization
+      render()
+    })
+  </script>
+</body>

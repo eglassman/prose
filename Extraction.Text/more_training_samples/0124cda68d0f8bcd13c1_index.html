@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Consumption of Grapes by Race</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		
+        <style type="text/css">
+			
+			body {
+               	background-color: white; font-family: sans-serif; font-size: 11px; color: #794044;}
+            
+            
+
+			svg {
+                background-color: white; }
+            
+            h1{ font-size: 30px;}
+            rect {
+                fill: #794044;}
+            
+            rect:hover {
+                opacity: 0.6;}
+            
+        </style>
+	
+    </head>
+	
+    <body>
+        <h1>Grapes Consumption by Race</h1>
+        <h2>Per Capita Retail Pounds Per Year</h2>
+		<script type="text/javascript">		
+			               
+           var svg = d3.select("body")
+                    .append("svg")
+				    .attr("width", 400)
+                    .attr("height", 380);
+                
+            d3.csv("fruits-by-race-uploaded-to-gist-FINAL.csv", function(data) {
+				
+                data.sort(function(a, b) {return d3.descending(+a.Grapes, +b.Grapes);});
+                
+                var rects = svg.selectAll("rect")
+					.data(data)
+					.enter()
+				    .append("rect");
+                    
+                rects.attr("x", 210)
+					.attr("y", function(d, i) {return i * 30;})
+					.attr("width", function(d) {return d.Grapes * 3;})
+					.attr("height", 25)
+                                      
+                    .append("title")
+                    .text(function(d) {return d.RaceEthnicity + "'s annual consumption of GRAPES, in retail pounds, is " + d.Grapes;});      
+            
+                svg.selectAll("text")
+					.data(data)
+					.enter()
+					.append("text")
+					.text(function(d){return d.RaceEthnicity;})
+					.attr("x", 200)
+					.attr("y", function(d, i){return i * 30 + 17;})
+                	.attr({"fill": "#8b8970",	"font-size": "12px", "text-anchor": "end"})});
+
+        </script>
+        <p>Sources: Food Intakes Converted to Retail Commodities Databases (ARS) and<br /> Food Availability (Per Capita) Data System; <a href="http://www.ers.usda.gov/data-products/commodity-consumption-by-population-characteristics.aspx#27850">Table 1: Fruit Availablity;</a> United States<br /> Department of Agriculture, Economic Research Service, 1999-2002.</p>
+	</body>
+</html>

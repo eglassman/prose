@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Bar Endangered Species</title>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+		<style type="text/css">
+			
+			body {
+				margin: 0;
+				background-color: lightGray;
+				font-family: Futura, Helvetica, Arial, sans-serif;
+			}
+
+			#container {
+				width: 800px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: white;
+				box-shadow: 3px 3px 5px 6px #ccc;
+			}
+
+			h1 {
+				font-size: 30px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 12px;
+				margin: 15px 0 10px 0;
+			}
+
+			a:link {
+				text-decoration: none;
+				color: gray;
+			}
+
+			a:hover {
+				text-decoration: underline;
+			}
+
+			a:visited {
+				color: gray;
+			}
+
+			a:active {
+				color: DarkGray;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			g.bar {
+
+				cursor: pointer;
+			}
+
+			g.bar text {
+				font-size: 8px;
+				font-weight: bold;
+				font-family: Futura, Helvetica, Arial, sans-serif;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: orange;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: Futura, Helvetica, Arial, sans-serif;
+				font-size: 10px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container">
+
+			<h1>Too many species in danger</h1>
+
+			<p>There are over 1,700 threatened plant and animal species in Australia. Data from The Department of Environment shows the most at-risk groups are plants - over 1100 are in risk of extinction. This means food sources and shelters for animals will be further threatened, and have a significant impact on Australian biodiversity. <strong>Source:</strong> <a href="http://www.data.gov.au/dataset/threatened-species-state-lists">data.gov.au, 2015</a></p>
+		</div>
+
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 30, 120 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+			//Now SVG goes into #container instead of body
+			var svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("Species.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.Danger, +b.Danger);
+				});
+
+				widthScale.domain([ 0, d3.max(data, function(d) {
+					return +d.Danger;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.Animal; } ));
+
+				//Bind data to groups (not bars directly)
+				var groups = svg.selectAll("g")
+								.data(data)
+								.enter()
+								.append("g")
+								.attr("class", "bar");
+
+				//Add a rect to each group
+				var rects = groups.append("rect")
+					.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.Animal);
+					})
+					.attr("width", 0)
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "lightblue");
+
+				//Add a text element to each group
+				groups.append("text")
+					.attr("x", function(d) {
+						return padding[3] + widthScale(d.Danger) - 3;
+					})
+					.attr("y", function(d) {
+						return heightScale(d.Animal) + 11;
+					})
+					.text(function(d) {
+						return d.Danger;
+					});
+
+				rects.transition()
+					.delay(function(d, i) {
+						return i * 20;
+					})
+					.duration(600)
+					.attr("width", function(d) {
+						return widthScale(d.Danger);
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

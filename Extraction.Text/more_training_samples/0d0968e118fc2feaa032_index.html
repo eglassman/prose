@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	
+	<body>
+        
+        <p> THIS IS MY FIRST WEB PAGE <p>
+        
+        <svg width="500" height="500">
+			<line x1="188" y1="270" x2="200" y2="300" stroke="green" stroke-width="13" />
+			<line x1="200" y1="300" x2="260" y2="250" stroke="green" stroke-width="10" />
+            <line x1="200" y1="300" x2="300" y2="150" stroke="green" stroke-width="7" />
+			<circle cx="300" cy="140" r="50" fill="red" />
+            <circle cx="238" cy="140" r="30" fill="orange" />
+			<circle cx="368" cy="140" r="30" fill="orange" />
+            <circle cx="300" cy="80" r="30" fill="orange" />
+			<circle cx="300" cy="200" r="30" fill="orange" />
+            <circle cx="259" cy="91" r="30" fill="orange" />
+			<circle cx="350" cy="91" r="30" fill="orange" />
+            <circle cx="259" cy="188" r="30" fill="orange" />
+			<circle cx="350" cy="188" r="30" fill="orange" />
+            <text x="58" y="400" fill="charcoal" font-size="42" font-weight="bold" font-family="Verdana">A little flower</text>
+		</svg>
+        
+   		<p>CSV data in the console </p>
+
+		<script type="text/javascript">		
+
+			//Load in contents of CSV file
+			//d3.csv("betterlifeindex.csv", function(data) {
+			d3.csv("prova.csv",function(data) ) {	
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+        </script>
+
+    </body>
+</html>

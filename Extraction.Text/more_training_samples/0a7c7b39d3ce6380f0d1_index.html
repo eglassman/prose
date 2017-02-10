@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+   
+    
+    <style>
+      
+    * {
+			margin: 0;
+			padding: 0;
+		}
+
+
+		#container {
+			width: 800px;
+			margin: 25px auto 25px auto;
+			padding: 50px 50px 50px 50px;
+			background-color: white;
+		}
+      
+      .chartContainer {
+			display: inline-block;
+			width: 99%;
+		}
+       
+      body {
+				 margin:0;position:fixed;top:0;right:0;bottom:0;left:0; 
+         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+         font-size: 20px;
+         font-style: bold;
+			}
+
+      h1 {
+        margin-bottom: 25px;
+  			 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+         font-size: 28px;
+         font-style: bold;
+			}
+
+			svg {
+				background-color: white;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+      
+  circle {
+      stroke-width: 4;
+      fill: white;
+      }
+  
+  circle.special {
+      stroke: white;
+      stroke-width: 3;
+      fill: white;
+      }
+  
+      .axis path,
+		.axis line {
+			fill: none;
+			stroke: black;
+			stroke-width: 2;
+      shape-rendering: crispEdges;
+		}
+		
+		.axis text {
+         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+         font-size: 18px;
+         font-style: bold;
+		}
+      
+</style>
+
+</head>
+
+
+<body>    
+  
+ <div id="container">
+
+		<h1>Slope Chart</h1>
+		
+
+		<div class="chartContainer" id="slopeChartContainer">
+		</div>
+	</div> 
+
+  
+  <script type="text/javascript">
+
+  //Width and height
+	var w = 400;
+	var h = 600;
+	var padding = 40;
+
+  
+  
+  
+  //data
+  var dataset = [{"first":3.1,"second":5,"group":"up","delta":-1.9},{"first":5.3,"second":6,"group":"up","delta":-0.7},{"first":1.7,"second":3.2,"group":"up","delta":-1.5},{"first":3.3,"second":7.3,"group":"up","delta":-4},{"first":2.4,"second":5.4,"group":"up","delta":-3},{"first":3.6,"second":8.5,"group":"up","delta":-4.9},{"first":4.3,"second":9.1,"group":"up","delta":-4.8},{"first":1.1,"second":11.1,"group":"up","delta":-10},{"first":5.2,"second":15.7,"group":"up","delta":-10.5},{"first":4.9,"second":4.5,"group":"down","delta":0.4},{"first":7,"second":2.6,"group":"down","delta":4.4},{"first":3,"second":1.2,"group":"down","delta":1.8}]   ;
+
+  
+  // Calculate differences between first and second y values.
+  
+   var diffs = []; // store their names within a local array
+
+   for(var i = 0; i < dataset.length; i++){
+      diffs.push(dataset[i].first - dataset[i].second);
+      }
+
+  
+  
+
+  //Find max values & Create scale functions
+			
+      var xMax = d3.max(dataset, function(d) { return d.first; })
+      var yMax = d3.max(dataset, function(d) { return d.second; })
+      var max = Math.max(yMax, xMax);  // highest value in dataset
+   
+			var yScale = d3.scale.linear()
+								 .domain([0, max])
+								 .range([h - padding, padding])
+                 .nice() 
+                 ;
+   
+      var rad = 6 // radius of circle 
+      var radback = rad * 1.3
+  
+//Configure y axis 
+		var yAxis = d3.svg.axis()
+						.scale(yScale)
+						.orient("left")
+						.ticks(6)
+            ; 
+      
+      
+  //Create SVG element
+			var svg = d3.select("#slopeChartContainer")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+// 
+
+    
+    
+ // join paths
+  svg.append("g")
+			   .attr("id", "lines")
+			   .selectAll("line")
+			   .data(dataset)
+			   .enter()
+			   .append("line")
+         .style("opacity", 0)
+         .attr("x1", (w/4))
+         .attr("x2", (w/4))
+         .attr("y1", function(d) {return yScale(d.first)})
+         .attr("y2", function(d) {return yScale(d.first)})
+          .transition()
+			    .duration(5000)
+         .attr("x1", (w/4))
+         .attr("x2", (w/1.4))
+         .attr("y1", function(d) {return yScale(d.first)})
+         .attr("y2", function(d) {return yScale(d.second)})
+         .attr("stroke",  function(d) {
+               if (d.delta <= -10) {return "#000c60";}
+                else if (d.delta >=0) {return "#569ffe";} 
+                else  {return "#001bea";}
+                 })
+         .style("stroke-width", 4)        
+         .style("stroke-linecap", "butt")
+           .style("opacity", 1)
+
+         
+  ;
+
+  
+  
+  
+ //Create first background circles
+			svg.append("g")
+			   .attr("id", "circles1b")
+			   .selectAll("circle")
+			   .data(dataset)
+			   .enter()
+			   .append("circle")
+         .attr("class", "special")
+         .attr("r", radback)
+         .attr("cx", (w/4))
+         .attr("cy", function(d) {return yScale(d.first)})
+          ;
+
+ //Create first circles
+			svg.append("g")
+			   .attr("id", "circles1")
+			   .selectAll("circle")
+			   .data(dataset)
+			   .enter()
+			   .append("circle")
+         .attr("r", rad)
+         .attr("cx", (w/4))
+         .attr("cy", function(d) {return yScale(d.first)})
+         .attr("stroke",  function(d) {
+               if (d.delta <= -10) {return "#000c60";}
+                else if (d.delta >=0) {return "#569ffe";} 
+                else  {return "#001bea";}
+                 })
+      .style("opacity", 1)
+         
+          ;
+  
+  
+ //Create second background circles
+			svg.append("g")
+			   .attr("id", "circles2b")
+			   .selectAll("circle")
+			   .data(dataset)
+			   .enter()
+			   .append("circle")
+         .attr("class", "special")
+         .attr("r", radback)
+         .attr("cx", (w/1.4))
+         .attr("cy", function(d) {return yScale(d.second)})
+          ;
+  //Create second circles
+			svg.append("g")
+			   .attr("id", "circles2")
+			   .selectAll("circle")
+			   .data(dataset)
+			   .enter()
+			   .append("circle")
+         .style("opacity", 0)
+         .transition()
+			   .delay(3500)
+         .duration(2500)
+         .attr("r", rad) 
+         .attr("cx", (w/1.4))
+         .attr("cy", function(d) {return yScale(d.second)})
+         .attr("stroke",  function(d) {
+               if (d.delta <= -10) {return "#000c60";}
+                else if (d.delta >=0) {return "#569ffe";} 
+                else  {return "#001bea";}
+                 })
+      .style("opacity", 1) 
+          ;
+  
+// First text
+       svg.append("text")
+          .attr("x", (w/4))
+          .attr("y", h-(padding/2))
+          .style("text-anchor","middle") 
+          .text("First");
+
+  // Second text
+       svg.append("text")
+          .attr("x", (w/1.4))
+          .attr("y", h-(padding/2))
+         .style("text-anchor","middle") 
+          .text("Second");
+  
+  
+  //Create y axis
+		svg.append("g")
+			.attr("class", "axis")
+			.attr("transform", "translate(" + (padding*1.5) + ",0)")
+			.call(yAxis);
+  
+    
+ // Add the text label for the Y axis
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", (padding/100))
+        .attr("x",0 - (h / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Arbitrary Units");
+   
+    
+    
+  // color by gradient?, delta?
+  
+
+  </script>
+
+</body>
+</html>

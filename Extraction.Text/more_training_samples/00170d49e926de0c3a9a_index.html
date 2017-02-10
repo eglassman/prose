@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+body{
+	background-color: rgb(38, 38, 38);
+}
+
+path{
+	stroke: white;
+	stroke-width: 6px;
+	fill: none;
+}
+
+circle{
+	fill: white;
+}
+
+rect{
+	fill: orange;
+}
+
+</style>
+
+<body></body>
+
+<script src="/1wheel/raw/67b47524ed8ed829d021/d3-3.5.5.js"></script>
+<script src="/1wheel/raw/67b47524ed8ed829d021/lodash-3.8.0.js"></script>
+<script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-jetpack.js'></script>
+<script src='/1wheel/raw/1b6758978dc2d52d3a37/d3-starterkit.js'></script>
+
+
+<script>
+
+var s = 50,
+		width  = 960 - s*2
+		height = 500 - s*2
+
+var svg = d3.select('body')
+	.append('svg')
+		.attr({height: height + s*2, width: width + s*2})
+	.append('g')
+		.translate([s, s])
+
+
+var grid = []
+d3.range(0, width, s).map(function(x, i){
+	d3.range(0, height, s).map(function(y, j){
+		grid.push({
+			pos: [x + (j % 2)*s/2, y*.9]
+		})
+	})
+})
+
+
+var gridGs = svg.dataAppend(grid, 'g').translate(ƒ('pos'))
+
+gridGs.append('circle')
+		.attr('r',3)
+
+var r = s/2/Math.sqrt(3)/2
+var triMidPoints = [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+		.map(function(d){ return d + Math.PI/2 })
+		.map(function(θ){
+			return {
+				pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+				θ: θ, 
+				deg: θ*180/Math.PI
+			}
+		})
+
+var mCircles = gridGs.dataAppend(triMidPoints, 'circle.m')
+		.attr('r', 3)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.θ + ')' })
+
+
+var rectW = 3, rectH = s/2 - 3
+var rects = gridGs.dataAppend(triMidPoints, 'rect')
+		.attr('width', rectW)
+		.attr('height', rectH)
+		.attr('x', +rectW/200)
+		.attr('y', -rectH/2)
+		.attr({rx: 10, ry: 10})
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+
+
+
+var r = s/2/Math.sqrt(3)*3/2
+var triMidPointsFar = [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+		.map(function(d){ return d + Math.PI/2*1 })
+		.map(function(θ){
+			return {
+				pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+				θ: θ, 
+				deg: θ*180/Math.PI
+			}
+		})
+
+rects.data(triMidPointsFar)
+rects.transition().delay(500).duration(1500)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+mCircles.data(triMidPointsFar)
+mCircles.transition().delay(500).duration(1500)
+		.attr('transform', function(d){ 
+			return 'translate(' + d.pos + ') rotate(' + d.deg + ')' })
+
+
+
+function genMidPoints(rFactor, angle){
+	var r = s/2/Math.sqrt(3)*rFactor
+	return [Math.PI*6/3, Math.PI*2/3, Math.PI*4/3]
+			.map(function(d){ return d + Math.PI/2*1 })
+			.map(function(θ){
+				return {
+					pos: [r*Math.cos(θ), r*Math.sin(θ)], 
+					θ: θ, 
+					deg: θ*180/Math.PI
+				}
+			})
+}
+
+
+</script>

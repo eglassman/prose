@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+/* CSS goes here. */
+
+body {
+	 font-family: Arial, sans-serif;
+	 font-size: 12px;
+}
+
+#title {
+	font-size: 24px;
+}
+
+.axis {
+	font-size: 10px;
+}
+
+.axis path {
+	fill: none;
+	stroke: none;
+}
+
+.axis line {
+	stroke: none;
+
+}
+
+.line {
+	stroke-width: 1.5px;
+	fill: none;
+	opacity: 0.3;
+}
+
+.texty {
+	font-size: 16px;
+	text-transform: lowercase;
+	/*font-weight: bold;*/
+	
+}
+
+</style>
+<body>
+<div id="title">Georgia unemployment rate</div>
+<div id="subtitle">By county & region, 2004 through July 2014
+<p>Where's Aug & September, you ask? Well, provisional data is not included.</div>
+<div id="chart">
+  <div id="legendHolder">
+  	<p id="menu">
+  	Choose a county:<br>
+  	<select id="selections"></select>
+  	</p>
+  	Or choose a region:<br>
+  	<p id="group_menu">
+  	<select id="group_selections">
+  		<option id="a01">1 Northwest Georgia</option>
+  		<option id="a02">2 Georgia Mountains</option>
+  		<option id="a03">3 - 7 Metro Atlanta</option>
+  		<option id="a08">8 West Central</option>
+		<option id="a09">9 Northeast Georgia</option>
+  		<option id="a11">10 & 11 Bibb & neighbors</option>
+  		<option id="a12">12 Richmond-Burke</option>
+  		<option id="a13">13 East Central</option>
+		<option id="a14">14 Lower Chattahoochee</option>
+		<option id="a15">15 Middle Flint</option>
+		<option id="a16">16 Central Georgia Altamaha</option>
+		<option id="a17">17 Southwest Georgia</option>
+		<option id="a18">18 South Georgia</option>
+		<option id="a19">19 Southeast Georgia</option>
+		<option id="a20">20 Coastal Georgia</option>
+		<option id="blank"></option>
+  	</select><br>
+  		
+
+
+  </div>
+</div> <!-- /div id="chart"   -->
+
+<div id="footer">
+<br><br>
+Source: <a href="http://www.bls.gov/lau/" target="_blank">Bureau of Labor Statistics Local Area Unemployment Statistics</a><br>
+<a href="https://www.dropbox.com/s/wusp4h6tpv3ifum/SeriesReport-20141017121942.xlsx?dl=0" target="_blank">Raw data as accessed Oct. 17</a><br>
+Not seasonally adjusted.  <a href="http://www.bls.gov/lau/lauseas.htm" target="_blank">Apparently BLS does not seasonal-adjust down to the county level.</a><br>
+These "regions" are modified "Workforce Investment Act" regions. I grouped them that way because it was easy to find a spreadsheet to map county name to WIA region. If I'd have had to group them by hand by some other method, I'd have been very prone to making a mistake. And it would be tedious.
+
+
+</div> <!-- close footer -->
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+
+<!-- ****** Cut before post -->
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+// ********* NOTES:
+// WIAs: https://www.dol.state.ga.us/pdf/wia/wia_administrators.pdf
+// *************
+
+// ********* DECLARE VARs
+var margin = {top: 40, bottom: 40, left: 50, right: 110},
+	width = 1000-margin.left-margin.right,
+    height = 500-margin.top-margin.bottom;
+
+var x = d3.time.scale()
+	.range([0, width]); 
+
+var y = d3.scale.linear()
+	.domain([0, 30])
+	.range([height, 0]);
+
+var xAxis = d3.svg.axis()
+	.scale(x)
+	.tickFormat(function (d) {return d3.time.format('%m/%y')(new Date(d)); }) // formate the javascript date object into just month-year
+	.ticks(64)
+	.orient("bottom");
+
+var yAxis = d3.svg.axis()
+	.scale(y)
+	.orient("left");	
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width+margin.left+margin.right)
+    .attr("height", height+margin.top+margin.bottom)
+    .append("g")
+    .attr("transform", 
+              "translate(" + margin.left + "," + margin.top + ")");
+
+var dateFormat = d3.time.format("%x").parse;
+
+var line = d3.svg.line()
+	.interpolate("basis")
+	.x(function (d) {return x(d.date); })
+	.y(function (d) {return y(d.rate) ; });
+
+var flat_line = d3.svg.line()
+	.interpolate("basis")
+	.x(function (d, i) {return x(d.date); })
+	.y(function (d) {return y(5) ; });
+
+
+
+
+
+
+var div = d3.select("#chart").append("div")
+	.attr("class", "tooltip");
+
+var sel = d3.select("#selections").node();
+
+var menu = d3.select("#menu select")
+    .on("change", function (d) {
+    	console.log("changed")
+    	console.log(sel.options[sel.selectedIndex].value)
+    	colorize(sel.options[sel.selectedIndex].value);
+});
+
+var group_sel = d3.select("#group_selections").node();
+
+
+var group_menu = d3.select("#group_menu select")
+	.property("value", 0)
+	.on("change", function (d) {
+		console.log("changed")
+		console.log(group_sel.options[group_sel.selectedIndex].id)
+		group_colorize(group_sel.options[group_sel.selectedIndex].id);
+	})
+
+//var fill = d3.scale.category20();
+
+var fill = d3.scale.ordinal()
+	.range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#ff9896", "DarkBlue", "DarkCyan", "DarkGreen", "DarkMagenta", "DarkSlateBlue", "black"]);
+
+function lineAnimate(selection) {  // selection must be paths
+	console.log(selection)
+	selection.transition().duration(500).ease("linear")
+	.style("opacity", 1)
+}
+
+
+// stack csv into "record" form using pandas.
+// then load it
+d3.csv("stacked.csv", function (error, unemp) {
+
+
+// wrassle the data into correct formats
+	data = unemp.map( function (d) {
+		return {
+			county : d.county,
+			date : dateFormat(d.date), // javascript date object
+			rate : +d.rate  }; // number
+	});	
+
+
+	//set domain -- the extent of the dates
+	x.domain(d3.extent(data, function (d) {return d.date; }));
+	// nest by county. I want a line for each county.
+	data = d3.nest().key(function (d) {return d.county;}).entries(data);
+
+	data.forEach(function (d) { // slice apart the county name from the 2-digit leading wia code
+		d.wia = d.key.slice(0,2)
+		d.key = d.key.slice(2,15)
+		;})
+
+	menu.selectAll("option")
+		.data(data)
+		.enter().append("option")
+		.text(function (d) {return d.key; });
+
+
+		function compare(a, b){
+			if (a['values'][127]['rate'] > b['values'][127]['rate'])
+				return -1;
+			if (a['values'][127]['rate'] < b['values'][127]['rate'])
+				return 1;
+			return 0;
+		}
+
+		data= (data.sort(compare));
+
+
+	 svg.append("g")
+	 	.attr("class", "x axis")
+	 	.attr("transform", "translate(0," + height + ")")
+	 	.call(xAxis)
+	 	.selectAll("text")  
+	 	.style("text-anchor", "end")
+	 	.attr("transform", function (d) {return "rotate(-40)"; });
+
+	 svg.append("g")
+	 	.attr("class", "y axis")
+	 	.call(yAxis);
+	 	
+	menu.property("value", 0);
+	
+
+
+	var counties = svg.selectAll(".county")
+		.data(data, function (d) {return d.key;})
+	   .enter().append("g")
+	    .attr("class", function (d) {return d.key + " " + d.wia + " county";})	
+	    .text(function (d) {return d.key});
+
+	 counties.append("path")
+		.attr("class", function (d) {return d.key + " " + d.wia + " county" + " line";})
+		.attr("id", function (d) {return "a" + d.wia;})
+		.attr("d", function (d) {return line(d.values); })
+		.attr("stroke", "gray")
+		.style("opacity", 0.2)
+
+		
+	counties.append("text")
+		.text(function (d) {return (d.key);})
+		.attr("y", height)
+		.style("opacity", 0)
+		.attr("class", "texty")
+		.attr("id", function (d) {return "a" + d.wia;})
+	
+;})
+
+function colorize(county_name){
+		//reset everything to gray & 0
+		group_menu.property("value", 0)
+		d3.selectAll(".texty").style("opacity", 0)
+		d3.selectAll(".line").style("stroke", "gray").style("stroke-width", "1.5px").style("opacity", 0.1)
+		// // then just turn one red
+		d3.selectAll("." + county_name).call(lineAnimate).style("stroke", "red").style("stroke-width", "2px")
+		d3.selectAll("." + county_name).select(".texty")
+		.style("opacity", 1)
+		.style("fill", "red")
+		.style("stroke-width", "0.5px")
+		.style("font-weight", "normal")
+		.attr("x", width+ 10)
+		.attr("y", function (d) {
+			return (y(d['values'][127]['rate']))
+		;})
+;}
+
+function group_colorize(wia_num){
+		//reset all to gray, null, zero
+		menu.property("value", 0)
+		d3.selectAll(".line").style("stroke", "gray").style("stroke-width", "1.5px").style("opacity", 0.1)
+		d3.selectAll(".texty").style("opacity", 0)
+		// then hightlight the bundle
+		d3.selectAll("path#" + wia_num) // select every path with the same wia and fill it with such color
+			.call(lineAnimate)
+			.style("stroke-width", "2.5px")
+			.style("stroke", function (d, i) {return fill(i);});
+
+		d3.selectAll("text#" + wia_num)
+			.style("opacity", 1)
+			.style("fill", function (d, i) {return fill(i);})
+			.attr("y", function (d, i) {return ((height*0.6)+(12*i)); })
+			.attr("x", width+10)
+
+;}
+
+
+</script>
+</html>

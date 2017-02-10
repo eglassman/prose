@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <script charset="utf-8" src="http://d3js.org/d3.v3.min.js"></script>
+    <script charset="utf-8" src="http://d3js.org/topojson.v1.min.js"></script>
+    <script charset="utf-8" src="http://d3js.org/queue.v1.min.js"></script></script>
+    <style media="screen">
+
+    body{
+      font-family:sans-serif;
+    }
+      .subunit.SCT ,
+      .subunit.WLS ,
+      .subunit.NIR ,
+      .subunit.ENG { fill: rgba(0,0,0,0.05); }
+      .subunit.IRL { display: none; }
+
+      .subunit-boundary {
+        fill: none;
+        stroke: rgba(0,0,0,0.1);
+        stroke-linejoin: round;
+      }
+
+      .subunit-boundary.IRL {
+        stroke: rgba(0,0,0,0.1);
+      }
+
+
+
+      .Lab{
+        fill:#E25050;
+      }
+
+      .C{
+        fill:#6DA8E1;
+      }
+
+      .LD{
+        fill:#FFC660;
+      }
+
+      .Other{
+        fill:#aaa;
+      }
+
+      .constituency-point{
+        stroke:none;
+        fill-opacity:1;
+      }
+
+      .constituency-point.filtered{
+        stroke:rgba(0,0,0,0.1);
+        fill-opacity:0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="input">
+      Layout:
+      <a href="#cartogram" data-layout="cartogram">cartogram</a>
+      <a href="#geography" data-layout="geography">geography</a>
+      <a href="#stack" data-layout="stack">stack</a>
+    </div>
+    <div id="vis">
+    </div>
+
+  </body>
+  <script charset="utf-8">
+    var width = 500, height = 500,
+      parties = ['C','Lab','LD','Other'],
+      stackColumns = 10,
+      margin = { top:20, left:20, bottom:20, right:20 },
+      projection = d3.geo.albers()
+        .center([0, 55.4])
+        .rotate([0, 0])
+        .parallels([50, 60])
+        .scale(2400)
+        .translate([width / 2, height / 2]),
+      dotSize = 4,
+      path = d3.geo.path().projection(projection),
+      plotWidth = width-(margin.left+margin.right),
+      plotHeight = height-(margin.top+margin.bottom),
+      cartoScale = d3.scale.linear()
+        .range([0, plotHeight]),
+
+      partyScale = d3.scale.ordinal()
+        .domain(parties);
+
+
+
+    var svg = d3.select('#vis').append('svg')
+        .attr({
+          width:width,
+          height:height
+        })
+        .append('g')
+          .attr('transform','translate(' + margin.left + ',' + margin.top + ')');
+
+
+    queue()
+      .defer(d3.csv, 'combined.csv')
+      .defer(d3.json, 'simplemap.topojson')
+      .await(initialise); // function that uses files
+
+    function normaliseParty(p){
+      if(parties.indexOf(p)>-1){
+        return p;
+      }
+      console.log(p);
+      return 'Other';
+    }
+
+    function initialise(error, details, uk){
+      if (error) return console.error(error);
+
+      //party index
+      var partyCount = {};
+      parties.forEach(function(d){partyCount[d]=0});
+
+      details = details.map(function(d){ //give each constituency a per party index
+        var p = normaliseParty(d.party);
+        d.partyCount = partyCount[p];
+        partyCount[p] ++;
+        return d;
+      });
+
+      cartoScale.domain( d3.extent(details, function(d){ return parseInt(d.cartoY); }) );
+      partyScale.rangePoints([0, plotWidth - cartoScale(stackColumns-1)]);
+
+      var g = svg.append('g').attr('id','boundaries');
+      g.selectAll(".subunit")
+        .data(topojson.feature(uk, uk.objects.subunits).features)
+        .enter().append("path")
+        .attr("class", function(d) { return "subunit " + d.id; })
+        .attr("d", path);
+
+      g.append("path")
+        .datum(topojson.mesh(uk, uk.objects.subunits, function(a, b) { return a !== b && a.id !== "IRL"; }))
+        .attr("d", path)
+        .attr("class", "subunit-boundary");
+
+      g.append("path")
+        .datum(topojson.mesh(uk, uk.objects.subunits, function(a, b) { return a === b && a.id === "IRL"; }))
+        .attr("d", path)
+        .attr("class", "subunit-boundary IRL");
+
+
+      svg.selectAll('circle')
+        .data( details, function(d){ return d.ons_id; } )
+        .enter()
+        .append('circle')
+        .attr({
+          'class':function(d){
+            return 'constituency-point ' + normaliseParty(d.party);
+          },
+          'r':dotSize,
+          'transform':geography
+        });
+
+    }
+
+    function position(f,size){
+      if(!size){ size = dotSize; }
+      svg.selectAll('circle')
+        .transition()
+        .duration(1000)
+        .attr({
+          'transform':f,
+          'r':size
+        });
+    }
+
+    function filter(f){
+      if(!f) f = d3.functor(false);
+      svg.selectAll('circle').classed('filtered',f)
+    }
+
+//filters
+    function wales(d){
+      return d.region_name != 'Wales'
+    }
+
+// positions
+    function cartogram(d){
+      hideMap();
+      return 'translate(' + [cartoScale(d.cartoX), cartoScale(d.cartoY)] + ')';
+    }
+
+    function geography(d){
+      showMap();
+      return 'translate(' + projection([d.lon, d.lat]) + ')';
+    }
+
+    function stack(d){
+      hideMap();
+      var baseX = partyScale( normaliseParty(d.party) ),
+        row = Math.floor(d.partyCount / stackColumns),
+        column = d.partyCount%stackColumns;
+
+      return 'translate(' + [baseX + cartoScale(column), cartoScale(row)] + ')';
+    };
+
+    function hideMap(){
+      d3.select('#boundaries').transition().duration(500)
+        .attr('opacity','0');
+    }
+
+    function showMap(){
+      d3.select('#boundaries').transition().delay(500).duration(500)
+        .attr('opacity','1');
+    }
+
+    function makeLookup(a, property){
+      var o = {};
+      a.forEach(function(d){
+        o[d[property]] = d;
+      });
+      return o;
+    }
+
+
+    d3.selectAll('a').on('click',function(){
+      var d = this.dataset;
+      if(d.layout){
+        console.log(window[d.layout])
+        position(window[d.layout]);
+      }
+    })
+
+  </script>
+</html>

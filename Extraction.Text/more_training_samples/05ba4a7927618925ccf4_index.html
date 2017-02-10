@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <style>
+      body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+      #display {
+      }
+      #controls {
+        float:left;
+        padding-left: 15px;
+        margin-top: 30px;
+        width: 220px;
+        height: 100%;
+      }
+      svg { 
+        position:absolute;
+        left: 220px;
+        width: calc(100% - 235px); 
+        height: 100%; 
+      }
+      
+    </style>
+  </head>
+
+  <body>
+    <div id="display">
+    <div id="controls">
+      cell width<br><input id="cellWidth" type="range" min="1" max="20" value="15">
+      <br>
+      cell height<br><input id="cellHeight" type="range" min="1" max="12" value="7">
+      <br>
+      x margin<br><input id="xmargin" type="range" min="0" max="10" value="3.4">
+      <br>
+      y margin<br>
+      <input id="ymargin" type="range" min="0" max="10" value="4.24">
+      <br>
+      <button id="brick">brick</button>
+    </div>
+    <svg></svg>
+    </div>
+    <script>
+      var exampleData = d3.range(1000).map(function(d) { return Math.random() });
+      
+      var brickSetting = true;
+      //setup the parameters for the layout. all are optional
+      var layout = new grid()
+        .cellWidth(15)
+        .cellHeight(8)
+        .width(500)
+        .margin([3.4, 4.24])
+        .offset([0, 28])
+        .brick(brickSetting)
+      
+      var color = d3.scale.linear()
+      .domain([0, 1000])
+      .range(["#a8ff60", "#0600cc"])
+      .interpolate(d3.interpolateHcl)
+      
+      //console.log("layout", layout.nodes());
+      var svg = d3.select("svg")
+      
+
+      function drawCells() {
+        var cells = svg.selectAll("rect")
+          .data(layout.nodes(exampleData)) // everything is recalculated when nodes is called
+        cells.enter().append("rect")
+        cells.exit().remove()
+        cells
+          .attr({
+            x: function(d) { return d.x },
+            y: function(d) { return d.y },
+            width: layout.cellWidth(),
+            height: layout.cellHeight(),
+            fill: function(d,i) { return color(d.index) }
+          })
+      }
+      drawCells();
+      
+    
+      // hook up the sliders
+      d3.select("#cellWidth").on("input", function() {
+        layout.cellWidth(+this.value)
+        drawCells();
+      })
+      d3.select("#cellHeight").on("input", function() {
+        layout.cellHeight(+this.value);
+        drawCells();
+      })
+      d3.select("#xmargin").on("input", function() {
+        var margin = layout.margin();
+        margin[0] = +this.value;
+        layout.margin(margin);
+        drawCells();
+      })
+      d3.select("#ymargin").on("input", function() {
+        var margin = layout.margin();
+        margin[1] = +this.value;
+        layout.margin(margin);
+        drawCells();
+      })
+      d3.select("#brick").on("click", function() {
+        brickSetting = !brickSetting;
+        layout.brick(brickSetting)
+        drawCells();
+        if(brick) return d3.select("#brick").text("brick")
+        d3.select("#brick").text("regular")
+      })
+      
+      // the grid layout itself
+     	function grid() {
+        var data = [];
+        var nodes;
+        var width = 100;
+        var cellWidth = 10;
+        var cellHeight = 10;
+        var nColumns = 10;
+        var offset = [0,0];
+        var margin = [1,1];
+        var brick = false;
+        
+        
+        function getX(d,i) {
+          return offset[0] + (i % nColumns) * (cellWidth + margin[0])
+        }
+        function getY(d,i) {
+          return offset[1] + Math.floor(i/nColumns) * (cellHeight + margin[1])
+        }
+        
+        function newNodes() {
+          nodes = [];
+          data.forEach(function(d,i) {
+            var node = {
+              x: getX(d,i),
+              y: getY(d,i),
+              data: d,
+              index: i
+            }
+            nodes.push(node);
+          })
+        }
+        newNodes();
+        
+        function calculate() {
+          nodes.forEach(function(node, i) {
+            node.x = getX(node, node.index);
+            node.y = getY(node, node.index);
+            // calculate the center for convenience
+            node.cx = node.x + cellWidth/2;
+            node.cy = node.x + cellHeight/2;
+          })
+        }
+        
+        this.nodes = function(val) {
+          if(val) {
+            data = val;
+            newNodes();
+          }
+          calculate();
+          return nodes;
+        }
+        this.columns = function(val) {
+        }
+        this.cellWidth = function(val) {
+          if(val) {
+            cellWidth = val;
+            this.width(width);
+            return this;
+          }
+          return cellWidth;
+        }
+        this.cellHeight = function(val) {
+          if(val) {
+            cellHeight = val;
+            return this;
+          }
+          return cellHeight;
+        }
+        this.width = function(val) {
+          if(val) {
+            width = val;
+            nColumns = Math.floor((width) / (cellWidth + margin[0])) + (brick ? 0.5 : 0);
+            //cellWidth = val / nColumns;
+            return this;
+          }
+          return width;
+        }
+        this.margin = function(val) {
+          if(val) {
+            margin = val;
+            this.width(width);
+            return this;
+          }
+          return margin;
+        }
+        
+        this.offset = function(val) {
+          if(val) {
+            offset = val;
+            return this;
+          }
+          return offset;
+        }
+        this.brick = function(val) {
+
+          if(val === null || val === undefined) return brick;
+          if(val !== null) {
+            brick = val;
+            this.width(width);
+            return this;
+          }
+          return brick;
+        }
+        
+        return this;
+      }
+    </script>
+  </body>
+  

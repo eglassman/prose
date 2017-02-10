@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	<body>
+		<h3>
+		English speaking persons proportion in canadian circonscriptions : 
+		</h3>
+		<script type="text/javascript">		
+
+		var h = 15*400;
+		var w = 600;
+
+		var svg = d3.select("body")
+		.append("svg")
+		.attr("width", w)
+		.attr("height", h);	
+
+			//Load in contents of CSV file
+			d3.csv("https://gist.githubusercontent.com/Alfsig/575130501fb6c7582857/raw/b3f68528cf6580dfc50a29b486d1d2a3e9f86434/data_langage.csv", function(data) {
+				console.log(data);
+
+				data.sort(function(a,b){
+					return d3.descending(+a.TxAnglais, +b.TxAnglais)
+				});
+
+
+				svg.selectAll("text")
+					.data(data)
+					.enter()
+					.append("text")
+					.attr("x", 160)
+					.attr("y", function(d,i){
+						return i*15+15;
+					})
+					.attr("width", function(d){
+						return d.TxAnglais*400;
+					})
+					.attr("height", 12)
+					.attr("text-anchor", "end")
+					.text(function(d){
+						console.log(d)
+						return "Circonscription " + d.Geo_code + " :";
+					})
+
+				svg.selectAll("rect")
+					.data(data)
+					.enter()
+					.append("rect")
+					.attr("x", 170)
+					.attr("y", function(d,i){
+						return i*15+5;
+					})
+					.attr("width", function(d){
+						return d.TxAnglais*400;
+					})
+					.attr("height", 12)
+					.attr("fill","rgba(255,100,0,0.2)")
+					.append("title")
+					.attr("x", function(d){return d.TxAnglais*400+15})
+					.attr("y", function(d,i){
+						return (i+1)*15;
+					})
+					.text(function(d){
+						console.log(d)
+						return "Circonscription " + d.Geo_code + " : " + (100*parseFloat(d.TxAnglais)).toFixed(3)+" %";
+					})
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

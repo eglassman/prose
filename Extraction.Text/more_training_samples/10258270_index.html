@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.grenze {
+  fill: none;
+  stroke: #cfcfcf;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+ 
+.gemeinde {
+  fill: #f0f0f0;
+}
+ 
+.gemeinde :hover {
+  fill: #d7d7d7;
+}
+ 
+.see {
+  fill: #cbdbe9;
+  stroke: #b0becb;
+}
+ 
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+ 
+var width = 960,
+    height = 960;
+ 
+var path = d3.geo.path()
+    .projection(null);
+ 
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+ 
+d3.json("zh.json", function(error, zh) {
+  svg.append("g")
+      .attr("class", "gemeinde")
+    .selectAll("path")
+      .data(topojson.feature(zh, zh.objects.gemeinden).features)
+    .enter().append("path")
+      .attr("d", path);
+ 
+  svg.append("g")
+      .attr("class", "see")
+    .selectAll("path")
+      .data(topojson.feature(zh, zh.objects.seen).features)
+    .enter().append("path")
+      .attr("d", path);
+ 
+  svg.append("path")
+      .datum(topojson.mesh(zh, zh.objects.gemeinden, function(a, b) { return a !== b; }))
+      .attr("class", "grenze")
+      .style("stroke-width", "1px")
+      .attr("d", path);
+});
+
+d3.select(self.frameElement).style("height", height + "px");
+ 
+</script>

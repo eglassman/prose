@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Ohad Sasson Rent Comparison</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="jquery.csv.min.js"></script>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+    google.load('visualization', '1', { packages: ['corechart', 'controls','line'] });
+    </script>
+</head>
+    <script type="text/javascript">
+        function drawVisualization() {
+            $.get("data.csv", function(csvString) {
+                // transform the CSV string into a 2-dimensional array
+                var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+
+
+                var data = new google.visualization.arrayToDataTable(arrayData);
+
+                var options = {
+                    title: 'Salary Rent 2016 Comparison',
+                    titleTextStyle : {color: '#b87333', fontSize: 20},
+                    legend: { position: 'none' },
+                    colors: ['#C5A5CF'],
+                    isStacked: true,
+                    hAxis: {title: "RENT 2016" , direction:-1, slantedTextAngle:90 },
+                    vAxis: {title: "Salary 2016" , direction:1, slantedTextAngle:90 }
+
+                };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+
+            });
+        }
+        google.setOnLoadCallback(drawVisualization)
+    </script>
+<body>
+    <div id="chart_div"></div>
+</body>
+</html>

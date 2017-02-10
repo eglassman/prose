@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type='text/javascript' src="http://d3js.org/d3.v3.min.js"></script>
+    <style>
+        body{
+            -webkit-backface-visibility: hidden;
+        }
+        svg{
+            position: absolute;
+            border: 1px solid silver;
+            fill: none;
+        }
+        div{
+            position: relative;
+            margin-top: 10px;
+            overflow: hidden;
+            border: 1px solid silver;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    var scrollingChart = function module(_config) {
+        var config = {
+            container: 'body',
+            dataCount: 100,
+            lineCount: 3,
+            dataMax: 100,
+            width: 1000,
+            height: 100,
+            duration: 15000,
+            easing: 'linear'
+        };
+        var cachedData = [];
+        var override = function(_objA, _objB){ for(var x in _objA) if(x in _objB) _objB[x] = _objA[x]; };
+        override(_config, config);
+        var exports = {};
+        exports.render = function() {
+            var scaleX = d3.scale.linear().domain([0, config.dataCount]).range([0, config.width]);
+            var scaleY = d3.scale.linear().domain([0, config.dataMax]).range([config.height, 0]);
+
+            var container = d3.select(config.container).append('div').attr({'class': 'container'})
+                .style({width: config.width + 'px', height: config.height + 'px'});
+            var chartCanvas = container.append('canvas').attr({'class': 'chart'})
+                .attr({width: config.width, height: config.height})
+                .style({position: 'absolute', '-webkit-transform': 'translate(' + config.width + 'px, 0)'});
+            var interactionCanvas = container.append('canvas').attr({'class': 'interaction'})
+                .attr({width: config.width, height: config.height})
+                .style({position: 'absolute', '-webkit-transform': 'translate(' + config.width + 'px, 0)'});
+
+            var ctx = chartCanvas.node().getContext('2d');
+            ctx.strokeRect(0, 0, config.width, config.height);
+            var ctx2 = interactionCanvas.node().getContext('2d');
+
+            interactionCanvas.on('mousemove', function(){
+                ctx2.clearRect(0, 0, config.width, config.height);
+                var closest = {};
+                var mouse = d3.mouse(chartCanvas.node());
+                cachedData.forEach(function (d, i) {
+                    var closestIndex = d3.bisect(d.x, mouse[0]);
+                    ctx2.beginPath();
+                    ctx2.arc(d.x[closestIndex], d.y[closestIndex], 3, 0, 2 * Math.PI, false);
+                    ctx2.strokeStyle = '#FF0000';
+                    ctx2.stroke();
+                });
+            })
+            .on('mouseout', function(){
+                ctx2.clearRect(0, 0, config.width, config.height);
+            });
+
+            var count = 0;
+            var datum = [];
+            var prevDatum = null;
+            var x, y;
+            var stepDuration = config.duration / config.dataCount;
+            var timerId = setInterval(function () {
+                datum = d3.range(config.lineCount).map(function(d, i){
+                    x = ~~scaleX(count);
+                    y = ~~scaleY(~~(Math.random() * 100));
+                    return {
+                        x: x,
+                        y: y,
+                        prevX: (prevDatum) ? prevDatum[i].x : x,
+                        prevY: (prevDatum) ? prevDatum[i].y : y,
+                        color: d3.scale.category10().range()[i]
+                    };
+                });
+                datum.forEach(function(d, i){
+                    drawLine(d);
+                    if(!cachedData[i]) cachedData[i] = {x: [], y: []};
+                    cachedData[i].x.push(d.x);
+                    cachedData[i].y.push(d.y);
+                });
+                count++;
+                prevDatum = datum;
+                if (count > config.dataCount) clearInterval(timerId);
+            }, stepDuration);
+
+            function drawLine(datum) {
+                ctx.strokeStyle = datum.color;
+                ctx.beginPath();
+                ctx.moveTo(datum.prevX, datum.prevY);
+                x = datum.x;
+                y = datum.y;
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                setTimeout(function () {
+                    chartCanvas.style({
+                        '-webkit-transition': 'all ' + (stepDuration / 1000) + 's ' + config.easing + ' 0s',
+                        '-webkit-transform': 'translate(' + (config.width - x) + 'px, 0)'
+                    });
+                    interactionCanvas.style({
+                        '-webkit-transition': 'all ' + (stepDuration / 1000) + 's ' + config.easing + ' 0s',
+                        '-webkit-transform': 'translate(' + (config.width - x) + 'px, 0)'
+                    });
+                }, 0);
+            }
+        };
+
+        return exports;
+    };
+
+
+    var lineChartCount = 100;
+    var config = {
+        dataCount: 100,
+        lineCount: 3
+    };
+    d3.range(lineChartCount).forEach(function(){ scrollingChart(config).render() });
+
+</script>
+</body>
+</html>

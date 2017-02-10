@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>patricia's exercise</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>	
+
+	</head>
+	<body>
+
+		
+
+		<svg x="300" width="450" height="525">
+					
+			<rect x="0" y="0" width="150" height="150" fill="red"></rect>
+			
+			<line x1="150" y1="344" x2="150" y2="0" stroke="black" stroke-width="6px"></line>
+			<line x1="320" y1="150" x2="0" y2="150" stroke="black" stroke-width="8px"></line>
+			<line x1="320" y1="220" x2="0" y2="220" stroke="black" stroke-width="8px"></line>
+			
+			<rect x="0" y="224" width="30" height="120" fill="yellow"></rect>
+			<line x1="30" y1="220" x2="30" y2="344" stroke="black" stroke-width="6px"></line>
+			
+			<rect x="153" y="224" width="90" height="90" fill="blue"></rect>
+			<line x1="153" y1="315" x2="243" y2="315" stroke="black" stroke-width="6px"></line>
+			<line x1="245" y1="224" x2="245" y2="344" stroke="black" stroke-width="6px"></line>
+
+			<text x="0" y="405" font-family="sans-serif" font-size="56">Mondrianism</text>
+			<text x="0" y="440" font-family="sans-serif" font-size="12">nothing to do with my data, but i had a lot of fun doing it.</text>
+			<text x="0" y="460" font-family="sans-serif" font-size=12>and also, do not forget to look in the console.</text>
+			
+
+
+
+			
+		
+</svg>
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("exercise1.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

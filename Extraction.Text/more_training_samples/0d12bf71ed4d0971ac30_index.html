@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- started with an example from Curran Kelleher -->
+    <meta charset="utf-8">
+    <title>D3 Example</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.1.0/d3-legend.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <style> 
+      .axis text {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 36pt;
+        fill:lightgrey;
+      }
+      .y.axis text{
+        font-size: 20pt;
+        fill:black;
+      }
+      .axis .label {
+        font-size: 30000pt;
+      }
+      .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      var outerWidth = 800;
+      var outerHeight = 438;
+      var margin = { left: 90, top: 30, right: 30, bottom: 40 };
+      var barPadding = 0.02;
+
+      var xColumn = "year";
+      var yColumn = "measurement";
+      var colorColumn = "period";
+      var layerColumn = colorColumn;
+
+      var innerWidth  = outerWidth  - margin.left - margin.right;
+      var innerHeight = outerHeight - margin.top  - margin.bottom;
+
+      var svg = d3.select("body").append("svg")
+        .attr({width:outerWidth,height:outerHeight});
+      var g = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var xAxisG = g.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + innerHeight + ")");
+      var yAxisG = g.append("g")
+        .attr("class", "y axis");
+
+      var xScale = d3.scale.ordinal().rangeBands([0, innerWidth], barPadding);
+      var yScale = d3.scale.linear().range([innerHeight, 0]);
+      var colorScale = d3.scale.ordinal().range(["red","green","blue","yellow"]);
+
+      var xAxis = d3.svg.axis().scale(xScale).orient("bottom")
+        .outerTickSize(0).innerTickSize(0);
+      var yAxis = d3.svg.axis().scale(yScale).orient("left")
+        .ticks(5).tickFormat(d3.format("s")).outerTickSize(0).innerTickSize(5);
+
+// ###########################################################################
+      function render(data){
+        var nested = d3.nest()
+          .key(function (d){ return d[layerColumn]; })
+          .entries(data)
+        var stack = d3.layout.stack()
+          .y(function (d){ return d[yColumn]; })
+          .values(function (d){ return d.values; });
+        var layers = stack(nested); 
+        console.log(layers)
+
+        var totals=[];
+        for (q=0;q<data.length-2;q+=3){
+          totals.push(data[q].measurement+data[q+1].measurement+data[q+2].measurement)
+        }
+        yScale.domain([0,d3.max(totals)])
+        xScale.domain(layers[0].values.map(function (d){return d[xColumn];}))
+
+        colorScale.domain(layers.map(function (layer){return layer.key}));
+
+        xAxisG.call(xAxis);  
+        yAxisG.call(yAxis); 
+
+        var layers = g.selectAll(".layer").data(layers);
+        layers.enter().append("g").attr("class", "layer");
+        layers.exit().remove();
+        layers.style("fill", function (d){
+          return colorScale(d.key);
+        });
+
+        var bars = layers.selectAll("rect.prd").data(function (d){return d.values})
+        var barWidth = xScale.rangeBand() / colorScale.domain().length; 
+        var blackBars=g.selectAll("rect.yr").data(totals);
+        console.log(xScale);  
+       
+        blackBars.enter().append("rect").attr({class:"yr",fill:"black",
+                                               height:function(d){return d.measurement},
+                                               width:xScale,
+                                               y:function(d){return yScale(d.y)}
+                                              })
+        // above line is in error, and x needs to be set same as for red rect 
+        
+        bars.enter().append("rect") 
+        bars.exit().remove();
+        bars
+          .attr("x", function (d, i, j){ 
+            if(d.shrink) j+=0.3
+            return xScale(d[xColumn]) + barWidth * j; // something from this is need for blackBars as well, but how?
+          })
+          .attr("y", function (d){ return yScale(d.y); })
+          .attr("height", function (d){ return innerHeight - yScale(d.y); })
+          .attr('class','prd')
+          .attr('width',function(d){if(d.shrink){
+          	return 0.4*barWidth
+        }else return barWidth;})
+      }
+// ##############################################################################
+      function type(d){
+        if (d.measurement.startsWith("~")){
+          d.measurement=d.measurement.slice(1);
+          d.shrink=true;
+        }
+        d[yColumn] = +d[yColumn]; 
+        return d;
+      }
+      d3.csv("religionByCountryTop5.csv", type, render);
+
+    </script>
+  </body>
+</html>

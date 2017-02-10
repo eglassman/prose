@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>My Scatter Plot</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: lightgrey;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover {
+				fill: orange;
+				transition: fill 0.2s;
+			}
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke:black;
+				shape-rendering: crispEdges;
+			}
+
+			/*.axis text {
+				font-family: sans-serif;
+				font-size: 8px;
+			}*/
+			/* Stage 1: tooltip styling */
+			div.tooltip{
+				position: absolute;
+				text-align: center;
+				width: 100px;
+				height:50px;
+				padding: 2px;
+				font: 12px sans-serif;
+				background: lightsteelblue;
+				border: 0px;
+				border-radius: 8px;
+				pointer-events: none;
+
+			}
+						
+			
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Race to the Top 10 : Most populous countries in the World</h1>
+		<h3>Global Population Vs. Under 5 Population (in thousands)</h3>
+
+		<p>Demographic numbers by country. Source: <a href="http://unicef.org">UNICEF</a>, 2015</p>
+ 
+		<script type="text/javascript">		
+
+			// Dimensions
+			var w = 600*2;
+			var h = 600*2;
+			var padding = [ 30, 20, 30, 50 ];  //Top, right, bottom, left
+
+			// Scales
+
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+
+			// Axes
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(10);
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.ticks(10);	
+
+			// Stage 2: Define the div for tooltip
+			var div = d3.select("body").append("div")
+						.attr("class", "tooltip")
+						.style("opacity", 0);						
+
+				
+
+			// Setting up SVG Canvas 
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+			// Loading csv data and dynamic scaling			
+
+			d3.csv("top10.csv", function(data) {
+
+			
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.under5Pop;
+					}), 
+					d3.max(data, function(d) {
+						return +d.under5Pop;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.totalPop;
+					}),
+					d3.min(data, function(d) {
+						return +d.totalPop;
+					})
+				]);
+
+			 
+
+			// Data Joining -- This is where the magic happens.	
+
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+											
+				circles.attr("cx", function(d) {
+						return xScale(d.under5Pop);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.totalPop);
+					})
+					.attr("r", 4)
+					.attr("fill", "steelblue")					
+					//.append("title")
+					//.text(function(d) {
+						//return "Country " + ":" + d.Country;
+					//});
+
+		// Stage 3: This is the tricky part of tooltipping
+					.on("mouseover", function(){
+						div.transition()
+							.duration(200)
+							.style("opacity", 0.9);
+
+						div.html(function(d) {
+							return d.Country
+						})
+							.style("padding[3]", (d3.event.pageX + 5) + "px")
+							.style("padding[0]", (d3.event.pageY - 28) + "px");
+							})
+
+					.on("mouseout", function(){
+						div.transition()
+							.duration(500)
+							.style("opacity", 0);
+					});
+
+			// Adding Transitions
+
+				circles.sort(function(a, b) {
+						return d3.ascending(+a.under5Pop, +b.totalPop);
+					})
+					.transition()
+					.delay(function(d, i) {
+						return i * 500;
+					})
+					.duration(2000)
+					.ease("linear")
+					.attr("r", 20);
+
+							
+
+			// Generate Axes on SVG canvas
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] + 10) + ",0)")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 10) + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+ 
+	</body>
+</html>

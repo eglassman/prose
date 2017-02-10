@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Robot</title>
+
+		<style type="text/css">
+			
+			body {
+				background-color: grey;
+			}
+
+			h1 {
+				font-size: 48px;
+				font-weight: bold;
+				border-bottom: solid 3px orange;
+			}
+
+			svg {
+				margin-right: auto;
+				margin-left: auto;
+			}
+
+		</style>
+
+
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	<body>
+
+		<h1>Robot</h1>
+
+		<svg width="600" height="1000">
+			
+			<rect x="235" y="10" width="100" height="100" fill="orange" />
+			<rect x="175" y="120" width="225" height="250" fill="orange" />
+            <rect x="135" y="120" width="35" height="200" fill="orange" />
+            <rect x="405" y="120" width="35" height="200" fill="orange" />
+			<rect x="175" y="375" width="55" height="275" fill="orange" />
+            <rect x="345" y="375" width="55" height="275" fill="orange" />
+            <circle cx="260" cy="40" r="10" fill="grey" />
+            <circle cx="310" cy="40" r="10" fill="grey" />
+            <rect x="255" y="90" width="65" height="10" fill="grey" />
+            <rect x="280" y="45" width="10" height="35" fill="grey" />
+            <text x="195" y="175" font-family="Helvetica, Arial, sans-serif" font-size="30" fill="grey" >I'm svg Robot</text>
+		</svg>
+
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("psychosocial_risk.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

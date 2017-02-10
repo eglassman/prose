@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Make amazing maps with CartoDB</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style type="text/css">
+html, body {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Lato", "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-weight: 300;
+  text-align: center;
+  padding-top: 2%;
+}
+.row {
+  position: relative;
+  float: left;
+  width: 100%;
+  margin: 10px;
+}
+.btn,
+.ipt {
+  position: relative;
+  display: inline-block;
+  border: 6px solid lighten($alizarin, 10%);
+  @extend %vertical-align;
+  transition: all .1s ease-in-out;
+  z-index: 99;
+  &.active { box-shadow: 2px 2px 4px rgba(0,0,0, .25); }
+  &:focus,
+  &:hover { border: 12px solid $alizarin; }
+}
+ 
+.btn > span,
+.ipt {
+  min-width: 275px;
+  cursor: pointer;
+}
+ 
+.btn,
+.ipt {
+  position: relative;
+  display: inline-block;
+  border: 6px solid black;
+  -webkit-transition: all .1s ease-in-out;
+          transition: all .1s ease-in-out;
+  z-index: 99;
+}
+.ipt {
+  font-size: 50px;
+}
+.ipt.gmt {
+  font-size: 20px;
+}
+.btn.active {
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.btn:focus, .btn:hover {
+  border: 12px solid black;
+}
+ 
+.btn > span,
+.ipt {
+  min-width: 275px;
+  cursor: pointer;
+}
+ 
+.ipt.gmt {
+  min-width: 100px;
+}
+.btn-inr {
+  display: inline-block;
+  color: white;
+  font-weight: 100;
+  font-size: 2em;
+  line-height: 1;
+  text-transform: uppercase;
+  background: black;
+  padding: 1em 2em;
+  margin: 6px;
+  -webkit-transition: all .1s ease-in-out;
+          transition: all .1s ease-in-out;
+}
+.btn-inr:focus, .btn-inr:hover {
+  background: black;
+  padding: 1em 2em;
+  margin: 0;
+}
+ 
+.btn:focus .btn-inr,
+.btn:hover .btn-inr {
+  background: black;
+  padding: 1em 2em;
+  margin: 0;
+}
+</style>
+<script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+</head>
+ 
+<body>
+    <!-- <div class="vizjson"><label for="title">Add a comment:</label></div>  -->
+    <div class="row first">
+      Change date format to "Monday 23:04:58" 
+    </div>
+    <div class="row ">
+      <input class="ipt" name="vizjson" type="vizjson" id="vizjson" value = "Paste VIZJSON URL" maxlength="1000" 
+ onfocus="if (this.value == 'Paste VIZJSON URL') {this.value = '';}">
+      </div>
+    <div class="row">
+      <div class="btn submit">
+        <span class="btn-inr">
+          <span class="txt-a">Submit</span>
+        </span>
+      </div> 
+    </div>
+ 
+    <div class="row">
+      <label for="gmt">Data timezone</label>
+      <select name="gmt" class="ipt gmt">
+      <option value="2" SELECTED>Monday 23:04:58</option>
+      <option value="1">01/26/2015 23:04:58</option>
+      </select>
+    </div>
+ 
+<script>
+      var webpage = "<!DOCTYPE h"+"tml> \
+<ht"+"ml> \
+<he"+"ad> \
+<title>Make amazing maps with CartoDB</title> \
+<meta name='viewport' content='initial-scale=1.0, user-scalable=no'> \
+<meta http-equiv='content-type' content='text/html; charset=utf-8'> \
+<style type='text/css'> \
+html, body { \
+  border: 0; \
+  margin: 0; \
+  padding: 0; \
+  width: 100%; \
+  height: 100%; \
+  overflow: hidden; \
+} \
+#map { \
+  height: 100%; \
+  background-color: #384047; \
+} \
+</style> \
+<link rel='stylesheet' href='http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css'> \
+<script src='http://libs.cartocdn.com/cartodb.js/v3/cartodb.js'></sc"+"ript> \
+</head> \
+<bo"+"dy> \
+<div id='map'></div> \
+<scr"+"ipt> \
+function pad(n, width, z) { z = z || '0'; n = n + ''; return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n; } var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; function main() { cartodb.createVis('map', '{0}') .done(function(vis, layers) { var slider = vis.getOverlay('time_slider'); slider.formatter(function(d) { if(1 == {1}){ $('.time .value').css('width','160px'); return pad(d.getMonth()+1,2) +'/'+ pad(d.getDate(),2) +'/'+ d.getFullYear() + ' ' + pad(d.getHours(),2) +':'+pad(d.getMinutes(),2)+':'+pad(d.getSeconds(),2); } else { $('.time .value').css('width','120px'); var day = days[d.getDay()]; return pad(day,9,' ') + ' ' + pad(d.getHours(),2) +':'+pad(d.getMinutes(),2)+':'+pad(d.getSeconds(),2); } }) }) .error(function(err) { console.log(err); }); } window.onload = main; \
+</scr"+"ipt> \
+</bo"+"dy> \
+</h"+"tml>";
+      function main() {
+        $('.submit').click(function(e){
+          var visj = $('#vizjson').val();
+          var p1 = Math.min(visj.indexOf("cartodb.com/api/v2/viz"),visj.indexOf("viz.json"));
+          if (p1 < 0){
+            alert('Sorry, not a valid vizjson URL');
+          } else {
+            var t = $('.gmt').val()
+            var f = webpage.format(visj, t);
+            // console.log(file)
+             var data = {
+              "description": "CartoDB",
+              "public": true,
+              "files": {
+                "index.html": {
+                  "content": f
+                }
+              }
+            }
+            $.ajax({
+              url: 'https://api.github.com/gists',
+              type: 'POST',
+              dataType: 'json',
+              data: JSON.stringify(data)
+            })
+            .success( function(e) {
+              var g = e.url.split("/");
+ 
+              var b = "http://bl.ocks.org/anonymous/raw/"+g[g.length - 1];
+              $("body").append('<div class="row"><a class="btn" href="'+b+'"" target="_blank"><span class="btn-inr"><span class="txt-a">See it Live!</span></span> </a></div>');
+            })
+            .error( function(e) {
+              console.warn("gist save error", e);
+            });
+ 
+ 
+          }
+ 
+        })
+      }
+      String.prototype.format = (function (i, safe, arg) {
+            function format() {
+                var str = this,
+                    len = arguments.length + 1;
+ 
+                for (i = 0; i < len; arg = arguments[i++]) {
+                    safe = typeof arg === 'object' ? JSON.stringify(arg) : arg;
+                    str = str.replace(RegExp('\\{' + (i - 1) + '\\}', 'g'), safe);
+                }
+                return str;
+            }
+ 
+            //format.native = String.prototype.format;
+            return format;
+        })();
+      window.onload = main;
+    </script>
+</script>
+</body>
+</html>

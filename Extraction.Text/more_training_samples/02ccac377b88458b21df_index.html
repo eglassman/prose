@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>D3 Course week 2</title>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+</head>
+
+<body>
+
+	<svg width="500" height="500">
+		<text x="50" y="100" fill="grey" font-size="100" font-weight="bold" font-family="Helvetica">N</text>
+		<text x="115" y="100" fill="#cc0000" font-size="100" font-weight="bold" font-family="Helvetica">O</text>
+		<text x="188" y="100" fill="grey" font-size="100" font-weight="bold" font-family="Helvetica">S</text>
+	</svg>
+
+
+	<script type="text/javascript">
+
+		d3.csv("bevolking.csv", function(data){
+
+		console.log(data);
+
+		});
+
+	</script>
+
+
+</body>
+
+</html>

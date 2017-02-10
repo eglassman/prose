@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>WaterHex</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
+<link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:40px; width:100%; }
+  #steps { position:absolute; bottom:0px; width:100%; height: 40px; background:#000; }
+  #steps a {
+      color:#fff;
+      display:inline-block;
+      text-align:center;
+      box-sizing:border-box;
+      max-width:10000px !important;
+  }
+  .pad1 {
+    color: #fff;
+  }
+  path {
+    transition: fill .4s ease;
+    -webkit-transition: fill .4s ease;
+ }
+</style>
+</head>
+<body>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v1.3.0/turf.min.js'></script>
+<div id='map'></div>
+<div id='steps' class='col12'>
+    <a href='#' class='col4 unround button fill-navy' id='raw'>raw data</a>
+    <a href='#' class='col4 unround button fill-navy' id='hex'>turf-hex</a>
+    <a href='#' class='col4 unround button fill-navy' id='count'>turf-count</a>
+</div>
+<div class='pin-top pad1 fill-blue'>
+    Buildings in Washington, DC, hexbinned on the fly
+</div>
+<script src='data80k.js'></script>
+<script>
+  var bbox = [-77.14702606201172,
+   38.81005601494022,
+   -76.91994639892578, 39.05];
+
+  var token = 'pk.eyJ1IjoibGFuZHBsYW5uZXIiLCJhIjoicUtlZGgwYyJ9.UFYz8MD4lI4kIzk9bjGFvg';
+
+  var map = L.mapbox.map('map', 'landplanner.ggflie7k', {zoomControl: false})
+      .setView([38.8991302513129,-77.04025268554688,], 14);
+  map.scrollWheelZoom.disable();
+
+  var layerGroup = L.layerGroup().addTo(map);
+
+
+  var grid = turf.hex(bbox, 0.0045);
+  var grid = turf.count(grid, pts, 'pt_count');
+
+  grid.features.forEach(function(cell) {
+
+    var pt_count = cell.properties.pt_count;
+
+    var _nohex = cell._nohex = {};
+    _nohex.weight = 0;
+    _nohex.color = '#00ffff';
+    _nohex.fillOpacity = 0;
+
+    var _nocount = cell._nocount = {};
+    _nocount.weight = 0.5;
+    _nocount.color = '#E9D362';
+    _nocount.fillOpacity = 0;
+
+    var _withCount = cell._withCount = {};
+    _withCount.color = '#E9D362';
+    _withCount.weight = 0;
+    _withCount.fill = '#E9D362';
+    _withCount.fillOpacity = 0;
+    if(pt_count >= 30) {
+      _withCount.fillOpacity = 0.1;
+    } if(pt_count >= 75) {
+      _withCount.fillOpacity = 0.2;
+      _withCount.weight = 1;
+    } if(pt_count >= 150) {
+      _withCount.weight = 2;
+      _withCount.fillOpacity = 0.35;
+    } if(pt_count >= 250) {
+      _withCount.weight = 3;
+      _withCount.fillOpacity = 0.55;
+    }
+
+    cell.properties = cell._nohex;
+  });
+
+  var hex = L.geoJson(grid)
+      .eachLayer(function(l) {
+          l.setStyle(l.feature.properties);
+      })
+      .addTo(layerGroup);
+
+  L.geoJson(pts, {
+    pointToLayer: function(feature, latlng) {
+      return L.circleMarker(latlng, {
+        radius: 0.5,
+        fillColor:'#ffffff',
+        fillOpacity:1,
+        stroke: false
+      });
+    }
+  }).addTo(layerGroup);
+
+  function setStage(stage) {
+      var fns = [];
+      hex.eachLayer(function(l) {
+          // fns.push(function() {
+              l.setStyle(l.feature[stage]);
+          // });
+      });
+      // stage === 'raw' ? fastChain(fns) : slowChain(fns);
+  }
+
+  function slowChain(fns) {
+      function run() {
+          var fn = fns.pop();
+          if (!fn) return;
+          fn();
+          setTimeout(function() {
+              run();
+          }, 0);
+      }
+      run();
+  }
+
+  function fastChain(fns) {
+      for (var i = 0; i < fns.length; i++) fns[i]();
+  }
+
+  function setButton(t) {
+      var stages = document.getElementById('steps').getElementsByTagName('a');
+      for (var i = 0; i < stages.length; i++) {
+          stages[i].className = stages[i].className.replace('fill-green', '');
+      }
+      t.className = t.className + ' fill-green';
+  }
+
+  document.getElementById('raw').onclick = function() { setButton(this); setStage('_nohex'); };
+  document.getElementById('hex').onclick = function() { setButton(this); setStage('_nocount'); };
+  document.getElementById('count').onclick = function() { setButton(this); setStage('_withCount'); };
+
+  setStage('_withCount');
+  setButton(document.getElementById('count'));
+</script>
+</body>
+</html>

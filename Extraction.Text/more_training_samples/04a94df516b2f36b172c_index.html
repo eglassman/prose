@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Cleaning Up</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			rect:hover {
+				fill: gray;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Temperature ups and downs</h1>
+
+		<p>The difference in each year's average temperature from the long-term average (1880 to 2014), in degrees Celsius.</p>
+		<p>Source: <a href="http://www.ncdc.noaa.gov/monitoring-references/faq/anomalies.php">NOAA National Climatic Data Center.</a></p>
+
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 1800;
+			var padding = [ 20, 10, 30, 120 ];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.1);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("TempAnomolies.csv", function(data) 
+				{
+
+				data.sort(function(a) {
+					return d3.descending(+a.Year);
+				});
+
+				widthScale.domain([ -1, d3.max(data, function(d) {
+					return +d.ValueLandOcean;
+				}) ]);
+console.log("domain:", widthScale.domain())
+
+				heightScale.domain(data.map(function(d) { return d.Year; } ));
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+                rects.attr("x", function(d) { 
+                  var x = padding[3] + widthScale(0);
+                  if(d.ValueLandOcean < 0) {
+                    x -= widthScale(d.ValueLandOcean)
+                  }
+                  return x;
+                })
+					.attr("y", function(d) {
+						return heightScale(d.Year);
+					})
+					.attr("width", function(d) {
+              if(d.ValueLandOcean >= 0) {
+                return widthScale(d.ValueLandOcean) - widthScale(0)
+              }else {
+                return widthScale(d.ValueLandOcean);
+              }
+					})
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", "red")
+					.append("title")
+					.text(function(d) {
+						return d.Year + "'s temperature difference from long-term average is " + d.ValueLandOcean;
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+svg.append("line")
+.attr({
+x1: padding[3] + widthScale(0),
+x2: padding[3] + widthScale(0),
+y1: 0,
+y2: h,
+stroke: "#000"
+})
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

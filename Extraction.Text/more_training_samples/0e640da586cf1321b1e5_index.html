@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tree Species Distribution per Hectare, by Decile, for Four American Cities</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #ddddff;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+		</style>
+	</head>
+    <body>
+
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 900)
+						.attr("height", 180);
+
+
+
+			d3.csv("DataVis_TreeCensus_PHILADELPHIA.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.ascending(+a.TREESperhectare, +b.TREESperhectare);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rect = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rect.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 18;
+					})
+					.attr("width", function(d) {
+						return d.TREESperhectare * 8;
+					})
+					.attr("height", 16)
+					.append("title")
+					.text(function(d) {
+						return "For Philadelphia, the " + d.DECILE + " decile represents " + d.TREESperhectare + " trees per hectare or " +  d.TREES_PERCENT;
+					});
+
+			});
+            
+            
+            var svg2 = d3.select("body")
+						.append("svg")
+						.attr("width", 900)
+						.attr("height", 180);
+
+
+
+			d3.csv("DataVis_TreeCensus_CHICAGO.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.ascending(+a.TREESperhectare, +b.TREESperhectare);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rect2 = svg2.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rect2.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 18;
+					})
+					.attr("width", function(d) {
+						return d.TREESperhectare * 8;
+					})
+					.attr("height", 16)
+					.append("title")
+					.text(function(d) {
+						return "For Chicago, the " + d.DECILE + " decile represents " + d.TREESperhectare + " trees per hectare or " +  d.TREES_PERCENT;
+					});
+
+			});
+            
+             var svg3 = d3.select("body")
+						.append("svg")
+						.attr("width", 900)
+						.attr("height", 180);
+
+
+
+			d3.csv("DataVis_TreeCensus_KANSASCITY.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.ascending(+a.TREESperhectare, +b.TREESperhectare);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rect3 = svg3.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rect3.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 18;
+					})
+					.attr("width", function(d) {
+						return d.TREESperhectare * 8;
+					})
+					.attr("height", 16)
+					.append("title")
+					.text(function(d) {
+						return "For Kansas City, the " + d.DECILE + " decile represents " + d.TREESperhectare + " trees per hectare or " +  d.TREES_PERCENT;
+					});
+
+			});
+            
+             var svg4 = d3.select("body")
+						.append("svg")
+						.attr("width", 900)
+						.attr("height", 180);
+
+
+
+			d3.csv("DataVis_TreeCensus_MINNEAPOLIS.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.ascending(+a.TREESperhectare, +b.TREESperhectare);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rect4 = svg4.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rect4.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 18;
+					})
+					.attr("width", function(d) {
+						return d.TREESperhectare * 8;
+					})
+					.attr("height", 16)
+					.append("title")
+					.text(function(d) {
+						return "For Minneapolis, the " + d.DECILE + " decile represents " + d.TREESperhectare + " trees per hectare or " +  d.TREES_PERCENT;
+					});
+
+			});
+        </script>
+    </body>
+</html>

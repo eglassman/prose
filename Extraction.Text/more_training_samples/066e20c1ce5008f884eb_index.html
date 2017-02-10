@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>d3.carto - Major City Clustering</title>
+  <meta charset="utf-8" />
+    <link type="text/css" rel="stylesheet" href="d3map.css" />
+    <link type="text/css" rel="stylesheet" href="example.css" />
+</head>
+<style>
+  html,body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
+  #map {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+</style>
+<script>
+      function makeSomeMaps() {
+    map = d3.carto.map();
+
+    d3.select("#map").call(map);
+    
+    tileLayer = d3.carto.layer();
+    tileLayer
+    .type("tile")
+    .path("elijahmeeks.map-azn21pbi")
+    .label("Base")
+    
+    csvLayer = d3.carto.layer.csv();
+    csvLayer
+    .path("http://bl.ocks.org/emeeks/raw/540b1b884b80b14a44c6/all_sites.csv")
+    .label("CSV Points")
+    .cssClass("pinkcircle")
+    .renderMode("svg")
+    .x("xcoord")
+    .y("ycoord")
+    .cluster(true)
+    .on("recluster", positionCluster);
+    
+    map.addCartoLayer(tileLayer).addCartoLayer(csvLayer);
+    map.centerOn([-115,40],"latlong").setScale(2);
+
+        function positionCluster() {
+        var d3MapProjection = map.projection();
+      csvLayer.clusterLayer().g().selectAll("g.pointG")
+      .each(function(d) {
+        if (!d.leaf) {
+          var newPosition = findMax(d,d);
+          var newProjectedPos = d3MapProjection([csvLayer.x()(newPosition.point),csvLayer.y()(newPosition.point)]);
+          d3.select(this).attr("transform", "translate("+newProjectedPos+")");
+        }
+
+      })
+      
+      function findMax(current, max) {
+        if (current.leaf) {
+          if (!max.leaf) {
+            max = current;
+          }
+          else if (parseInt(current.point.pop) >= parseInt(max.point.pop)) {
+            max = current;
+          }
+        }
+        else {
+          for (var y in current.children) {
+            var thisMax = findMax(current.children[y],max);
+            if (!max.leaf) {
+              max = thisMax;
+            }
+            else if (parseInt(thisMax.point.pop) >= parseInt(max.point.pop)) {
+              max = thisMax;
+            }
+          }
+        }
+        return max;
+      }
+
+    }
+
+  }
+</script>
+<body onload="makeSomeMaps()">
+<div id="map"></div>
+<footer>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
+<script src="http://d3js.org/topojson.v1.min.js" type="text/javascript">
+</script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js" type="text/javascript">
+</script>
+<script src="http://bl.ocks.org/emeeks/raw/f3105fda25ff785dc5ed/tile.js" type="text/javascript">
+</script>
+<script src="http://bl.ocks.org/emeeks/raw/f3105fda25ff785dc5ed/d3.quadtiles.js" type="text/javascript">
+</script>
+<script src="http://bl.ocks.org/emeeks/raw/f3105fda25ff785dc5ed/d3.geo.raster.js" type="text/javascript">
+</script>
+<script src="https://rawgit.com/emeeks/d3-carto-map/master/d3.carto.map.js" type="text/javascript">
+</script>
+</footer>
+</body>
+</html>

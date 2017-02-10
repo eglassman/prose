@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.area.above {
+  fill: rgb(145,207,96);
+}
+
+.area.below {
+  fill: rgb(252,141,89);
+}
+
+.legendSizeLine line {
+    stroke: rgb(145,207,96);
+   }
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.6.0/d3-legend.min.js""></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+//    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.area()
+    .interpolate("linear")
+    .x(function(d) { return x(d.mile); })
+    .y(function(d) { return y(d["WS100"]); });
+
+var area = d3.svg.area()
+    .interpolate("linear")
+    .x(function(d) { return x(d.mile); })
+    .y1(function(d) { return y(d["WS100"]); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//http://d3-legend.susielu.com/
+var linear = d3.scale.linear()
+  .domain([0,10])
+  .range(["rgb(252,141,89)", "rgb(145,207,96)"]);
+
+//var svg = d3.select("svg");
+
+svg.append("g")
+  .attr("class", "legendLinear")
+  .attr("transform", "translate(20,400)");
+
+var legendLinear = d3.legend.color()
+  .shapeWidth(100)
+ // .cells([1, 2]
+  .cells(2)
+  .orient('horizontal')
+  .labels(["WS100 higher el.", "AC100 higher el."])
+  .scale(linear);
+
+svg.select(".legendLinear")
+  .call(legendLinear);
+
+d3.tsv("data.tsv", function(error, data) {
+  if (error) throw error;
+
+  data.forEach(function(d) {
+    d["mile"]= +d["mile"];
+    d["WS100"]= +d["WS100"];
+    d["AC100"] = +d["AC100"];
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.mile; }));
+
+  y.domain([
+    d3.min(data, function(d) { return Math.min(d["WS100"], d["AC100"]); }),
+    d3.max(data, function(d) { return Math.max(d["WS100"], d["AC100"]); })
+  ]);
+
+  svg.datum(data);
+
+  svg.append("clipPath")
+      .attr("id", "clip-below")
+    .append("path")
+      .attr("d", area.y0(height));
+
+  svg.append("clipPath")
+      .attr("id", "clip-above")
+    .append("path")
+      .attr("d", area.y0(0));
+
+  svg.append("path")
+      .attr("class", "area above")
+      .attr("clip-path", "url(#clip-above)")
+      .attr("d", area.y0(function(d) { return y(d["AC100"]); }));
+
+  svg.append("path")
+      .attr("class", "area below")
+      .attr("clip-path", "url(#clip-below)")
+      .attr("d", area);
+
+  svg.append("path")
+      .attr("class", "line")
+      .attr("d", line);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "-4.75em")
+      .style("text-anchor", "end")
+      .text("Elevation (feet)");
+
+      svg.append("g")
+      .attr("class", "xaxis")
+      .call(xAxis)
+    .append("text")
+      .attr("transform", "rotate(0)")
+      .attr("x", 880)
+      .attr("dx", ".95em")
+      .style("text-anchor", "end")
+      .text("Distance (miles)");
+
+});
+
+</script>
+<div>Source of elevation data: <a href="https://catalog.data.gov/dataset/national-elevation-dataset-ned-1-3-arc-second-downloadable-data-collection-national-geospatial">USGS National Map (1/3 arc-second DEMs)</a></div>

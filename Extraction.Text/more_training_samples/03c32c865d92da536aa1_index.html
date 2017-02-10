@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Where does US military aid go?</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+                
+				margin: 0;
+				background-color: #ccb1b1;
+				font-family: Helvetica, Arial, sans-serif;
+/*                padding-top:10px;
+                padding-left:20px;
+*/			}
+
+
+			#container {
+				width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: white;
+				box-shadow: 3px 3px 5px 6px #ccb1b1;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+			}
+            
+            ul {
+                font-size: 14px;
+            }
+            
+            li {
+                font-size: 12px;
+            }
+
+            svg {
+				background-color: #eaeaea;
+                line-height: normal;
+			}
+
+			circle:hover {
+				fill: orange;
+			}
+			
+            circle {
+                fill: none;
+                stroke: #5c5c5c;
+                stroke-opacity: 0.9;
+                r: 1;
+            }
+            
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+                stroke-width: 1px;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+                opacity: 0.7;
+			}
+            
+            #main {
+                position: absolute;
+                width: 350px;
+                height: 600px;      
+                float:left;
+            }
+            
+            #chart {
+                width: 600px;
+                height: 500px;
+                position:relative;
+                right: -400px;
+                top: 10px;
+            }
+            
+            #notes {
+                width:auto;
+                height:auto;
+                position:relative;
+                top:100px;
+            }
+                
+		</style>
+	</head>
+	<body>
+        <div id="container">
+		<h1>Misdirected military aid?</h1>
+
+		<p>The US provided 16.7 billion USD in military aid to over 100 countries in 2012.<br>
+            50% of it went to authoritarian regimes (Economist's Democracy Index). Over 70% went to governments with little or no press freedom (World Press Freedom Index).<br>
+                <ul> Sources:
+                    <li><a href="https://eads.usaid.gov/gbk/data/prepared.cfm">US Government</a>, 2012</li>
+                    <li><a href="http://en.wikipedia.org/wiki/Democracy_Index">The 2014 Democracy Index by the Economist Intelligence Unit.</a> Higher is better. 
+                    </li>
+					<li><a href="https://index.rsf.org/#!/">Reporters Without Borders 2015 World Press Freedom Index.</a> Lower is better</li>
+                    </ul></p>
+		<p><i>Note: Only countries that received more than 2 million USD are shown.</i></p>
+        </div>
+    
+            
+		<script type="text/javascript">		
+
+			govt_colors = d3.scale.category10();
+			govt_colors = d3.scale.ordinal()
+								.domain(["Full democracy","Flawed democracy","Hybrid regime","Authoritarian regime","No Data"])
+								.range(["blue","purple","orange","red","grey"])
+            govt_types = [];
+			var w = 700;
+			var h = 600;
+			var padding = [ 60, 10, 50, 50 ];  //Top, right, bottom, left
+
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left");
+
+			var svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+			
+			/*svg.append("rect")
+				.attr("x",padding[3]-10)
+				.attr("y",padding[0])
+				.attr("height",h-padding[0]-padding[2])
+				.attr("width",w-padding[1]-padding[3])
+				.attr("fill","none")
+				.attr("stroke","grey")
+				.attr("stroke-width","1px");
+			*/
+
+
+			d3.csv("usaid_democracy_data.csv", function(data) {
+
+				xScale.domain([0,100]);
+
+				yScale.domain([10,0]);
+
+				svg.append("text")
+					.text("US Military Aid by Country, Democracy Score, and Press Freedom")
+					.attr("x",30)
+					.attr("y",25)
+					.attr("font-size","16px")
+					.attr("text-anchor","start");
+					
+				
+				svg.append("line")
+					.attr("stroke","grey")
+					.attr("stroke-dasharray","4,4")
+					.attr("x1",xScale(15))
+					.attr("y1",padding[0]+10)
+					.attr("x2",xScale(15))
+					.attr("y2",h-padding[3]-5);
+				
+				rotate_angle = "rotate(-30 " + xScale(1) + " " + (padding[0]+30) + ")";
+				svg.append("text")
+					.text(function() {return "Free Press" })
+					.attr("x",xScale(1))
+					.attr("y",padding[0]+30)
+					.attr("font-size","12px")
+					.attr("text-anchor","left")
+					.style("fill","grey")
+					.attr("transform",rotate_angle);
+				
+				svg.append("line")
+					.attr("stroke","grey")
+					.attr("stroke-dasharray","4,4")
+					.attr("x1",xScale(25))
+					.attr("y1",padding[0]+10)
+					.attr("x2",xScale(25))
+					.attr("y2",h-padding[3]-5);
+				
+				rotate_angle = "rotate(-30 " + xScale(15+1) + " " + (padding[0]+30) + ")";
+				svg.append("text")
+					.text(function() {return "Mostly Free"})
+					.attr("x",xScale(15 +1))
+					.attr("y",padding[0]+30)
+					.attr("font-size","12px")
+					.attr("text-anchor","left")
+					.style("fill","grey")
+					.attr("transform",rotate_angle);
+				
+				svg.append("line")
+					.attr("stroke","grey")
+					.attr("stroke-dasharray","4,4")
+					.attr("x1",xScale(35))
+					.attr("y1",padding[0]+15)
+					.attr("x2",xScale(35))
+					.attr("y2",h-padding[3]-5);
+				
+				rotate_angle = "rotate(-30 " + xScale(25+1) + " " + (padding[0]+30) + ")";
+				svg.append("text")
+					.text(function() {return "Somewhat Free"})
+					.attr("x",xScale(25 +1))
+					.attr("y",padding[0]+30)
+					.attr("font-size","12px")
+					.attr("text-anchor","left")
+					.style("fill","grey")
+					.attr("transform",rotate_angle);
+				
+				svg.append("line")
+					.attr("stroke","grey")
+					.attr("stroke-dasharray","4,4")
+					.attr("x1",xScale(55))
+					.attr("y1",padding[0]+15)
+					.attr("x2",xScale(55))
+					.attr("y2",h-padding[3]-5);
+				
+				rotate_angle = "rotate(-30 " + xScale(35+1) + " " + (padding[0]+30) + ")";
+				svg.append("text")
+					.text(function() {return "Controlled"})
+					.attr("x",xScale(35 +1))
+					.attr("y",padding[0]+30)
+					.attr("font-size","12px")
+					.attr("text-anchor","left")
+					.style("fill","grey")
+					.attr("transform",rotate_angle);	
+				
+				rotate_angle = "rotate(-30 " + xScale(55+1) + " " + (padding[0]+30) + ")";
+				svg.append("text")
+					.text(function() {return "Propoganda Arm"})
+					.attr("x",xScale(55 +1))
+					.attr("y",padding[0]+30)
+					.attr("font-size","12px")
+					.attr("text-anchor","left")
+					.style("fill","grey")
+					.attr("transform",rotate_angle);
+				
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+				circles.attr("cx", function(d) {
+						return xScale(d.press_score);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.democracy_score);
+					})
+					/*.style("r", function(d) {
+						if (d.military_aid >= 2000000) {
+							return Math.max(2,5*Math.sqrt((d.military_aid/10000000)/Math.PI))
+						} else {
+							return 0;
+						}
+					})*/
+					.style("r",0)
+					.style("fill", "lightblue")
+					.style("fill-opacity",0)
+				 	.style("stroke", function(d) {return govt_colors(d.govt_category);})
+					.append("title")
+					.text(function(d) {
+						return d.country + "\nDemocracy Score: " + d.democracy_score + "\nPress Freedom Score: " + d.press_score + 
+							"\nMilitary Aid (MUSD): " + d.military_aid/1000000;
+					});
+				
+				circles.transition()
+					.delay(function(d,i) {
+						return i*50;
+					})
+					.duration(function(d) { 
+						dur = Math.min(5000,500*Math.sqrt((d.military_aid/10000000)/Math.PI));
+						console.log(dur);
+						return dur;
+					})
+					.style("r", function(d) {
+						if (d.military_aid >= 2000000) { 
+							return Math.max(2,5*Math.sqrt((d.military_aid/10000000)/Math.PI))
+						} else {
+							return 0;
+						}
+					});
+				
+				y1 = padding[0] + 10;
+				svg.append("text")
+					.text("Democracy Category")
+					.attr("x",w-150)
+					.attr("y",y1)
+					.attr("text-anchor","left")
+					.style("font-size","14px");
+
+				svg.append("circle")
+					.attr("cx",w-140)
+					.attr("cy",y1 + 15)
+					.style("r",5*Math.sqrt((50000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("Full democracy"))
+					.attr("stroke-width","2px");				
+				
+				svg.append("text")
+					.attr("x",w-125)
+					.attr("y",y1 + 20)
+					.attr("text-anchor","left")
+					.attr("fill",govt_colors("Full democracy"))
+					.attr("font-size","12px")
+					.text("Full Democracy");				
+
+				svg.append("circle")
+					.attr("cx",w-140)
+					.attr("cy",y1 + 35)
+					.style("r",5*Math.sqrt((50000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("Flawed democracy"))
+					.attr("stroke-width","2px");				
+				
+				svg.append("text")
+					.attr("x",w-125)
+					.attr("y",y1 + 40)
+					.attr("text-anchor","left")
+					.attr("fill",govt_colors("Flawed democracy"))
+					.attr("font-size","12px")
+					.text("Flawed Democracy");		
+				
+				svg.append("circle")
+					.attr("cx",w-140)
+					.attr("cy",y1 + 55)
+					.style("r",5*Math.sqrt((50000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("Hybrid regime"))
+					.attr("stroke-width","2px");				
+				
+				svg.append("text")
+					.attr("x",w-125)
+					.attr("y",y1 + 60)
+					.attr("text-anchor","left")
+					.attr("fill",govt_colors("Hybrid regime"))
+					.attr("font-size","12px")
+					.text("Hybrid regime");		
+
+				svg.append("circle")
+					.attr("cx",w-140)
+					.attr("cy",y1 + 75)
+					.style("r",5*Math.sqrt((50000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("Authoritarian regime"))
+					.attr("stroke-width","2px");				
+				
+				svg.append("text")
+					.attr("x",w-125)
+					.attr("y",y1 + 80)
+					.attr("text-anchor","left")
+					.attr("fill",govt_colors("Authoritarian regime"))
+					.attr("font-size","12px")
+					.text("Authoritarian Regime");		
+
+				svg.append("text")
+					.attr("x",w-150)
+					.attr("y",y1 + 120)
+					.attr("text-anchor","left")
+					.attr("fill","black")
+					.attr("font-size","14px")
+					.text("Scale (MUSD)");
+				
+				svg.append("circle")
+					.attr("cx",w-110)
+					.attr("cy",y1 + 135)
+					.style("r",5*Math.sqrt((100000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("No Data"))
+					.attr("stroke-width","2px");
+				
+				svg.append("text")
+					.attr("x",w-30)
+					.attr("y",y1 + 140)
+					.attr("text-anchor","end")
+					.attr("fill","black")
+					.attr("font-size","12px")
+					.text("100");
+				
+				svg.append("circle")
+					.attr("cx",w-110)
+					.attr("cy",y1 + 170)
+					.style("r",5*Math.sqrt((500000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("No Data"))
+					.attr("stroke-width","2px");
+				
+				svg.append("text")
+					.attr("x",w-30)
+					.attr("y",y1 + 175)
+					.attr("text-anchor","end")
+					.attr("fill","black")
+					.attr("font-size","12px")
+					.text("500");
+				
+				svg.append("circle")
+					.attr("cx",w-110)
+					.attr("cy",y1 + 240)
+					.style("r",5*Math.sqrt((2000000000/10000000)/Math.PI))
+					.style("stroke",govt_colors("No Data"))
+					.attr("stroke-width","2px");
+				
+				svg.append("text")
+					.attr("x",w-30)
+					.attr("y",y1 + 245)
+					.attr("text-anchor","end")
+					.attr("fill","black")
+					.attr("font-size","12px")
+					.text("2,000");				
+				
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] + 5) + ")")
+					.call(xAxis);
+
+				svg.append("text").text("World Press Freedom Index Score (2015)")
+					.attr("x",padding[1] + (w-padding[3])/2)
+					.attr("y",h-padding[2] + 40)
+					.attr("text-anchor","middle")
+					.style("font-size","12px");
+				
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 5) + ",0)")
+					.call(yAxis);				
+				
+				svg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 10)
+                    .attr("x",(-(h - padding[0] - padding[2]) / 2)-padding[0])
+                    .attr("dy", "1em")
+                    .style("text-anchor", "middle")
+                    .style("font-size","12px")
+                    .text("Democracy Index (2014)");
+
+			});
+
+
+		</script>
+
+
+	</body>
+</html>

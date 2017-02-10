@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no">
+  <style>
+  p {text-align:center;}
+  .strong {position:relative;z-index:1; font-size:200%;}
+  .my {
+    height:500px; margin:200% 0;
+    outline:100em solid rgba(255,255,255,.8); box-shadow:inset 0 0 0px 2px red;
+    background:url(http://lorempixel.com/1400/1900/) center no-repeat; background-size:cover;
+    overflow:visible!important;
+  }
+  .my >div {
+    position:relative;z-index:-1;
+  }
+  .my p {font-size:500%;}
+  </style>
+</head>
+<body>
+  <p class="strong">Scroll down<br>↓↓↓</p>
+
+  <p><a href="https://gist.github.com/abernier/0837661e346360b5385b#file-readme-md">README</a>
+
+  <div class="my">
+    <p>Lorem ipsum</p>
+  </div>
+ 
+  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="http://underscorejs.org/underscore.js"></script>
+  <script src="https://rawgit.com/abernier/3225993/raw/7f928620dbe65570950ab551ee06b82e480507bb/loop.js"></script>
+  <script src="parallax.js"></script>
+  <script>
+  $('.my').parallax({amplitude: 1});
+ </script>
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.js"></script>
+	<style>
+		
+		body {
+		  font: 13pt courier;
+		  font-weight: bold;
+		  background-color: #111;
+		  overflow-y:hidden;
+		  color: #ccc;
+		}
+    
+    table { 
+    	table-layout: fixed;
+    }
+    
+    tr {
+    	white-space: nowrap;
+    }
+		
+		td {
+			width:150px;
+			height: 40px;
+	    overflow: hidden;
+	    display: inline-block;
+	    white-space: nowrap;
+    	border:0;
+    	padding:0;
+    	margin:0;
+    }
+
+    td.small {
+    	width: 50px;
+    }
+
+		.step_line {
+		  fill: none;
+		  stroke: #6c6; /* rgb(120, 120, 120); */
+		  stroke-width: 1.5px;
+		  stroke-opacity: .6;
+		}
+
+		.gradient_line {
+		  fill: none;
+		  stroke: #999; /* rgb(120, 120, 120); */
+		  stroke-width: 1.5px;
+		  sroke-opacity: .8;
+		}
+
+		.line {
+		  fill: none;
+		  stroke-width: 1px;
+      shape-rendering: optimizeSpeed;
+		}
+
+		.blue_line {
+		  fill: none;
+		  stroke: steelblue;
+		  stroke-width: 1.5px;
+		}
+
+		.green_line {
+		  fill: none;
+		  stroke: #090;
+		  stroke-width: 3px;
+		}
+		div {
+		  position: relative;
+		  height:50px;
+		}
+		input {
+		  position: absolute;
+		  right: 10px;
+      width: 120px;
+		}
+		#atext, #btext {
+			position: absolute;
+			right: 150px;
+		}
+
+		@media all and (max-width: 940px) {
+		    input {
+		        left: 786px;
+		    }
+		    #atext, #btext {
+		    	left: 676px;
+		    	width: 100px;
+		    }
+		}		
+
+		#coordText {
+			position: absolute;
+			left: 250px;
+			top: 12px;
+		}
+
+		#fText {
+			position: absolute;
+			left: 20px;
+			top: 12px;
+		}
+
+		sup, sub {
+			line-height:0;
+		}
+	</style>
+	</head>
+	<body>
+		<div>
+			<span id="fText"></span>
+			<span id="coordText"></span>
+			<input min="-1" max="1" step=".01" type="range" id="aSlider" value="1" title="axis 1" autocomplete="off">
+			<span id="atext"></span>
+			<br/>
+			<input min="-1" max="1" step=".01" type="range" id="bSlider" value="1" title="axis 1" autocomplete="off">
+			<span id="btext"></span>
+			<br/>
+		</div>
+
+		<script type="text/javascript">
+      var cleanup_lines = function() {
+      	  d3.selectAll('.step_line')
+			  	  .transition()
+			  	  .duration(dur)
+			  	  .ease('linear')
+			  	  .style('opacity', 0)
+			  	  .remove() ;
+			  	d3.selectAll('.gradient_line')
+			  	  .transition()
+			  	  .duration(dur)
+			  	  .ease('linear')
+			  	  .style('opacity', 0)
+			  	  .remove()	;
+			  	drawing = false ;
+			  	stepping = false ;
+      }
+
+			var aSlider = d3.select("#aSlider")
+			  .on("input", function() {
+			  	cleanup_lines();
+			    a  = +this.value;
+			    ar = Math.sqrt(Math.abs(a)) ;
+			    // aText.text('a: ' + a) ;
+			    init_data() ;
+			    aText.html('<table><tbody><tr><td class="small">λ<sub>1</sub>:</td><td class="small">' + a.toPrecision(2) + '</td></tr></tbody></table>')
+			  }) ;
+
+			var bSlider = d3.select("#bSlider")
+			  .on("input", function() {
+			  	cleanup_lines() ;
+			    b  = +this.value;
+			    br = Math.sqrt(Math.abs(b)) ;
+			    // aText.text('a: ' + a) ;
+			    init_data() ;
+			    bText.html('<table><tbody><tr><td class="small">λ<sub>2</sub>:</td><td class="small">' + b.toPrecision(2) + '</td></tr></tbody></table>')
+			  }) ;
+
+		  var a  = Number(aSlider.attr("value")) ;
+		  var b  = Number(bSlider.attr("value")) ;
+		  var ar = Math.sqrt(a) ;
+		  var br = Math.sqrt(b) ;
+
+		  var c = 0 ; // .1 ;
+
+			var auxiliary_objective = function(v) {
+				var x = v[0] ;
+				var y = v[1] ;
+			  //return -c * Math.cos(x) - c * Math.cos(y) ;
+			  return c * x * x * x * x + c * y * y * y * y ;
+			} ;
+
+			var auxiliary_gradient = function(v) {
+			  //return [c * Math.sin(v[0]), c * Math.sin(v[1])] ;
+			  return [4 * c * v[0] * v[0] * v[0], 4 * c * v[1] * v[1] * v[1]] ;
+			}
+
+			var auxiliary_hessian = function(v) {
+				return [[12 * c * v[0] * v[0], 0], [0, 12 * c * v[1] * v[1]]] ;
+			}
+
+			var objective_function = function(v) {
+				var x = v[0] ;
+				var y = v[1] ;
+			  //return 0.25 * (a * x * x + b * y * y) + auxiliary_objective(v) ;
+			  return 0.25 * (a * x * x + b * y * y) ;
+			} ;
+
+			var gradient_function = function(v) {
+				// var g_aux = auxiliary_gradient(v) ;
+			  //return [0.5 * a * v[0] + g_aux[0], 0.5 * b * v[1] + g_aux[1]] ;
+			  return [0.5 * a * v[0], 0.5 * b * v[1]] ;
+			}
+
+			var hessian_function = function(v) {
+        //var H = auxiliary_hessian(v) ;
+			  //return [[0.5 * a + H[0][0], 0 + H[0][1]], [0 + H[1][0], 0.5 * b + H[1][1]]] ;
+			  return [[0.5 * a, 0], [0, 0.5 * b]] ;
+			}
+
+      var width  = 320 ;
+      var height = 320 ;
+
+			var x = d3.scale.linear()
+			  .domain([-2.5, 2.5])
+			  .range([0, width]) ;
+
+			var y = d3.scale.linear()
+			  .domain([-2.5, 2.5])
+        .range([height, 0]) ;
+
+      var z = d3.scale.linear()
+        .domain([-10, -2, 0, 2, 10])
+        .range(["rgb(0, 0, 102)", "rgb(33, 102, 172)", "rgb(140, 140, 140)", "rgb(178, 88, 43)", "rgb(102, 0, 0)"]);    
+
+
+			var line = d3.svg.line()
+		    .x(function(d) { return x(d.x); })
+		    .y(function(d) { return y(d.y) ; }) ;
+
+			var svg = d3
+			  .select("body")
+			  .append("svg")
+        .attr("viewBox", -width/2 + ' ' + 0 + ' ' + 2 * width + ' ' + height)
+        .attr("preserveAspectRatio", "xMidYMin meet")
+        .style('max-height', '90%')
+        .style('min-height', '610px') ;
+        //.attr("viewBox", '0 0 ' + width + ' ' + height)
+
+      svg
+        .append('defs')
+        .append('marker')
+        .attr('id', 'gradientMarker')
+        .attr('orient', 'auto')
+        .attr('markerWidth', 2)
+        .attr('markerHeight', 4)
+        .attr('refX', 0.1)
+        .attr('refY', 2)
+        .append('path')
+        .attr('d', 'M0,0 V4 L2,2 Z')
+        .attr('fill', '#999')
+        .attr('opacity', .8)
+      svg
+        .append('marker')
+        .attr('id', 'stepMarker')
+        .attr('orient', 'auto')
+        .attr('markerWidth', 2)
+        .attr('markerHeight', 4)
+        .attr('refX', 0.1)
+        .attr('refY', 2)
+        .append('path')
+        .attr('d', 'M0,0 V4 L2,2 Z')
+        .attr('fill', '#6c6')
+        .attr('opacity', .6)
+
+			d3
+			  .select(document.body)
+			  .append("br") ;
+
+			var g = svg
+			   .append("g")
+         .attr("transform", "rotate(-60, 160, 160)") ;
+
+			var g2 = svg
+			   .append("g")
+         .attr("transform", "translate(160, 0)scale(.8)rotate(-60, 160, 160)") ;
+
+			var aText = d3
+			    .select('#atext')
+			    .html('<table><tbody><tr><td class="small">λ<sub>1</sub>:</td><td class="small">' + a.toPrecision(2) + '</td></tr></tbody></table>')
+
+			var bText = d3
+			    .select('#btext')
+			    .html('<table><tbody><tr><td class="small">λ<sub>2</sub>:</td><td class="small">' + b.toPrecision(2) + '</td></tr></tbody></table>')
+
+			var Nline = 43 ;
+
+      var Nt = 280 ;
+
+     	var spacing = .85 ;
+
+     	var start  = 0.175 ;
+
+      var t = d3
+        .scale
+        .linear()
+        .domain([0, Nt - 1])
+        .range([0, 2 * Math.PI]) ;
+
+      var unitCircle = []
+
+      for(var k = 0 ; k < Nt ; k++) {
+      	unitCircle[k] = [Math.cos(t(k)), Math.sin(t(k))] ;
+      }
+
+    	var contour  = []
+
+			for(var k = 0 ; k < Nline ; k++) {
+        contour[k] = g.append("path") ;
+        contour[Nline + k] = g.append("path") ;
+        contour[2 * Nline + k] = g.append("path") ;
+        contour[3 * Nline + k] = g.append("path") ;
+        contour[4 * Nline + k] = g.append("path") ;
+        contour[5 * Nline + k] = g.append("path") ;
+        contour[6 * Nline + k] = g.append("path") ;
+        contour[7 * Nline + k] = g.append("path") ;
+			}
+
+//      var quiver  = [] ;
+//			for(var k = 0 ; k < Nline ; k++) {
+//				quiver[k] = [] ;
+//				for(var j = 0 ; j < Nt ; j++) {
+//					quiver[k][j] = g.append("path") ;
+//				}
+//			}
+
+
+      var dist2 = function(v, w) {
+        return (v[0] - w[0]) * (v[0] - w[0]) + (v[1] - w[1]) * (v[1] - w[1]) ;
+      } ;
+
+      var init_data = function() {
+
+	      var contour_line = function(v, sign) {
+	      	var d    = [] ;
+	      	var dx   = .03 ;
+	      	var f    = objective_function(v) ;
+	      	var df ;
+	      	var xk, yk ;
+	      	var v0    = [v[0], v[1]] ;
+        	d[0]      = {x: v[0], y: v[1]} ;
+        	var count = 1 ;
+        	var skip  = 5 ;
+        	var tol   = .001	 ;
+	        for(var k = 1 ; k < Nt + 1 ; k++) {
+	        	grad = gradient_function(v) ;
+            len  = Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]) ;
+	        	xk   = v[0] - sign * dx * grad[1] / len ;
+	        	yk   = v[1] + sign * dx * grad[0] / len ;
+	        	v[0] = xk ;
+	        	v[1] = yk ;
+	        	df   = f - objective_function(v) ;
+	        	var niter = 0 ;
+	        	var maxiter = 100 ;
+	        	while(Math.abs(df) > tol && niter < maxiter) {
+		        	grad = gradient_function(v) ;
+	            len  = Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]) ;
+	            var scale = df / len ;
+	            v[0] = v[0] + dx * scale * grad[0] ;
+	            v[1] = v[1] + dx * scale * grad[1] ;
+	            df   = f - objective_function(v) ;
+	            niter++ ;
+            }
+	        	if(k === 1 || k % skip === 0 || k === Nt) {
+	        		d[count]  = {x: v[0], y: v[1]} ;
+	        		//if(k > skip * 10 && dist2([d[count].x, d[count].y], v0) < .1) break ;
+	        		count++ ;
+	        	}
+	        }
+	        return d ;
+	      }
+
+				for(var k = 0 ; k < Nline ; k++) {
+					var d = contour_line([0, -Math.sqrt(start + k * spacing) / br], 1) ;
+					contour[k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line)
+					  .style('stroke', z(objective_function([0, -Math.sqrt(start + k * spacing) / br]))) ;
+					d = contour_line([0, Math.sqrt(start + k * spacing) / br], 1) ;
+					contour[Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([0, Math.sqrt(start + k * spacing) / br]))) ;
+					d = contour_line([Math.sqrt(start + k * spacing) / ar, 0], 1) ;
+					contour[2 * Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([Math.sqrt(start + k * spacing) / ar, 0]))) ;
+					d = contour_line([-Math.sqrt(start + k * spacing) / ar, 0], 1) ;
+					contour[3 * Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([-Math.sqrt(start + k * spacing) / ar, 0]))) ;
+
+					d = contour_line([0, -Math.sqrt(start + k * spacing) / br], -1) ;
+					contour[4 * Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([0, -Math.sqrt(start + k * spacing) / br]))) ;
+					d = contour_line([0, Math.sqrt(start + k * spacing) / br], -1) ;
+					contour[5 * Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([0, Math.sqrt(start + k * spacing) / br]))) ;
+					d = contour_line([Math.sqrt(start + k * spacing) / ar, 0], -1) ;
+					contour[6 * Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([Math.sqrt(start + k * spacing) / ar, 0]))) ;
+					d = contour_line([-Math.sqrt(start + k * spacing) / ar, 0], -1) ;
+					contour[7 * Nline + k]
+					  .datum(d)
+					  .attr("class", "line")
+					  .attr("d", line) 
+					  .style('stroke', z(objective_function([-Math.sqrt(start + k * spacing) / ar, 0]))) ;
+				}
+
+	      var grad_set = function(kline) {
+	      	var d       = [] ;
+	      	var scaling = .05 ;
+
+	        for(var k = 0 ; k < Nt - 1 ; k++) {
+	        	var xk = contour[kline].datum()[k].x ;
+	        	var yk = contour[kline].datum()[k].y ;
+	        	var grad = gradient_function([xk, yk]) ;
+	        	var norm = Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]) ;
+	        	grad[0] *= scaling * Math.sqrt(norm) / norm ;
+	        	grad[1] *= scaling * Math.sqrt(norm) / norm ;
+	        	if(isNaN(grad[0]) || isNaN(grad[1])) { 
+	        		grad[0] = 0 ;
+	        		grad[1] = 0 ;
+	        	}
+	        	d[k] = [{x: xk, y: yk}, {x: xk - grad[0], y: yk - grad[1]}] ;
+	        }
+	        return d ;
+	      }
+
+				for(var k = 0 ; k < Nline ; k++) {
+					//var d = grad_set(k) ;
+					var skip = 2 ;
+					for(var j = 0 ; j < Nt - 1 ; j += skip) {
+	  				//console.log(d[j]) ;
+						//quiver[k][j] 
+						//  .attr('class', 'gradient_line')
+						//  .datum(d[j])
+						//  .attr("d", line) ;
+					}
+				}
+      }
+
+      init_data() ;
+
+      var circle = g
+        .append('circle')
+        .style('stroke', 'none')
+        .style('fill', 'green')
+        .style('opacity', 0)
+        .attr('r', 3) ;
+
+      var dur = 333 ;
+
+      var fadeIn = function(element, duration, delay) {
+      	if(duration === undefined) duration = dur ;
+      	if(delay    === undefined)    delay = 0 ;
+      	return element
+      	  .transition()
+      	  .duration(duration)
+      	  .ease('linear')
+      	  .style('opacity', 1) ;
+      }
+
+      var fadeOut = function(element, duration, delay) {
+      	if(duration === undefined) duration = dur ;
+      	if(delay    === undefined)    delay = 0 ;
+      	return element
+      	  .transition()
+      	  .duration(duration)
+      	  .delay(delay)
+      	  .ease('linear')
+      	  .style('opacity', 0) ;
+      }
+
+      var drawing = false ;
+
+			var draw_grad = function(xy) {
+				if(drawing) return ;
+				if(a === 0 && b === 0) return ;
+				drawing = true
+			  var grad  = gradient_function(xy) ;
+			  if(isNaN(grad[0]) || isNaN(grad[1]) || !isFinite(grad[0]) || !isFinite(grad[1])) { 
+			  	drawing = false ;
+			  	return ;
+			  }
+			  var scale = 1 ;
+	      var d = [{x: xy[0], y: xy[1]}, {x: xy[0] - scale * grad[0], y: xy[1] - scale * grad[1]}] ;
+	      var dur = 1000 ;
+	      var gradLine = g
+	        .append('path')
+	        .attr('class', 'gradient_line')
+	        .attr('marker-end', 'url(#gradientMarker)')
+	        //.attr("stroke-dasharray", ("5, 2"))
+	      gradLine
+	        .style('opacity', 0)
+				  .datum(d)
+				  .attr("d", line)
+	        .transition()
+	        .duration(dur / 2)
+	        .ease('linear')
+				  .style('opacity', 1)
+				  .each('end', function() { drawing = false })
+				  .transition() 
+				  .duration(dur)
+				  .delay(2 * dur)
+				  .ease('linear')
+				  .style('opacity', 0)
+				  .remove() ;
+      } ;
+
+      var newton_step = function(xy) {
+			  // 
+			  // solve the 2-by-2 system of equations for the Newton step p: H p = -g
+			  //
+			  H         = hessian_function(xy) ;
+			  var grad  = gradient_function(xy) ;
+			  var py    = -grad[1] / (H[1][1] - H[1][0] * H[0][1] / H[0][0]) ;
+			  var px    = (-grad[0] - H[0][1] * py) / H[0][0] ;      	
+			  var step  = [px, py] ;
+			  return step ;
+      }
+
+      var stepping = false ;
+
+			var draw_step = function(xy) {
+				if(stepping) return ;
+				if(a === 0 || b === 0) return ;
+				stepping = true ;
+			  H         = hessian_function(xy) ;
+			  var grad  = gradient_function(xy) ;
+			  // var step  = [-1/H[0][0] * grad[0], -1/H[1][1] * grad[1]] ; // assume that the Hessian is diagonal
+			  var py = -grad[1] / (H[1][1] - H[1][0] * H[0][1] / H[0][0]) ;
+			  var px = (-grad[0] - H[0][1] * py) / H[0][0] ;
+			  step = newton_step(xy) ;
+			  if(isNaN(step[0]) || isNaN(step[1]) || !isFinite(step[0]) || !isFinite(step[1])) { 
+			  	stepping = false ;
+			  	return ;
+			  }
+			  var scale = .97 ;
+	      var d = [{x: xy[0], y: xy[1]}, {x: xy[0] + scale * step[0], y: xy[1] + scale * step[1]}] ;
+	      var dur = 1000 ;
+	      var stepLine = g
+	        .append('path')
+	        .attr('class', 'step_line')
+	        .attr('marker-end', 'url(#stepMarker)')
+	      stepLine
+	        .style('opacity', 0)
+				  .datum(d)
+				  .attr("d", line)
+	        .transition()
+	        .duration(dur / 2)
+	        .ease('linear')
+				  .style('opacity', 1)
+				  .each('end', function() { stepping = false })
+				  .transition() 
+				  .duration(dur)
+				  .delay(2 * dur)
+				  .ease('linear')
+				  .style('opacity', 0)
+				  .remove() ;
+      } ;
+
+			//svg.on('click', click_function) ;
+
+      var coordText = d3.select('#coordText')
+        .style('opacity', 0) ;
+      var fText = d3.select('#fText')
+        .style('opacity', 0) ;
+
+      fText.html('f(x) = x<sup>T</sup> H x / 4') ;
+      var delay = dur ;
+      fadeIn(fText, 2 * dur, 2 * dur) ;
+
+
+			var mouse_function = function() {
+			  var xy    = d3.mouse(svg.node()) ;
+			  var xy0   = d3.mouse(g.node()) ;
+			  var textX = xy[0] - 35 ;
+			  if(xy[1] < 40) {
+			  	textY = xy[1] + 40 ;
+			  } else {
+			    var textY = xy[1] - 30 ;
+			  } 
+        coordText
+          .html('<table><tbody><tr><td>x<sub>1</sub>: ' + x.invert(xy[0]).toPrecision(3) + 
+          	'</td><td>x<sub>2</sub>: ' + y.invert(xy[1]).toPrecision(3) + 
+          	'</td><td>f(x): ' + objective_function([x.invert(xy0[0]), y.invert(xy0[1])]).toPrecision(3)) 
+             + '</td></tr></tbody></table>' ;
+        var dur = 1000 ;
+        var delay = 2 * dur ;
+			  fadeOut(fadeIn(coordText), dur, delay) ;
+			  xy0[0] = x.invert(xy0[0]) ;
+			  xy0[1] = y.invert(xy0[1]) ;
+			  draw_grad(xy0) ;
+			  draw_step(xy0) ;
+			} ;			
+
+			svg.on('mousemove', mouse_function) ;
+
+			var run_newton = function(xy) {
+			  if(running) {
+			    return false ; // do nothing if already running
+			  }
+			  running = true ; // to prevent multiple visualizations from activating simultaneously
+			}
+
+    </script>
+	</body>
+</html>

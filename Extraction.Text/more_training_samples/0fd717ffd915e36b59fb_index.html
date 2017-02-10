@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Transitions</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+				
+			}
+
+			circle:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #888;
+				shape-rendering: crispEdges;
+				
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+				fill: #888;
+				
+				}
+				
+			.legend {
+    			font-size: 12px;
+  			}
+  
+	
+		</style>
+	</head>
+	<body>
+
+		<h1>Bachelor's Degrees by Higher Ed System</h1>
+
+		<p>Overall trends in degrees awarded by public and private higher education systems in California from 2000 - 2009. Source: <a href="http://www.cpec.ca.gov/OnLineData/OnLineData.asp">CPEC</a>. </p>
+        <p><strong>Circle size</strong> = % of underrepresented minorities (URM), which include African American, Latino, and American Indian students. </p>
+		<script type="text/javascript">		
+
+
+			var w = 800;
+			var h = 600;
+			var padding = [ 20, 10, 50, 75 ];  //Top, right, bottom, left
+			var color = d3.scale.ordinal()
+  .range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18', '#C3F25C']); 
+
+
+
+			var xScale = d3.scale.linear()
+								//.range([ padding[3], w - padding[1] - padding[3] ]);
+								.range([ padding[3] + 25, w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								//.range([ padding[0], h - padding[2] ]);
+								.range([ padding[3], h - padding[3] - 15 ]);
+								
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							//.ticks(15);
+							.tickFormat(function(d) {
+								return d;
+							});
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							//.tickFormat(function(d) {
+							//	return d;
+							//});
+							
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+						
+
+
+			d3.csv("degrees.csv", function(data) {
+				
+				
+
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.year;
+					}), 
+					d3.max(data, function(d) {
+						return +d.year;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.total;
+					}),
+					d3.min(data, function(d) {
+						return +d.total;
+					})
+				]);
+
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+				circles.attr("cx", function(d) {
+						return xScale(d.year);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.total);
+					})
+					.attr("r", 0.1)
+					.attr('fill', function(d, i) { 
+    return color(d.system);
+  })
+					.append("title")
+					
+					.text(function(d) {
+						return d.system + "'s total number of graduates for " + d.year + " is " + d.total + ", with " + d.urmp + "% URM";
+					});
+					
+
+				circles.transition()
+					.duration(2000)
+					.attr("r",function(d) {
+						return d.urmp - 10;
+					})
+
+				svg.append("g")
+					.attr("class", "x axis")
+					//.attr("transform", "translate(0," + (h - padding[2] + 10) + ")")
+					.attr("transform", "translate(0," + (h - padding[2] - 10) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] ) + ",0)")
+					.call(yAxis)
+					.append("text")
+      				.attr("transform", "rotate(-90)")
+      				.attr("y", 6)
+					 .attr("x",0 - padding[3])
+     				 .attr("dy", ".71em")
+     				 .style("text-anchor", "end")
+     				 .text("Total Number of Degrees");
+
+  				var legend = svg.selectAll(".legend")
+     .data(color.domain())
+  .enter()
+  .append("g")
+    .attr("class", "legend")
+    .attr("transform", function (d, i) {
+    return "translate(20," + i * 20 + ")";
+});
+
+legend.append("rect")
+    .attr("x", w - 50)
+	.attr("y", h - 400)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+legend.append("text")
+    .attr("x", w - 55)
+    .attr("y", h - 390)
+    .attr("dy", ".35em")
+    .style("text-anchor", "end")
+    .text(function (d) {
+    return d;
+});
+							 
+				
+					
+				
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

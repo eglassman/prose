@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Rect in a Circle</title>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+
+  <style type="text/css">
+  	#chartArea {
+			border: 2px dashed black;
+			height: 400px;
+			width: 700px;
+		}
+		path {
+		  fill-rule: evenodd;
+		  fill: #aaa;
+		  fill-opacity: .7;
+		  stroke: #666;
+		  stroke-width: 5.5px;
+		}
+		rect {
+			fill-rule: evenodd;
+			fill: gold;
+			stroke: #666;
+		  stroke-width: 5px;
+		}
+  </style>
+
+	<body>
+		<div id="chartArea"></div>
+	</body>
+
+<script type="text/javascript">
+	var divH = parseInt( d3.select("#chartArea").style("height") );
+  var divW = parseInt( d3.select("#chartArea").style("width") );
+	
+	var margin = {top: 10, right: 10, bottom: 10, left: 10};
+	var w = divW - margin.left - margin.right;
+		h = divH - margin.top - margin.bottom;
+		smallestDim = h < w ? h : w;
+
+	var fields = [//larger the order value -> farther inside
+	  {side: "left", value: 35, size: 60, order: 0},
+	  {side: "left", value: 50, size: 60, order: 1},
+	  {side: "left", value: 8, size: 24, order: 2},
+	  {side: "left", value: 23, size: 24, order: 3},
+	  {side: "right", value: 60, size: 60, order: 0},
+	  {side: "right", value: 45, size: 60, order: 1},
+	  {side: "right", value: 20, size: 24, order: 2},
+	];
+
+	var svg = d3.select("#chartArea").append("svg:svg")
+	    .attr("width", w + margin.left + margin.right)
+	    .attr("height", h + margin.top + margin.bottom)
+	  .append("svg:g")
+	    .attr("transform", "translate(" + margin.left + "," +(margin.top + smallestDim/2)+ ")");
+
+	//rect start
+	var rectData = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13];
+	var xScale = d3.scale.ordinal()
+		.domain(d3.range(rectData.length))
+		.rangeRoundBands([0, w - smallestDim], 0.05);
+	var yScale = d3.scale.linear()
+		.domain([0, d3.max(rectData)])
+		.range([0, h]);
+	svg.selectAll("rect")
+		.data(rectData)
+		.enter()
+		.append("rect")
+		.attr({
+			x: function(d, i) { return xScale(i); },
+			y: function(d) { return h - yScale(d) ; },
+			width: xScale.rangeBand(),
+			height: function(d){ return yScale(d); },
+			transform: function(d,i){
+				return "translate(" + smallestDim/2 + "," + (-smallestDim/2) + ")";
+			}
+		});
+	//rect end
+
+	//arc start
+	var outerRadiusInit = smallestDim / 2;
+	var arcWidth = 35;
+	var innerRadiusInit = outerRadiusInit - arcWidth;
+
+	var arc = d3.svg.arc()
+    .innerRadius(function(d) { return innerRadiusInit - d.order * arcWidth ; })
+    .outerRadius(function(d) { return outerRadiusInit - d.order * arcWidth ; })
+    .startAngle(Math.PI)
+    .endAngle(function(d,i) { 
+    	if(d.side === "left")
+    		return (d.value / d.size) * Math.PI + Math.PI; 
+    	else return Math.PI - (d.value / d.size) * Math.PI;
+    });
+
+	for(var i = 0; i < fields.length; i++)
+		fields[i].previous = fields[i].value;
+
+	var path = svg.selectAll("path")
+	    .data(fields.filter(function(d) { return d.value; }))
+
+	path.enter().append("svg:path")
+    .attr("transform", function(d, i) { 
+    	if(d.side === "left")
+    		return "translate(" + smallestDim/2 + ",0)"; 
+    	else return "translate(" + (w - smallestDim/2) + ",0)"; 
+    })
+    .attr("d", arc);
+  //arc end
+</script>
+</html>

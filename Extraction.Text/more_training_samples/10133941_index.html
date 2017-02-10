@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300" rel="stylesheet" type="text/css">
+<style>
+  body, svg {
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+  }
+
+  #selectContainer {
+    width: 600px;
+    height: 450px;
+    position: absolute;
+    top:20px;
+    left:20px;
+  }
+
+  .grid-background {
+    fill: #fff;
+  }
+
+  .brush .extent {
+    fill:#1874CD;
+    fill-opacity: .05;
+    shape-rendering: crispEdges;
+  }
+
+  .count {
+    text-anchor:middle;
+    fill: #777;
+    font-size: 60px;
+    position: absolute;
+  }
+
+</style>
+</head>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+//define dimensions
+var margin = {top: 15, right: 15, bottom: 15, left: 15},
+    width = 400 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+    radius = Math.min(width, height) / 1.8;
+
+// add a percent scale
+var x = d3.scale.linear()
+    .domain([0, 100])
+    .range([0, width]);
+
+// define the brush control
+var brush = d3.svg.brush()
+    .x(x)
+    .extent([0, 10])
+    .on("brush", brushend);
+
+// build the svg for the whole thing
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr('class','brushControl')
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// tack the brush elements onto the svg
+svg.append("rect")
+    .attr("class", "grid-background")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("class", "x grid")
+    .attr("transform", "translate(0," + height + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")");
+
+var gBrush = svg.append("g")
+    .attr("class", "brush")
+    .call(brush);
+
+gBrush.selectAll("rect")
+    .attr("height", height);
+
+// set the brush extent to be non-clickable
+gBrush.selectAll("rect")
+    .style("pointer-events", "none")
+    .attr("y", -1)
+    .attr("height", height);
+
+// give the right edge of the brush an icon as a handle
+gBrush.selectAll(".resize.e")
+  .append("image")
+    .attr("width", 35)
+    .attr("height", 35)
+    .attr("y", height/1.1)
+    .attr("x", -18)
+    .attr("xlink:href", "arrow_right.png");
+
+// add a counter in the middle
+d3.selectAll('.brushControl').append('text')
+    .attr("x", width/1.8)
+    .attr("y", height/1.75)
+    .attr('class', 'count')
+    .text(Math.round(brush.extent()[1]) + '%');
+
+// choose the pie chart colors
+var color = d3.scale.ordinal()
+    .range(['#1874CD','#f0f1f1']);
+
+// define the chart type and dimensions
+var pie = d3.layout.pie()
+    .sort(null);
+
+var arc = d3.svg.arc()
+    .innerRadius(radius - 100)
+    .outerRadius(radius - 60);
+
+// append the pie chart to the already-defined brush svg
+var svg = d3.select(".brushControl").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + width / 1.85 + "," + height / 1.9 + ")");
+
+// connect the pie chart proportions to the brush extent
+var path = svg.selectAll("path")
+    .data(pie([brush.extent()[1], 100 - brush.extent()[1]]))
+  .enter().append("path")
+    .attr("fill", function(d, i) { return color(i); })
+    .attr("d", arc);
+
+// update the pie and the counter whenever the brush is moved
+function brushend() {
+  path.data(pie([brush.extent()[1], 100 - brush.extent()[1]]))
+      .attr("d", arc);
+  d3.select('text.count')
+      .text(Math.round(brush.extent()[1]) + '%');
+}
+
+</script>
+</body>
+</html>

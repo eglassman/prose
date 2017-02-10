@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<link href="http://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.css" rel="stylesheet" />
+<script src="http://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.1.1/katex.min.js"></script>
+
+</head>
+<body>
+<div class="container" style="width:90%;margin:auto;max-width:800px;">
+  <h1>
+    <a href="http://khan.github.io/KaTeX/">
+      <span class="tex" data-expr="\KaTeX"></span>
+    </a>
+    with R using 
+    <code>
+      <a href="http://github.com/rstudio/htmltools">htmltools</a>
+    </code>
+  </h1>
+  <p>
+    Although RStudio markdown 
+    <a href="https://support.rstudio.com/hc/en-us/articles/200486328-Equations-in-R-Markdown">supports LaTeX with MathJax</a>
+    , 
+    <a href="http://khan.github.io/KaTeX/">KaTeX from Khan Academy</a>
+    contends to be faster and better.  This short example shows how we can employ KaTeX in R.
+      We'll borrow heavily from the demo page code in the 
+    <a href="https://github.com/Khan/KaTeX/blob/gh-pages">gh-pages branch of KaTeX</a>
+     for this quick set of examples.
+  </p>
+  <p>
+    As a direct comparision with the inline LaTeX, we'll use the same 
+    simple arithmetic mean example used in the RStudio tutorial.
+  </p>
+  <div class="tex" style="text-align:center;" data-expr="\frac{1}{n} \sum_{i=i}^{n} x_{i}"></div>
+  <p>
+    For fun, let's grab the Greek letters from 
+    <a href="https://www.sharelatex.com/learn/List_of_Greek_letters_and_math_symbols">this list</a>
+     by scraping in R.
+  </p>
+  <ul>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \alpha A    
+      <span class="tex" data-expr="\alpha A"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \nu N    
+      <span class="tex" data-expr="\nu N"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \beta B    
+      <span class="tex" data-expr="\beta B"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \xi\Xi    
+      <span class="tex" data-expr="\xi\Xi"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \gamma \Gamma    
+      <span class="tex" data-expr="\gamma \Gamma"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      o O    
+      <span class="tex" data-expr="o O"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \delta \Delta    
+      <span class="tex" data-expr="\delta \Delta"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \pi \Pi    
+      <span class="tex" data-expr="\pi \Pi"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \epsilon \varepsilon E    
+      <span class="tex" data-expr="\epsilon \varepsilon E"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \rho\varrho P    
+      <span class="tex" data-expr="\rho\varrho P"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \zeta Z    
+      <span class="tex" data-expr="\zeta Z"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \sigma \Sigma    
+      <span class="tex" data-expr="\sigma \Sigma"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \eta H    
+      <span class="tex" data-expr="\eta H"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \tau T    
+      <span class="tex" data-expr="\tau T"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \theta \vartheta \Theta    
+      <span class="tex" data-expr="\theta \vartheta \Theta"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \upsilon \Upsilon    
+      <span class="tex" data-expr="\upsilon \Upsilon"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \iota I    
+      <span class="tex" data-expr="\iota I"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \phi \varphi \Phi    
+      <span class="tex" data-expr="\phi \varphi \Phi"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \kappa K    
+      <span class="tex" data-expr="\kappa K"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \chi X    
+      <span class="tex" data-expr="\chi X"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \lambda \Lambda    
+      <span class="tex" data-expr="\lambda \Lambda"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \psi \Psi    
+      <span class="tex" data-expr="\psi \Psi"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \mu M    
+      <span class="tex" data-expr="\mu M"></span>
+    </li>
+    <li style="float:left;margin-left:20px;margin-right:20px;">
+      \omega \Omega     
+      <span class="tex" data-expr="\omega \Omega "></span>
+    </li>
+  </ul>
+</div>
+<script>
+  // code for this from KaTeX gh-pages branch
+  // https://github.com/Khan/KaTeX/blob/gh-pages/main.js
+  var tex = document.getElementsByClassName('tex');
+  Array.prototype.forEach.call(tex, function(el) {
+    katex.render('\\displaystyle{' + el.getAttribute('data-expr') + '}', el);
+  });
+</script>
+</body>
+</html>

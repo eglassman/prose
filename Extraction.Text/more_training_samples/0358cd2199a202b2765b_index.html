@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Omid Kashan &mdash; Module 3</title>
+    <style type="text/css">
+        * { box-sizing: border-box; }
+        body, html, h1, h2, h3, h4, h5, h6, figure, blockquote, ul, ol, li {margin:0;padding:0}
+        #main {padding:20px;}
+        h1 {font-weight: normal;margin-bottom:20px;}
+        #viz {width:800px;;height:400px;overflow: visible}
+        svg g text {text-align: center;fill:black;font-size:8px;transform: rotate(-90deg) translate(-120px,-75px);-webkit-transform:rotate(-90deg) translate(-120px,-75px);transform-origin: center center;-webkit-transform-origin:center center}
+        svg g rect {fill:blue; }
+    </style>
+</head>
+<body>
+    
+    <div id="main"><svg id="viz"></svg></div>  
+    
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+    
+        var i=1,svg = d3.select('#viz'),main=d3.select('#main'),bar={width:30};
+        window.onload = function() {
+            d3.csv('data.csv',function(data) {
+                console.log(data);
+                var max = d3.max(data, function(d) { return +d.w*3;} );
+                var group = svg.selectAll('g').data(data).enter().append('g').attr("transform", function(d, i) { return "translate(" + i*(bar.width + 1)+", 0)"; });
+                group.append('rect').attr('width', bar.width).attr('height',function(d) { return d.w*3; }).attr("y", function(d) { return max-(d.w*3); });
+                group.append('text').text(function(d) { return d.season; }).style("text-anchor", "middle").attr("y", function(d) { return max+10; });             
+            });
+        };
+
+    </script>
+    
+</body>
+</html>

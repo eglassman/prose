@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Keen IO | Location Map</title>
+  
+  <style>
+    #map-canvas {
+      margin: 0px;
+      min-height: 500px;
+      padding: 0px;
+      width: 100%;
+    }
+  </style>
+  
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <script src="https://dc8na2hxrj29i.cloudfront.net/code/keen-2.1.2-min.js"></script>
+  <script>
+  
+    google.maps.event.addDomListener(window, 'load', function() {
+      
+      var bounds = new google.maps.LatLngBounds ();
+      var map = new google.maps.Map(document.getElementById('map-canvas'), {
+        center: new google.maps.LatLng(0, 0),
+        zoom: 2
+      });
+      
+      Keen.configure({
+        projectId: "your_project_id",
+        readKey: "your_read_key"
+      });
+      
+      Keen.onChartsReady(function(){
+              
+        var unique = new Keen.Metric("your_event_collection_name", {
+          analysisType: "select_unique",
+          targetProperty: "keen.location.coordinates"
+        });
+        
+        unique.getResponse(function(response){
+          // console.log(response);
+          
+          for (var i = 0; i < response.result.length; i++) {
+            (function(){
+              if (response.result[i] !== undefined && response.result[i] !== null) {
+                var latlng = new google.maps.LatLng(response.result[i][1], response.result[i][0]);
+                var marker = new google.maps.Marker({
+                  position: latlng,
+                  map: map
+                });
+                bounds.extend(latlng);
+              }
+            })();
+            map.fitBounds(bounds);
+          }
+          
+        });
+        
+      });
+      
+    });
+  </script>
+</head>
+<body>
+  <div id="map-canvas"></div>
+</body>
+</html>

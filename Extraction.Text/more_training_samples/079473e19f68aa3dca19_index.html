@@ -1,0 +1,70 @@
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Querying a related table in feature service</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.2.4/bootstrap-table.min.css">
+
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+  <!-- cool bootstrap plugin for working with tables
+    //http://wenzhixin.net.cn/p/bootstrap-table/docs/index.html
+  -->
+  <script src="//rawgit.com/wenzhixin/bootstrap-table/master/dist/bootstrap-table.min.js"></script>
+
+  <!-- Load Leaflet from CDN-->
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="//cdn-geoweb.s3.amazonaws.com/esri-leaflet/1.0.0-rc.6/esri-leaflet.js"></script>
+  <script src="https://cdn.rawgit.com/maptastik/esri-leaflet-related/master/src/EsriLeafletRelated.js"></script>
+
+  <style>
+    body {margin:0;padding:0;}
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+    }
+    #info-pane {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      padding: 1em;
+      background: white;
+    }
+    .fixed-table-container {
+      position: absolute;
+      top: 10px;
+      left: 50px;
+      z-index: 10;
+      padding: 1em;
+      background: white;
+    }
+    .fixed-table-body {
+      max-height: 600px;
+      max-width: 400px;
+    }
+    #hidden {
+      display:none;
+    }
+  </style>
+</head>
+<body>
+<div id='my-table' class="hidden leaflet-bar table-condensed">
+</div>
+<div id="map"></div>
+<div id="info-pane" class="leaflet-bar"></div>
+
+<!--Loads the app-->
+<script src="app.js"></script>
+
+</body>
+</html>

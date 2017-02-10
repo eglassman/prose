@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+
+		body {
+	        background-color: #fff1e0;
+	        font-family: Arial, sans-serif;
+      	}
+
+      	h1{
+      		margin: 0;
+      		width:750px;
+      		font-size: 1.3em;
+      		color: #43423E;
+      		margin-bottom: 5px;
+
+      	
+
+		}
+
+      	p{
+      		font-size: 1em;
+      		margin: 10px 0 0 0;
+      		color: #777777;
+      		line-height: 1.3em;
+      		width: 660px;
+      	}
+
+		circle{
+			fill: #8AB7C3;
+		}
+
+		circle:hover{
+			  stroke-width: 8px;
+  			stroke: rgba(231, 114, 101, .3);
+			fill:rgb(231, 114, 101);
+
+		}
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #777777;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+				  fill: #777777;
+		
+			}
+
+
+		
+
+			a{
+				text-decoration: none;
+			}
+
+			.highlight-rwanda{
+				color:#649FAF;
+			}
+
+			.highlight-congo{
+				color:rgb(231, 114, 101);
+			}
+
+			.y.axis line{
+	  stroke-dasharray: 2,2;
+			}
+
+
+			#xAxis-title{
+			margin:0 auto;
+			padding: 10px;
+			text-align: center;
+			color: #777777;
+		
+
+
+			}
+
+			.yText{
+			fill:#777777;
+			font-size: 1em;
+
+			}
+
+			.source{
+				margin: 0;
+				font-size: 12px;
+				color: #777777;
+			}
+			.y.axis path {
+  display: none;
+}
+
+/*.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}*/
+			
+			/*.x.axis path,*/
+		
+		
+
+		</style>
+ 
+ 
+	</head>
+	<body>
+	
+ 
+ 
+		<script type="text/javascript">	
+
+		var w = 750;
+		var h = 505;
+		var padding = [50, 10, 50, 70];
+
+		var dateFormat = d3.time.format("%Y");
+
+		var xScale = d3.time.scale()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+
+		var yScale = d3.scale.linear()
+						.range([ padding[0], h - padding[2] ]);
+
+
+		var body = d3.select("body")
+
+
+		// var tip = d3.tip()
+		// 		  .attr('class', 'd3-tip')
+		// 		  .offset([-10, 0])
+		// 		  .html(function(d) {
+		// 		    return "<strong>Frequency:</strong> <span style='color:red'>" + d.lifeExpectancy + "</span>";
+  // 					})
+					
+						
+						
+
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient('left')
+							.tickSize(-w + padding[3] + padding[0] + 28);
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(18)
+							.tickFormat(function(d) {
+								return dateFormat(d);
+							});
+
+			var line=d3.svg.line()
+				.x(function(d){
+					return  xScale(dateFormat.parse(d.year))
+
+				})
+				.y(function(d){
+					return  yScale(d.lifeExpectancy);
+				})
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+						// svg.call(tip);
+
+
+
+
+			//Load in contents of CSV file
+			//Load in contents of CSV file
+			d3.csv("rwanda-life-expectancy.csv", function(rwandaData) {
+
+				//Load congo data
+
+			d3.csv('congo-life-expectancy.csv', function(congoData) {
+
+
+				var mergeData=rwandaData.concat(congoData);
+
+				console.log(mergeData);
+				
+
+			
+					xScale.domain([
+
+						d3.min(mergeData, function(d){
+						return dateFormat.parse(d.year);
+						}), 
+						d3.max(mergeData, function(d){
+						return dateFormat.parse(d.year);
+						}) 
+					]);
+
+					yScale.domain([
+						d3.max(mergeData, function(d){
+						return +d.lifeExpectancy;
+					}),
+						d3.min(mergeData, function(d){
+						return +d.lifeExpectancy;
+					})
+				]);
+					//.attr('height', data.length * 20 )
+				
+				// var circles = svg.selectAll("circle")
+				// // 	.data(data)
+				// 	.enter()
+				// 	.append("circle")
+					
+				// 	  // .on('mouseover', tip.show)
+    //   	// 			.on('mouseout', tip.hide);
+
+
+				// circles.attr("cx", function(d){
+				// 	return xScale(dateFormat.parse(d.year)
+				// 		);
+
+				// })
+				// 	.attr("cy", function(d) {
+				// 		return yScale(d.lifeExpectancy);
+				// 	})
+				// 	.attr("r", 4)
+				// 	.attr('fill', 'steelblue' )
+				// 	.append("title")
+				// 	.text(function(d){
+				// 		return d.year +' has a life expectancy of ' + d.lifeExpectancy + ' years';
+				// 	});
+
+
+					svg.append('g')
+					.attr('class','x axis' )
+					.attr("transform", "translate(0," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+
+
+
+
+					svg.append('g')
+						.attr('class','y axis' )
+						.attr('transform', 'translate(' + (padding[3] -1) + ',0)')
+						.call(yAxis);
+
+
+			svg.data([ rwandaData ])
+					.append("path")
+					.attr("class", "line rwanda")
+					.attr("d", line)
+					.attr("fill", "none")
+					.attr("stroke", "#8AB7C3")
+					.attr("stroke-width", 4)
+					.append("title")
+					.text(function(d) {
+						return  "Rwanda life expectancy at birth";
+					});
+
+
+
+				svg.data([ congoData ])
+					.append("path")
+					.attr("class", "line congo")
+					.attr("d", line)
+					.attr("fill", "none")
+					.attr("stroke", "rgb(231, 114, 101)")
+					.attr("stroke-width", 4)
+					.append("title")
+					.text(function(d) {
+						return  "Congo life expectancy at birth";
+					});
+
+					svg.append("text")
+					.attr("transform", "translate(675," + (h - padding[2]) + ")")
+					.attr("dy", "-25.0em")
+					.attr("text-anchor", "start")
+					.style("fill", "#8AB7C3")
+					.text("Rwanda");
+
+
+					svg.append("text")
+					.attr("transform", "translate(675," + (h - padding[2]) + ")")
+					.attr("dy", "-21.5em")
+					.attr("text-anchor", "start")
+					.style("fill", "rgb(231, 114, 101)")
+					.text("Congo");
+
+
+
+				
+
+					
+	
+
+
+			});
+
+		});
+
+
+		</script>
+ 
+	
+ 
+		<p class="source">Source: <a href="http://www.worldbank.org/">The World Bank</a></p>
+ 
+ 
+	</body>
+</html>

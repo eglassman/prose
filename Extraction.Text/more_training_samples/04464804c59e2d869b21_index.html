@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Cell phone subsription (per 100 people) in 2013</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    </head>
+    <h3>United States = 95.5</h3>
+	<body>
+  
+		<script type="text/javascript">		
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 500)
+						.attr("height", 1800);
+		
+            
+            d3.csv("cellphoneusage.csv", function(data) {
+
+                data.sort(function(a, b) {
+					return d3.descending(+a["2013"], +b["2013"]);
+			
+				});
+                    
+                var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");    
+                
+					rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 10;
+					})
+					.attr("width", function(d) {
+						return d["2013"] * 2;
+					})
+					.attr("height", 8)
+					.attr("fill", "MidnightBlue")
+					.append("title")
+					.text(function(d) {
+						return d.Country + "'s cell phone subscriptions per 100 people is " + d["2013"];
+					});
+               
+			});
+
+		</script>
+
+	</body>
+</html>

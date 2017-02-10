@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Dynamic Sensor Network</title>
+<style>
+
+    svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
+
+<body>
+</body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+    var color = d3.scale.category10();
+
+    var width = 960,
+        height = 500;
+
+
+    var numPoints = 10;
+    var data = d3.range(numPoints).map(function() {
+        return {xloc: 0, yloc: 0, a: Math.random(), b: Math.random(),
+            xOffset: Math.random(), yOffset: Math.random(), theta: Math.random() * Math.PI};
+    });
+
+
+    var x = d3.scale.linear()
+            .domain([-1.2, 1.2])
+            .range([0, height]);
+
+    var y = d3.scale.linear()
+            .domain([-1.2, 1.2])
+            .range([0, height]);
+
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", function(d) { return "translate(" + width/4 + "," + 0 + ")"; })
+
+
+    var circle = svg.selectAll("circle")
+            .data(data)
+            .enter().append("circle")
+            .attr("stroke", "#000")
+            .attr("stroke-width", "2px")
+            .attr("r", 4)
+
+    var pathData = calculatePaths(data);
+
+    var line = d3.svg.line();
+    var path = svg.selectAll(".line")
+            .data(pathData)
+            .enter().append("path")
+            .attr("d", function(d) {
+                return line(d);
+            })
+            .attr("fill", "none")
+            .attr("stroke", "#000")
+
+    console.log(calculatePaths(data));
+
+    function calculatePaths(data) {
+
+        var pointArray = [],
+            dt = 0.01;
+
+        var dataLength = data.length;
+        for(i = 0; i < dataLength; i++){
+            var d = data[i];
+            var arrayToAdd = [];
+            for(t = 0; t < Math.PI*2; t+= dt) {
+                // sample from next time step, add position
+                arrayToAdd.push([x(d.a*Math.cos(t + d.xOffset*Math.PI*2)), y(d.b*Math.sin(t + d.yOffset*Math.PI * 2))]);
+            }
+            pointArray.push(arrayToAdd);
+        }
+        return pointArray;
+    }
+
+
+
+
+    d3.timer(function() {
+
+        svg.selectAll("polygon").remove();
+
+        data.forEach(function(d) {
+            d.xloc = d.a*Math.cos(d.theta + d.xOffset*Math.PI*2);
+            d.yloc = d.b*Math.sin(d.theta + d.yOffset*Math.PI*2);
+            d.theta += 0.02;
+        });
+
+        circle
+                .attr("cx", function(d) { return x(d.xloc)})
+                .attr("cy", function(d) { return y(d.yloc)})
+                .attr("fill", function(d, i) {
+                    return color(i)
+                });
+
+
+
+    });
+
+
+
+</script>

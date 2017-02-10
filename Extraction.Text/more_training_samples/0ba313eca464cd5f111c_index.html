@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Exercise_Module3_Yeowoon</title>
+	<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	
+</head>
+<body>
+<p> <b> World Population in OECD countries</b> </p>
+
+	<script>
+		var svg = d3.select("body")
+					.append("svg")
+					.attr("width", 800)
+					.attr("height", 1000);
+
+		d3.csv("sample.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.year, +b.year);
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 16;
+					})
+					.attr("width", function(d) {
+						return d.year;
+					})
+					.attr("height", 14)
+					.attr("fill", "#959595")
+					.append("title")
+					.text(function(d) {
+						return d.name + "'s social expenditure represents " + d.year + "% of GDP"
+					})
+
+
+				var countries = svg.selectAll("text")
+									.data(data)
+									.enter()
+									.append("text");
+
+
+								countries.attr("x", 5)
+									.attr("y", function(d,i) {
+										return i * 15.9 + 13; })
+									.attr("fill", "black")
+									.attr("font-size", "12px")
+									.attr("font-weight", "bold")
+									.attr("font-family", "sans-serif")
+									.text(function(d) {
+										return d.name})
+
+
+
+			});
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+        
+        <style type="text/css">
+			
+			body {
+				background-color: #004280;
+			}
+			
+			p {
+				font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+				font-size:24px;
+				margin-left:10px;
+				color:white;
+			}
+			
+			li {
+				font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+				font-size:16px;
+				margin-left:10px;
+				color:white;
+				line-height:28px;
+			}	
+
+			svg {
+				background-color: #0071c5;
+			}
+
+		</style>
+        
+	</head>
+	<body>
+
+
+		<svg width="600" height="100">
+			<text x="0" y="72" fill="#004280" font-size="68" font-weight="bold" font-family="Arial" fill-opacity=".18">Module 2 Exercise</text>
+			<circle cx="130" cy="60" r="10" fill="#0AD2BC" />
+			<circle cx="160" cy="60" r="10" fill="#CF1915" />
+			<circle cx="242" cy="60" r="12" fill="#CC7A33" />
+			<circle cx="398" cy="60" r="12" fill="#1923F8" />
+			<circle cx="450" cy="60" r="12" fill="#781F06" />
+			<circle cx="524" cy="60" r="12" fill="#885992" />
+			<text x="67" y="75" fill="#00aeef" font-size="54" font-weight="bold" font-family="Arial">Module 2 Exercise</text>
+		</svg>
+
+		<p>Module 2 Exercise:</p>
+        <ol>
+        	<li>Create a web page that includes one SVG image.</li>
+            <li>Using D3, load your data into the page and log that data to the console.</li>
+            <li>Post the <a style="text-decoration:none; color: #00aeef" href="http://bl.ocks.org" target="_blank">Bl.ocks.org link</a> to your working page in the forums.</li>
+        </ol>
+
+		<script type="text/javascript">		
+
+
+			//Load in contents of CSV file
+			d3.csv("BeverageImports2US.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

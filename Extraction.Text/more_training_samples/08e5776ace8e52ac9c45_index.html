@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>Election Results, Lower Austria, 1995 vs. 2015</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+<style>
+text
+{
+font-size:10pt;
+}
+
+line
+{
+stroke:black;
+}
+
+.heading
+{
+font-size:14pt;
+fill:steelblue;
+}
+
+label
+{
+color:steelblue;
+font-size:14pt;
+padding:0.2em;
+}
+
+label.checked
+{
+background-color:#efefef;
+}
+</style>
+
+</head>
+
+<body>
+<div id="switch"></div>
+<div id="chart"></div>
+
+<script type="text/javascript">
+var width=800;
+var height=700;
+var data, datastore, res95, res15, pos, line;
+var parties=["oevp","spoe"]; //parties for the radio buttons
+var check=0;
+var svg=d3.select("#chart").append("svg").attr("width",width).attr("height",height);
+
+d3.csv("data.csv", function(data)
+{
+for (i=0;i<data.length;i++)
+{
+data[i].oevp_95=+(data[i].oevp_votes_1995/data[i].valid_votes_1995*100).toFixed(2); //calculating the percentages
+data[i].oevp_15=+(data[i].oevp_votes_2015/data[i].valid_votes_2015*100).toFixed(2);
+data[i].spoe_95=+(data[i].spoe_votes_1995/data[i].valid_votes_1995*100).toFixed(2);
+data[i].spoe_15=+(data[i].spoe_votes_2015/data[i].valid_votes_2015*100).toFixed(2);
+data[i].idname=data[i].name.replace(/[\.,\s+]/g, ''); //to avoid spaces and dots in the class of the element for proper selection
+}
+
+d3.select("#switch")
+  .selectAll("input")
+  .data(parties)
+  .enter()
+  .append("label")
+  .attr("id",function(d){return d;})
+  .classed("checked", function(d,i){return i===check ? true : false;})
+  .text(function(d){return d.toUpperCase();})
+  .append("input")
+  .attr("type","radio")
+  .attr("name","party")
+  .attr("value",function(d){return d;})
+  .attr("onChange",function(d){return "draw('"+d+"')";})
+  .property("checked", function(d, i) {return (i===check)}); //add the radio buttons, depending on the number of available parties
+
+svg
+  .append("text")
+  .attr("x", 200)
+  .attr("y",20)
+  .attr("text-anchor", "end")
+  .attr("class","heading")
+  .text("1995");
+  
+svg
+  .append("text")
+  .attr("x", 500)
+  .attr("y",20)
+  .attr("text-anchor", "start")
+  .attr("class","heading")
+  .text("2015");
+
+datastore=data; //somehow the data-variable is undefined in the draw-function below, not sure why
+pos=(height-30)/datastore.length; //fixed multiplier for the y-positions (might be easier done with d3.axis)
+
+datastore.sort(function(a,b){return d3.descending(a.oevp_95,b.oevp_95);}) //make the left side
+res95=svg.selectAll(".res95").data(datastore).enter().append("text");
+res95
+  .attr("x",200)
+  .attr("y",function(d,i){d.pos95=45+i*pos; return 50+i*pos;})
+  .attr("text-anchor","end")
+  .text(function(d){return d.name+": "+d.oevp_95;})
+  .attr("class",function(d){return d.idname;})
+  .on("mouseover",function(){d3.selectAll("text."+this.className.baseVal)
+  .style("font-weight","bold")
+  .style("fill","red"); 
+  d3.selectAll("line."+this.className.baseVal).style("stroke","red");})
+  .on("mouseout",function(){d3.selectAll("text."+this.className.baseVal)
+  .style("font-weight","normal")
+  .style("fill","black");
+  d3.selectAll("line."+this.className.baseVal).style("stroke","black");}); //different selection for text and line, because changing the stroke-value would also affect the text
+
+datastore.sort(function(a,b){return d3.descending(a.oevp_15,b.oevp_15);}) //make the right side
+res15=svg.selectAll(".res15").data(datastore).enter().append("text");
+res15
+  .attr("x",500)
+  .attr("y",function(d,i){d.pos15=45+i*pos; return 50+i*pos;})
+  .attr("text-anchor","start")
+  .text(function(d){return d.name+": "+d.oevp_15;})
+  .attr("class",function(d){return d.idname;})
+  .on("mouseover",function(){d3.selectAll("text."+this.className.baseVal)
+  .style("font-weight","bold")
+  .style("fill","red"); 
+  d3.selectAll("line."+this.className.baseVal).style("stroke","red");})
+  .on("mouseout",function(){d3.selectAll("text."+this.className.baseVal)
+  .style("font-weight","normal")
+  .style("fill","black");
+  d3.selectAll("line."+this.className.baseVal).style("stroke","black");});
+
+line=svg.selectAll("line").data(datastore).enter().append("line");  //draw a line between left and right
+line
+  .attr("x1",210)
+  .attr("x2",490)
+  .attr("y1",function(d,i){return d.pos95;})
+  .attr("y2",function(d){return d.pos15;})
+  .attr("class",function(d){return d.idname;});
+});
+
+function draw(choice)
+{
+d3.selectAll("label").classed("checked",false);
+d3.select("#"+choice).classed("checked",true);
+party_95=choice+"_95"; //construct the name of the object property based on the radio button
+party_15=choice+"_15"; //construct the name of the object property based on the radio button
+
+datastore.sort(function(a,b){return d3.descending(a[party_95],b[party_95]);}); 
+
+for (i=0; i<datastore.length;i++) //this part seems necessary to get an updated index for the list - not very elegant, but i have not found a better solution yet
+{
+datastore[i].pos95=i;
+}
+
+datastore.sort(function(a,b){return d3.descending(a[party_15],b[party_15]);}); //the same for the right side
+
+for (i=0; i<datastore.length;i++)
+{
+datastore[i].pos15=i;
+}
+
+res95
+  .transition()
+  .duration(500)
+  .attr("y",function(d){return (50+d.pos95*pos);})
+  .text(function(d){return d.name+": "+d[party_95];});
+
+res15
+  .transition()
+  .duration(500)
+  .attr("y",function(d){return (50+d.pos15*pos);})
+  .text(function(d){return d.name+": "+d[party_15];});
+
+line
+  .transition()
+  .duration(500)
+  .attr("y1",function(d){return 45+d.pos95*pos;})
+  .attr("y2",function(d){return 45+d.pos15*pos;});
+}
+</script>
+</body>
+</html>

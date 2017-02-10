@@ -1,0 +1,22 @@
+<!DOCTYPE html>	
+<meta charset="utf-8">
+<head>
+  <link rel="stylesheet" type="text/css" href="http://www.ankerst.de/lib/itemExplorer_10.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+  <script src="http://www.ankerst.de/lib/itemExplorer_10.min.js"></script>
+</head>
+
+<body>
+  <script>  
+    var myIEChart = itemExplorerChart("items_5c.csv");
+    showChart(); 
+    
+    function showChart() {
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myIEChart);
+    }   
+  </script>
+</body>
+</html> 

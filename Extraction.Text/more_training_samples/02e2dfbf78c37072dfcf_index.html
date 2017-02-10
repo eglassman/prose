@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"> 
+		<title>Health Record</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+
+			h1 {
+				font-family: sans-serif;
+				font-size: 30px;
+				padding-left: 30px;
+				padding-top: 10px;
+			}
+
+			h2 {
+				font-family: sans-serif;
+				font-size: 12px;
+				padding-left: 30px;
+				font-weight: normal;
+				padding-top: 10px;
+			}
+
+			#container {
+				width: 800px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: white;
+				border: 1px solid #ccc;
+				/*box-shadow: 3px 3px 5px 6px #ccc;*/
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover {
+				fill: orange;
+			}
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			.axis text{
+				font-family: sans-serif;
+				font-size: 10px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				/*opacity: 0;*/
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="container">
+
+		<h1>Unite States Health Record</h1>
+		<h2>This chart reflects health status in different states in US. The value repersents the ration of people
+			involved in the healthy lunch program. As the population in each status varies, this chart uses the ratio instead of the original number.
+
+			Y Axis represents people involved in the school breakfast program.</h2>
+		</div>
+
+		<script type="text/javascript">		
+			
+			var stack = d3.layout.stack()
+							.values(function(d) {
+								return d.population;
+							})
+							.order("reverse");
+
+
+
+			//Width, height, padding
+			var w = 800;
+			var h = 600;
+			var padding = [ 20, 10, 50, 100 ];  //Top, right, bottom, left
+
+
+
+			//Set up date format function (years)
+			var dateFormat = d3.time.format("%Y");
+
+
+
+			//Set up scales
+			var xScale = d3.time.scale()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+
+
+
+			//Configure axis generators
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(3)
+							.tickFormat(function(d) {
+								return dateFormat(d);
+							});
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.ticks(5)
+							.tickFormat(d3.format("%"));
+
+			//Configure area generator
+			var area = d3.svg.area()
+				.x(function(d) {
+					// console.log(d.x);
+					return xScale(dateFormat.parse(d.x));
+				})
+				.y0(function(d) {
+					return yScale(d.y0);  //Updated
+				})
+				.y1(function(d) {
+					return yScale(d.y0 + d.y);  //Updated
+				});
+
+
+			//Easy colors accessible via a 10-step ordinal scale
+			var color = d3.scale.category10();
+
+			//Create the empty SVG image
+			var svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+			//Load data
+			d3.csv("statehealth.csv", function(data) {
+
+				//Uncomment to log the newly loaded data to the console
+				//console.log(data);
+
+				//Data is loaded in, but we need to restructure it.
+				//Remember, each line requires an array of x/y pairs;
+				//that is, an array of arrays, like so:
+				//
+				//	[ [x: 1, y: 1], [x: 2, y: 2], [x: 3, y: 3] ]
+				//
+				//Our x value will be the year, and y will be the amount
+				//of CO2.  We also need to know which country belongs to 
+				//each line, so we will build an array of objects that is
+				//structured like this:
+				//
+				/*
+
+					[
+						{
+							country: "Australia",
+							emissions: [
+										{ x: "1961", y: 90589.568 },
+										{ x: "1962", y: 94912.961 },
+										{ x: "1963", y: 101029.517 },
+										…
+									   ]
+						},
+						{
+							country: "Bermuda",
+							emissions: [
+										{ x: "1961", y: 176.016 },
+										{ x: "1962", y: 157.681 },
+										{ x: "1963", y: 150.347 },
+										…
+									   ]
+						},
+						…
+					 ]
+
+				*/
+				//
+				//Note that this is an array of objects. Each object
+				//contains two values, 'country' and 'emissions'.
+				//The 'emissions' value is itself an array, containing
+				//more objects, each one holding x and y values.
+				//
+				//The x (year) values have to be strings in this case,
+				//because the date format function expects a string
+				//to parse into a Date object.
+
+				//New array with all the years, for referencing later
+				var years = ["2010","2011", "2012"];
+
+				//Create a new, empty array to hold our restructured dataset
+				var dataset = [];
+
+				//Loop once for each row in data
+				for (var i = 0; i < data.length; i++) {
+
+					//Create new object with this country's name and empty array
+					dataset[i] = {
+						state: data[i].State,
+						ratio: [],
+						population: []
+					};
+
+					// console.log(data[i].State);
+
+					//Loop through all the years
+					var total = 0;
+					for (var j = 0; j < years.length; j++) {
+
+						//Default value, used in case no value is present
+						var amount = null;
+
+						// If value is not empty
+						if (data[i][years[j]]) {
+							var s = "WIC" + years[j];
+							var a = "Breakfast" + years[j];
+							// console.log(s);
+							// console.log(data[i][s]);
+							amount = +(data[i][a] / data[i][years[j]]);
+							total += +(data[i][a] / data[i][years[j]]);
+						}
+
+						//Add a new object to the emissions data array
+						//for this country
+						dataset[i].population.push({
+							x: years[j],
+							y: amount
+						});
+
+					}
+					dataset[i].ratio.push(total);
+
+				}
+
+				// console.log(dataset.length);
+
+				//Stack the data!
+				stack(dataset);
+
+				//Now that the data is ready, we can check its
+				//min and max values to set our scales' domains!
+				xScale.domain([ 
+					d3.min(years, function(d) {
+						return dateFormat.parse(d);
+					}),
+					d3.max(years, function(d) {
+						return dateFormat.parse(d);
+					})
+				]);
+				//Need to recalcluate the max value for yScale  
+				//differently, now that everything is stacked.
+
+				//Loop once for each year, and get the total value
+				//of CO2 for that year.
+				var totals = [];
+
+				for (i = 0; i < years.length; i++) {
+					totals[i] = 0;
+					for (j = 0; j < dataset.length; j++) {
+						totals[i] += dataset[j].population[i].y;
+					}
+				}
+
+				yScale.domain([ d3.max(totals), 0 ]);
+
+				//Areas
+				//
+				//Now that we are creating multiple paths, we can use the
+				//selectAll/data/enter/append pattern to generate as many
+				//as needed.
+
+				//Make a path for each country
+				var paths = svg.selectAll("path")
+					.data(dataset)
+					.enter()
+					.append("path")
+					.attr("class", "area")
+					.attr("d", function(d) {
+						//Calculate path based on only d.emissions array,
+						//not all of d (which would include the country name)
+						return area(d.population);
+					})
+					.attr("stroke", "none")
+					.attr("fill", function(d, i) {
+						return color(i);
+					});
+
+				//Append a title with the country name (so we get easy tooltips)
+				paths.append("title")
+					.text(function(d) {
+						return d.state + ", Breatfast Ratio: " + d3.format("%")(d.ratio);
+					});
+
+
+				//Create axes
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2]) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

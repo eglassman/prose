@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Mixed Canvas-SVG Rendered Force Layout</title>
+  <meta charset="utf-8" />
+</head>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<body>
+  <canvas style="background: white;500px;width:500px;position:absolute;z-index:-1;" height=500 width=500></canvas>
+<svg id="graphSVG" style="height:500px;width:500px;border:1px lightgray solid;" height=500 width=500></svg>
+<div id="numbers" style="position:fixed;top:20px;left:20px;"></div>
+  <footer>
+<script>
+  nodesSeed = d3.range(750);
+  numConnections = 5;
+  nodes = [];
+  edges = [];
+  for (x in nodesSeed) {
+    nodes.push({id: x, label: "node " + x})
+  }
+  
+  //This is just making a bunch of random edges 
+  var pass = Math.floor(Math.random() * 10) + 2;
+  var z = 0;
+  while (z < pass) {
+  for (x in nodes) {
+    var y = Math.floor(Math.random() * nodes.length);
+    var numEdges = y + 1;
+    while (y <= numEdges) {
+      if (y < nodes.length && y != x) {
+        edges.push({source: nodes[x], target: nodes[y]})
+      }
+      y++;
+    }
+    }
+    z++;
+  }
+
+    d3.select("#numbers").html("Nodes: "+nodes.length + " Edges: " +edges.length);
+    var svg = d3.select("svg");
+
+    force = d3.layout.force()
+      .charge(-100)
+      .linkDistance(100)
+      .size([500, 500])
+      .gravity(1)
+      .on("tick", redrawGraph)
+      .nodes(nodes)
+      .links(edges)
+      
+      svg.selectAll("g.node").data(nodes).enter().append("g")
+      .attr("class", "node")
+      .style("cursor", "pointer")
+      .append("circle")
+      .attr("r", 6)
+      .style("fill",function() {
+    return "hsl(" + Math.random() * 360 + ",100%,50%)";
+    })
+      .call(force.drag())
+      .on("mouseover", highlight)
+      .on("click", clickNode);
+      
+      function highlight() {
+        d3.select(this).style("fill", "red").style("stroke", "white").style("stroke-width", 4)
+      }
+      function clickNode(d,i) {
+        d3.select(this).transition().duration(1000).attr("r", 1)
+        d.fixed = true;
+      }
+      
+      force.start();
+    
+    function redrawGraph() {
+
+      var context = d3.select("canvas").node
+
+      var canvas = d3.select("canvas").node();
+      var context = canvas.getContext("2d");
+      context.clearRect (0,0,canvas.width,canvas.height);
+
+  context.lineWidth = 1;
+  context.strokeStyle = "rgba(0, 0, 0, 0.1)";
+
+      edges.forEach(function (link) {
+  context.beginPath();
+  context.moveTo(link.source.x,link.source.y)
+  context.lineTo(link.target.x,link.target.y)
+  context.stroke();
+      })
+      d3.selectAll("g.node")
+      .attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"});
+    }
+
+</script>
+  </footer>
+</body>
+</html>

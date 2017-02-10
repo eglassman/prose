@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Exercise Module 3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			h1 {
+				font-family: Helvetica;
+				font-size: 20px;
+				font-weight: bold;
+			}
+
+	
+			p {
+				font-family: Helvetica;
+				font-size: 20px;
+				
+			}
+
+		</style>
+	</head>
+	<body>
+		<h1>UNEMPLOYMENT RATE IN SPAIN BY REGION IN 2014</h1>
+		<p>Data in the chart show that unemployment rates are higher in the southern regions in Spain, while the lowest rates are found in the north of the country</p>
+		<script type="text/javascript">		
+			
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 350)
+						.attr("height", 500);
+
+				
+
+			d3.csv("Unemployment in Spain.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(a.Unemp_rate_14, b.Unemp_rate_14);
+
+
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 100)
+					.attr("y", function(d, i) {
+						return i * 28;
+					})
+					.attr("width", function(d) {
+						return d.Unemp_rate_14 * 8;
+					})
+					.attr("height", 20)
+					.attr("fill", "grey")
+					.append("title")
+					.text(function(d) {
+						return d.Region + "'s unemployment rate in 2014 was " + d.Unemp_rate_14;
+					});
+
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

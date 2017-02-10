@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3-Intermediate Module 4</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<script src="//d3js.org/topojson.v1.min.js"></script>
+		<style type="text/css">
+
+		#visual {
+			width: 800px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 50px;
+			padding: 50px;
+			font-family: 'Open Sans';
+			font-size: 12px;
+			font-style: normal;
+			font-variant: normal;
+			background-color: #F0F3F5;
+			box-shadow: 1px 1px 1px 1px #ccc;
+		}
+
+		svg {
+			background-color: #F0F3F5;
+		}
+
+		g.area text {
+			fill: #872a23;
+			text-anchor: start;
+			opacity: 0;
+			font-family: 'Open Sans';
+			font-size: 14px;
+			font-style: normal;
+			font-variant: normal;
+		}
+
+		g.area:hover text {
+			opacity: 1;
+		}
+
+		</style>
+	</head>
+	<body>
+		<div id="visual">
+			<h1>High-technology Exports in Europe for 2013</h1>
+			<h1>(current US$ in billions)</h1>
+			<p>High-technology exports are products with high R&D intensity, such as in aerospace, computers, pharmaceuticals, scientific instruments, and electrical machinery. Data are in current U.S. dollars.</p>
+			<p style="font-size: 10px">Source: Worldbank/United Nations, Comtrade database.</p>
+	</div>
+		<script type="text/javascript">
+
+			var w = 800;
+			var h = 800;
+
+			var leg_data = [0,5,10,20,25,30,120,200]
+
+			//var color = d3.scale.linear()
+	 		//.range(["#8Fa3B0","#173773"]);
+
+			var color = d3.scale.quantile()
+			.range(["#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"]);
+
+			var year = 2013
+
+			var rescale = 1000000000
+
+			var projection = d3.geo.stereographic()
+								   .center([40, 30 ])
+								   .translate([ w, h ])
+								   .scale([ w*2 ]);
+
+			var path = d3.geo.path()
+							 .projection(projection);
+
+			var svg = d3.select("#visual")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			d3.csv("tech_exports.csv", function(data) {
+
+			//http://stackoverflow.com/questions/29261994/use-d3-min-to-find-lowest-value-that-is-not-0
+
+			var noZeroes = data.filter(function(d) { return +d[year]/rescale !== 0; });
+
+			var colrng = [
+					d3.min(noZeroes, function(d) { return +d[year]/rescale; }),
+					d3.max(noZeroes, function(d) { return +d[year]/rescale; })
+			]
+
+			//color.domain(colrng);
+			color.domain(leg_data);
+
+
+				d3.json("europe.json", function(json) {
+
+					for (var i = 0; i < data.length; i++) {
+						var dataCountryCode = data[i].code;
+						var dataValue = +data[i][year]/rescale;
+
+						for (var j = 0; j < json.features.length; j++) {
+
+						var jsonCountryCode = json.features[j].properties.iso_a3;
+
+						if (dataCountryCode == jsonCountryCode) {
+							json.features[j].properties.exp = dataValue;
+										break;
+									}
+								}
+							}
+
+						var groups = svg.selectAll("g")
+						 .data(json.features)
+						 .enter()
+						 .append("g")
+						 .attr("class", "area")
+
+						var paths = groups.append("path")
+							.attr("d", path)
+							.attr("stroke", "#F0F3F5")
+							.attr("stroke-width", "1.5")
+							.on("mouseover", function(){d3.select(this).style("fill", "872a23");})
+							.on("mouseout", function(){d3.select(this).style("fill", function(d) {
+									var value = d.properties.exp;
+									if (value) {
+										return color(value);
+									} else {
+										return "#DADDE0";
+									}
+
+							});})
+							.style("fill", function(d) {
+									var value = d.properties.exp;
+									if (value) {
+										return color(value);
+									} else {
+										return "#DADDE0";
+									}
+
+							});
+
+							groups.append("text")
+								.attr("x", 0)
+								.attr("y", 50)
+								.text(function(d,i) {
+									var value = d.properties.exp;
+									if (value) {
+										return "The high-tech export of " + json.features[i].properties.admin + " for 2013 is " + d3.round(json.features[i].properties.exp,3) + " billion US dollars.";
+									}
+									else {return "No data available for " + json.features[i].properties.admin;
+									}
+								});
+
+							//https://suffenus.wordpress.com/2014/01/07/making-interactive-maps-with-d3-for-total-beginners/
+
+							var legend = svg.selectAll("g.legend")
+ 								.data(leg_data)
+ 								.enter().append("g")
+ 								.attr("class", "legend");
+
+							var ls_w = 20, ls_h = 20;
+
+							legend.append("rect")
+ 								.attr("x", 20)
+ 								.attr("y", function(d, i){ return h - (i*ls_h) - 2*ls_h;})
+ 								.attr("width", ls_w)
+ 								.attr("height", ls_h)
+ 								.style("fill", function(d, i) { return color(d); })
+ 								.style("opacity", 0.8);
+
+							legend.append("text")
+ 								.attr("x", 50)
+ 								.attr("y", function(d, i){ return h - (i*ls_h) - ls_h - 4;})
+ 								.text(function(d, i){ return d3.round(leg_data[i],0) + "B $"; });
+
+				});
+
+			});
+
+		</script>
+	</body>
+</html>

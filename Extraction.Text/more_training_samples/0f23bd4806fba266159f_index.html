@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Simple Map with D3</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+</head>
+<body>
+
+  <style>
+  body {
+    margin: 0;
+  }
+
+  svg {
+    background-color: #A7DBD8;
+  }
+
+  .land {
+    fill: #E0E4CC;
+    stroke: #ACAF9F;
+    stroke-width: 1;
+  }
+  </style>
+
+  <div id="map-container"></div>
+
+  <script>
+
+    // Set the dimensions of the map
+    var width  = 960,
+        height = 480;
+
+    // Create a selection for the container div and append the svg element
+    var div = d3.select('#map-container'),
+        svg = div.selectAll('svg.map').data([0]);
+
+    svg.enter().append('svg')
+      .classed('map', true);
+
+    // Set the size of the SVG element
+    svg
+      .attr('width', width)
+      .attr('height', height);
+
+    svg.exit().remove();
+
+
+    // Retrieve the geographic data asynchronously
+    d3.json('land.geojson', function(err, data) {
+
+      // Throw errors on getting or parsing the file
+      if (err) { throw err; }
+
+      // Create and configure a geographic projection
+      var projection = d3.geo.equirectangular()
+        .translate([width / 2, height / 2])
+        .scale(width / (2 * Math.PI));
+
+      // Create and configure a path generator
+      var pathGenerator = d3.geo.path()
+        .projection(projection);
+
+      // Create a selection for the path elements and bind the
+      // geographic data to the selection
+      var land = svg.selectAll('path.land').data([data]);
+
+      // Append the path element on enter and set its class
+      land.enter().append('path')
+        .classed('land', true);
+
+      // Use the path generator to convert from GeoJSON to SVG string
+      land.attr('d', function(d) { return pathGenerator(d); });
+
+      // Remove the path element on exit
+      land.exit().remove();
+
+    });
+  </script>
+
+</body>
+</html>

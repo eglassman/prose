@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.4.2/tabletop.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.js"></script>
+  <style>
+    body { margin:10;position:fixed;top:0;right:0;bottom:0;left:0; overflow-y:scroll;}
+    #victims {
+      float:left;
+    }
+    #detail {
+      margin-top: 20px;
+      float:left;
+      clear: left;
+    }
+    .victim {
+      width: 15px;
+      height: 15px;
+      border: 1px solid gray;
+      float: left;
+      font-size: 13px;
+      font-family: Courier new;
+      font-weight: bold;
+      text-align: center;
+      cursor: default;
+    }
+    .victim:hover {
+      background-color: #c10023;
+      color: #ffe0e0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loading">Loading</div>
+  <div id="victims"></div>
+  <div id="detail"></div>
+  <script>
+    
+    /*
+    // if Tabletop or the google spreadsheet stop working, uncomment this
+    // to use a snapshot of the processed data captured 11/4/2015
+    d3.json("snapshot.json", function(err, data) {
+      render(data)
+    })
+    */
+    
+    var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1Iz_iuCBZspmR_A3UN4VID5Uj3eSMYzOdgrZtVtQDZNE/pubhtml';
+
+    Tabletop.init( { key: public_spreadsheet_url,
+                     callback: process,
+                     simpleSheet: false } );
+    
+    function process(data, tabletop) {
+      //console.log("tabletop", tabletop)
+      console.log("data", data);
+      var months = Object.keys(data);
+      console.log("months", months)
+      
+      function getName(d) {
+        var name = d['Name'] || d["Victim's Name"];
+        return name;
+      }
+      function getRace(d) {
+        var race = d['Race'];
+        if(race === "Unknown" || race === "Unkown race" || !race) {
+          return "Unknown"
+        }
+        if(race === "Hispanic/Latino" || race === "Hispanic") {
+          return "Hispanic"
+        }
+        return race;
+      }
+      function getUnarmed(d) {
+        var unarmed = d['Unarmed?'] || d['Armed?'] || d['Unarmed/Armed']
+        if(d['Armed?'] && unarmed === "No") unarmed = "Unarmed"
+        return unarmed;
+      }
+      function getDate(d) {
+        var date = d['Date of Incident'] || d['Date']
+        if(!date && d['Month']) {
+          date = d['Month'] + "/" + d['Day'] + "/" + d['Year']
+        }
+        if(!date && d['month']) {
+          date = d['month'] + "/" + d['day'] + "/" + d['year']
+        }
+        //console.log(date, new Date(date))
+        return new Date(date);
+      }
+      function getSource(d) {
+        var source = d['News source'] || d['Source Article'] || d['Source'] || d['Source Link'] || d['Source 1'] || d['Source 2'] || d['Link to Source Article']
+        return source;
+      }
+      
+      var combined = [];
+      months.forEach(function(month) {
+        var entries = data[month].elements;
+        console.log(month, entries.length)
+        var e0 = entries[0];
+        var keys = Object.keys(e0);
+        console.log(month, keys);
+        entries.forEach(function(d) {
+          var c = {
+            name: getName(d),
+            race: getRace(d),
+            gender: d['Gender'],
+            state: d['State'],
+            unarmed: getUnarmed(d),
+            date: getDate(d),
+            source: getSource(d)
+          }
+          combined.push(c);
+        })
+
+        
+      })
+      console.log("combined", combined.length)
+      combined.sort(function(a,b) {
+        return b.date - a.date
+      })
+      //console.log(JSON.stringify(combined, null, 2));
+      render(combined); 
+    }
+    
+    function render(combined) {
+
+      // let's do some filtering/grouping of the data
+      var xf = crossfilter(combined);
+      var race = xf.dimension(function(d) { return d.race })
+      var races = race.group().all()
+      console.log("races", races);
+
+      var gender = xf.dimension(function(d) { return d.gender })
+      var genders = gender.group().all()
+      console.log("gender", genders);
+
+      var unarmed = xf.dimension(function(d) { return d.unarmed })
+      var unarmeds = unarmed.group().all()
+      console.log("unarmeds", unarmeds);
+
+
+      d3.select("#loading").style("display", "none");
+
+      var dateFormat = d3.time.format("%b %d, %y")	
+
+      var victims = d3.select("#victims").selectAll("div.victim")
+        .data(combined)
+      var venter = victims.enter().append("div").classed("victim", true)
+      .text(function(d) { return d.race[0] })
+      .on("mouseover", function(d) {
+        var text = d.name + ", a " + d.race + " " + d.gender + " was killed by Police in " + d.state + " on " + dateFormat(new Date(d.date)) + ". ";
+        d3.select("#detail").text(text)
+        .append("a").attr({
+          href: d.source
+        }).text(d.source)
+      })
+
+    }
+
+
+
+  </script>
+</body>

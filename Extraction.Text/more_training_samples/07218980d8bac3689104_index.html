@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            text    {font-size:0.75em;font-family:sans-serif}
+            button  {float:left;}
+            #title  {font-weight:bold}
+            svg    {float:left;clear:both;width:600px;height:350px;padding:5px;}
+            table{float:left; clear:both; font-size: 0.75em; font-family: sans-serif;}
+            circle {fill:orange;stroke:orange;fill-opacity:0.5;}
+            .regLine    {stroke-width:1px; stroke:blue;}
+            rect   {fill:#f5f5f5}
+            .axis line {fill:none;stroke:#ddd;shape-rendering: crispEdges;}
+            .axis path  {fill:none;}
+            .axis text {font-size:0.7em;fill:#555;font-family:sans-serif}
+        </style>
+        <script src="http://d3js.org/d3.v3.js"></script>
+        <script src="https://rawgithub.com/tmcw/simple-statistics/master/src/simple_statistics.js"></script>
+    </head>
+    <body>
+        <script>
+
+var ans={};
+
+d3.csv("anscombe.csv",function(csv)	{
+    
+    //layout
+    var xOffset=25;
+    var yOffset=20;
+    var graphHeight=290;
+    var graphWidth=480;
+    var activeSeries=0;
+    var numSeries=4;
+    
+    //parse data
+    csv.forEach(function(d) {
+        d.x = parseFloat(d.x);
+        d.y = parseFloat(d.y);
+    });
+
+    //set data parameters
+    ans.xMin = 0;//we'll constrain graph axis to 0 origins...
+    ans.xMax = d3.max(csv, function(d) { return d.x; });
+    ans.yMin = 0;
+    ans.yMax = d3.max(csv, function(d) { return d.y; });
+
+    //create scales
+    ans.xScale=d3.scale.linear()
+        .domain([ans.xMin,ans.xMax])
+        .range([xOffset,graphWidth])
+        .nice();
+
+    ans.yScale=d3.scale.linear()
+        .domain([ans.yMin,ans.yMax])
+        .range([graphHeight,yOffset])
+        .nice();
+    
+    //define an x axis
+    var xAxis=d3.svg.axis()
+        .scale(ans.xScale)
+        .orient("bottom")
+        .tickSize(graphHeight-yOffset+5);
+    
+    //define a y axis
+    var yAxis=d3.svg.axis()
+        .scale(ans.yScale)
+        .orient("left")
+        .tickSize(graphWidth-xOffset+5);
+
+    //create data object for each chart series
+	var plotdata=d3.nest()
+        .key(function(d){return d.seriesname;})
+        .entries(csv);
+	
+    d3.select("body").append("button")
+        .text("next series >>")
+        .on("click",function(){
+            activeSeries++;
+            if(activeSeries>=numSeries) {
+                activeSeries=0;
+            }
+
+            d3.select("#title").text(plotdata[activeSeries].key);
+
+            //rebind data
+            ans.dots.data(plotdata[activeSeries].values);
+
+            //transition to new values
+            ans.dots.transition()
+                .duration(500)
+                .attr("cx",function(d){
+                    return ans.xScale(d.x);
+                })
+                .attr("cy",function(d){
+                    return ans.yScale(d.y);
+                });
+            calcSummary();
+        });
+
+    //create svg element
+    ans.plot = d3.select("body").append("svg");
+
+    //background rectangle
+    ans.plot.append("rect")
+        .attr("width","100%")
+        .attr("height","100%");
+
+    //axes
+    ans.plot.append("g")
+        .attr("class","axis")
+        .attr("transform","translate("+xOffset+","+(yOffset*2)+")")
+        .call(xAxis);
+    
+    ans.plot.append("g")
+        .attr("class","axis")
+        .attr("transform","translate("+(xOffset+graphWidth)+","+yOffset+")")
+        .call(yAxis);
+    
+    ans.plot.append("line")
+        .attr("class","regLine")
+        .attr("transform","translate("+xOffset+","+yOffset+")");
+
+    ans.dots = ans.plot.append("g").attr("id","dots").attr("transform","translate("+xOffset+","+yOffset+")")
+        .selectAll("circle")
+        .data(plotdata[activeSeries].values)
+        .enter()
+        .append("circle")
+        .attr("r",7)
+        .attr("cx",function(d){
+            return ans.xScale(d.x);
+        })
+        .attr("cy",function(d){
+            return ans.yScale(d.y);
+        });
+
+    //ans.plottitle
+    ans.plot.append("text")
+        .attr("id","title")
+        .attr("x",function(d){return (ans.xScale((ans.xMax-ans.xMin)/2))})
+        .attr("y",20)
+        .text(plotdata[activeSeries].key);
+
+    d3.select("body").append("table").attr("id","tableSum");
+    
+    calcSummary();
+});
+
+
+function calcSummary()  {
+
+    //ans.plotarrays
+    ans.xArray = new Array();
+    ans.yArray =new Array();
+    ans.xyArray = new Array();
+
+    ans.dots.each(function(d,i){
+        ans.xArray.push(d.x);
+        ans.yArray.push(d.y);
+        ans.xyArray.push([d.x,d.y]);
+    });
+
+    //summary data
+    ans.tableArray=[
+        ["Mean of x: ",ss.mean(ans.xArray)],
+        ["Mean of y: ",ss.mean(ans.yArray).toFixed(2)],
+        ["Sample variance of x: ",ss.sample_variance(ans.xArray)],
+        ["Sample variance of y: ",ss.sample_variance(ans.yArray).toFixed(3)],
+        ["Correlation co-efficient: ",ss.sample_correlation(ans.xArray,ans.yArray).toFixed(2)]
+    ]
+
+    //summary table
+    //remove any existing table rows
+    d3.select("#tableSum").selectAll("tr").remove();  
+
+
+    //create the table rows
+    var tr = d3.select("#tableSum").append("tbody").selectAll("tr")  
+        .data(ans.tableArray)
+        .enter()
+        .append("tr");
+
+    //Ncreate the table cells
+    var td = tr.selectAll("td")
+        .data(function(d) {return d;})
+        .enter()
+        .append("td")
+        .text(function(d) {return d;});
+
+    //calculate linear regression
+    ans.linReg = ss.linear_regression().data(ans.xyArray).line();
+
+    //draw regression line
+    ans.plot.select(".regLine")
+            .attr("x1",function(d){
+                return ans.xScale(ans.xMin);  
+            })
+            .attr("y1",function(d){
+                return ans.yScale(ans.linReg(ans.xMin));  
+            })
+            .attr("x2",function(d){
+                return ans.xScale(ans.xMax);  
+            })
+            .attr("y2",function(d){
+                return ans.yScale(ans.linReg(ans.xMax));  
+            })
+}
+
+        </script>
+    </body>
+</html>

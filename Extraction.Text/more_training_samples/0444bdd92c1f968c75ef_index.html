@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    * {
+        line-height: 20px;
+        font-family: Calibri, Arial, Helvetica, sans-serif;
+        color: #999;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        text-rendering: optimizelegibility;
+    }
+
+    canvas {
+        display: block;
+        border-bottom: 1px solid #dedede;
+    }
+
+    svg {
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: none;
+    }
+
+    .axis .domain {
+        display: none;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: 0.87;
+        stroke-width: 1;
+    }
+
+    .axis text {
+        font: 16px Calibri, Arial, Helvetica, sans-serif;
+        fill: #000;
+        fill-opacity: 0.87;
+    }
+</style>
+<body>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+<script src="utils.js"></script>
+<script>
+    var width = 960;
+    var height = 480;
+    var canvasScale = ((document.body.clientWidth > width) ? document.body.clientWidth : width) / width;
+
+    width *= canvasScale;
+    height *= canvasScale;
+
+    var valueInterpolation = d3.interpolate('#f89f00', '#f80000');
+
+    var maxScale = 3;
+    var scaleMargin = (40 * canvasScale / width);
+    var maxCountry = (48 * canvasScale / width);
+
+    var config = {
+        durationMin: 800,
+        durationMax: 1200,
+        interval: 1000,
+        fontSize: 16,
+        fontShift: 2,
+        font: 'Arial, Helvetica, sans-serif',
+        land: {
+            fillStyle: '#bbb',
+            shadowColor: '#000',
+            shadowOffsetY: 1,
+            shadowBlur: 1
+        },
+        border: {
+            lineWidth: 0.75,
+            strokeStyle: '#fff',
+            shadowColor: '#eee',
+            shadowOffsetY: -1
+        },
+        past: {
+            fillStyle: '#9c8f8f',
+            shadowColor: '#fff',
+            shadowOffsetY: -1,
+            shadowBlur: 0
+        },
+        names: {
+            shadowOffsetY: 2,
+            fillStyle: '#fff',
+            shadowColor: 'rgba(0,0,0,0.87)',
+            strokeStyle: '#888',
+            shadowBlur: 4,
+            lineWidth: 0
+        },
+        graticule: {
+            strokeStyle: '#aaa',
+            lineWidth: 0.25,
+            shadowOffsetY: 0,
+            shadowBlur: 0
+        }
+    };
+
+    var centroidsShifts = {
+        USA: [30, 10],
+        IRN: [0, 5],
+        FRA: [20, -20],
+        IND: [-2, 8],
+        MAR: [0, -6],
+        CAN: [-22, 7],
+        IRQ: [2, 2],
+        SYR: [0, -2]
+    };
+
+    var rusUsaShift = 12;
+    var mini = 0.2;
+    var miniHeight = mini;
+
+    var canvas = d3.select('body').append('canvas').attr('width', width).attr('height', height);
+    var info = d3.select('body').append('div');
+    var ctx = canvas.node().getContext('2d');
+    var projection = d3.geo.equirectangular().translate([width / 2, height / 2]).scale(153 * canvasScale).rotate([-rusUsaShift, 0, 0]);
+    projection.precision(0);
+    var path = d3.geo.path().projection(projection).context(ctx);
+
+    var graticule = d3.geo.graticule().step([10, 10]).extent([[-180, -90.001], [180, 90.001]])();
+    var miniProjection = d3.geo.equirectangular().clipExtent([[0, 0], [width * mini, height * miniHeight]]).translate([width * mini / 2, height * miniHeight / 2]).scale(153 * canvasScale * mini).rotate([-rusUsaShift, 0, 0]);
+    var miniPath = d3.geo.path().projection(miniProjection).context(ctx);
+    var currentScale = 1;
+    var currentTranslate = [0, 0];
+    var pastCountries = {};
+    var pastColors = {};
+    var currentEventIndex = -1;
+    var loadedEvents;
+    var land, borders, countries = {};
+
+    var scale = d3.scale.linear()
+            .domain([1, 2])
+            .range([0, 380]);
+
+    var svg = d3.select('body').append('svg')
+            .attr('width', 400)
+            .attr('height', 35);
+
+    svg.append('svg:rect')
+            .attr('width', 400)
+            .attr('height', 36)
+            .style('fill-opacity', 0.4)
+            .style('fill', '#fff');
+
+    var gradient = svg.append('svg:defs')
+            .append('svg:linearGradient')
+            .attr('id', 'gradient')
+            .attr('x1', '0%')
+            .attr('y1', '0%')
+            .attr('x2', '100%')
+            .attr('y2', '0%')
+            .attr('spreadMethod', 'pad');
+
+    gradient.append('svg:stop')
+            .attr('offset', '0%')
+            .attr('stop-color', valueInterpolation(0))
+            .attr('stop-opacity', 1);
+
+    gradient.append('svg:stop')
+            .attr('offset', '100%')
+            .attr('stop-color', valueInterpolation(1))
+            .attr('stop-opacity', 1);
+
+    svg.append('svg:rect')
+            .attr('width', 380)
+            .attr('transform', 'translate(10,7)')
+            .attr('height', 8)
+            .style('stroke-width', 0)
+            .style('fill', 'url(#gradient)');
+
+    var axis = d3.svg.axis()
+            .scale(scale)
+            .ticks(1)
+            .tickSize(8)
+            .orient("bottom");
+
+    var legend = svg.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(10,7)")
+            .call(axis);
+
+    d3.json('/darosh/raw/2d12a584a14910032ab8/countries.json', function (world) {
+        initWorld(world);
+        d3.json('events.json', function (events) {
+            loadedEvents = events;
+            update();
+        });
+    });
+
+    function update() {
+        var e = loadedEvents[currentEventIndex];
+
+        if (e) {
+            svg.style('display', 'block');
+            var d = new Date(e[0]);
+            var mm = getValuesMinMax(e[1]);
+
+            info.text('Week: ' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear() +
+                    ', Record: ' + (currentEventIndex + 1) + ' of ' + loadedEvents.length +
+                    ', Countries: ' + Object.keys(e[1]).length +
+                    ', Past countries: ' + Object.keys(pastCountries).length +
+                    ', Min: ' + mm.min + ', Max: ' + mm.max + ', Sum: ' + mm.sum);
+
+            scale.domain(!(mm.max - mm.min) ? [mm.min - 0.5, mm.max + 0.5] : [mm.min, mm.max]);
+            axis.ticks((mm.max - mm.min) || 1);
+            legend.transition().duration(config.durationMin).call(axis);
+            transition(e[1]);
+        } else {
+            transition({});
+        }
+
+        currentEventIndex++;
+
+        if (currentEventIndex < loadedEvents.length) {
+            setTimeout(update, config.interval);
+        } else {
+            setTimeout(function () {
+                config.durationMax *= 2;
+                info.text('');
+                svg.style('display', 'none');
+                transition({});
+            }, config.interval);
+        }
+    }
+
+    function initWorld(world) {
+        land = topojson.merge(world, world.objects.countries.geometries);
+
+        borders = topojson.mesh(world, world.objects.countries, function (a, b) {
+            return a !== b;
+        });
+
+        topojson.feature(world, world.objects.countries).features.forEach(function (v) {
+            countries[v.id] = v;
+        });
+    }
+
+    function transition(values) {
+        var selectedFeatures = Object.keys(values).map(function (v) {
+            return countries[v];
+        });
+
+        var currentRotation = projection.rotate();
+        var targetRotation = !values['RUS'] && values['USA'] ? [+rusUsaShift, 0] : [-rusUsaShift, 0];
+        var rotationInterpolation = d3.interpolate(currentRotation, targetRotation, 'easeIn');
+
+        projection.rotate(targetRotation);
+
+        var bound = groupBounds(path, selectedFeatures, width, height, maxCountry * width, maxCountry * height);
+        var size = [bound[1][0] - bound[0][0], bound[1][1] - bound[0][1]];
+        var targetScale = getScale(size, width, height, scaleMargin, maxScale);
+        var targetCenter = [(bound[0][0] + bound[1][0]) / 2, (bound[0][1] + bound[1][1]) / 2];
+        var realCenter = [width / 2, height / 2];
+
+        var scaledBox = [
+            [targetCenter[0] - realCenter[0] / targetScale,
+                targetCenter[1] - realCenter[1] / targetScale],
+            [targetCenter[0] + realCenter[0] / targetScale,
+                targetCenter[1] + realCenter[1] / targetScale]];
+
+        scaledBox[0][1] = scaledBox[0][1] < 0 ? 0 : scaledBox[0][1];
+
+        var targetTranslate = [-scaledBox[0][0] * targetScale, -scaledBox[0][1] * targetScale];
+        var minMax = getValuesMinMax(values);
+
+        var zoomInterpolation = d3.interpolateZoom([currentTranslate[0], currentTranslate[1], width * currentScale],
+                [targetTranslate[0], targetTranslate[1], width * targetScale]);
+
+        d3.transition()
+                .duration(Math.min(config.durationMax, Math.max(config.durationMin, 2.5 * zoomInterpolation.duration)))
+                .tween('tween', function getTween() {
+                    return function drawTween(t) {
+                        // Clear
+                        ctx.globalAlpha = 1;
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        ctx.clearRect(0, 0, width, height);
+
+                        // Transform
+                        var zoom = zoomInterpolation(t);
+                        projection.rotate(rotationInterpolation(t));
+                        currentTranslate = [zoom[0], zoom[1]];
+                        ctx.translate(currentTranslate[0], currentTranslate[1]);
+                        currentScale = zoom[2] / width;
+                        ctx.scale(currentScale, currentScale);
+
+                        // Graticule
+                        ctx.beginPath();
+                        setContextSyle(ctx, config.graticule);
+                        ctx.lineWidth = config.graticule.lineWidth / currentScale;
+                        path(graticule);
+                        ctx.stroke();
+
+                        // Land
+                        ctx.beginPath();
+                        setContextSyle(ctx, config.land);
+                        path(land);
+                        ctx.fill();
+
+                        // Past
+                        ctx.beginPath();
+                        setContextSyle(ctx, config.past);
+                        Object.keys(pastCountries).forEach(function fillPast(id) {
+                            if (!values[id]) {
+                                path(countries[id]);
+                                pastColors[id] = config.past.fillStyle;
+                            }
+                        });
+                        ctx.fill();
+
+                        // Current
+                        selectedFeatures.forEach(function fillNow(f) {
+                            ctx.beginPath();
+                            ctx.fillStyle = d3.interpolate(pastColors[f.id] || config.land.fillStyle, valueInterpolation(normalize(values[f.id], minMax)), 'easeIn')(t);
+                            pastColors[f.id] = ctx.fillStyle;
+                            path(f);
+                            ctx.fill();
+                            pastCountries[f.id] = true;
+                        });
+
+                        // Borders
+                        ctx.beginPath();
+                        setContextSyle(ctx, config.border);
+                        ctx.lineWidth = config.border.lineWidth / currentScale;
+                        path(borders);
+                        ctx.stroke();
+
+                        // Names
+                        setContextSyle(ctx, config.names);
+                        ctx.font = config.fontSize * canvasScale / currentScale + 'px ' + config.font;
+                        ctx.textAlign = 'center';
+                        selectedFeatures.forEach(function addCountryName(f) {
+                            var x = path.centroid(f);
+                            var name = (f.properties.name).split(',')[0];
+
+                            if (centroidsShifts[f.id]) {
+                                x[0] += centroidsShifts[f.id][0] * canvasScale / currentScale;
+                                x[1] += centroidsShifts[f.id][1] * canvasScale / currentScale;
+                            }
+
+                            ctx.shadowBlur = config.names.shadowBlur * canvasScale / currentScale;
+                            ctx.lineWidth = config.names.lineWidth * canvasScale / currentScale;
+                            ctx.shadowOffsetY = config.names.shadowOffsetY * canvasScale / currentScale;
+                            ctx.fillText(name, x[0], x[1] + config.fontShift * canvasScale / currentScale);
+                        });
+
+                        // Preview
+                        miniProjection.rotate(targetRotation);
+
+                        ctx.globalAlpha = 0.4;
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        ctx.translate(0, height - height * miniHeight);
+                        ctx.beginPath();
+                        ctx.shadowOffsetY = 0;
+                        ctx.shadowColor = '#fff';
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = '#ccc';
+                        ctx.fillRect(0, 0, width * mini, height * miniHeight);
+
+                        ctx.beginPath();
+                        setContextSyle(ctx, config.land);
+                        ctx.fillStyle = '#666';
+                        ctx.shadowOffsetY = 0;
+                        ctx.shadowBlur = 0;
+                        miniPath(land);
+                        ctx.fill();
+
+                        selectedFeatures.forEach(function fillNow(f) {
+                            ctx.beginPath();
+                            ctx.fillStyle = valueInterpolation(1);
+                            miniPath(f);
+                            ctx.fill();
+                            pastCountries[f.id] = true;
+                        });
+
+                        ctx.beginPath();
+                        ctx.globalAlpha = 0.4;
+                        ctx.fillStyle = '#f20';
+
+                        ctx.scale(mini, mini);
+                        var b = scaledBox;
+                        ctx.fillRect(b[0][0], b[0][1], b[1][0] - b[0][0], b[1][1] - b[0][1]);
+                    };
+                })
+                .transition();
+    }
+</script>

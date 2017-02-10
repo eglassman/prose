@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Module 3 exercice</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+            
+            <style type="text/css">
+			
+			body {
+				background-color: #EBEFEB;
+			}
+
+			h {
+				font-size: 30px;
+				font-family: arial;
+				margin: 2;
+
+			}
+
+			p {
+				font-size: 15px;
+				font-family: arial;
+				margin: 15px 0 0 0;
+
+			}
+
+			svg {
+				background-color: #EBEFEB;
+			}
+
+			circle:hover {
+				fill: #635C5C;
+			}
+
+            .axis path,
+            .axis line {
+            	fill: none;
+            	stroke: black;
+            	shape-rendering: crispEdges;
+ 
+            }
+
+            .axis text {
+                font-family: arial;
+                font-size: 12px;
+
+          
+
+            }
+
+
+
+		</style>
+
+	</head>
+	<body>
+
+<h1>Evolution of GHG in the last 20 years<h1/>
+
+	<p>Countries ranked by greenhouse gases emissions (GHG) per capita (kg, thousands), from 1990 to 2012, based on <a href="http://stats.oecd.org/">OECD data.<a/></p>
+
+
+<script type="text/javascript">
+
+var w = 900;
+var h = 500;
+var padding = [1, 10, 30, 95 ]; //top - 0, right - 1, bottom - 2, left - 3
+
+
+var xScale = d3.scale.linear()
+                         .range([ padding[3], w - padding[1] ]);
+
+var yScale = d3.scale.linear()
+                    .range ( [ padding[0], h - padding[2] ]);
+
+var xAxis = d3.svg.axis()
+                 .scale(xScale)
+                 .orient("bottom")
+                 .ticks(10)
+                 .tickFormat(function(d)
+                  { return d + " kg ";
+              }) 
+                 ;
+
+var yAxis = d3.svg.axis()
+                 .scale(yScale)
+                 .orient("left")
+                 .tickFormat(function(d)
+                  { return d + " kg ";
+              }) 
+                 ;
+
+
+var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+      d3.csv("melaniejuliendata.csv", function(data) {
+
+        data.sort(function(a, b) {
+		return d3.descending(+a.GHGin2012, 
+			+b.GHGin2012);
+		});
+
+
+      	xScale.domain( [ 
+            d3.min(data, function(d) {
+      	return +d.GHGin2012;
+
+      	 }),
+
+      		d3.max(data, function(d) {
+      	return +d.GHGin2012;
+
+      	 }) 
+      		]);
+
+
+      	yScale.domain([ 
+         d3.max(data, function(d) {
+      	return +d.GHGin1990; 
+        
+         }),
+      	d3.min(data, function(d) {
+      	return +d.GHGin1990; 
+      })
+      	]);
+      
+
+     var circles = svg.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle");
+
+
+			   circles.attr("cx", function(d) 
+			   	{return xScale(d.GHGin1990);
+                  })
+					.attr("cy", function(d, i) {
+						return yScale(d.GHGin2012);
+					})
+					.attr("r", 0,1)
+					.attr("fill", "#D11919")
+					.append("title")
+					.text(function(d) {
+						return d.Country + "'s total GHG emissions was " + d.GHGin1990 +" kg per capita in 1990, and it's now "+ d.GHGin2012 +" in 2012";
+					});
+              
+              circles.sort(function(a,b)
+              	{return d3.ascending(+a.GHGin1990, +b.GHGin2012)
+              	})
+              .transition()
+              .delay (function(d, i){
+              	return i * 40;
+              })
+              .duration(2000)
+              .attr ("fill", "#006600")
+              .attr ("r", 4);
+
+
+
+                svg.append("g")
+                   .attr("class", "x axis")
+                   .attr("transform", "translate(0," + (h - padding[2]) + ")")
+                   .call(xAxis);
+
+                svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 5) + ",0)")
+					.call(yAxis);
+
+
+
+					});
+      
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<head>
+  <title>Circle Pack</title>
+</head>
+<meta charset="utf-8">
+<style>
+
+svg {
+  height: 500px;
+  width: 1000px;
+}
+
+</style>
+<body>
+<div id="viz">
+<svg></svg>
+</div>
+</body>
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js" type="text/JavaScript"></script>
+<script>
+
+d3.select("svg").append("g").attr("class", "partition-legend")
+  .attr("transform", "translate(500,0)");
+
+  var chartG = d3.select("svg")
+    .append("g")
+    .attr("class", "pack")
+    .attr("transform", "translate(0,0)");
+
+d3.json("students.json", cleanStudents)
+
+function cleanStudents(data) {
+  var students = data.students;
+
+  var packableStudents = packStudents(students);
+
+  circlePack(packableStudents, "values", "key");
+
+  createPartitionLegend("ethnicity", students, 100, "values", "key");
+  createPartitionLegend("gender", students, 200, "values", "key");
+
+}
+
+function gradeColor(d) {
+    var colors = d3.scale.ordinal().domain(["A","B","C","D","F"]).range(["#a50f15", "#de2d26", "#fb6a4a", "#fcae91", "#fee5d9"]);
+    return colors(d);
+}
+
+function genderColor(d) {
+  if (d === "Male") {
+    return "lightblue";
+  }
+  return "pink";
+}
+
+function trendColor(d) {
+    if (d === "growth") {
+    return "green";
+  }
+  return "red";
+}
+
+function ethnicityColor(d) {
+    var eth = ["Non-Hispanic White","Non-Hispanic Black or African American","Asian","American Indian or Alaska Native","Non-Hispanic Native Hawaiian or other Pacific Islander","Non-Hispanic some other race","Non-Hispanic two or more races","Hispanic or Latino"];
+
+    var colors = d3.scale.ordinal().domain(eth).range(["#d6cf7f","#d6604d","#7570b3","#e7298a","#66a61e","#e6ab02","#a6761d","#b0a7a9"])
+    return colors(d);
+}
+
+function createPartitionLegend(partitionOn, data, offset, childAccessor, label) {
+
+  colorFunctions = {"grade": gradeColor, "ethnicity": ethnicityColor, "gender": genderColor, "trend": trendColor};
+  colorFunction = colorFunctions[partitionOn];
+
+  var legendNest = d3.nest()
+    .key(function (d) {
+      return d[partitionOn];
+    })
+    .entries(data);
+
+    legendNest = {id: "root", key: "root", values: legendNest};
+
+  var partition = d3.layout.partition();
+
+  var partitionWidth = 500;
+  var partitionHeight = 200;
+
+  partition
+  .children(function(d) {return d[childAccessor]})
+  .value(function(d) {return 1})
+
+  var pLegend = d3
+    .select("g.partition-legend")
+    .append("g")
+    .attr("transform", "translate(20," + offset + ")")
+
+  pLegend
+  .selectAll("rect")
+  .data(partition(legendNest).filter(function(d) {return d.depth === 1}))
+  .enter()
+  .append("rect")
+  .attr("x", function (d) {return d.x * partitionWidth})
+  .attr("y", function (d) {return d.y * partitionHeight})
+  .attr("width", function (d) {return d.dx * partitionWidth})
+  .attr("height", function (d) {return d.dy * partitionHeight})
+  .style("fill", function (d) {return colorFunction(d.key)})
+
+  pLegend.selectAll("text")
+  .data(partition(legendNest).filter(function(d) {return d.depth === 1}))
+  .enter()
+  .append("text")
+  .attr("x", function (d) {return d.x * partitionWidth})
+  .attr("y", function (d) {return (d.y * partitionHeight) + 15})
+  .text(function (d) {return d[label] ? d[label].substr(0, parseInt((d.dx * partitionWidth) / 8)) : ""})
+
+}
+
+function packStudents(data) {
+
+    nestedData = d3.nest()
+    .key(function (d) {
+      return d.grade;
+    })
+    .key(function (d) {
+      return d.ethnicity;
+    })
+    .key(function (d) {
+      return d.gender
+    })
+    .entries(data);
+
+    nestedData.forEach(function (d) {
+      d.leafColor = gradeColor(d.key);
+      d.values.forEach(function (d) {
+        d.leafColor = ethnicityColor(d.key);
+          d.values.forEach(function (d) {
+            d.leafColor = genderColor(d.key);
+        })
+
+      })
+    })
+
+  return packableData = {id: "root", key: "root", values: nestedData}
+}
+
+function circlePack(data, childAccessor, label) {
+  packChart = d3.layout.pack();
+
+  //padding is only for siblings
+
+  packChart.size([500,500])
+  .children(function(d) {return d[childAccessor]})
+//  .padding(1)
+  .value(function (d) {return 1})
+
+  var depthScale = d3.scale.linear().domain([0,3]).range([4,0])
+
+  var chartG = d3.select("g.pack");
+
+  chartG
+  .selectAll("circle")
+  .data(packChart(data).filter(function (d) {return (d.depth !== 0 && d.depth !== 1) || !d[childAccessor]}))
+  .exit()
+  .remove();
+
+  chartG
+  .selectAll("circle")
+  .data(packChart(data).filter(function (d) {return (d.depth !== 0 && d.depth !== 1) || !d[childAccessor]}))
+  .enter()
+  .append("circle")
+  .on("dblclick", packZoom);
+
+  chartG
+  .selectAll("circle")
+  .transition()
+  .duration(1000)
+  .attr("cx", function (d) {return d.x})
+  .attr("cy", function (d) {return d.y})
+  .attr("r", paddedR)
+  .style("fill", function (d) {return d.leafColor ? d.leafColor : "white"})
+  .style("fill-opacity", function (d) {return d.leafColor ? 1 : .25})
+  .style("stroke", function (d) {return d.leafColor || d.depth === 0 ? "none" : "black"});
+
+  chartG
+  .selectAll("text")
+  .remove();
+
+  chartG
+  .selectAll("text")
+  .data(packChart(data).filter(function (d) {return d.depth === 1}))
+  .enter()
+  .append("text")
+  .attr("x", function (d) {return d.x})
+  .attr("y", function (d) {return d.y})
+  .text(function (d) {return d[label] ? d[label] : d.key})
+  .style("font-size", function (d) {return d.r})
+  .style("text-anchor", "middle")
+  .style("fill-opacity", .55)
+
+
+  function paddedR(d) {
+    return Math.max(2, d.r - (Math.max(0, d.depth - 1)))
+  }
+
+  function packZoom(d) {
+    circlePack(d, "values", "key");
+  }
+
+}
+
+</script>

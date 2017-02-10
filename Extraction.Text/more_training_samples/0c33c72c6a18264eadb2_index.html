@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<style>
+    svg {
+        border: 1px solid #ccc;
+        display: block;
+        margin: 8px 0;
+    }
+
+    div {
+        float: left;
+        margin: 8px;
+        width: 216px;
+        font-family: sans-serif;
+    }
+
+    body {
+        padding: 16px;
+    }
+</style>
+<body>
+<div>
+    <strong>Static SVG</strong>
+    <svg width="64" height="64">
+        <defs>
+            <marker id="arrow-1"
+                    orient="auto"
+                    viewBox="0 0 8 8"
+                    markerWidth="8"
+                    markerHeight="8"
+                    markerUnits="strokeWidth"
+                    refX="0"
+                    refY="4"
+                    fill="#000">
+                <polyline points="0,0 8,4 0,8"></polyline>
+            </marker>
+        </defs>
+        <path d="M 32 0 L 32 32"
+              marker-end="url(#arrow-1)"
+              stroke-width="3"
+              stroke="#000"
+              fill="none"
+              stroke-dasharray="8,2">
+        </path>
+    </svg>
+    <em>pure static SVG,
+        <br>
+        no CSS</em>
+</div>
+<div>
+    <strong>SMIL Animation</strong>
+    <svg width="64" height="64">
+        <defs>
+            <marker id="arrow-2"
+                    orient="auto"
+                    viewBox="0 0 8 8"
+                    markerWidth="8"
+                    markerHeight="8"
+                    markerUnits="strokeWidth"
+                    refX="0"
+                    refY="4"
+                    fill="#000">
+                <polyline points="0,0 8,4 0,8">
+                    <animate dur="3s"
+                             repeatCount="indefinite"
+                             attributeName="fill-opacity"
+                             values="0;1;0">
+                    </animate>
+                </polyline>
+            </marker>
+        </defs>
+        <path d="M 32 0 L 32 32"
+              marker-end="url(#arrow-2)"
+              stroke-width="3"
+              stroke="#000"
+              fill="none"
+              stroke-dasharray="8,2">
+            <animate dur="3s" repeatCount="indefinite" attributeName="stroke-opacity" values="0;1;0"></animate>
+            <animate dur="3s" repeatCount="indefinite" attributeName="stroke-dashoffset" values="0;-80;-160"></animate>
+            <animate dur="3s" repeatCount="indefinite" attributeName="d"
+                     values="M 32 0 L 32 0; M 32 0 L 32 32; M 32 0 L 32 32; M 32 32 L 32 32;"></animate>
+        </path>
+    </svg>
+    <em>SMIL is <a href="https://groups.google.com/a/chromium.org/forum/#!msg/blink-dev/5o0yiO440LM/59rZqirUQNwJ">deprecated</a>,
+        <br>
+        no CSS</em>
+</div>
+<div>
+    <strong>CSS Animation</strong>
+    <style>
+        #svg-3 polyline {
+            animation-name: svg-arrow;
+            animation-duration: 3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: translate(44px, 32px) rotate(90deg);
+            fill: #000;
+        }
+
+        #svg-3 path {
+            animation-name: svg-path;
+            animation-duration: 3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            stroke-dasharray: 8, 2;
+            fill: none;
+            stroke: #000;
+            stroke-width: 3;
+        }
+
+        @keyframes svg-arrow {
+            0% {
+                fill: #fff;
+                transform: translate(44px, 0px) rotate(90deg);
+            }
+
+            33% {
+                transform: translate(44px, 32px) rotate(90deg);
+            }
+
+            50% {
+                fill: #000;
+            }
+
+            66% {
+            }
+
+            100% {
+                fill: #fff;
+            }
+        }
+
+        @keyframes svg-path {
+            0% {
+                stroke: #fff;
+                stroke-dashoffset: 0;
+                transform: translateY(-32px);
+            }
+
+            33% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                stroke: #000;
+                stroke-dashoffset: -80;
+            }
+
+            66% {
+                transform: translateY(0px);
+                stroke-dasharray: 8, 2;
+            }
+
+            100% {
+                stroke: #fff;
+                stroke-dashoffset: -160;
+                transform: translateY(32px);
+            }
+        }
+    </style>
+    <svg id="svg-3" width="64" height="64">
+        <defs>
+            <clipPath id="clip-arrow">
+                <rect x="0" y="0" width="64" height="32"></rect>
+            </clipPath>
+        </defs>
+        <g clip-path="url(#clip-arrow)">
+            <path d="M 32 0 L 32 32"></path>
+        </g>
+        <polyline points="0,0 24,12 0,24"></polyline>
+    </svg>
+    <em>marker arrow replaced,
+        <br>
+        added clipPath</em>
+</div>
+</body>

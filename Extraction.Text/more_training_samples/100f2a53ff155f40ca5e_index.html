@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pipeline test</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+	<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+	<style>
+		
+		#map {
+			width: 960px;
+			height: 500px;
+		}
+		
+		svg {
+			position: relative;
+		}
+		
+		.pipes {
+			stroke-width: 2;
+			fill: none;
+			stroke-linejoin: "round";
+		}
+		
+		.hp {
+			stroke: #f03b20;
+		}
+		
+		.t {
+			stroke: #d9b410;
+		}
+		
+		.streets {
+			stroke-width: 1;
+			stroke: #cbcbca;
+			stroke-linejoin: "round";
+		}
+		
+/*
+		.pipes:hover {
+			stroke: #d98410;
+		}
+*/
+		
+	</style>
+</head>
+<body>
+	<div id="map"></div>
+	<script>
+		
+		var undermap = new L.StamenTileLayer("toner-lite");
+		
+		var map = new L.Map("map", { center: [34.05, -118.25], zoom: 10 })
+			.addLayer(undermap);
+		
+		var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+				g = svg.append("g").attr("class", "leaflet-zoom-hide");
+		
+		d3.json("pipeline_hp.json", function(error, collection) {
+			if (error) throw error;
+			
+			var transform = d3.geo.transform({point: projectPoint}),
+					path = d3.geo.path().projection(transform);
+			
+			var feature = g.selectAll("path")
+				.data(collection.features)
+				.enter().append("path")
+				.attr("class", "pipes hp")
+			
+			map.on("viewreset", reset);
+			reset();
+			
+			// Reposition the SVG to cover the features
+			function reset() {
+				var bounds = path.bounds(collection),
+						topLeft = bounds[0],
+						bottomRight = bounds[1];
+
+				svg.attr("width", bottomRight[0] - topLeft[0])
+					.attr("height", bottomRight[1] - topLeft[0])
+					.style("left", topLeft[0] + "px")
+					.style("top", topLeft[1] + "px");
+
+				g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+
+				feature.attr("d", path);
+			}
+			
+			function projectPoint(x, y){
+				var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+				this.stream.point(point.x, point.y);
+			}
+			
+		})
+		
+//		var width = 800,
+//				height = 600;
+//		
+//		var svg = d3.select("body")
+//			.append("svg")
+//			.attr("width", width)
+//			.attr("height", height);
+//		
+//		var projection = d3.geo.mercator()
+////		.rotate();
+//
+//		var path = d3.geo.path()
+//			.projection(projection);
+//		
+//		// Load high-pressure pipeline
+//		d3.json("pipeline_hp.json", function(error, data){
+//			if (error) throw error;
+//
+//			projection
+//				.scale(1)
+//				.translate([0,0]);
+//						
+//			var b = path.bounds(data),
+//					s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+//					t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+//			
+//			projection
+//				.scale(s)
+//				.translate(t);
+//			
+//			svg.append("path")
+//				.datum(data)
+//				.attr("class", "pipes hp")
+//				.attr("d", path);
+//			
+//					
+//			// Load transmission pipeline
+//			d3.json("pipeline_t.json", function(error, data2){
+//				if (error) throw error;
+//
+//				svg.append("path")
+//					.datum(data2)
+//					.attr("class", "pipes t")
+//					.attr("d", path);
+//
+//			});
+//
+//		});
+
+	</script>
+</body>
+</html>

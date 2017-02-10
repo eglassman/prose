@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CA College Debt</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+    			font-family:  "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    			background-color: white;
+    			padding: 50px;
+    		}
+
+			#container {
+				width: 1000px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 50px;
+				padding: 50px;
+				background-color: white;
+				box-shadow: 3px 3px 5px 6px #ccc;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 14px;
+				margin: 15px 0 10px 0;
+			}
+
+			a:link {
+				text-decoration: none;
+				color: gray;
+			}
+
+			a:hover {
+				text-decoration: underline;
+			}
+
+			a:visited {
+				color: gray;
+			}
+
+			a:active {
+				color: steelBlue;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			g.bar text {
+				font-size: 11px;
+				font-weight: bold;
+				text-anchor: end;
+				opacity: 0;
+			}
+
+			g.bar:hover rect {
+				fill: orange;
+			}
+
+			g.bar:hover text {
+				opacity: 1;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis path,
+			.y.axis line {
+				opacity: 0;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="container">
+
+			<h1>Graduates from some California colleges wind up with a lot of debt</h1>
+
+			<p>The US Department of Education provides data regarded the median debt for graduates of most colleges in the USA. Here we see the 50 colleges in California whose graduates leave school with the most debt. <font color="blue">FOR-PROFIT</font> schools are represented in <font color="blue"> blue </font> and <font color="orange"> NON-PROFIT </font> schools in <font color="orange"> orange </font>.  <strong>Source:</strong> <a href="https://collegescorecard.ed.gov/data/">College Scorecard, US Dept, Education, 2015</a></p>
+
+		</div>
+
+		<script type="text/javascript">		
+
+
+			var w = 1000;
+			var h = 800;
+			var padding = [ 20, 10, 50, 320];  //Top, right, bottom, left
+
+
+
+			var widthScale = d3.scale.linear()
+								.range([ 0, w - padding[1] - padding[3] - 35 ]);
+			
+			var heightScale = d3.scale.ordinal()
+								.rangeRoundBands([ padding[0], h - padding[2] ], 0.15);
+
+			var color = d3.scale.category10()
+
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+
+			//Now SVG goes into #container instead of body
+			var svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("top50CA.debt.csv", function(data) {
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.med_debt, +b.med_debt);
+				});
+
+				widthScale.domain([ 25000, d3.max(data, function(d) {
+					return +d.med_debt;
+				}) ]);
+
+				heightScale.domain(data.map(function(d) { return d.name; } ));
+
+				//Bind data to groups (not bars directly)
+				var groups = svg.selectAll("g")
+								.data(data)
+								.enter()
+								.append("g")
+								.attr("class", "bar");
+
+				//Add a rect to each group
+				var rects = groups.append("rect")
+					.attr("x", padding[3])
+					.attr("y", function(d) {
+						return heightScale(d.name);
+					})
+					.attr("width", 0)
+					.attr("height", heightScale.rangeBand())
+					.attr("fill", function(d) {return color(d.for_profit);})
+					//.attr("fill", "tomato")
+
+				//Add a text element to each group
+				groups.append("text")
+					.attr("x", function(d) {
+						return padding[3] + widthScale(d.med_debt) + 35;
+					})
+					.attr("y", function(d) {
+						return heightScale(d.name) + 10;
+					})
+					.text(function(d) {
+						return "$" +d.med_debt;
+					});
+
+				rects.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(1000)
+					.attr("width", function(d) {
+						return widthScale(d.med_debt);
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + padding[3] + "," + (h - padding[2]) + ")")
+					.call(xAxis)
+					.append("text")
+				      .attr("y", padding[2]/1.05) //smaller divider moves down
+				      .attr("x",w/3.5)
+				      .text("Median Debt of Graduates ($, USD)")
+				      .attr("font-family","serif")
+				      .attr("font-size","16px");
+
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + padding[3] + ",0)")
+					.call(yAxis);
+			});
+
+
+		</script>
+
+	</body>
+</html>

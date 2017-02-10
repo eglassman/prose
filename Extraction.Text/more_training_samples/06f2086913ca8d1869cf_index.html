@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Apple Growers in Connecticut</title>
+        <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+
+            body {
+                background-color: #eee;
+                font-family: 'Lato';
+                width: 800px;
+                margin: 30px auto;
+            }
+
+            svg {
+                background-color: white;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <h1>Apple Grower Locations in Connecticut</h1>
+        <div id="map"></div>
+
+
+        <p> Red circle areas are proportional to the bushels of apples grown by each farm. Farms without any data have black circles.</p>
+        <p>Source: <a href="https://data.ct.gov/Environment-and-Natural-Resources/2013-Apple-Growers-List/k7hr-c5u6/">CT Open Data Portal</a>, maintained by Tyler Kleycamp</p>
+        <p>I downloaded the data from the website as a CSV, and used Trifacta Wrangler to extract the Latitude and Longitude from the address field. Unfortunately not all the farms reported how many bushels of apples they grow.</p>
+        <p>At first I thought that the census tracts were completely irrelevant to the apple data. However, I think it offers an interesting perspective as it enables exploration of the relationship between population density and where the most apples are grown. With that said, it made sense to tone down the background color so one can focus on the apple location data.</p>
+        <script type="text/javascript">
+
+            //Width and height
+            var w = 800;
+            var h = 700;
+
+            //Define map projection
+            var projection = d3.geo.mercator()
+                                   .center([ -72.5, 41.7 ])
+                                   .scale([ 24.2*w ]);
+                                   // .translate([ w/2, h/2 ])
+                                  
+
+            // Define a long grayscale
+            var colors = d3.scale.linear().domain([1,350])
+                .interpolate(d3.interpolateHcl)
+                .range([d3.rgb("#DCDCDC"), d3.rgb('#FFFFFF')]);
+
+            //Define path generator
+            var path = d3.geo.path()
+                             .projection(projection);
+
+            //Create SVG
+            var svg = d3.select("#map")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+
+
+
+                
+
+                //Load in GeoJSON data of Connecticut
+                d3.json("ctCensusTracts2010.json", function(json) {
+                    
+                    //Bind data and create one path per GeoJSON feature
+                    svg.selectAll("path")
+                       .data(json.geometries)
+                       .enter()
+                       .append("path")
+                       .attr("d", path)
+                       .attr("stroke","#777")
+                       .attr("fill", function(d,i) { return colors(i); });
+
+
+                    //Load in apple data
+                    d3.csv("ctAppleClean.csv", function(data) {
+                        console.log(data);
+                        //Create a circle for each city
+                        svg.selectAll("circle")
+                           .data(data)
+                           .enter()
+                           .append("circle")
+                           .attr("cx", function(d) {
+                               //[0] returns the first coordinate (x) of the projected value
+                               return projection([+d.Longitude, +d.Latitude])[0];
+                           })
+                           .attr("cy", function(d) {
+                               //[1] returns the second coordinate (y) of the projected value
+                               return projection([+d.Longitude, +d.Latitude])[1];
+                           })
+                           .attr("r", function(d) {
+                               //Use Math.sqrt to scale by area (not radius)
+                               if (d.Bushels) {
+                                    if (+d.Bushels > 0) {
+                                        return Math.sqrt(+d.Bushels / w*5);
+                                    }
+                                    else {
+                                        return "3";
+                                    }
+                               } else {
+                                    return "3";
+                               }
+                               
+                           })
+                           .style("fill", function(d) {
+                             if (d.Bushels) {
+                                  if (+d.Bushels > 0) {
+                                      return "red";
+                                  }
+                                  else {
+                                      return "black";
+                                  }
+                             } else {
+                                  return "black";
+                             }
+                           })
+                           .style("opacity", 0.45)
+                           .append("title")
+                           .text(function(d) {
+                                if (!d.Bushels) {
+                                    return d.BusinessName1 + "did not report any apple growth data.";
+                                } else {
+                                    return d.BusinessName1 + ": grew " + d.Bushels + " bushels of apples.";
+                                }
+                                
+                            });
+                        
+                    });
+        
+                });
+
+        </script>
+    </body>
+</html>

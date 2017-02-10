@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+    <style>
+      body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+      #visualization-container { width: 100%; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="visualization-container"></div>
+    <script>
+      
+      function marginConvention(my, svg, g){
+        my.when("box", function (box){
+          svg.attr("width", box.width)
+             .attr("height", box.height);
+        });
+        my.when(["box", "margin"], function (box, margin){
+          my.width = box.width - margin.left - margin.right;
+          my.height = box.height - margin.top - margin.bottom;
+          g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        });
+      }
+      
+      function outerRect(my, svg){
+        var rect = svg.append("rect").attr("class", "outer-rect");
+        my.when(["box"], function (box) {
+          rect.attr("width", box.width).attr("height", box.height);
+        });
+      }
+      
+      function innerRect(my, g){
+        var rect = g.append("rect").attr("class", "inner-rect");
+        my.when(["width", "height"], function (width, height) {
+          rect.attr("width", width).attr("height", height);
+        });
+      }
+      
+      function styles(my, svg){
+        my.when("styles", function (styles){
+          Object.keys(styles).forEach(function (selector){
+            var selection = svg.selectAll(selector);
+            console.log(selector);
+            console.log(selection);
+            
+            Object.keys(styles[selector]).forEach(function (key){
+              selection.style(key, styles[selector][key]);
+            });
+             // .style(styles[selector]);
+          });
+        });
+      }
+      
+      function scale(my, prefix, type){
+        
+        var _scale = d3.scale[type]();
+        var columnProperty    = prefix + "Column";
+        var accessorProperty  = prefix + "Accessor";
+        var domainProperty    = prefix + "ScaleDomain";
+        var rangeProperty     = prefix + "ScaleRange";
+        var scaleProperty     = prefix + "Scale";
+        
+        // TODO account for fixed min, max, or both
+        // var domainMinProperty    = prefix + "ScaleDomainMin";
+        // var domainMaxProperty    = prefix + "ScaleDomainMax";
+        // my.addPublicProperty(domainMinProperty, Model.None);
+        // my.addPublicProperty(domainMaxProperty, Model.None);
+
+        my.when(columnProperty, function (column){
+          my[accessorProperty] = function(d){ return d[column]; };
+        });
+
+        my.when(["data", accessorProperty], function(data, accessor){
+          if(type === "linear"){
+            my[domainProperty] = d3.extent(data, accessor);
+          } else if(type === "ordinal"){
+            my[domainProperty] = data.map(accessor);
+          }
+        });
+
+        my.when([domainProperty, rangeProperty], function (domain, range){
+          my[scaleProperty] = _scale.domain(domain).range(range);
+        });
+
+        //my.when([scaleProperty, accessorProperty], function (scale, accessor){
+        //  my[prefix] = function(d){ return _scale(accessor(d)); };
+        //});
+      }
+        
+      function xScale(my){
+        scale(my, "x", "linear");
+      }
+      
+      function axis(my, prefix, g){
+        var _axis = d3.svg.axis();
+        var axisG = g.append("g").attr("class", prefix + " axis");
+        var scaleProperty = prefix + "Scale";
+        var axisProperty  = prefix + "Axis";
+        
+        my.when(scaleProperty, function (scale){
+          _axis.scale(scale);
+            //.ticks(ticks)
+            //.tickFormat(tickFormat);
+          axisG.call(_axis);
+        });
+        return axisG;
+      }
+      
+      function xAxis(my, g){
+        var xAxisG = axis(my, "x", g);
+        my.when(["width", "height"], function (width, height) {
+          xAxisG.attr("transform", "translate(0," + height + ")");
+          my.xScaleRange = [0, width];
+        });
+      }
+      
+      function Visualization(){
+        var my = new Model({
+          margin: {top: 20, right: 10, bottom: 20, left: 10}
+        });
+        
+        my.el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        var svg = d3.select(my.el);
+        
+        outerRect(my, svg);
+        
+        var g = svg.append("g");
+        marginConvention(my, svg, g);
+        innerRect(my, g);
+        
+        xScale(my);
+        xAxis(my, g);
+        styles(my, svg);
+        
+        return my;
+      }
+      
+      var visualization = new Visualization();
+      visualization.set({
+        box: { width: 960, height: 500 },
+        data: [
+          { foo: 0,    bar: 0},
+          { foo: 1000, bar: 1000}
+        ],
+        xColumn: "foo",
+        yColumn: "foo",
+        margin: {top: 30, right: 30, bottom: 30, left: 30},
+        styles: {
+          ".outer-rect": {
+            "fill": "#f2f2f2"
+          },
+          ".inner-rect": {
+            "fill": "#eaeaea",
+            "stroke": "#cccccc",
+            "stroke-width": "1px",
+            "shape-rendering": "crispEdges"
+          },
+          ".axis": {
+            "font": "16pt sans-serif"
+          },
+          "path": {
+            "fill": "#828282"
+          }
+        }
+      });
+      
+      d3.select("#visualization-container").node()
+        .appendChild(visualization.el);
+      
+      console.log("you are now rocking with d3 and model.js", d3, visualization);
+    </script>
+  </body>

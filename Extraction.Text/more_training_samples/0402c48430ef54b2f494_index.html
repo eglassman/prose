@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<head>
+  <title>Difference Chart</title>
+</head>
+<meta charset="utf-8">
+<style>
+
+svg{
+  background-color: #eee;
+  margin-top: 20px;
+}
+
+path.domain {
+  fill: none;
+}
+
+g.tick > line {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+g.tick > text {
+  text-anchor: middle;
+  fill: #606060;
+}
+
+</style>
+<body>
+<div id="viz"></div>
+<div>Data From: <a href="http://www.presidency.ucsb.edu/data/popularity.php">http://www.presidency.ucsb.edu/data/popularity.php</a></div>
+</body>
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js" type="text/JavaScript"></script>
+<script>
+
+var width = 500,
+    height = 500;
+
+xScale = d3.scale.linear().domain([0,10]).range([40,760]);
+yScale = d3.scale.linear().domain([0,10]).range([60,830]);
+
+svg = d3.select('#viz')
+    .append('svg')
+    .attr({width: 1500, height: height});
+
+var chartPoints = 100;
+
+    queue()
+    .defer(d3.csv, "bush_popularity.csv")
+    .defer(d3.csv, "obama_popularity.csv")
+    .await(function(error, file1, file2) { createAllCharts(file1, file2); });
+
+function createAllCharts(bush, obama) {
+  createChart(bush, obama, "undecided", d3.select("svg").append("g"))
+  createChart(bush, obama, "approval", d3.select("svg").append("g").attr("transform", "translate(500,0)"))
+  createChart(bush, obama, "disapproval", d3.select("svg").append("g").attr("transform", "translate(1000,0)"))
+
+}
+
+function createChart(bush, obama, type, linechart) {
+  var bushScale = createScale(bush, type);
+  var obamaScale = createScale(obama, type);
+  var s = 86400000;
+
+  var latestDay = obamaScale.domain()[0];
+  var firstObama = obamaScale.domain()[obamaScale.domain().length - 1];
+  var firstBush = bushScale.domain()[bushScale.domain().length - 1];
+
+  var lengthOfOffice = Math.floor(( latestDay - firstObama ) / s);
+
+  var stepSize = lengthOfOffice / chartPoints;
+
+  var fromStart = [];
+
+  for (var x = 0; x <= chartPoints; x++) {
+    var obamaStep = new Date(firstObama.getTime() + ((x * stepSize) * s));
+    var bushStep = new Date(firstBush.getTime() + ((x * stepSize) * s));
+    var obamaPoint = obamaScale(obamaStep);
+    var bushPoint = bushScale(bushStep);
+    fromStart.push({x: x, o: obamaPoint, b: bushPoint});
+  }
+
+  createLineChart(fromStart, linechart)
+
+}
+
+function createScale(data, type) {
+  var scale = d3.time.scale();
+  var domain = [];
+  var range = [];
+
+  data.forEach(function(d) {
+    domain.push(new Date(d.start));
+    range.push(parseInt(d[type]));
+  })
+  scale.domain(domain).range(range);
+
+  return scale;
+}
+
+function createLineChart(data, linechart) {
+  var chartExtent = [0,90];
+
+  var xScale = d3.scale.linear().domain([0, chartPoints]).range([20,480]);
+  var yScale = d3.scale.linear().domain(chartExtent).range([480,20]);
+
+  var axis = d3.svg.axis().scale(yScale)
+    .orient("right")
+    .ticks(8)
+    .tickSize(-480)
+    .tickSubdivide(true);
+
+  var b_aLine = d3.svg.line()
+  .x(function(d) {return xScale(d.x)})
+  .y(function(d) {return yScale(d.b)})
+  .interpolate("linear");
+
+  var o_aLine = d3.svg.line()
+  .x(function(d,i) {return xScale(d.x)})
+  .y(function(d) {return yScale(d.o)})
+  .interpolate("linear");
+
+  var b_aDifference = d3.svg.area()
+  .x(function(d) {return xScale(d.x)})
+  .y(function(d) {return yScale(Math.max(d.b,d.o))})
+  .y0(function(d) {return yScale(d.o)})
+  .interpolate("linear");
+
+  var o_aDifference = d3.svg.area()
+  .x(function(d,i) {return xScale(d.x)})
+  .y(function(d) {return yScale(Math.max(d.o,d.b))})
+  .y0(function(d) {return yScale(d.b)})
+  .interpolate("linear");
+
+  linechart.append("g").attr("transform", "translate(480,0)").call(axis);
+
+  linechart.selectAll("g.tick > text").style("text-anchor", "middle").attr("x", 10)
+
+  linechart.append("path")
+  .style("fill", "red")
+  .style("fill-opacity", .5)
+  .attr("class", "difference")
+  .attr("d", b_aDifference(data))
+
+  linechart.append("path")
+  .style("fill", "blue")
+  .style("fill-opacity", .5)
+  .attr("class", "difference")
+  .attr("d", o_aDifference(data))
+
+  linechart.append("path")
+  .style("fill", "none")
+  .style("stroke-width", "2px")
+  .style("stroke", "darkred")
+  .attr("class", "line")
+  .attr("d", b_aLine(data))
+
+  linechart.append("path")
+  .style("fill", "none")
+  .style("stroke-width", "2px")
+  .style("stroke", "darkblue")
+  .attr("class", "line")
+  .attr("d", o_aLine(data))
+}
+
+</script>

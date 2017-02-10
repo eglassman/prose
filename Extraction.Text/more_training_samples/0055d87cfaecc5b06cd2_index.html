@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+  </style>
+</head>
+
+<body>
+  <div id='fuck'></div>
+  <script>
+ 
+    //initial data set
+    data = [26, 70, 159, 246];
+    
+    //select where we want to put our plot
+		divs = d3.select('body #fuck')
+    .selectAll('div.item')	//giving our divs souls
+    .data(data);
+    
+    //make each bar in a div. Putting souls into their bodies
+    divs.enter()
+    	.append('div').classed('item', true);
+
+    //style our bars
+    divs.style({
+      width: '45px',
+      height: function(d, i) { return d + 'px'},
+      margin: '30px',
+      float: 'left',
+     'background-color' : '#080825'
+    });
+    
+    //new data to transition to
+    data = [246, 159, 70, 26];
+    
+    //select the divs
+    divs = d3.select('body #fuck')
+    .selectAll('div.item')
+    .data(data);
+
+    divs.transition().delay(50).duration(2000)
+    	.style({
+     		'height': function(d, i) { return d + 'px'},
+     		'background-color' : '#2725b0'
+    });
+        
+  </script>
+</body>

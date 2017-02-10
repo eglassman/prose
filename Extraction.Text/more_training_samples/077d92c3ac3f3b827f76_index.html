@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="//use.edgefonts.net/cabin.js"></script>
+		<meta charset="utf-8">
+		<title>Transition Delays</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+			}
+
+			
+
+			h1 {
+      			font-family: cabin, sans-serif;
+      			font-style: normal;
+      			font-weight: 400;
+    		}
+
+			p {
+				font-family: cabin, sans-serif;
+				font-size: 14px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover {
+				fill: #FFCC00;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: cabin, sans-serif;
+				font-size: 11px;
+			}
+
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Child Marriage vs Educational Attainment</h1>
+
+		<p>Prevalence of child marriage by country vs percentage of women in the country with no education past primary school. Source: <a href="http://www.dhsprogram.com/">Demographic and Health Surveys</a>. ICF International </p>
+
+		<script type="text/javascript">		
+
+
+			var w = 750;
+			var h = 600;
+			var padding = [ 20, 10, 100, 100 ];  //Top, right, bottom, left
+
+
+			//Define Scale Functions
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+		
+								
+			//Define Axes					
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+			
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+
+					
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("marriage.csv", function(data) {
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.childmarriage;
+					}), 
+					d3.max(data, function(d) {
+						return +d.childmarriage;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.lowed;
+					}),
+					d3.min(data, function(d) {
+						return +d.lowed;
+					})
+				]);
+
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+				circles.attr("cx", function(d) {
+						return xScale(d.childmarriage);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.lowed);
+					})
+					.attr("r", 0.1)
+					.attr("fill", "#C9CACC")
+					.append("title")
+					.text(function(d) {
+						return d.childmarriage + " percent of women in " + d.Country + " are married by age 18";
+					});
+
+				circles.sort(function(a, b) {
+						return d3.ascending(+a.childmarriage, +b.childmarriage);
+					})
+					.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(2000)
+					.attr("r", 4);
+
+				svg.append("g")
+					 .attr("class", "x axis")
+					 .attr("transform", "translate(0," + (h - padding[2] + 10) + ")")
+					 .call(xAxis);
+					 
+				svg.append("text")                // text label for the x axis
+       				 .attr("x", w/2)
+        			.attr("y", h - padding [3] + 47)
+        			.style("text-anchor", "middle")
+        			.text("Child marriage (%)");
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 10) + ",0)")
+					.call(yAxis);
+
+				svg.append("text")                // text label for the y axis
+       			    .attr("transform", "translate("+ (padding/2) +","+(height/2)+")rotate(-90)")
+        			.style("text-anchor", "middle")
+        			.text("% of women whose highest education is primary (%)");
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

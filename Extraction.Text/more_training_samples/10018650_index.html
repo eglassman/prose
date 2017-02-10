@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+</head>
+<body>
+
+<script src="pouchdb.js"></script>
+
+<script>
+    new PouchDB('test')
+        .then(function (db) {
+            console.log("Destroying database.. ");
+            return db.destroy()
+        })
+        .then(function () {
+            console.log("Creating database.. ");
+            return new PouchDB('test');
+        })
+        .then(function (db) {
+            console.log("Posting record.. ");
+            return db.post({name: 'name'});
+        })
+        .then(function(info){
+            console.log("Checking id of inserted record: " + info.id);
+        })
+        .catch(function (error) {
+            console.log(error.message);
+        });
+
+</script>
+
+</body>
+</html>

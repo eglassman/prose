@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Issues</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+		body {
+			font-family: 'Open Sans',Helvetica,arial,sans-serif;
+			line-height: 42px;
+		}
+		h1 {
+			font-weight: 600;
+			text-transform: uppercase;
+		}
+		header {
+			color: #36435A;
+		}
+		hr {
+			border: 2px solid #36435A;
+		}
+		.standout {
+			color: #36435A;
+			font-size: 22px;
+			font-weight: bold;
+			text-decoration: none;
+		}
+		.standout a {
+			color: #36435A;
+			font-size: 32px;
+			font-weight: 600;
+			text-decoration: none;
+		}
+		.standout a:hover {
+			text-decoration: underline;
+		}
+		svg {
+			background: #FFFFFF;
+		}
+		circle:hover {
+			fill: #0DDDFF;
+		}
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: #36435A;
+			shape-rendering: crispEdges;
+		}
+		.axis text {
+			font-family: sans-serif;
+			font-size: 11px;
+			fill: #36435A;
+		}
+
+		.tooltip {
+			background: #FFFFFF;
+			box-shadow: 0 0 5px #999999;
+			color: #36435A;
+			line-height: normal;
+			padding: 8px;
+			position: absolute;
+			visibility: hidden;
+			z-index: 10;
+ 		}
+ 		.subhead{
+        fill: #36435A;
+        font-size: 14px;
+      	}
+		</style>
+	</head>
+	<body>
+		<header>
+		<h1>Stars And Issues</h1>
+		<p>of the top 25 <span class='standout'>data visualization</span> repos on <span class='standout'><a href='http://github.com'>GitHub</a></span> (data accessed March 2015)</p>
+		<hr/>
+		</header>
+	
+		<script type="text/javascript">		
+
+			var w = 900;
+			var h = 450;
+			var padding = [ 20, 10, 50, 100 ];  //Top, right, bottom, left
+
+
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+								
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom");
+							
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left");				
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+				svg.append("text")			   
+    			.attr("class", "y subhead")	   
+    			.attr("text-anchor", "middle") 
+    			.attr("y", 45)				   
+    			.attr("x", -(h/2))			   
+    			.attr("transform", "rotate(-90)")
+    			.text("Number of Stargazers");	   
+    				
+				svg.append('text')
+				.text('Number of Open Issues')
+				.attr('x', w/2)
+				.attr('y', h - 5 )
+				.attr('text-anchor', 'middle')
+				.attr('class', 'x subhead')
+				.attr('opacity', 1);			
+						
+			var tooltip = d3.select('body')
+			 				.append('div')
+			 				.attr('class', 'tooltip');
+			 			
+			var tooltipOn = function(d, i) {
+			 			var content = '<div><b>' + d.name + ' </b>has<b> ' +d.open_issues_count+'</b> open issues<br/> and <b>'+d.stargazers_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' </b>stars</div>';
+			 			tooltip.html(content)
+			 			.style('visibility', 'visible');
+ 			};
+ 			
+ 			var tooltipMove = function(d, i) {
+ 					tooltip.style('top', (d3.event.pageY - 55) + 'px')
+ 					.style('left', (d3.event.pageX + 10) + 'px');
+ 			};			
+			
+			 var tooltipOff = function() {
+			 			tooltip.style('visibility', 'hidden');
+ 			};
+ 			
+			d3.csv("github-api-visualization-cleaned.csv", function(dataLoad) {
+				
+				var dataSorted = dataLoad.sort(function(a,b) {
+					return d3.descending(+a.open_issues_count,+b.open_issues_count);
+				})
+
+				var data = dataSorted.filter(function(d,i) {
+					if (i<25) {
+						return d;
+					}});				
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.open_issues_count;
+					}), 
+					d3.max(data, function(d) {
+						return +d.open_issues_count;
+					})
+				]);;
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.stargazers_count;
+					}),
+					d3.min(data, function(d) {
+						return +d.stargazers_count;
+					})
+				]);
+				
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+								
+				circles.attr("cx",padding[3])
+					 .attr("cy", function(d) {
+						return yScale(d.stargazers_count);
+					 })
+					 .attr("r",4)
+					 .attr("fill","#FFFFFF")
+					 .transition()
+					 .duration(2000)
+					 .attr("cx",function(d) {
+						return xScale(d.open_issues_count);
+					 })
+					 .attr("fill","#3A96B7");
+					 
+				circles.on('mouseover', tooltipOn)
+					.on('mousemove', tooltipMove)
+					.on('mouseout', tooltipOff);
+        
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] + 10) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+				.attr("class", "y axis")
+				.attr("transform", "translate(" + (padding[3] - 5) + ",0)") 
+				.call(yAxis);
+
+			});
+
+		</script>
+		
+	</body>
+</html>

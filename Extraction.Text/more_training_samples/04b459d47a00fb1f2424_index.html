@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Marital Status in Mexico 2010</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+        font-family: Eurostile, Arial, sans-serif;
+        background-color: #F0F0F0;
+        padding: 50px;
+      }
+
+      h1 {
+        font-size: 55px;
+        font-weight: bold;
+        border-top: solid 7px Purple
+    
+      }
+
+      h2 {
+        font-size: 28px;
+        font-weight: normal;
+      }
+
+      h3 {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      p {
+        font-size: 18px;
+        line-height: 20px;
+        text-align: justify;
+      }
+
+      em {
+        font-size: 20px;
+        color: Purple;
+        font-weight: bold;
+        font-style: italic;
+      }
+
+      a href{
+        color: Darkblue;
+        font-weight: bold;
+        font-style: italic;
+      }
+      svg {
+        background-color: #F0F0F0;
+        box-shadow: 5px 5px 25px gray;
+      }
+
+			circle:hover {
+				fill: purple;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: Eurostile, Arial, sans-serif;
+				font-size: 11px;
+			}
+
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Marital Status in Mexico</h1>
+
+		<p>How important is marital status in our lives?
+Besides the emotions envolved, there are other facts to consider. What is more convenient? Is it preferable to be single, married, or maybe divorced? For example, how much does it cost to get married? How expensive can it be to suddenly become a widow/widower? If the marriage does not work out, people would prefer to be divorced, which can be an expensive process. Economically speaking, then, is it better to be single? We find that married couples have more rights and better opportunities for housing and health services. Looking for answers to our simple questions...</p> 
+
+		<p><em>Widowed Women (Percentage of Population per State, 2010)</em></p> 
+   
+		<script type="text/javascript">		
+
+
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 50, 50 ];  //Top, right, bottom, left
+
+
+
+			var xScale = d3.scale.linear()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[3] ]);
+
+
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom");
+							
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left");
+							
+						
+ 
+				
+
+
+
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("MaritalStatus2.csv", function(data) {
+
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return +d.WidowedW;
+					}), 
+					d3.max(data, function(d) {
+						return +d.WidowedW;
+					})
+				]);
+
+				yScale.domain([
+					d3.max(data, function(d) {
+						return +d.PercenttotalPopulation;
+					}),
+					d3.min(data, function(d) {
+						return +d.PercenttotalPopulation;
+					})
+				]);
+
+				var circles = svg.selectAll("circle")
+								.data(data)
+								.enter()
+								.append("circle");
+
+				circles.attr("cx", -100)
+					.attr("cy", function(d) {
+						return yScale(d.PercenttotalPopulation);
+					})
+					.attr("r", 7)
+					.attr("fill", "grey")
+					.append("title")
+					.text(function(d) {
+						return d.State + "'s percentage of widowed women is " + d.WidowedW + ", and this state represents " + d.PercenttotalPopulation + "% of the total population in the country";
+					});
+
+				circles.transition()
+					.duration(2000)
+					.attr("cx", function(d) {
+						return xScale(d.WidowedW);
+					})
+					.attr("cy", function(d) {
+						return yScale(d.PercenttotalPopulation);
+					})
+					.attr("r", 7)
+					.attr("fill", "purple")
+					.delay(function(d, i) {
+						return i * 50;
+					})
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + (h - padding[2] + 10) + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + (padding[3] - 10) + ",0)")
+					.call(yAxis);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>
+			
+<p>The correlation of different data between Marital status could produce very interesting results. It could also help us formulate more questions such as, are widowed women in Mexico completely sure that their husbands are dead? There are a lot of missing people in this country. Some women have decided to choose the role of the widow simply because they could never find their husbands, some because of migration and others may have been victims of violent crime and their bodies never found. This is not so clear in the statistics.</p>
+<p>The original databases can be found at the Inegi site:</p>
+    <a href="http://www3.inegi.org.mx/sistemas/temas/default.aspx?s=est&c=17484">Instituto Nacional de Geografía y Estadística </a> 
+<br></br>
+<p>Module 5 Exercise: Mónica Alejandra Rodríguez Sosa.</p>
+
+<p>April 19.2015</p>
+	</body>
+</html>

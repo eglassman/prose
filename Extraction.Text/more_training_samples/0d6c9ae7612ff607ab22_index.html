@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Loading CSV Data with D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+	</head>
+	<body>
+		<p style="font-family: Arial">A simple bird (check console log for data)</p>
+		<svg width="1000" height="1000">
+			<circle cx="100" cy="50" r="50" fill="gray" />
+			<circle cx="210" cy="50" r="50" fill="gray" />
+			<circle cx="100" cy="50" r="10" fill="black" />
+			<circle cx="210" cy="50" r="10" fill="black" />
+			<line x1="100" y1="110" x2="155" y2="260" stroke="orange" stroke-width="3"/>
+			<line x1="155" y1="260" x2="210" y2="110" stroke="orange" stroke-width="3"/>
+		</svg>
+
+		<script type="text/javascript">		
+			
+			//Load in contents of CSV file
+			d3.csv("WHO_data.csv", function(data) {
+
+				//Now CSV contents have been transformed into
+				//an array of JSON objects.
+
+				//Log 'data' to the console, for verification.
+				console.log(data);
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

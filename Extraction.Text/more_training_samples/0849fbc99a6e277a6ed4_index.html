@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>ninjaPixel.js Donut Chart</title>
+</head>
+<style>
+    path {
+        stroke-width: 5px;
+    }
+    body {
+        font: 10px sans-serif;
+    }
+    text {
+        font: 12px sans-serif;
+        position: absolute;
+    }
+    .ninja-chartTitle {
+        font: 18px sans-serif;
+    }
+    .d3-tip {
+        line-height: 1;
+        padding: 8px;
+        background: rgba(100, 100, 100, 0.7);
+        color: #fff;
+        border-radius: 2px;
+        font: 12px sans-serif;
+        width: 100px;
+    }
+    /* Creates a small triangle extender for the tip */
+    .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(100, 100, 100, 0.7);
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+    }
+    /* Style northward tooltips differently */
+    .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+    }
+</style>
+
+<body>
+
+    <div id="chart"><span id="chart1"></span><span id="chart2"></span>
+    </div>
+    <div id="message"></div>
+    </br>
+    <input type="radio" name="radData" id="rad1" value="data1" checked="checked" onclick='ready(data1);' />
+    <label for="rad1">Data1</label>
+
+    <input type="radio" name="radData" id="rad2" value="data2" onclick='ready(data2);' />
+    <label for="rad2">Data2</label>
+
+</body>
+<script src="ninjaPixel.bundle.js" charset="utf-8"></script>
+<script>
+    var chart1 = new ninjaPixel.Donut();
+    chart1.transitionDuration(1000)
+        .margin({
+            top: 60,
+            bottom: 0,
+            left: 0,
+            right: 0
+        })
+        .transitionDelay(function (d, i) {
+            return i * 25;
+        })
+        .height(220)
+        .width(200)
+        .innerRadius(0)
+        .outerRadius(80)
+        .title('Do I look like Pac Man?')
+        .itemStroke('white')
+        .itemFill(function (d, i) {
+            return d.data.color;
+        })
+        .itemOpacity(1)
+        .mouseOverItemOpacity(0.9)
+        .mouseOverItemStroke('#333333');
+
+    var chart2 = new ninjaPixel.Donut();
+    chart2.transitionDuration(1000)
+        .margin({
+            top: 60,
+            bottom: 0,
+            left: 0,
+            right: 0
+        })
+        .transitionDelay(function (d, i) {
+            return i * 25;
+        })
+        .height(220)
+        .width(200)
+        .innerRadius(50)
+        .outerRadius(80)
+        .itemStroke('white')
+        .itemFill(function (d, i) {
+            return d.data.color;
+        })
+        .itemOpacity(1)
+        .mouseOverItemOpacity(0.9)
+        .mouseOverItemStroke('#333333');
+
+
+    var data1 = [
+        {
+            x: 'No',
+            y: 1,
+            color: '#fc8d59'
+                },
+        {
+            x: 'Yes',
+            y: 4,
+            color: '#ffde58' 
+                }
+            ];
+    var data2 = [
+        {
+            x: 'No',
+            y: 4,
+            color: '#fc8d59'
+                },
+        {
+            x: 'Yes',
+            y: 1,
+            color: '#99d594'
+                }
+            ];
+
+    function ready(data) {
+        chart1.plot(d3.select("#chart1")
+            .datum(data));
+
+        chart2.plot(d3.select("#chart2")
+            .datum(data));
+    }
+
+    ready(data1);
+</script>
+
+</html>

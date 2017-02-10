@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>OSM Buildings + CartoDB : Long night of museums Berlin 2014</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style type="text/css">
+html, body {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#map {
+  height: 100%;
+  background-color: #384047;
+}
+#mamufas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  color: #fff;
+  background: rgba(0,0,0,0.5) url('img/icon.png') 14px 20px no-repeat;
+  padding: 15px;
+}
+
+#mamufas h1 {
+  font-family: Helvetica, Arial, Sans-serif;
+  font-weight: bold;
+  font-size: 17px;
+  margin: 6px 0 0 106px;
+}
+
+#mamufas h4 {
+  font-family: Helvetica, Arial, Sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 21px;
+  max-width: 1150px;
+  margin: 7px 30px 7px 106px;
+  color: rgba(255,255,255,0.8)
+}
+
+#mamufas h4 a {
+  color: #FFF;
+  }
+
+.leaflet-control-zoom{
+  bottom: 40px;
+}
+
+</style>
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css">
+<script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+<script src="http://cartodb.github.io/showcase-maps/nightofmuseums/OSMBuildings-Leaflet.js"></script>
+</head>
+
+<body>
+<div id="map"></div>
+<div id="mamufas">
+  <h1>Portland 911 Call Density</h1>
+  <h4>Made using<a href="http://cartodb.com">CartoDB</a> and <a href="http://osmbuildings.org">OSMBuildings</a></h4>
+</div>
+<script>
+var map = new L.Map('map', {
+  center: [45.5399, -122.4567],
+  zoom: 15,
+  minZoom: 5,
+  maxZoom: 17,
+  zoomControl: false
+});
+
+new L.Control.Zoom({ position: 'bottomleft' }).addTo(map);
+
+        // add a nice baselayer from Stamen 
+        L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {
+          attribution: 'Stamen'
+        }).addTo(map);
+
+// cartodb.createLayer(map, 'http://saleiva.cartodb.com/api/v2/viz/15f8e4ba-dab0-11e3-be35-0e230854a1cb/viz.json').addTo(map)
+//   .on('done', function(layer) {
+//     //Remove layer with labels
+//      layer.getSubLayer(2).hide()
+//   });
+
+var osmb = new OSMBuildings(map)
+  .setStyle({ shadows: false })
+  .each(function(item) {
+    // item.properties = parseHstore(item.properties);
+    item.properties = alignProperties(item.properties)
+    // highlight buildings with event
+    // if (item.properties.has_event) {
+      // item.properties.color = '#ffcc66';
+      // item.properties.roofColor = '#cc9933';
+      // item.properties.height = item.properties.height*10; // ensure a minimum height of 20
+      item.properties.height = Math.max(20, item.properties.height*33); // ensure a minimum height of 20
+    // } else {
+      item.properties.color = 'rgba('+Math.min(255, item.properties.height*2)+', 100, 113, 0.89)';
+      item.properties.roofColor = 'rgba('+Math.min(255, item.properties.height*2)+', 57, 64, 0.98)';
+    //   item.properties.roofColor = 'rgba(83, 100, 113, 0.80)';
+    // }
+  })
+  .loadData(
+    'http://andrew.cartodb.com/api/v2/sql?q='+
+    'SELECT a.cartodb_id AS id, calls AS height, the_geom, a.cartodb_id>0 AS has_event '+
+    'FROM portland_911_dddensity AS a '+
+    'WHERE a.the_geom %26%26 ST_SetSRID(ST_MakeBox2D(ST_Point({w},{s}), ST_Point({e},{n})), 4326) LIMIT 100 '+
+//    'AND b.cartodb_id>0'+
+    '&format=geojson'
+  );
+
+
+function parseHstore(properties) {
+  if (properties.other_tags) {
+    properties.other_tags.replace(/,?"([^"]+)"=>"([^"]*)"/g, function(m, k, v) {
+      properties[k] = v;
+    });
+    delete properties.other_tags;
+  }
+  return alignProperties(properties);
+}
+
+// OSM processing helpers
+
+var
+  YARD_TO_METER = 0.9144,
+  FOOT_TO_METER = 0.3048,
+  INCH_TO_METER = 0.0254,
+  METERS_PER_LEVEL = 3;
+
+function toMeters(str) {
+  str = '' + str;
+  var value = parseFloat(str);
+  if (value === str) {
+    return value <<0;
+  }
+  if (~str.indexOf('m')) {
+    return value <<0;
+  }
+  if (~str.indexOf('yd')) {
+    return value*this.YARD_TO_METER <<0;
+  }
+  if (~str.indexOf('ft')) {
+    return value*this.FOOT_TO_METER <<0;
+  }
+  if (~str.indexOf('\'')) {
+    var parts = str.split('\'');
+    var res = parts[0]*this.FOOT_TO_METER + parts[1]*this.INCH_TO_METER;
+    return res <<0;
+  }
+  return value <<0;
+};
+
+function alignProperties(properties) {
+  if (properties.height) {
+    properties.height = toMeters(properties.height);
+  }
+  if (!properties.height && properties['building:height']) {
+    properties.height = toMeters(properties['building:height']);
+  }
+
+  if (!properties.height && properties.levels) {
+    properties.height = properties.levels*METERS_PER_LEVEL <<0;
+  }
+  if (!properties.height && properties['building:levels']) {
+    properties.height = properties['building:levels']*METERS_PER_LEVEL <<0;
+  }
+
+  if (properties.min_height) {
+    properties.minHeight = toMeters(properties.min_height);
+  }
+  if (!properties.minHeight && properties['building:min_height']) {
+    properties.minHeight = toMeters(properties['building:min_height']);
+  }
+
+  if (!properties.minHeight && properties.min_level) {
+    properties.minHeight = properties.min_level*METERS_PER_LEVEL <<0;
+  }
+  if (!properties.minHeight && properties['building:min_level']) {
+    properties.minHeight = properties['building:min_level']*METERS_PER_LEVEL <<0;
+  }
+
+  return properties;
+}
+
+</script>
+</body>
+</html>

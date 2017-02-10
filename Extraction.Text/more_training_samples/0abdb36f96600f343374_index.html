@@ -1,0 +1,50 @@
+<!doctype html>
+
+<html>
+  
+  <head>
+    <title>Google Graph and CSV</title>
+    <meta name="description" content="test">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
+ <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
+<script type="text/javascript"> // load the visualisation API
+  google.load('visualization', '1', { packages: ['corechart', 'controls'] });
+</script>
+
+  </head>
+
+  <body>
+   <script type="text/javascript">
+function drawVisualization() {
+   $.get("protest.csv", function(csvString) {
+      // transform the CSV string into a 2-dimensional array
+      var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+      // this new DataTable object holds all the data
+      var data = new google.visualization.arrayToDataTable(arrayData);
+      //make charts
+      var canvas = new google.visualization.ChartWrapper({
+         chartType: 'LineChart',
+         containerId: 'canvas',
+         dataTable: data,
+         options:{
+            width: 800,
+            height: 400,
+            title: 'Compare 2011 and 2016 Rent of each protester',
+            titleTextStyle : {color: 'grey', fontSize: 20},
+         }
+      });
+      //draw charts
+      canvas.draw();
+   });
+}
+google.setOnLoadCallback(drawVisualization);
+</script>
+
+<div id="canvas"></div>
+
+  </body>
+
+</html>

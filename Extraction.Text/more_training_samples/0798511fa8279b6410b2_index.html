@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chicago 2015 mayoral election results by precinct</title>
+        <style>
+            body {
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+            }
+
+            h1 {
+                font-weight: normal;
+                font-size: 18px;
+            }
+
+            .bg {
+                fill: none;
+            }
+
+            .city-border {
+                stroke: #777;
+                stroke-width: 1;
+                fill: none;
+                pointer-events: none;
+            }
+
+            .ward-border {
+                stroke: #777;
+                stroke-linejoin: round;
+                stroke-dasharray: 1,1;
+                fill: none;
+                pointer-events: none;
+            }
+
+            .precincts {
+                pointer-events: none;
+            }
+
+            .precincts path, svg > rect {
+                pointer-events: all;
+            }
+
+            .no-results {
+                fill: pink;
+                background-color: pink;
+            }
+
+            .zero-total {
+                fill: black;
+            }
+
+            .Purples .q0-7{fill:rgb(242,240,247);background-color:rgb(242,240,247)} .Purples .q1-7{fill:rgb(218,218,235);background-color:rgb(218,218,235)} .Purples .q2-7{fill:rgb(188,189,220);background-color:rgb(188,189,220)} .Purples .q3-7{fill:rgb(158,154,200);background-color:rgb(158,154,200)} .Purples .q4-7{fill:rgb(128,125,186);background-color:rgb(128,125,186)} .Purples .q5-7{fill:rgb(106,81,163);background-color:rgb(106,81,163)} .Purples .q6-7{fill:rgb(74,20,134);background-color:rgb(74,20,134)}
+
+            .tooltip {
+                padding: 5px;
+                position: absolute;
+                border: 1px solid #000;
+                background: white;
+                opacity: 0.9;
+                font-size: 12px;
+            }
+
+            .tooltip ul, .tooltip p {
+                margin-bottom: 0;
+            }
+
+            .tooltip ul {
+                list-style: none;
+                margin-left: 0;
+                padding-left: 0;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .legend {
+                font-size: 12px;
+                float: right;
+                background-color: white;
+                padding: 3px;
+                border: 1px solid #ccc;
+            }
+
+            .legend .box {
+                height: 15px;
+                width: 15px;
+                display: inline-block;
+                margin-right: 10px;
+            }
+
+            #map {
+                position: relative;
+            }
+        </style>
+    </head>
+    <body class="Purples">
+        <div id="selector"></div>
+        <div id="legend"></div>
+        <div id="map"></div>
+        <h1>Chicago 2015 mayoral election results by precinct</h1>
+        <p>Election day: Tuesday, February 24, 2015</p>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="http://d3js.org/queue.v1.min.js"></script>
+        <script src="http://d3js.org/topojson.v1.min.js"></script>
+        <script>
+            var dispatch = d3.dispatch("load", "candidatechange");
+
+            var width = 539;
+            var height = 690;
+
+            var projection = d3.geo.transverseMercator()
+                .rotate([88 + 20 / 60, -36 - 40 / 60]);
+
+            var path = d3.geo.path()
+                .projection(projection);
+
+            var nclasses = 7;
+
+            var quantize = d3.scale.quantize()
+                .domain([0, 1])
+                .range(d3.range(nclasses).map(function(i) {
+                    return "q" + i + "-" + nclasses;
+                }));
+
+            var svg = d3.select("#map").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+
+            svg.append("rect")
+                .attr("class", "bg")
+                .attr("width", width)
+                .attr("height", height)
+                .on("click", reset);
+
+            var results = d3.map();
+            var candidates = d3.set();
+
+            var g = svg.append("g")
+                .attr("class", "map");
+
+            var pg = g.append("g")
+                .attr("class", "precincts");
+
+            // key returns a key suitable for indexing precincts.
+            function key(ward, precinct) {
+                return ("00" + ward).substr(-2, 2) + ("000" + precinct).substr(-3, 3);
+            }
+
+            // unkey takes a precinct id and returns a tuple of ward, precinct.
+            function unkey(key) {
+                return [(+key.substring(0, 2)).toString(), (+key.substring(2, 5)).toString()];
+            }
+
+            var active = d3.select(null);
+
+            function reset() {
+                g.transition()
+                    .duration(750)
+                    .style("stroke-width", "1.5px")
+                    .attr("transform", "");
+            }
+
+            function clicked(d) {
+                if (active.node() === this) {
+                    return reset();
+                }
+
+                active = d3.select(this);
+
+                var centroid = path.centroid(d);
+                var x = centroid[0];
+                var y = centroid[1];
+                var k = 4;
+
+                g.transition()
+                    .duration(750)
+                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+                    .style("stroke-width", 1.5 / k + "px");
+            }
+
+            // draw legend
+            var legend = d3.select("#legend").append("div")
+                .attr("class", "legend");
+
+            var legendRow = legend
+                .selectAll("div")
+                .data(quantize.range().concat("no-results"))
+                .enter().append("div");
+
+            legendRow.append("span")
+                    .attr("class", function(d) { return d + " box"; });
+
+            legendRow.append("span")
+                    .text(function(d, i) {
+                        var n = quantize.range().length;
+                        if (i < n) {
+                            var lower = (i/n)*100;
+                            var upper = ((i+1)/n)*100;
+                            return lower.toFixed(0) + "% up to " + upper.toFixed(0) + "%";
+                        } else {
+                            return "no reported results";
+                        }
+                    });
+
+            queue()
+                .defer(d3.json, "chicago_2015_precincts_topo.json")
+                .defer(d3.json, "chicago_2015_wards_topo.json")
+                .defer(d3.json, "chicago_topo.json")
+                .defer(d3.csv, "results.csv", function(d) {
+                    var id = key(d.ward, d.precinct);
+                    var candidateVotes = results.get(id);
+                    if (candidateVotes === undefined) {
+                        candidateVotes = d3.map();
+                        results.set(id, candidateVotes);
+                    }
+                    candidateVotes.set(d.candidate, +d.votes);
+                    candidates.add(d.candidate);
+                })
+                .await(ready);
+
+            function ready(error, chipcts, chiwards, chiboundary) {
+                if (error) {
+                    return console.error(error);
+                }
+
+                dispatch.load(chipcts, chiwards, chiboundary);
+                dispatch.candidatechange("Rahm Emanuel");
+            }
+
+            dispatch.on("load.menu", function() {
+                var select = d3.select("#selector")
+                    .append("div")
+                    .append("select")
+                        .on("change", function() {
+                            dispatch.candidatechange(this.value);
+                        });
+
+                select.selectAll("option")
+                    .data(candidates.values())
+                    .enter().append("option")
+                        .attr("value", function(d) { return d; })
+                        .text(function(d) { return d; });
+
+                dispatch.on("candidatechange.menu", function(candidate) {
+                    select.property("value", candidate);
+                });
+            });
+
+            dispatch.on("load.map", function(chipcts, chiwards, chiboundary) {
+                var precincts = topojson.feature(chipcts, chipcts.objects.chicago_2015_precincts);
+                var wards = topojson.feature(chiwards, chiwards.objects.chicago_2015_wards);
+
+                projection
+                    .scale(1)
+                    .translate([0, 0]);
+
+                var b = path.bounds(precincts);
+                var s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+                var t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+
+                projection
+                    .scale(s)
+                    .translate(t);
+
+                var keyFn = function(d) { return d.id; }
+
+                g.append("g")
+                    .attr("class", "ward-border")
+                    .selectAll("path")
+                    .data(wards.features)
+                    .enter().append("path")
+                    .attr("d", path);
+
+                g.append("g")
+                        .attr("class", "city-border")
+                    .append("path")
+                        .datum(topojson.mesh(chiboundary, chiboundary.objects.chicago))
+                        .attr("d", path);
+
+                var tooltip = d3.select("#map").append("div")
+                    .attr("class", "tooltip hidden");
+
+                function precinctClass(candidate) {
+                    return function(d) {
+                        if (!results.has(d.id)) {
+                            var id = unkey(d.id);
+                            var ward = id[0];
+                            var pct = id[1];
+                            return "no-results";
+                        }
+                        var candidateVotes = results.get(d.id);
+                        var total = d3.sum(candidateVotes.values());
+                        if (total === 0) {
+                            return "zero-total";
+                        }
+                        var ourGuy = candidateVotes.get(candidate);
+                        return quantize(ourGuy / total);
+                    };
+                }
+
+                dispatch.on("candidatechange.map", function(candidate) {
+                    var map = pg.selectAll("path")
+                        .data(precincts.features)
+                        .attr("class", precinctClass(candidate));
+
+                    map
+                        .enter().append("path")
+                        .attr("d", path)
+                        .attr("class", precinctClass(candidate))
+                        .on("mousemove", function(d, i) {
+                            var mouse = d3.mouse(this).map(function(d) { return parseInt(d); });
+                            var id = unkey(d.id);
+                            var ward = id[0];
+                            var pct = id[1];
+                            var html = "<b>Ward " + ward + " Precinct " + pct + "</b>";
+                            var yOffset;
+                            if (!results.has(d.id)) {
+                                html += "<p><i>No results</i></p>";
+                                yOffset = 70;
+                            } else {
+                                html += "<table>";
+                                var votes = results.get(d.id);
+                                var total = d3.sum(votes.values());
+                                votes.forEach(function(candidate, vote) {
+                                    var voteText = vote === 1 ? "vote" : "votes"
+                                    html += "<tr><td>" + candidate + "</td><td>" + vote + " " + voteText + "</td><td>(" + ((vote/total)*100).toFixed(0) + "%)</td></tr>";
+                                });
+                                html += "</table>";
+                                yOffset = 140;
+                            }
+                            if (mouse[1]-154 < 0) {
+                                yOffset = -20;
+                            }
+                            tooltip
+                                .classed("hidden", false)
+                                .attr("style", "left:"+(mouse[0]-80)+"px;top:"+(mouse[1]-yOffset)+"px")
+                                .html(html);
+                        })
+                        .on("mouseout", function() {
+                            tooltip.classed("hidden", true);
+                        })
+                        .on("click", clicked)
+                        .append("title")
+                            .text(function(d) {
+                                var id = unkey(d.id);
+                                return "Ward " + id[0] + " Precinct " + id[1];
+                            });
+                });
+            });
+
+            d3.select(self.frameElement).style("height", height+"px");
+        </script>
+    </body>
+</html>

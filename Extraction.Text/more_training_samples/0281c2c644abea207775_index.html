@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>Election Results, Lower Austria, 1995 vs. 2015</title>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<style>
+#ttip
+{
+position:absolute;
+background:white;
+display:none;
+font-family:sans-serif;
+font-size:10pt;
+padding:4px;
+border-width:1px;
+border-style:solid;
+border-color:#990033;
+}
+
+.ttip_head
+{
+font-weight:bold;
+text-align:center;
+margin-bottom:0.5em;
+}
+
+.tip_rows
+{
+text-align:left;
+}
+
+table
+{
+border:collapse;
+font-weight:normal;
+}
+
+th
+{
+text-align:center;
+font-weight:normal;
+padding-bottom:0.2em;
+}
+
+td
+{
+padding-left:0.4em;
+padding-right:0.4em;
+text-align:left;
+}
+
+td+td
+{
+text-align:right;
+}
+
+.axis path,
+.axis line,
+.axis_overall path,
+.axis_overall line
+{
+fill: none;
+stroke: #d3d3d3;
+shape-rendering: crispEdges;
+}
+
+.axis text 
+{
+font-family: sans-serif;
+font-size:8pt;
+}
+
+.axis_overall text 
+{
+font-family: sans-serif;
+font-size:9pt;
+}
+
+.SPOE
+{
+fill:red;
+opacity:0.5;
+}
+
+.OEVP
+{
+fill:black;
+opacity:0.5;
+}
+
+#overall_results
+{
+margin-top:20px;
+}
+
+#heading
+{
+font-size:20pt;
+font-family:sans-serif;
+font-weight:bold;
+padding:15px;
+}
+
+.teaser
+{
+font-size:10pt;
+font-family:sans-serif;
+font-weight:normal;
+width:700px;
+line-height:1.5;
+padding-top:10px;
+}
+
+.subheading
+{
+margin-top:40px;
+margin-bottom:15px;
+padding-left:15px;
+font-size:16pt;
+font-family:sans-serif;
+font-weight:bold;
+}
+
+.caption
+{
+text-anchor:middle;
+font-size:8pt;
+font-family:sans-serif;
+}
+
+.legend
+{
+font-size:9pt;
+font-family:sans-serif;
+}
+
+.caption.cat
+{
+font-size:10pt;
+}
+
+#container
+{
+width:1200px;
+}
+
+#menu
+{
+font-family:sans-serif;
+font-size:10pt;
+padding-left:15px;
+float:left;
+}
+
+#partychoice
+{
+font-family:sans-serif;
+font-size:10pt;
+float:right;
+}
+</style>
+</head>
+
+<body>
+<div id="heading">Elections 20 years apart
+<div class="teaser">The charts below compare voter turnout and election results in municipal elections in Lower Austria from 1995 and 2015 for the two major parties, OEVP and SPOE. 566 municipalities are included, four are missing because only one of those parties ran there (Aderklaa, Grosshofen, Parbasdorf and St. Corona am Wechsel).</div></div>
+<div class="subheading">Changes in turnout and party results
+<div class="teaser">The  number of municipalities in which turnout and party results were higher/lower in 2015 than in 1995.<br />The turnout has decreased almost everywhere, however, the change in party results is not so clear. While the SPOE struggles, the OEVP seems to have broadened its support on local level over the last 20 years. This corresponds with its performance on state level, holding the absolute majority in the state parliament since 2003.
+</div>
+</div>
+<div id="overall_change"></div>
+<div class="subheading">Vote share of parties
+<div class="teaser">The number of municipalities in which the OEVP and SPOE received a vote share of ...<br />The changes seem rather small, but this comparison does not account for big swings in the background. Again, the strength of the OEVP in Lower Austria is obvious, having an absolute majority in almost 70% of the municipalities.</div>
+</div>
+<div id="overall_results"></div>
+<div class="subheading">Details
+<div class="teaser">Every dot represents the result for one party in one municipality, its size represents the number of voters.<br />While there were some rather dramatic vote shifts, most of the changes range from minus to plus 10 percentage points. The results show by trend that the parties, especially the OEVP, remain strong were they were strong 20 years ago.
+<br /><br />
+So two decades changed little? While the big picture might suggest this conclusion, the individual political landscape in each village, town or city may look very different today than it did in 1995 - having seen different candidates and politicians and being expanded by new parties.</div>
+</div>
+<div id="container">
+<div id="menu">
+<label><input type="radio" name="type" value="change" id="radio_change" checked onClick="change(this.value)">Change in Turnout (y-axis) and party-results (x-axis) in percentage points</input></label><br />
+<label><input type="radio" name="type" value="result" id="radio_result" onClick="change(this.value)">Results in 1995 (y-axis) and 2015 (x-axis) in percent</input></label>
+</div>
+<div id="partychoice">
+<label><input type="checkbox" name="parties" value="OEVP" id="check_OEVP" onClick="draw(this.value)" checked>OEVP</input></label><br /><label><input type="checkbox" name="parties" value="SPOE" id="check_SPOE" onClick="draw(this.value)" checked>SPOE</input></label></div></div>
+<div id="chart"></div>
+<div id="region"></div>
+
+<script type="text/javascript">
+var width=1200;
+var width1=700;
+var height=700;
+var height1=120;
+var down=height1+height1/4;
+var axpadding=50;
+var dur=1500;
+var xscale=d3.scale.linear().range([25,width-25]);
+var yscale=d3.scale.linear().range([height-20,20]);
+var xaxis=d3.svg.axis().scale(xscale).orient("bottom");
+var yaxis=d3.svg.axis().scale(yscale).orient("left");
+var rscale=d3.scale.linear().range([5,20]); //another scale to adjust the circle-radius to the size of the electorate
+var min,max,tmin,tmax,vmin,vmax;  //variables to store the min/max values
+var zoom=0; //to control the zoom
+var years=["1995","2015"];
+var regions=["Waldviertel","Weinviertel","Mostviertel","Industrieviertel"];
+var overall_cat=["Turnout","OEVP","SPOE"];
+var overall_results_cat=["<10%","10-20%","20-30%","30-40%","40-50%",">50%"];
+var overall_change=[[0,0],[0,0],[0,0]];
+var overall_results={"OEVP":{"<10%":[0,0],"10-20%":[0,0],"20-30%":[0,0],"30-40%":[0,0],"40-50%":[0,0],">50%":[0,0]},"SPOE":{"<10%":[0,0],"10-20%":[0,0],"20-30%":[0,0],"30-40%":[0,0],"40-50%":[0,0],">50%":[0,0]}};
+
+var svg1=d3.select("#overall_change").append("svg").attr("width",width1).attr("height",height1+20);
+var svg2=d3.select("#overall_results").append("svg").attr("width",width1).attr("height",height1+down+22);
+var svg=d3.select("#chart").append("svg").attr("width",width).attr("height",height);
+
+d3.csv("data.csv", function(data)
+{
+
+for (i=0;i<data.length;i++)
+{
+data[i].OEVP_change=+data[i].OEVP_change;  //make sure all values are numbers
+data[i].SPOE_change=+data[i].SPOE_change;
+data[i].Turnout_change=+data[i].Turnout_change;
+data[i].OEVP_result_1995=+data[i].OEVP_result_1995;
+data[i].SPOE_result_1995=+data[i].SPOE_result_1995;
+data[i].OEVP_result_2015=+data[i].OEVP_result_2015;
+data[i].SPOE_result_2015=+data[i].SPOE_result_2015;
+data[i].idname=data[i].name.replace(/[\.,\s+]/g, ''); //to avoid spaces and dots in the class of the element for proper selection
+}
+
+//making a new array for the first bar chart, counting the municipalities
+for (i=0;i<overall_change.length;i++)
+{
+overall_change[i][0]=data.filter(function(d){return d[overall_cat[i]+"_change"]>=0;}).length;
+overall_change[i][1]=data.filter(function(d){return d[overall_cat[i]+"_change"]<0;}).length;
+}
+
+//making a new array for the second bar chart, counting the results in categories
+for (i=1;i<overall_cat.length;i++)
+{
+for (k=0;k<years.length;k++)
+{
+overall_results[overall_cat[i]]["<10%"][k]=data.filter(function(d){return d[overall_cat[i]+"_result_"+years[k]]<10;}).length;
+overall_results[overall_cat[i]]["10-20%"][k]=data.filter(function(d){return d[overall_cat[i]+"_result_"+years[k]]<20 & d[overall_cat[i]+"_result_"+years[k]]>=10;}).length;
+overall_results[overall_cat[i]]["20-30%"][k]=data.filter(function(d){return d[overall_cat[i]+"_result_"+years[k]]<30 & d[overall_cat[i]+"_result_"+years[k]]>=20;}).length;
+overall_results[overall_cat[i]]["30-40%"][k]=data.filter(function(d){return d[overall_cat[i]+"_result_"+years[k]]<40 & d[overall_cat[i]+"_result_"+years[k]]>=30;}).length;
+overall_results[overall_cat[i]]["40-50%"][k]=data.filter(function(d){return d[overall_cat[i]+"_result_"+years[k]]<50 & d[overall_cat[i]+"_result_"+years[k]]>=40;}).length;
+overall_results[overall_cat[i]][">50%"][k]=data.filter(function(d){return d[overall_cat[i]+"_result_"+years[k]]>=50;}).length;
+}
+}
+
+//make the scales for the overall charts
+var scaleheight=height1-15;
+var yscale_overall=d3.scale.linear().domain([0,data.length]).range([scaleheight,10]);
+var xscale_overall=d3.scale.ordinal().domain(overall_cat).rangeRoundBands([axpadding, width1],0.2);
+var xaxis_overall=d3.svg.axis().scale(xscale_overall).orient("bottom").tickSize(0);
+var yaxis_overall=d3.svg.axis().scale(yscale_overall).orient("left").tickValues([Math.round(data.length/2),data.length]);
+
+//first the change-chart
+for (j=0;j<overall_change.length;j++)
+{
+var group=svg1.selectAll(".overall_change")
+  .data(overall_change[j])
+  .enter()
+  .append("g");
+
+group.append("rect")
+  .attr("x",function(d,i){return xscale_overall(overall_cat[j])+xscale_overall.rangeBand()/2*i;})
+  .attr("y",function(d){return yscale_overall(d);})
+  .attr("width",xscale_overall.rangeBand()/2)
+  .attr("height",function(d){return scaleheight - yscale_overall(d);})
+  .style("fill",function(d,i){return i==0 ?  "#a7c88f" : "#cd8c8a";})
+  .append("title").text(function(d,i){
+    i==0 ? hl="higher" : hl="lower";
+	j==0 ? bn="turnout" : j==1 ? bn="OEVP result" : bn="SPOE result";
+	return "In "+d+" municipalities the "+bn+" was "+hl+" in 2015 than in 1995"});
+
+group.append("text")
+  .attr("x",function(d,i){return xscale_overall(overall_cat[j])+xscale_overall.rangeBand()/4+xscale_overall.rangeBand()/2*i;})
+  .attr("y",function(d){return height1-3;})
+  .attr("class","caption")
+  .text(function(d){return d;});
+}
+
+group.append("g")
+  .attr("class","axis_overall")
+  .attr("transform","translate(0,"+scaleheight+")")
+  .attr("id","xaxis_overall")
+  .call(xaxis_overall)
+  .selectAll("text").attr("transform","translate(0,15)");
+  
+group.append("g")
+  .attr("class","axis")
+  .attr("transform","translate("+axpadding+",0)")
+  .attr("id","yaxis_overall")
+  .call(yaxis_overall);
+
+//then the results-charts
+xscale_overall=d3.scale.ordinal().domain(overall_results_cat).rangeRoundBands([axpadding, width1],0.2);
+xaxis_overall=d3.svg.axis().scale(xscale_overall).orient("bottom").tickSize(0);
+
+for (k=1;k<overall_cat.length;k++)
+{
+for (j=0;j<overall_results_cat.length;j++)
+{
+var group=svg2.selectAll(".overall_results_"+overall_cat[k])
+  .data(overall_results[overall_cat[k]][overall_results_cat[j]])
+  .enter()
+  .append("g")
+  .attr("transform","translate(0,"+down*(k-1)+")");
+
+group.append("rect")
+  .attr("x",function(d,i){return xscale_overall(overall_results_cat[j])+xscale_overall.rangeBand()/2*i;})
+  .attr("y",function(d){return yscale_overall(d);})
+  .attr("width",xscale_overall.rangeBand()/2)
+  .attr("height",function(d){return scaleheight - yscale_overall(d);})
+  .style("fill",function(d,i){return k==1 ? "black" : "red";})
+  .style("opacity",function(d,i){return i==0 ?  0.3 : 1;})
+  .append("title").text(function(d,i){
+    i==0 ? yr="1995" : yr="2015";
+	k==1 ? pt="OEVP" : pt="SPOE";
+	return "In "+yr+", the "+pt+" got a vote share of "+overall_results_cat[j]+" in "+d+" municipalities";});
+  
+group.append("text")
+  .attr("x",function(d,i){return xscale_overall(overall_results_cat[j])+xscale_overall.rangeBand()/4+xscale_overall.rangeBand()/2*i;})
+  .attr("y",function(d){return height1-3;})
+  .attr("class","caption")
+  .text(function(d){return d;});
+}
+
+group.append("g")
+  .attr("class","axis_overall")
+  .attr("transform","translate(0,"+scaleheight+")")
+  .attr("id","xaxis_overall")
+  .call(xaxis_overall)
+  .selectAll("text").attr("transform","translate(0,15)");
+
+group.append("g")
+  .attr("class","axis")
+  .attr("transform","translate(50,0)")
+  .attr("id","yaxis_overall_OEVP")
+  .call(yaxis_overall);
+}
+
+//getting the min/max-points of the scales of the scatter plot
+var maxx=[];
+for (i=1;i<overall_cat.length;i++)
+{
+maxx.push(d3.max(data,function(d){return d[overall_cat[i]+"_change"];}));
+maxx.push(d3.min(data,function(d){return d[overall_cat[i]+"_change"];}));
+if (maxx[maxx.length]<0) maxx[maxx.length]=maxx[maxx.length]*(-1);
+}
+
+min=d3.max(maxx)*(-1);
+max=d3.max(maxx);
+
+tmin=d3.min(data,function(d){return d.Turnout_change;});
+tmax=d3.max(data,function(d){return d.Turnout_change;});
+
+if (tmax>tmin*(-1))
+{
+tmin=tmax*(-1);
+}
+else
+{
+tmax=tmin*(-1);
+}
+
+vmin=d3.min(data,function(d){return +d.eligible_voters_2015;});
+vmax=d3.max(data,function(d){return +d.eligible_voters_2015;});
+
+rscale.domain([vmin,vmax]);
+
+xscale.domain([min,max]); //setting the domain for both scales
+yscale.domain([tmin,tmax]);
+
+svg.selectAll(".OEVP").data(data).enter()
+  .append("circle")
+  .attr("cx",function(d){return xscale(d.OEVP_change);})
+  .attr("cy",function(d){return yscale(d.Turnout_change);})
+  .attr("r",function(d){return rscale(+d.eligible_voters_2015);})
+  .attr("class",function(d){return d.idname + " OEVP";})
+  .on("mouseover",function(d){
+    ttip(d,this); //call the tooltip
+    d3.selectAll("circle")
+	  .style("opacity",0.1);
+	d3.selectAll(connect(this.className.baseVal))
+	  .style("opacity",1); //highlighting the corresponding circle of the other party
+  }) 
+
+  .on("mouseout",function(){
+      d3.selectAll("circle")
+	  .style("opacity",0.5);
+	  d3.selectAll("#ttip").style("display","none");
+	  });
+
+svg.selectAll(".SPOE").data(data).enter()
+  .append("circle")
+  .attr("cx",function(d){return xscale(d.SPOE_change);})
+  .attr("cy",function(d){return yscale(d.Turnout_change);})
+  .attr("r",function(d){return rscale(+d.eligible_voters_2015);})
+  .attr("class",function(d){return d.idname +" SPOE";})
+  .attr("id",function(d){return d.idname;})
+  .on("mouseover",function(d){
+      ttip(d,this);
+      d3.selectAll("circle")
+	    .style("opacity",0.1); 
+	  d3.selectAll(connect(this.className.baseVal))
+	    .style("opacity",1);	  
+	  })
+  .on("mouseout",function(){
+      d3.selectAll("circle")
+	  .style("opacity",0.5); 
+	  d3.selectAll("#ttip").style("display","none");
+	  });
+
+svg.append("g")
+  .attr("class","axis")
+  .attr("transform","translate(0,"+yscale(0)+")")
+  .attr("id","xaxis")
+  .call(xaxis)
+  .append("text")
+  .attr("x", width)
+  .style("text-anchor", "end")
+  .attr("dx","-2.5em")
+  .attr("dy", "-0.5em")
+  .attr("id","text_x")
+  .text("change in party-results");
+
+svg.append("g")
+  .attr("class","axis")
+  .attr("transform","translate("+xscale(0)+",0)")
+  .attr("id","yaxis")
+  .call(yaxis)
+  .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 6)
+  .style("text-anchor", "end")
+  .attr("dy","0.5em")
+  .attr("dx","-2em")
+  .attr("id","text_y")
+  .text("change in turnout");
+
+
+svg.on("click",function(){
+if (zoom==0)
+{
+var x=d3.mouse(this);
+zoom_in(x);
+}
+else
+{
+zoom_out();
+}
+});
+});
+
+function draw(selection)  //show/hide the parties
+{
+if (document.getElementById('check_SPOE').checked) 
+{
+svg.selectAll(".SPOE").transition().duration(500).attr("r",function(d){return rscale(+d.eligible_voters_2015);});
+}
+else
+{
+svg.selectAll(".SPOE").transition().duration(500).attr("r",0);
+}
+
+if (document.getElementById('check_OEVP').checked) 
+{
+svg.selectAll(".OEVP").transition().duration(500).attr("r",function(d){return rscale(+d.eligible_voters_2015);});
+}
+else
+{
+svg.selectAll(".OEVP").transition().duration(500).attr("r",0);
+}
+}
+
+function change(selection)  //change the scatter plot
+{
+if (selection=="result")
+{
+xscale.domain([0,100]); 
+yscale.domain([0,100]);
+
+svg.selectAll(".OEVP")
+  .transition()
+  .duration(dur)
+  .attr("cx",function(d){return xscale(d.OEVP_result_2015);})
+  .attr("cy",function(d){return yscale(d.OEVP_result_1995);});
+  
+svg.selectAll(".SPOE")
+  .transition()
+  .duration(dur)
+  .attr("cx",function(d){return xscale(d.SPOE_result_2015);})
+  .attr("cy",function(d){return yscale(d.SPOE_result_1995);});
+
+svg.select("#xaxis")
+  .transition()
+  .duration(dur)
+  .attr("transform","translate(0,"+yscale(0)+")")
+  .call(xaxis)
+  .select("#text_x")
+  .text("party results 2015");
+
+svg.select("#yaxis")
+  .transition()
+  .duration(dur)
+  .attr("transform","translate("+xscale(0)+",0)")
+  .call(yaxis)
+  .select("#text_y")
+  .text("party results 1995");
+}
+
+else
+{
+xscale.domain([min,max]);
+yscale.domain([tmin,tmax]);
+
+svg.selectAll(".OEVP")
+  .transition()
+  .duration(dur)
+  .attr("cx",function(d){return xscale(d.OEVP_change);})
+  .attr("cy",function(d){return yscale(d.Turnout_change);});
+
+svg.selectAll(".SPOE")
+  .transition()
+  .duration(dur)
+  .attr("cx",function(d){return xscale(d.SPOE_change);})
+  .attr("cy",function(d){return yscale(d.Turnout_change);});
+
+svg.select("#xaxis")
+  .transition()
+  .duration(dur)
+  .attr("transform","translate(0,"+yscale(0)+")")
+  .call(xaxis)
+  .select("#text_x")
+  .text("change in party-results");
+
+svg.select("#yaxis")
+  .transition()
+  .duration(dur)
+  .attr("transform","translate("+xscale(0)+",0)")
+  .call(yaxis)
+  .select("#text_y")
+  .text("change in Turnout");
+}
+
+}
+
+function connect(element)  //a helper-function to allow the highlighting of the dots
+{
+element=element.split(" ");
+return "."+element[0];
+}
+
+function ttip(data,coord){
+var yoffset=height1*4+down*3.5; //for positioning the tooltip, not really a good solution
+var x=d3.mouse(coord)[0];
+var y=d3.mouse(coord)[1];
+var ttip=d3.select("#chart").append("div").attr("id","ttip"); //prepare the tooltip
+var temp="<div class=\"ttip_head\">"+data.name+"</div><table><th></th><th>1995</th><th>2015</th><th>+/-</th><tr><td>Turnout</td><td>"+data.Turnout_1995+"</td><td>"+data.Turnout_2015+"</td><td>"+data.Turnout_change+"</td></tr><tr><td>OEVP</td><td>"+data.OEVP_result_1995+"</td><td>"+data.OEVP_result_2015+"</td><td>"+data.OEVP_change+"</td></tr><tr><td>SPOE</td><td>"+data.SPOE_result_1995+"</td><td>"+data.SPOE_result_2015+"</td><td>"+data.SPOE_change+"</td></tr></table>";
+ttip.style("left",(x+coord.r.baseVal.value*2)+"px")
+  .style("top",y+yoffset+"px")
+  .style("display","block")
+  .html(temp);
+}
+
+function zoom_in(x)
+{
+zoom=1;
+var x1,x2,y1,y2,ax,ay;  //storing some values to allow reuse of the same code
+if (document.getElementById('radio_change').checked)
+{
+var pscalex=d3.scale.linear().domain([25,width-25]).range([min,max]);
+if (pscalex(x[0])+10>=max) x2=max; else x2=pscalex(x[0])+10;
+if (pscalex(x[0])-10<=min) x1=min; else x1=pscalex(x[0])-10;
+xscale.domain([x1,x2]);
+v1="OEVP_change";
+v2="Turnout_change";
+v3="SPOE_change";
+v4="Turnout_change";
+ax=0;
+ay=0;
+}
+else
+
+{
+var pscalex=d3.scale.linear().domain([25,width-25]).range([0,100]);
+var pscaley=d3.scale.linear().domain([height-20,20]).range([0,100]);
+if (pscalex(x[0])+10>=100) x2=100; else x2=pscalex(x[0])+10;
+if (pscalex(x[0])-10<=0) x1=0; else x1=pscalex(x[0])-10;
+if (pscaley(x[1])+10>=100) y2=100; else y2=pscaley(x[1])+10;
+if (pscaley(x[1])-10<=0) y1=0; else y1=pscaley(x[1])-10;
+xscale.domain([x1,x2]);
+yscale.domain([y1,y2]);
+v1="OEVP_result_2015";
+v2="OEVP_result_1995";
+v3="SPOE_result_2015";
+v4="SPOE_result_1995";
+ax=x1;
+ay=y1;
+}
+
+svg.selectAll(".OEVP")
+  .transition()
+  .duration(500)
+  .attr("cx",function(d){return xscale(d[v1]);})
+  .attr("cy",function(d){return yscale(d[v2]);});
+  
+svg.selectAll(".SPOE")
+  .transition()
+  .duration(500)
+  .attr("cx",function(d){return xscale(d[v3]);})
+  .attr("cy",function(d){return yscale(d[v4]);});
+
+svg.select("#xaxis")
+  .transition()
+  .duration(500)
+  .attr("transform","translate(0,"+yscale(ay)+")")
+  .call(xaxis);
+
+  svg.select("#yaxis")
+  .transition()
+  .duration(500)
+  .attr("transform","translate("+xscale(ax)+",0)")
+  .call(yaxis);
+}
+
+function zoom_out()
+{
+var v1,v2,v3,v4,tx,ty;
+if (document.getElementById('radio_change').checked)
+{
+xscale.domain([min,max]);
+v1="OEVP_change";
+v2="Turnout_change";
+v3="SPOE_change";
+v4="Turnout_change";
+tx="change in party-results";
+ty="change in Turnout";
+}
+else
+{
+xscale.domain([0,100]);
+yscale.domain([0,100]);
+v1="OEVP_result_2015";
+v2="OEVP_result_1995";
+v3="SPOE_result_2015";
+v4="SPOE_result_1995";
+tx="party results 2015";
+ty="party results 1995";
+}
+zoom=0;
+
+svg.selectAll(".OEVP")
+  .transition()
+  .duration(500)
+  .attr("cx",function(d){return xscale(d[v1]);})
+  .attr("cy",function(d){return yscale(d[v2]);});
+
+  svg.selectAll(".SPOE")
+  .transition()
+  .duration(500)
+  .attr("cx",function(d){return xscale(d[v3]);})
+  .attr("cy",function(d){return yscale(d[v4]);});
+
+svg.select("#xaxis")
+  .transition()
+  .duration(500)
+  .attr("transform","translate(0,"+yscale(0)+")")
+  .call(xaxis)
+  .select("#text_x")
+  .text(tx);
+
+svg.select("#yaxis")
+  .transition()
+  .duration(500)
+  .attr("transform","translate("+xscale(0)+",0)")
+  .call(yaxis)
+  .select("#text_y")
+  .text(ty);
+}
+
+</script>
+</body>
+</html>

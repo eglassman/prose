@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+
+
+/* CSS goes here. */
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+
+var width = 2000,
+    height = 1500;
+
+var scale = 10000;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var color = d3.scale.category20();
+
+var projection = d3.geo.mercator()
+    .scale(scale)
+    .rotate([84.4, -33.9, 0]);
+
+var path = d3.geo.path()
+    .projection(projection);
+ 
+
+d3.json("topo_GA_all_counties.json", function(error, counties) {
+  if (error) return console.error(error);
+  console.log("ok counties:", counties);
+
+svg.selectAll("#county")
+  .data(topojson.feature(counties, counties.objects['GA_all_counties']).features)
+  .enter().append("path")
+  .attr("id", function (d, i) {return "county" + i; })
+  .attr("d", path)
+  .attr("fill", "white")
+  .attr("stroke", "black");
+});
+
+</script> 

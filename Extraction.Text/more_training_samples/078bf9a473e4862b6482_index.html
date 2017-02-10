@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Materials in Houston Public Art</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+				/*color: #072854;*/
+			}
+
+			p {
+				font-size: 14px;
+				margin: 10px 0 10 0;
+				/*color: #072854;*/
+			}
+
+			a:link {
+				/*color: #072854;*/
+			}
+
+			a:visited {
+				color: #FF7F00;
+			}
+
+			a:hover{
+				opacity: 0.8;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover {
+				fill: #FF7F00;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.x.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.y.axis text {
+				font-family: sans-serif;
+				font-size: 10px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<h1>Materials in Houston Public Art</h1>
+		<p>The number of <strong>unique materials</strong> used in the construction of public art installations on display in Houston. You can explore the source data over at the City of Houston's <a href="http://data.ohouston.org/dataset/public-art-on-display">Data Portal</a></p>
+		<script type="text/javascript">
+			var w = 1130;
+			var h = 150;
+			var padding = {
+				top:20,
+				right:10,
+				bottom:30,
+				left: 20
+			};
+
+			var xScale = d3.scale.linear()
+				.rangeRound([padding.left, w - padding.right - padding.left], 1);
+
+			var yScale = d3.scale.linear()
+													.range([h - padding.bottom, padding.top]);
+
+			var xAxis = d3.svg.axis()
+										.scale(xScale)
+										.orient("bottom")
+										.tickFormat(d3.format("d"));
+
+			var yAxis = d3.svg.axis()
+										.scale(yScale)
+										.orient("right")
+										.tickFormat(function(d){
+											return d;
+										});
+
+			var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+
+			d3.csv("houston-public-art.csv", function(data) {
+
+				// Sort first by count of Materials in the artwork
+				// then by then number of characters in the description of the materials
+				// then alphabetically by the first charcter of the description of the materials
+			/*
+			data.sort(
+    		firstBy(function (v1, v2) { return v2.countOfMaterials - v1.countOfMaterials; })
+    		.thenBy(function (v1, v2) { return v2.mediaAndSupport.length - v1.mediaAndSupport.length; })
+    		.thenBy(function (v1, v2) { return v2.mediaAndSupport - v1.mediaAndSupport; })
+			);
+			*/
+				var minCompletionYear = d3.min(data, function(d){
+						return +d.completionYear;
+					})
+
+				var maxCompletionYear = d3.max(data, function(d){
+						return +d.completionYear;
+					})
+
+				var spanCompletionYear = maxCompletionYear - minCompletionYear
+
+				var yearPadding = 0.05*spanCompletionYear
+
+				xScale.domain([
+					minCompletionYear - yearPadding,
+					maxCompletionYear + yearPadding
+				]);
+
+				yScale.domain([0,d3.max(data, function(d){
+					return +d.countOfMaterials; 
+				})]);
+
+				xAxis.ticks(10);
+				yAxis.ticks(d3.max(data, function(d){
+					return +d.countOfMaterials;
+				}));
+
+				var circles = svg.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle");
+
+				circles.attr("cx", function(d){
+					return xScale(d.completionYear);
+					})
+					.attr("cy", function(d){
+						return yScale(d.countOfMaterials);
+					})
+					.attr("r", .1)
+					.attr("fill", "#072854")
+					.append("title")
+					.text(function(d){
+						return d.mediaAndSupport + "\n" + d.displayTitle + "\n" + d.displayArtist + ", " + d.completionYear;
+					})
+
+					circles.sort(function(a, b){
+						return d3.ascending(+a.completionYear, +b.completionYear);
+					})
+					.transition()
+					.delay(function(d, i){
+						return i * 100;
+					})
+					.duration(4000)
+					.attr("r", 3.2)
+
+					svg.append("g")
+						 .attr("class", "x axis")
+						 .attr("transform", "translate(" + padding.left + "," + (h-padding.bottom) + ")")
+						 .call(xAxis);
+
+					svg.append("g")
+						 .attr("class", "y axis")
+						 .attr("transform", "translate(" + padding.left + ",0)")
+						 .call(yAxis);
+				});
+			
+
+		/*** Copyright 2013 Teun Duynstee Licensed under the Apache License, Version 2.0 ***/
+		/* https://github.com/Teun/thenBy.js */
+		firstBy=(function(){
+
+			function e(f){
+				f.thenBy=t;
+				return f}
+
+			function t(y,x){
+				x=this;
+				return e(function(a,b){
+					return x(a,b)||y(a,b)
+				})}
+				return e
+			})();
+
+		</script>
+
+	</body>
+</html>

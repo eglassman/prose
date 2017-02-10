@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head><title>Responsiv data vis</title>
+<style>
+
+
+#container{
+  position: absolute; top: 5%; left: 5%; height: 90%; width: 90%;
+}
+svg{
+  border:solid 1px #f00;
+}
+</style></head>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<body>
+  <div id="container">
+    <svg></svg>
+  </div>
+
+</body>
+<script>
+
+var debounce = function(fn, timeout) {
+  var timeoutID = -1;
+  return function() {
+    if (timeoutID > -1) {
+      window.clearTimeout(timeoutID);
+    }
+    timeoutID = window.setTimeout(fn, timeout);
+  }
+};
+
+var draw = debounce(function() {
+  console.log('do your stuff in here');
+  var bounds = d3.select('#container').node().getBoundingClientRect();
+  var margin = {top:0,left:0,bottom:0,right:0};
+  d3.select('svg').attr({
+    height:Math.round(bounds.height),
+    width:Math.round(bounds.width)
+  });
+
+
+}, 125); //but wait atleast 125 ms before repeating this function
+
+d3.select(window).on('resize', draw);
+
+//$(window).resize(draw);
+
+</script>
+</html>

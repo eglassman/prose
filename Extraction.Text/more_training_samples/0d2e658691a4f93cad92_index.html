@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title>Block Color Clustering</title>
+		
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<script type="text/javascript" src="http://d3js.org/d3.hexbin.v0.min.js"></script>	
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.js"></script>
+
+		<!-- jQuery -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:700,400,300' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+		<style>
+			body {
+				text-align: center;
+			}
+			
+			.header {
+				font-family: 'Montserrat', sans-serif;
+				margin-top: 20px;
+				margin-left: 40px;
+				padding-bottom: 20px;
+				font-size: 34px; 
+				text-align: left;
+				max-width: 900px;
+				color: #525252;
+			}
+			.hint {
+				font-family: 'Lora', serif;
+				margin-top: 10px;
+				color: #AAAAAA; 
+				font-size: 12px;
+				max-width: 750px;
+			}
+			
+			.popover{
+				font-family: 'Montserrat', sans-serif;
+				font-size: 12px;
+				font-weight: 400;
+				color: #525252;
+				text-align: center;
+			}
+			
+			.btn {
+				font-family: 'Lora', serif;
+				color: #525252;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			A Self Organizing Map Clustering of block Colors
+			<div class="hint">
+				<p>All of the custom colors found in d3.js blocks were used as input. The data was taken from the <a href="http://bl.ocks.org/enjalot/de262983e3ba0c0f89c1">enjalot's block</a> and includes 3250 different blocks. 
+				He parsed out hex codes, hsl(a) and rgb(a) in any html, js or coffee file found in each block and I converted all of these to their hex, rgb and hsl values. There were 24700 different color statements in these blocks that make up 4350 unique colors.</p>
+				<p>The clustering grouped similar colors together in 600 hexagons (based on their RGB and HSL values, thus 6 variables in total). The map below displays the "average" hex value and the size of each hexagon is scaled to the number of (the 24700) colors that are grouped in each hexagon. 
+				The biggest one, pure black, #000000, has 1500 entries. In essence it is an exercise in trying to map a 3D color space into a 2D plane while also looking at the nuances in colors used in blocks :)</p>
+			</div>
+		</div>
+		<div id="chart"></div>
+		
+		<div id="button" class="btn-group" data-toggle="buttons">
+			<label id="diffSizeButton" class="btn btn-default active"><input type="radio" class="btn-options"> Sized hexagons </label>
+			<label id="sameSizeButton" class="btn btn-default"><input type="radio" class="btn-options"> Unsized hexagons </label>
+		</div>
+		
+		<script type="text/javascript" src="script.js"></script>
+	</body>
+</html>

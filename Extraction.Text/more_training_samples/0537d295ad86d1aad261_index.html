@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title></title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.0/mapbox-gl.js'></script>
+  <script src='http://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>  
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+
+var Tour = function() {
+  mapboxgl.accessToken = 'pk.eyJ1IjoidHdlbGNoIiwiYSI6Il9pX3dtb3cifQ.YcYnsO0X2p3x0HpHPFfleg';
+};
+
+Tour.prototype.start = function() {
+  this.map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v8',
+    center: [-122.580067, 45.548602],
+    zoom: 20,
+    minzoom: 18
+  });
+
+  this.map.on('style.load', function () {
+    this.startTour();
+  }.bind(this));
+};
+
+Tour.prototype.startTour = function() {
+  var time = 0;
+  var timePerStep = 100;
+  var interval = setInterval(function() {
+    time += timePerStep;
+    if (time === 3000) {this.startPerson();}
+    else if (time === 4000) {this.startVideo();}
+    else if (time === 50000) {this.stopPerson();}
+    else if (time === 45000) {this.stopVideo();}
+  }.bind(this), timePerStep);
+};
+
+Tour.prototype.textEvent = function(text) {
+
+}
+
+Tour.prototype.startPerson = function() {
+  var iPath = turf.linestring([
+    [ -122.579915799999981, 45.5485545, 0.0 ], [ -122.57994530000002, 45.5485536, 0.0 ], [ -122.579944, 45.5485996, 0.0 ], [ -122.580011, 45.54860810000001, 0.0 ], [ -122.5799507, 45.5486043, 0.0 ], [ -122.579954700000016, 45.5485489, 0.0 ], [ -122.579903799999983, 45.5485489, 0.0 ]
+  ]);
+
+  var iPathLength = turf.lineDistance(iPath, 'miles');
+  var iPoint = turf.along(iPath, 0, 'miles');
+
+  this.map.addSource("pLine", {
+    "type": "geojson",
+    "data": iPath,
+    "maxzoom": 20
+  });
+
+  this.map.addLayer({
+    "id": "pLine",
+    "type": "line",
+    "source": "pLine",
+    "layout": {
+      "line-join": "round",
+      "line-cap": "round"
+    },
+    "paint": {
+      "line-color": "#888",
+      "line-width": 2
+    }
+  });
+
+  this.map.addSource("pDot", {
+    "type": "geojson",
+    "data": iPoint,
+    "maxzoom": 20
+  });
+
+  this.map.addLayer({
+    "id": "pDot",
+    "type": "circle",
+    "source": "pDot",
+    "layout": {},
+    "paint": {
+      "circle-radius": 4
+    }
+  });
+
+  var step = 0;
+  var numSteps = 800; //Change this to set animation resolution
+  var timePerStep = 50; //Change this to alter animation speed
+  var pDotSource = this.map.getSource('pDot');
+  this.personinterval = setInterval(function() {
+    step += 1;
+    if (step > numSteps) {
+      clearInterval(this.personInterval);
+    } else {
+      var curDistance = step / numSteps * iPathLength;
+      var iPoint = turf.along(iPath, curDistance, 'miles');
+      pDotSource.setData(iPoint);
+    }
+  }, timePerStep);
+};
+
+Tour.prototype.stopPerson = function() {
+  this.map.removeLayer('pLine');
+  this.map.removeLayer('pDot');
+  this.map.removeSource('pLine');
+  this.map.removeSource('pDot');
+  clearInterval(this.personInterval);
+};
+
+Tour.prototype.startVideo = function() {
+  var videoSrc = new mapboxgl.VideoSource({
+    "urls": ["https://cldup.com/KpVLU35SZv.webm", "https://cldup.com/B-IRzEIuWZ.mp4"],
+    "coordinates": [
+      [-122.580348, 45.548714],
+      [-122.580063, 45.548714],
+      [-122.580063, 45.548610],
+      [-122.580348, 45.548610]
+    ]
+  });
+
+  videoSrc.on('change', function (e) {
+    this.video = videoSrc.getVideo();
+  }.bind(this));
+
+  this.map.addSource("pVideo", videoSrc);
+  this.map.addLayer({
+    "id": "pVideo",
+    "type": "raster",
+    "source": "pVideo"
+  });
+};
+
+Tour.prototype.stopVideo = function() {
+  this.video.pause();
+  this.map.removeLayer('pVideo');
+  this.map.removeSource('pVideo');
+};
+
+var tour = new Tour();
+tour.start();
+
+</script>
+
+</body>
+</html>

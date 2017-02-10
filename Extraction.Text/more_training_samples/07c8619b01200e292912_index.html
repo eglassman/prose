@@ -1,0 +1,132 @@
+<html>
+<head>
+  <title>Drawing parallel edges</title>
+  <meta charset="utf-8" />
+<script src="http://d3js.org/d3.v3.min.js" type="text/JavaScript"></script>
+</head>
+<style>
+  svg {
+    height: 500px;
+    width: 500px;
+    border: 1px solid gray;
+  }
+</style>
+<body>
+
+<div id="viz">
+  <svg>
+  </svg>
+</div>
+</body>
+  <footer>
+<script>
+
+d3.csv("firm.csv",function(error,data) {createNetwork(data)});
+
+var nodeSize = 5;
+
+function offsetEdge(d) {
+  var diffX = d.target.y - d.source.y;
+  var diffY = d.target.x - d.source.x;
+
+  var angle0 = ( Math.atan2( diffY, diffX ) + ( Math.PI / 2 ) );
+  var angle1 = angle0 + ( Math.PI * 0.75 );
+  var angle2 = angle0 + ( Math.PI * 0.25 );
+
+  var x1 = d.source.x + (nodeSize * Math.cos(angle1));
+  var y1 = d.source.y - (nodeSize * Math.sin(angle1));
+  var x2 = d.target.x + (nodeSize * Math.cos(angle2));
+  var y2 = d.target.y - (nodeSize * Math.sin(angle2));
+
+  return {x1: x1, y1: y1, x2: x2, y2: y2}
+
+}
+
+function createNetwork(edgelist) {
+  var nodeHash = {};
+  var edgeHash = {};
+  var nodes = [];
+  var edges = [];
+
+  var marker = d3.select("svg").append('defs')
+    .append('marker')
+    .attr("id", "Triangle")
+    .attr("refX", 6)
+    .attr("refY", 3)
+    .attr("markerUnits", 'userSpaceOnUse')
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 9)
+    .attr("orient", 'auto')
+    .append('path')
+    .style("fill", "#996666")
+    .attr("d", 'M 0 0 6 3 0 6 1.5 3');
+
+  edgelist.forEach(function (edge, i) {
+    if (!nodeHash[edge.source]) {
+      nodeHash[edge.source] = {id: edge.source, label: edge.source};
+      nodes.push(nodeHash[edge.source]);
+    }
+    if (!nodeHash[edge.target]) {
+      nodeHash[edge.target] = {id: edge.target, label: edge.target};
+      nodes.push(nodeHash[edge.target]);
+    }
+    if (edge.weight >= 5) {
+      edges.push({source: nodeHash[edge.source], target: nodeHash[edge.target], weight: edge.weight});
+    }
+  });
+  createForceNetwork(nodes, edges);
+}
+
+function createForceNetwork(nodes, edges) {
+
+//create a network from an edgelist
+
+  var force = d3.layout.force().nodes(nodes).links(edges)
+  .size([500,500])
+  .charge(-300)
+  .linkStrength(.5)
+  .gravity(.25)
+  .on("tick", updateNetwork);
+
+  d3.select("svg").selectAll("line")
+  .data(edges)
+  .enter()
+  .append("line")
+  .style("stroke-width", "1px")
+  .style("stroke", "#996666")
+  .attr("marker-end", "url(#Triangle)");
+
+  d3.select("svg").selectAll("circle")
+  .data(nodes)
+  .enter()
+  .append("circle")
+  .attr("class", "node")
+  .attr("r", nodeSize)
+  .style("fill", "#66CCCC")
+  .style("opacity", 0.5)
+  .call(force.drag());
+
+  force.start();
+
+  function updateNetwork() {
+    d3.select("svg").selectAll("line").each(function (d) {
+      var startCoords = offsetEdge(d);
+      d3.select(this)
+      .attr("x1", startCoords.x1)
+      .attr("y1", startCoords.y1)
+      .attr("x2", startCoords.x2)
+      .attr("y2", startCoords.y2)
+    })
+
+    d3.select("svg").selectAll("circle.node")
+      .attr("cx", function (d) {return d.x})
+      .attr("cy", function (d) {return d.y});
+  }
+
+
+
+}
+</script>
+  </footer>
+
+</html>

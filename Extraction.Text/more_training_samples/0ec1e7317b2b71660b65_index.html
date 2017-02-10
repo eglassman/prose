@@ -1,0 +1,92 @@
+<html>
+<meta charset="utf-8">
+<style>
+.fill {
+  fill: #ccc;
+}
+.stroke {
+  fill: none;
+  stroke: #005290;
+  stroke-width: 100px;
+}
+</style>
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="640.0pt" height="340.0pt" viewBox="0 0 1500 1350" preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0,1350) scale(0.1,-0.1)" fill="#005290" stroke="none">
+    <defs>
+        
+<path id = "l1" d="M1040 13360 l-860 -1790 l2650 -1925z"/> 
+<path id = "r1" d="M13960 13360 l860 -1790 l-2650 -1925z"/>    
+<path id = "l2" d="M15 11250 l1200 -2550 l5700 -4100 l430 1350z"/>
+<path id = "r2" d="M14985 11250 l-1200 -2550 l-5700 -4100 l-430 1350z"/>
+<path id = "r3" d="M13455 8070 l-1200 -2550 l-1780 -1270 l-2300 0z"/>        
+<path id = "l3" d="M1545 8070 l1200 -2550 l1780 -1270 l2300 0z"/>
+<path id = "r4" d="M10930 2500 l-1735 -1260 l-555 1680 l860 620z"/>
+<path id = "l4" d="M4070 2500 l1735 -1260 l555 1680 l-860 620z"/>
+<path id = "c1" d="M7500 3300 
+                   m -800, 0 
+                   a 800, 800 0 1,1 1600,0 
+                   a 800, 800 0 1,1 -1600,0
+                   "/>
+<path id = "c2" d="M7500 2070 L6069 1046 L7500 0 L8931 1046z"/>
+        <clipPath id="clip-r1">
+        <use xlink:href="#r1"/>
+        </clipPath>
+    </defs>
+  <use class="fill" xlink:href="#r1"/>
+  <use class="fill" xlink:href="#l1"/>
+  <use class="fill" xlink:href="#r2"/>
+  <use class="fill" xlink:href="#l2"/>
+  <use class="fill" xlink:href="#r3"/>
+  <use class="fill" xlink:href="#l3"/>
+  <use class="fill" xlink:href="#r4"/>
+  <use class="fill" xlink:href="#l4"/>
+  <use class="fill" xlink:href="#c1"/>
+  <use class="fill" xlink:href="#c2"/>
+    
+
+    
+    <path class="stroke" style="display:none;" d="M1040 13360 l-860 -1790 l2650 -1925z 
+                                                  M13960 13360 l860 -1790 l-2650 -1925z
+                                                  M15 11250 l1200 -2550 l5700 -4100 l430 1350z 
+                                                  M14985 11250 l-1200 -2550 l-5700 -4100 l-430 1350z"/>     
+        <path class="stroke" style="display:none;" d="M1545 8070 l1200 -2550 l1780 -1270 l2300 0z 
+                                                  M13455 8070 l-1200 -2550 l-1780 -1270 l-2300 0z
+                                                  M4070 2500 l1735 -1260 l555 1680 l-860 620z 
+                                                  M10930 2500 l-1735 -1260 l-555 1680 l860 620z"/> 
+    
+    <path class="stroke" style="display:none;" d="M7500 3300 
+                   m -800, 0 
+                   a 800, 800 0 1,1 1600,0 
+                   a 800, 800 0 1,1 -1600,0 M7500 2070 L6069 1046 L7500 0 L8931 1046z"/>
+
+    </g>
+</svg>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var width = 1500, height = 1500;
+d3.select(this)
+    .on("touchstart", animate)
+    .on("click", animate)
+    .on("load", animate);
+function animate() {
+  var delay = 0,
+      stroke = d3.selectAll(".stroke");
+  // First cancel any active or scheduled transitions.
+  stroke.interrupt().transition();
+  // Then schedule the new transition.
+  stroke.transition().each(function() {
+    var length = this.getTotalLength(),
+        duration = 1000;
+    d3.select(this)
+        .style("display", null)
+        .style("stroke-dasharray", "0," + length)
+      .transition()
+        .delay(delay)
+        .duration(duration)
+        .style("stroke-dasharray", length + "," + length);
+    delay += duration;
+  });
+}
+</script>
+</html>

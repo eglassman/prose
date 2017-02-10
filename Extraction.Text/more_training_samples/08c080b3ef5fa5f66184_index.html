@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+	label, .slider-value{
+		font-family: monospace;
+	}
+	svg {
+		border: 1px solid #000;
+	}
+	.axis{
+		stroke:#000;
+		fill:none;
+	}
+	.cross-hair-line{
+		stroke:#666;
+		fill:none;
+	}
+	.point{
+		stroke:#666;
+		fill:#fff;
+	}
+	</style>
+
+	<title>isometric</title>
+</head>
+<body>
+	<h1>isometric</h1>
+	<div class="content">
+		<br><label>X</label> <input min="0" max="100" type="range" data-property="x"> <span data-property="x" class="slider-value"></span><span class="unit"></span>
+		<br><label>Y</label> <input min="0" max="100" type="range" data-property="y"> <span data-property="y" class="slider-value"></span><span class="unit"></span>
+		<br><label>Z</label> <input min="0" max="100" type="range" data-property="z"> <span data-property="z" class="slider-value"></span><span class="unit"></span>
+	</div>
+</body>
+<script>
+
+	var height = 300, width = 500;
+
+	var data = {
+		f:0,
+		r:0,
+		v:0,
+	};
+
+	var svg = d3.select('.content')
+		.append('svg')
+			.attr({
+				'width':width,
+				'height':height
+			})
+		.append('g')
+			.attr({
+				'class':'origin',
+				'transform':'translate(250,200)'
+			});
+
+	
+
+	axes(svg);
+
+	d3.selectAll('input[type="range"]')
+		.each(draw)
+		.on('input',draw);
+
+	
+
+	function draw(){
+		d3.select('span[data-property='+this.dataset.property +']').text(this.value);
+		data[this.dataset.property] = Number(this.value);
+
+		//position dot
+		d3.select('g.origin')
+			.selectAll('.cross-hair-line')
+			.data(crossHair(data))
+				.enter()
+			.append('line')
+				.attr('class', 'cross-hair-line');
+
+		d3.select('g.origin')
+			.selectAll('.point')
+			.data([data])
+				.enter()
+			.append('g')
+				.attr('class','point')
+			.append('circle')
+				.attr({
+					cx:0,cy:0,r:10
+				});
+
+		d3.selectAll('.cross-hair-line')
+			.attr({
+				x1:function(d){return d.start[0]},
+				y1:function(d){return d.start[1]},
+				x2:function(d){return d.end[0]},
+				y2:function(d){return d.end[1]}
+			})
+
+		d3.selectAll('.point')
+			.attr({
+				'transform':function(d,i){
+					var projected = isometric([d.x, d.y, d.z]);
+					return 'translate(' + projected[0] + ',' + projected[1] + ')';
+				}
+			})
+	}
+
+	function crossHair(d){
+		var lines = [
+			{
+				start: isometric([0, d.y, d.z]),
+				end: isometric([100, d.y, d.z])
+			},
+			{
+				start: isometric([d.x ,0, d.z]),
+				end: isometric([d.x, 100, d.z])
+			},
+			{
+				start: isometric([d.x, d.y, 0]),
+				end: isometric([d.x, d.y, 100])
+			}
+		];
+		return lines;
+	}
+
+	function isometric(p){	//[x,y,z] -> [x,y]
+		var x = (p[0]-p[2]) * Math.cos(Math.PI/8);
+		var y = -p[1] + (p[0]+p[2]) * Math.sin(Math.PI/8);
+		return [x,y];
+	}
+
+	function axes(parent){
+		var g = parent.append('g')
+			.attr('class','axes');
+
+		d3.selectAll('input[type="range"]')
+			.each(function(d,i){
+				var range = d3.select(this);
+				this.dataset.property
+
+				var startPoint = [0,0,0]
+				endPoint = [];
+				if(this.dataset.property == "x"){
+					endPoint = [ Number(range.attr('max')) , 0, 0 ];
+				}
+				if(this.dataset.property == "y"){
+					endPoint = [ 0, Number(range.attr('max')) , 0 ];
+				}
+				if(this.dataset.property == "z"){
+					endPoint = [ 0, 0,  Number(range.attr('max')) ];
+				}
+
+				var projectedStart = isometric(startPoint);
+				var projectedEnd = isometric(endPoint);
+
+				g.append('line')
+					.attr({
+						'class':'axis',
+						x1:projectedStart[0],
+						y1:projectedStart[1],
+						x2:projectedEnd[0],
+						y2:projectedEnd[1]
+					});
+
+				g.append('text')
+					.attr({
+						'class':'axis-label',
+						'transform':'translate('+projectedEnd[0]+','+projectedEnd[1]+')',
+						'text-anchor':'middle',
+						'dy':-10
+					})
+					.text(this.dataset.property + ' ' + range.attr('max'))
+			})
+
+	}
+
+	
+
+</script>
+</html>

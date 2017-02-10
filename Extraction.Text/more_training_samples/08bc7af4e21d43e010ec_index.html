@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Test</title>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <style type="text/css">
+        
+        body {
+            background-color: #ddddff;
+        }
+
+        svg {
+            background-color: white;
+        }
+        
+        .bar {
+            height : 8;
+        }
+        
+        .text {
+            color: black;
+            font-size: 26px;
+        }
+
+		</style>
+    </head>
+    <body>
+              
+        <script>
+        var width = 1200,
+            height = 5000
+            
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+            
+        d3.csv("tweeps.csv", function(data) {
+        
+       
+            var max_followers_count = d3.max(data, function(d) { return parseInt(d.followers_count); });
+            var max_friends_count = d3.max(data, function(d) { return parseInt(d.friends_count); });
+            
+            data.sort(function(a, b) {
+				return d3.descending(+a.followers_count, +b.followers_count); // + signs because it makes ints from strrings
+                });
+                        
+            console.log(max_followers_count);
+            console.log(max_friends_count);
+
+            var tweeps = svg.selectAll("g")
+                            .data(data)
+                            .enter()
+                            .append("g")                            
+                            .attr("class", "tweep")
+                            .attr("id", function(d) { return d.id; })
+                            
+            
+            followers = tweeps.append("rect")                            
+                                .attr("class", "followers bar")
+                                .attr("id", function(d) { return d.id + "_followers"; })
+                                .attr("fill", "blue")
+                                .attr("x", 0)
+                                .attr("y", function(d, i) { return i * 10; })
+                                .attr("width", function(d) { return d.followers_count/(max_followers_count+max_friends_count) * width; })
+                                .attr("height", 8)
+                                .append("title")
+                                .text(function(d) { return d.name + " has " + d.followers_count + " followers"} );
+            
+            friends = tweeps.append("rect")                            
+                                .attr("class", "friends bar")
+                                .attr("id", function(d) { return d.id + "_followers"; })
+                                .attr("fill", "red")
+                                .attr("x", function(d) { return d.followers_count/(max_followers_count+max_friends_count) * width; })
+                                .attr("y", function(d, i) { return i * 10; })
+                                .attr("width", function(d) { return d.friends_count/(max_followers_count+max_friends_count) * width; })
+                                .attr("height", 8)
+                                .append("title")
+                                .text(function(d) { return d.name + " has " + d.friends_count + " friends"} );
+                              
+
+                                
+            });
+        
+        
+        
+        </script>
+    </body>
+</html>

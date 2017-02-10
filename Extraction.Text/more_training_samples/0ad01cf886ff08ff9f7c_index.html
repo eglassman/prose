@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Stacked Bar Chart</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+    <style type="text/css">
+        body {
+            background-color: white;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        #container {
+            width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            padding: 50px;
+            background-color: white;
+            box-shadow: 3px 3px 5px 6px #ccc;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 10px 0 0 0;
+        }
+
+        svg {
+            background-color: white;
+        }
+
+        rect:hover {
+            fill: darkgreen;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-family: sans-serif;
+            font-size: 9px;
+        }
+
+        .y.axis path,
+        .y.axis line {
+            opacity: 0;
+        }
+        .tip {
+            background: #fff;
+            border: none;
+            box-shadow: 0 0 5px #888;
+            display: none;
+            left: 1em;
+            padding: 0.5em;
+            position: absolute;
+            top: 1em;
+            width: 200px;
+        }
+        .legend {
+            padding: 5px;
+            font: 10px sans-serif;
+            background: yellow;
+            box-shadow: 2px 2px 1px #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <h1>Mix of Sources Vary, but USG Revenue as % of GDP Consistent Over Time</h1>
+        <p>Corporate Income Taxes as a percentage of US GDP: 1934-2020. Source: <a href="https://www.whitehouse.gov/omb/budget/Historicals">OMB</a>  Table 2.3</p>
+    </div>
+
+    <script type="text/javascript">
+
+			var w = 700;
+			var h = 1100;
+
+			var margin = { top: 5, right: 70, bottom: 30, left: 0 };
+
+            var width = w - margin.left - margin.right,
+                height = h - margin.top - margin.bottom;
+
+			var widthScale = d3.scale.linear()
+                 .range([ 0, width]);
+		
+			var heightScale = d3.scale.ordinal()
+                .rangeRoundBands([0, height], 0.2)
+		
+			var xAxis = d3.svg.axis()
+							.scale(widthScale)
+							.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+							.scale(heightScale)
+							.orient("left");
+
+			var svg = d3.select("#container")
+                    .append("svg")
+			        .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var tip = d3.select('#container')
+                  .append('div')
+                  .attr('class', 'tip');
+			var tipTimer;
+
+			d3.csv("usg_receipts.csv", function(data) {
+			        
+			    var receiptTypeNames = ["Individual Income Taxes", "Corporation Income Taxes", "Social Insurance and Retirement Receipts", "Excise Taxes", "Other"];
+			    var receiptTypes = [];
+			    receiptTypeNames.forEach(function (d) {
+			        var type = { name: d, values: [] };
+			        receiptTypes.push(type);
+			    });
+
+			    data.forEach(function (d, iYear) {
+			        receiptTypes.forEach(function (type, iReceiptType) {
+			            type.values.push({ fiscalYear: d["Fiscal Year"], receiptType: type.name, x: iYear, y: +d[receiptTypeNames[iReceiptType]] });
+			        });
+			    });
+
+			    var stack = d3.layout.stack()
+			    stack.values(function (d) { return d.values; });
+			    stack(receiptTypes);
+
+			    var years = [];
+			    data.forEach(function (d) {
+			        years.push(d["Fiscal Year"]);
+			    });
+
+			    widthScale.domain([0,
+					d3.max(receiptTypes, function (d) {
+					    return d3.max(d.values, function (d) {
+					        return d.y0 + d.y;
+					    });
+					}) 
+			    ]);
+
+				heightScale.domain(data.map(function(d) { return d["Fiscal Year"]; } ));
+
+				var colors = ['#253494', '#2c7fb8', '#41b6c4', '#a1dab4', '#ffff80'];
+				
+				var groups = svg.selectAll("g")
+				.data(receiptTypes)
+				.enter()
+				.append("g")
+				.style("fill", function (d, i) {
+				    return colors[i];
+				})
+                
+				var rects = groups.selectAll("rect")
+                    .data(function (d) { return d.values; })
+                    .enter()
+                    .append("rect")
+                    .attr("y", function (d, i) {
+                        return heightScale(d.fiscalYear);
+                    })
+                    .attr("height", heightScale.rangeBand())
+                    .attr("x", function (d) {
+                        return margin.right;
+                    })
+                    .attr("width", function (d) {
+                        return 0;
+                    })
+
+                    .on('mousemove', function (d) {
+                        // Show and position the tool tip.
+                        var where = d3.mouse(this);
+                        // Left side of the chart:  show tool tip to the right of curosr.
+                        // Right side of the chart:  show tool tip to the left of cursor.
+                        var leftPad = (where[0] < (w + margin.left) / 2) ? 350 : 100;
+                        console.log(where[0] + " " + (w + margin.left) / 2 + " " + leftPad);
+                        tip.style({
+                            'display': 'block',
+                            'left': where[0] + leftPad + 'px',
+                            'top': where[1] + 90 + 'px'
+                        })
+                        .html(
+                             "In " + d.fiscalYear + ", " + d.receiptType + " was " + d.y + "% of GDP"
+
+                            //'Airline:  ' + d.airline + '<br>' +
+                            //'Average Delay:  ' + d.averageDelay + ' minutes<br>' +
+                            //'Total flights:  ' + d.count
+                        );
+                    })
+                    .on('mouseout', function () {
+                        // Add a short delay to hide the tool tip to prevent
+                        // flickering when moving between bars.
+                        tipTimer = setTimeout(function () {
+                        tip.style('display', 'none');
+                        }, 200)
+                    })
+                    .on('mouseenter', function () {
+                        // Don't hide the tool tip if mouseenter fires quickly after
+                        // mouseout.
+                        clearTimeout(tipTimer);
+                    });
+
+                rects.transition()
+				    .delay(function(d, i) {
+				        return i * 5;
+				    })
+					.duration(300)
+                    .attr("x", function (d) {
+                         return margin.right + widthScale(d.y0);
+                         return 0;
+                     })
+					.attr("width", function (d) {
+					    return widthScale(d.y);
+					});
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(" + margin.right + "," + height + ")")
+					.call(xAxis);
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(" + margin.right + ", 0)")
+					.call(yAxis);
+
+                var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("x", width - 300)
+                    .attr("y", 400)
+                    .attr("height", 100)
+                    .attr("width", 300);
+
+			    legend.selectAll("text")
+                    .data(receiptTypeNames)
+                    .enter()
+                    .append("text")
+                    .attr("x", 420)
+                    .attr("y", function(d, i) {
+                        return i * 14 + 20;
+                    })
+                    .text(function (d) { return d; });
+
+			    legend.selectAll("rect")
+                    .data(colors)
+                    .enter()
+                    .append("rect")
+                    .attr("x", 404)
+                    .attr("y", function (d, i) {
+                        return i * 14 + 13;
+                    })
+                    .attr("height", 10)
+                    .attr("width", 10)
+                    .style("fill", function (d, i) {
+                        return colors[i];
+                    });
+			});
+    </script>
+</body>
+</html>

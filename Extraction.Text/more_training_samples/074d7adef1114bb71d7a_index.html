@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<title>Exercise 5 - Scatterplot</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+
+			body {
+				font-family: 'Open Sans', sans-serif;
+			}
+
+			.wrapper {
+				position: relative;
+				background-color: #843c39;
+				width: 940px;
+			}
+
+			header {
+				background-color: #843c39;
+				width: 940px;
+				padding-bottom: 20px;
+			}
+
+			h2 {
+				font-family
+				width: 940px;
+				margin: 0 20px 5px 20px;
+				padding-top: 10px;
+				color: #fff4cb;
+			}
+
+			span {
+				font-size: 12px;
+			}
+
+			p {
+				margin: 5px 20px;
+				color: #fff4cb;
+				font-size: 14px;
+				line-height: 1.1em;
+			}
+
+			aside {
+				position: absolute;
+				width: 180px;
+				bottom: 30px;
+				left: 740px;
+				background-color: #843c39;
+			}
+
+			aside p {
+				font-size: 12px;
+			}
+
+			svg {
+				fill: #843c39;
+			}
+
+			rect {
+				fill: #fff4cb;
+			}
+
+			a {
+				text-decoration: none;
+				color: #bcbd22;
+				font-weight: bold;
+			}
+
+			circle.dot {
+				fill: #bcbd22;
+				stroke: #fff4cb;
+				stroke-width: 1px;
+			}
+
+			.axis path {
+				stroke: #843c39;
+				fill: none;
+				shape-rendering: crispEdges;
+			}
+
+			.axis line {
+				fill: none;
+				stroke: #fff4cb;
+			}
+
+			.axis text {
+				font-size: 12px;
+				fill: #fff4cb;
+			}
+
+			.label {
+				stroke: #843c39;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<header>
+				<h2>Seismic Events <span>&#8213; reported on March 20, 2015 between midnight and 8 a.m.</span></h2>
+				<p>The scatter chart plots the relationship between depth and
+					<a href="http://earthquake.usgs.gov/learn/glossary/?term=magnitude" target="_blank">
+						magnitude
+					</a>
+					 of earthquakes.</p>
+				<aside>
+				<p>The data was taken from a
+					<a href="http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php" target="_blank">
+						real-time feed
+					</a>
+					(including hourly, daily, weekly, and monthly feeds) provided by the website of
+					<a href="http://earthquake.usgs.gov/" target="_blank">
+						US Geological Survey (USGS).
+					</a>
+					It is a subset filtered by time to represent the events that occured between
+					midnight and 8 a.m.
+				</p>
+			</aside>
+
+			</header>
+		</div>
+		<script type="text/javascript">
+			var margin,
+				width,
+				height,
+				xScale,
+				yScale,
+				xAxis,
+				yAxis,
+				svg,
+				circles,
+				xAxisGroup,
+				yAxisGroup
+				;
+
+			margin = {
+				top: 20,
+				right: 20,
+				bottom: 30,
+				left: 40
+			};
+
+			width = 760 - margin.left - margin.right;
+			height = 400 - margin.top - margin.bottom;
+
+			xScale = d3.scale.linear()
+								.range([0, width - margin.right]);
+
+			yScale = d3.scale.linear()
+								.range([height, 0]);
+
+			xAxis = d3.svg.axis()
+								.scale(xScale)
+								.orient("bottom")
+								.ticks(10);
+
+			yAxis = d3.svg.axis()
+								.scale(yScale)
+								.orient("left");
+
+			svg = d3.select(".wrapper")
+				.append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+			svg.append("rect")
+				.attr("width", width)
+				.attr("height", height);
+
+			// Filters the dataset by time to include only data points between
+			// midnight and 8 a.m.
+			function filterByTime(time) {
+				var start,
+					end,
+					t;
+
+				// Start at midnight
+				start = new Date(2015, 2, 20, 0, 0, 0).getTime();
+				// End at 8 a.m.
+				end = new Date(2015, 2, 20, 8, 0, 0).getTime();
+				// Time the event occured
+				t = new Date(time.time).getTime();
+
+				return start <= t && t <= end;
+			}
+
+			d3.csv("earthquakes_all_day.csv", function(data) {
+				var filteredByTime;
+
+				filteredByTime = data.filter(filterByTime);
+
+				filteredByTime.sort(function(a, b) {
+					return d3.descending(a.mag, b.mag);
+				});
+
+				xScale.domain(d3.extent(filteredByTime, function(d) {
+					return +d.mag;
+				})).nice();
+
+				yScale.domain(d3.extent(filteredByTime, function(d) {
+					return +d.depth;
+				})).nice();
+
+ 				circles = svg.selectAll("circle.dot")
+					.data(filteredByTime, function(d, i) {
+						return d.id;
+					})
+					.enter()
+					.append("circle");
+
+				circles
+					.attr("class", "dot")
+					.attr("cx", function(d) {
+						return xScale(d.mag);
+					})
+					.attr("cy", function(d, i) {
+						return yScale(d.depth);
+					})
+					.attr("r", "0.1")
+					.on("mouseover", function() {
+						d3.select(this).attr("r", "12");
+					})
+					.on("mouseout", function() {
+						d3.select(this).attr("r", "6");
+					})
+					.append("title")
+					.text(function(d) {
+						var dateTime;
+						dateTime = new Date(d.time);
+						return "At " + dateTime.toTimeString() + " on " + dateTime.toDateString() +
+							" a " + d.type + " with a magnitude of " + d.mag +
+							" and a depth of " + d.depth + " km occured in " + d.place;
+					});
+
+				circles.sort(function(a, b) {
+						return d3.ascending(a.depth, b.depth);
+					})
+					.transition()
+					.delay(function(d, i) {
+						return i * 50;
+					})
+					.duration(3000)
+					.attr("r", "12")
+					.transition()
+					.duration(3000)
+					.attr("r", "6");
+
+				xAxisGroup = svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0, " + (height) + ")")
+					.call(xAxis)
+					.append("text")
+					.attr("class", "label")
+					.attr("x", width - 6)
+					.attr("y", "-4")
+					.style("text-anchor","end")
+					.text("Magnitude");
+
+				yAxisGroup = svg.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(0,0)")
+					.call(yAxis)
+					.append("text")
+					.attr("class", "label")
+					.attr("transform", "rotate(-90)")
+					.attr("x", "-4")
+					.attr("dy", "1.1em")
+					.style("text-anchor","end")
+					.text("Depth (km)");
+			});
+
+		</script>
+
+	</body>
+</html>

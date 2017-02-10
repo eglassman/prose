@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Adding Tooltips</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: #637660;
+			}
+
+			svg {
+				background-color: #c0c0c0;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<script type="text/javascript">		
+			//width and height
+			var w = 700;
+			var h = 1500;
+
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			d3.csv("global-findex.csv", function(data) {
+
+				data.sort(function(a, b) {
+					//return d3.descending(a.AccountAtaBank, b.AccountAtaBank);
+					return d3.descending(+a.AccountAtaBank, +b.AccountAtaBank);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.AccountAtaBank, +b.AccountAtaBank);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 10;
+					})
+					.attr("width", function(d) {
+						return d.AccountAtaBank * 7;
+					})
+					.attr("height", 7)
+					.attr("fill", "white")
+					.append("title")
+					.text(function(d) {
+						return d.country + "'s percentage of people with a bank account is " + d.AccountAtaBank + "%.";
+					});
+
+			});
+
+
+		</script>
+
+	</body>
+</html>

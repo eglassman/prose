@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Setting attributes</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			p {
+				font-size: 10px;
+				line-height: 10px;
+
+			svg {
+				background-color: white;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<h2>Top Arms Exporting Countries in 2014</h2>
+
+		<script type="text/javascript">		
+
+			var svgWidth = 300;
+			var svgHeight = 1000;
+
+			var svg = d3.select("body")
+						.append("div")
+                        .style("height", "400px")
+                        .style("width", "300px")
+                        .style("overflow", "scroll")
+						.append("svg")
+                        .attr("width", svgWidth)
+						.attr("height", svgHeight);
+
+			// Loads the data from the csv file using method d3.csv.
+			// Note that 'data' exists only within the anonymous
+			// function. So either it is assigned to a global variable
+			// to be used by the visualisation function, 
+			// or all the vis part should stay embedded here!
+			d3.csv("SIPRI_Arms_Transfers_DB_2014.csv", function(data) {
+
+
+				data.sort(function(a, b) {
+					return d3.descending(+a.TIV_VALUE_EXPORT, +b.TIV_VALUE_EXPORT);
+
+					//If your numeric values aren't sorting properly,
+					//try commenting out the line above, and instead using:
+					//
+					//return d3.descending(+a.lifeSatisfaction, +b.lifeSatisfaction);
+					//
+					//Data coming in from the CSV is saved as strings (text),
+					//so the + signs here force JavaScript to treat those
+					//strings instead as numeric values, thereby fixing the
+					//sort order (hopefully!).
+				});
+
+				// Rectangles are created in a number specified by 
+				// .data(data) and using enter().
+
+				var rects = svg.selectAll("rect")
+								.data(data)
+								.enter()
+								.append("rect");
+
+				rects.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 10;
+					})
+					.attr("width", function(d) {
+						return d.TIV_VALUE_EXPORT / 40;
+					})
+					.attr("height", 8)
+					.attr("fill", "black")
+					.append("title")
+					.text(function(d) {
+						return d.COUNTRY + "'s arms export in 2014 was " + d.TIV_VALUE_EXPORT + " TIV";
+					});
+
+			});
+
+
+		</script>
+
+		<p> Source: SIPRI Arms Transfers Database. </p>
+		<p>	TIV of arms import/exports. Figures are SIPRI Trend Indicator Values (TIVs) expressed in US$ m. at constant (1990) price. </p>
+		<p>	See http://www.sipri org/databases/armstransfers/background </p>
+		<p>	Data download: 17 March 2015</p>
+
+	</body>
+</html>

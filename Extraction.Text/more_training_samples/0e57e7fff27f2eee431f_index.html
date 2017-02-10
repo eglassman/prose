@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Fundamental Visualizations</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+    <!-- The date parsing for the line chart data uses Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+
+    <!-- The Choropleth component uses TopoJSON. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    
+    <!-- A functional reactive model library. github.com/curran/model -->
+    <script src="http://curran.github.io/model/cdn/model-v0.2.4.js"></script>
+
+    <!-- Chiasm core and plugins. github.com/chiasm-project -->
+    <script src="http://chiasm-project.github.io/chiasm/chiasm-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-component/chiasm-component-v0.2.0.js"></script>
+    <script src="http://chiasm-project.github.io/chiasm-layout/chiasm-layout-v0.2.2.js"></script>
+
+    <!-- Custom Chiasm plugins for this example. -->
+    <script src="links.js"></script>
+    <script src="dataLoader.js"></script>
+
+    <script src="pieChart.js"></script>
+    <script src="scatterPlot.js"></script>
+    <script src="barChart.js"></script>
+    <script src="lineChart.js"></script>
+    <script src="choropleth.js"></script>
+
+    <style>
+
+      body {
+        background-color: black;
+      }
+
+      /* Make the chart container fill the page using CSS. */
+      #chiasm-container {
+        background-color: white;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <svg>
+        <defs>
+        <filter id="filter-wavy" color-interpolation-filters="sRGB">
+            <feTurbulence result="turb1" baseFrequency="0.09" type="turbulence" seed="0" numOctaves="3" id="turb1" />
+            <feDisplacementMap in2="turb1" scale="2.6" xChannelSelector="R" yChannelSelector="G" in="SourceGraphic" id="dispMap1" />    
+        </filter>
+    </defs>
+    </svg>
+    <div id="chiasm-container"></div>
+
+    <script>
+
+      var chiasm = Chiasm();
+
+      chiasm.plugins.layout = ChiasmLayout;
+      chiasm.plugins.links = Links;
+      chiasm.plugins.dataLoader = DataLoader;
+      chiasm.plugins.pieChart = PieChart;
+      chiasm.plugins.scatterPlot = ScatterPlot;
+      chiasm.plugins.barChart = BarChart;
+      chiasm.plugins.lineChart = LineChart;
+      chiasm.plugins.choropleth = Choropleth;
+
+      // Use D3 to fetch the chiasm configuration file.
+      d3.json("chiasmConfig.json", function (config){
+
+        // Set the Chaism application configuration.
+        chiasm.setConfig(config);
+
+      });
+
+
+      // Set up the line chart component with data from William Playfair.
+      chiasm.getComponent("lineChart").then(function (lineChart){
+
+        // Fetch the JSON version of the data for the line chart.
+        d3.json("lineChartData.json", function (lineChartData){
+
+          // Do a custom data transform to make it the table structure that the
+          // line chart component understands.
+          var data = lineChartData.year.map(function (yearStr, i){
+            return {
+              year: moment(yearStr).toDate(),
+              imports_minus_exports: lineChartData.imports_minus_exports[i]
+            };
+          });
+
+          // Configure the line chart with the data.
+          lineChart.set({
+            data: data,
+            xColumn: "year",
+            yColumn: "imports_minus_exports"
+          });
+        });
+      });
+
+
+      // Set up the choropleth component with data from the US Census.
+      chiasm.getComponent("choropleth").then(function (choropleth){
+
+        // Fetch the JSON version of the data for the line chart.
+        d3.json("choroplethData.json", function (topoData){
+
+          var geometries = topoData.objects.State_2010Census_DP1.geometries;
+
+          var data = geometries.map(function (d){
+            return {
+              geoId: d.properties.GEOID10,
+              population: d.properties.DP0010001
+            };
+          });
+
+          // Configure the line chart with the data.
+          choropleth.set({
+            topoData: topoData,
+            data: data
+          });
+        });
+      });
+      
+      // TODO: Should be able to have this called after data loads
+      setTimeout(function(){
+      	d3.selectAll('#chiasm-container svg').attr({  filter: 'url(#filter-wavy)' });
+      }, 100)
+    </script>
+  </body>
+</html>

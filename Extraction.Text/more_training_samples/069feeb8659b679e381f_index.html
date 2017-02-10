@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Module 6 Exercise</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+
+			h1 {
+				font-size: 24px;
+				margin: 0;
+			}
+
+			p {
+				font-size: 16px;
+				margin: 10px 0 0 0;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle:hover {
+				fill: orange;
+			}
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<h1>Changing Woodshop Production Goals</h1>
+
+        <p>How I want to shift my woodworking away from <strong style="color: red;">Furniture</strong> and onto <strong style="color: steelblue;">Boxes</strong> and <strong style="color: brown;">Other</strong> items over the coming years</p>
+
+		<script type="text/javascript">		
+
+
+			//Dimensions and padding
+			var w = 700;
+			var h = 600;
+			var padding = [ 20, 10, 50, 100 ];  //Top, right, bottom, left
+
+
+
+			//Set up date formatting and years
+			var dateFormat = d3.time.format("%Y");
+
+
+
+			//Set up scales
+			var xScale = d3.time.scale()
+								.range([ padding[3], w - padding[1] - padding[3] ]);
+			
+			var yScale = d3.scale.linear()
+								.range([ padding[0], h - padding[2] ]);
+
+
+
+			//Configure axis generators
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							.ticks(10)
+							.tickFormat(function(d) {
+								return dateFormat(d);
+							});
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left");
+
+
+
+			//Configure line generator
+			var line = d3.svg.line()
+				.x(function(d) {
+					return xScale(dateFormat.parse(d.Year));
+				})
+				.y(function(d) {
+					return yScale(d.Number);
+				});
+
+
+
+			//Create the empty SVG image
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+
+
+			//Load Boxes data
+			d3.csv("boxes.csv", function(boxesData) {
+
+				//Load Furniture data
+				d3.csv("furniture.csv", function(furnitureData) {
+                    
+                    //Load Other data
+				    d3.csv("others.csv", function(otherData) {
+
+                        //Create a new array that contains the
+                        //furniture, boxes and other data merged into one
+                        var mergedData = boxesData.concat(furnitureData);
+                        mergedData = mergedData.concat(otherData)
+                        //console.log(mergedData);
+
+                        //Use the newly merged data to determine the
+                        //min and max values, for setting scale domains
+                        xScale.domain([ 
+                            d3.min(mergedData, function(d) {
+                                return dateFormat.parse(d.Year);
+                            }),
+                            d3.max(mergedData, function(d) {
+                                return dateFormat.parse(d.Year);
+                            })
+                        ]);
+
+                        yScale.domain([ 
+                            d3.max(mergedData, function(d) {
+                                return +d.Number;
+                            }),
+                            0
+                        ]);
+
+
+
+                        //Lines
+                        //
+                        // Note data is wrapped in another array, so all its
+                        // values are bound to a single element (the line!)
+                        //
+                        svg.data([ boxesData ])
+                            .append("path")
+                            .attr("class", "line boxes")
+                            .attr("d", line)
+                            .attr("fill", "none")
+                            .attr("stroke", "steelblue")
+                            .attr("stroke-width", 2);
+
+                        svg.data([ furnitureData ])
+                            .append("path")
+                            .attr("class", "line furniture")
+                            .attr("d", line)
+                            .attr("fill", "none")
+                            .attr("stroke", "red")
+                            .attr("stroke-width", 2);
+                        
+                         svg.data([ otherData ])
+                            .append("path")
+                            .attr("class", "line other")
+                            .attr("d", line)
+                            .attr("fill", "none")
+                            .attr("stroke", "brown")
+                            .attr("stroke-width", 2);
+                        
+                        //Add points for the Boxes Data
+                        var boxesCircles = svg.selectAll("circle")
+								.data(boxesData)
+								.enter()
+								.append("circle");
+                        
+                        boxesCircles.attr("cx", function(d) {
+						          return xScale(dateFormat.parse(d.Year));
+					       })
+					       .attr("cy", function(d) {
+                                  return yScale(d.Number);
+					       })
+					       .attr("r", 4)
+					       .attr("fill", "steelblue")
+					       .append("title")
+					       .text(function(d) {
+						          return d.Year + " Boxes: " + d.Number + " pieces";
+					       });
+
+                        //Add points for the furniture data
+                        var furnitureCircles = svg.selectAll("circle")
+								.data(furnitureData)
+								.enter()
+								.append("circle");
+                        
+                        furnitureCircles.attr("cx", function(d) {
+						          return xScale(dateFormat.parse(d.Year));
+					       })
+					       .attr("cy", function(d) {
+                                  return yScale(d.Number);
+					       })
+					       .attr("r", 4)
+					       .attr("fill", "red")
+					       .append("title")
+					       .text(function(d) {
+						          return d.Year + " Furniture: " + d.Number + " pieces";
+					       });
+                        
+                        //Add points for the Others data
+                        var othersCircles = svg.selectAll("circle")
+								.data(otherData)
+								.enter()
+								.append("circle");
+                        
+                        othersCircles.attr("cx", function(d) {
+						          return xScale(dateFormat.parse(d.Year));
+					       })
+					       .attr("cy", function(d) {
+                                  return yScale(d.Number);
+					       })
+					       .attr("r", 4)
+					       .attr("fill", "brown")
+					       .append("title")
+					       .text(function(d) {
+						          return d.Year + " Other: " + d.Number + " pieces";
+					       });
+
+                        //Axes
+                        svg.append("g")
+                            .attr("class", "x axis")
+                            .attr("transform", "translate(0," + (h - padding[2]) + ")")
+                            .call(xAxis);
+
+                        svg.append("g")
+                            .attr("class", "y axis")
+                            .attr("transform", "translate(" + (padding[3]) + ",0)")
+                            .call(yAxis);
+
+				    });
+				    //End Other data load function
+                    
+                });
+				//End furniture data load function
+
+			});
+			//End boxes data load function
+
+
+		</script>
+
+	</body>
+</html>

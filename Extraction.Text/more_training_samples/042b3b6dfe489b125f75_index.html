@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+svg {
+  fill: white;
+}
+
+path {
+  stroke-linejoin: round;
+}
+
+.points {
+  fill: black;
+}
+
+.subunit {
+  fill: none;
+  stroke: #999;
+  stroke-size: 1px;
+}
+
+.voronoi {
+  fill: none;
+  fill-opacity: 0.5;
+  stroke: white;
+  stroke-width: .5px;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var fill = d3.scale.linear()
+    .domain([0, 10000])
+    .range(["#fff", "#f00"]);
+
+var projection = d3.geo.mercator()
+    .scale(132000)
+    .center([-58.45000,-34.61600]);
+
+var path = d3.geo.path()
+    .projection(projection)
+    .pointRadius(1.5);
+
+var voronoi = d3.geom.voronoi();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+queue()
+    .defer(d3.json, "caba.json")
+    .defer(d3.csv, "comisarias.csv")
+    .await(ready);
+
+function ready(error, caba, comisarias) {
+  var limits = topojson.feature(caba, caba.objects.limites);
+
+  var exterior = projectLineString(limits, projection);
+
+  svg.append("path")
+      .datum(limits)
+      .attr("class", "limits")
+      .attr("d", path);
+
+  svg.append("path")
+      .datum(topojson.mesh(caba, caba.objects.barrios))
+      .attr("class", "subunit")
+      .attr("d", path);
+
+  var coordinates = comisarias.map(function(d) { return [+d.longitude, +d.latitude]; });
+
+  svg.append("path")
+      .datum({type: "MultiPoint", coordinates: coordinates})
+      .attr("class", "points")
+      .attr("d", path);
+
+  svg.append("g")
+      .attr("class", "land")
+    .selectAll(".voronoi")
+      .data(voronoi(coordinates.map(projection)).map(function(d) {
+        // Each voronoi region is a convex polygon, therefore we can use
+        // d3.geom.polygon.clip, treating each regino as a clip region, with the
+        // projected “exterior” as a subject polygon.
+        return d3.geom.polygon(d).clip(exterior.slice());
+      }))
+    .enter().append("path")
+      .attr("class", "voronoi")
+      .style("fill", function(d) { return fill(Math.abs(d3.geom.polygon(d).area())); })
+      .attr("d", polygon);
+}
+
+function polygon(d) {
+  return "M" + d.join("L") + "Z";
+}
+
+// Extracts a single LineString from the given feature, projected (and
+// resampled) using the given projection.
+function projectLineString(feature, projection) {
+  var line;
+  d3.geo.stream(feature, projection.stream({
+    polygonStart: noop,
+    polygonEnd: noop,
+    lineStart: function() { line = []; },
+    lineEnd: noop,
+    point: function(x, y) { line.push([x, y]); },
+    sphere: noop
+  }));
+  return line;
+}
+
+function noop() {}
+
+</script>

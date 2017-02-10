@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>D3 Particle System</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    </head>
+    <body>
+        <script>
+            var w = 800;
+            var h = 500;
+
+            var svg = d3.select("body")
+                    .append("svg")
+                    .attr("id", "chart")
+                    .attr("height", h)
+                    .attr("width", w);
+
+            var colorScale = d3.scale.category20();
+
+            var force = d3.layout.force()
+                    .size([w, h])
+                    .gravity(0.02)
+                    .charge(0)
+                    .on("tick", tick);
+
+            function tick() {
+                svg.selectAll("circle").attr("cx", function (d) {
+                    return d.x;
+                })
+                        .attr("cy", function (d) {
+                            return d.y;
+                        });
+            }
+
+            var prevNode;
+            svg.on("mousemove", function () {
+                node = {x: d3.event.x, y: d3.event.y};
+                node.px = prevNode != undefined ? prevNode.x : node.x;
+                node.py = prevNode != undefined ? prevNode.y : node.y;
+                prevNode = node;
+
+                svg.append("circle")
+                        .data([node])
+                        .attr("cx", node.x)
+                        .attr("cy", node.y)
+                        .attr("r", 5)
+                        .attr("fill", colorScale(node.x + node.y))
+                        .transition()
+                        .delay(2000)
+                        .attr("r", 0)
+                        .each("end", function () {
+                            force.nodes().shift();
+                        })
+                        .remove();
+
+                force.nodes().push(node);
+                force.start();
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;top:0;right:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>
+
+<body>
+  <script>
+    var margin = {top: 20, right: 10, bottom: 20, left: 10};
+    var width = 800 - margin.left - margin.right;
+    var height = 800 - margin.top - margin.bottom;
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var nodeNums = 40;
+    var ignoreApi = ['d3.select', 'd3.selectAll'];
+    var force = d3.layout.force()
+      .size([width, height])
+      .charge(-800)
+      .linkDistance(400)
+      .on('tick', update);
+
+    var nodes = [];
+    var links = [];
+    var circle, path, text;
+
+    var nodeSizeScale = d3.scale.linear().range([5, 50]);
+    var nodesColor = d3.scale.category20();
+    var linkSizeScale = d3.scale.linear().range([1, 10]);
+
+    function enter() {
+      path = svg.selectAll('line')
+        .data(links).enter().append('line')
+        .attr('stroke', '#999')
+        .attr('opacity', .25);
+      circle = svg.selectAll('circle')
+        .data(nodes).enter().append('circle')
+        .call(force.drag);
+      text = svg.selectAll('text')
+        .data(nodes)
+        .enter().append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '.35em')
+        .style({
+          'font-size': '12px',
+          'font-family': 'Helvetica',
+          'font-weight': 600,
+          'pointer-events': 'none'
+        });
+    };
+    function update() {
+      circle.attr('r', function(d) {return d.size})
+        .attr('fill', function(d) {return d.fill})
+        .attr('cx', function(d) {return d.x})
+        .attr('cy', function(d) {return d.y});
+      text.attr('x', function(d) {return d.x})
+        .attr('y', function(d) {return d.y})
+        .text(function(d) {return d.name});
+      
+      path.attr('stroke-width', function(d) {return d.size})
+        .attr('x1', function(d) {return d.source.x})
+        .attr('y1', function(d) {return d.source.y})
+        .attr('x2', function(d) {return d.target.x})
+        .attr('y2', function(d) {return d.target.y});
+    };
+
+    d3.json('nodes.json', function(nodesObj) {
+      d3.json('edges.json', function(edgesObj) {
+        var minSize = _.min(nodesObj, function(node) {return node.count}).count;
+        var maxSize = _.max(nodesObj, function(node) {return node.count}).count;
+        nodeSizeScale.domain([minSize, maxSize]);
+        _.chain(nodesObj)
+          .sortBy(function(node) {return -node.count})
+          .each(function(node, i) {
+            if (i >= nodeNums || _.contains(ignoreApi, node.name)) {
+              delete nodesObj[node.name];
+            } else {
+              node.fill = nodesColor(node.name);
+              node.size = nodeSizeScale(node.count);
+              nodes.push(node);
+            }
+          }).value();
+
+        var minSize = _.min(edgesObj, function(edge) {return edge.count}).count;
+        var maxSize = _.max(edgesObj, function(edge) {return edge.count}).count;
+        linkSizeScale.domain([minSize, maxSize]);
+        _.each(edgesObj, function(edge) {
+          if (!nodesObj[edge.source] || !nodesObj[edge.target]) return;
+          edge.source = nodesObj[edge.source];
+          edge.target = nodesObj[edge.target];
+          edge.size = linkSizeScale(edge.count);
+          links.push(edge);
+        });
+
+        console.log(nodes, links)
+        force.nodes(nodes).links(links)
+          .start();
+      
+        enter();
+      });
+    });
+    
+  </script>
+</body>

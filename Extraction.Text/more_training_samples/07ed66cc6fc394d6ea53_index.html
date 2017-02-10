@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>
+
+<body>
+  <div>binomial probability density function</div>
+  <div>calculates success or failure. probability of x successes in n sucessive trials</div>
+  <script>
+		var START_SUCCESS_RATE = 0.03;
+		var NUMBER_SUCCESS_RATE = 2;
+    var START_SAMPLE_SIZE = 10;
+    var NUMBER_SAMPLE_SIZE = 10;    
+    var STEP_SAMPLE_SIZE = 10;
+		var NUMBER_HIRES = 3;    
+    
+    
+    
+    var margin = {top: 10, right: 10, bottom: 10, left: 10};
+    var width = 960 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom - 30;
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	    .attr('id', 'transformGroup')
+
+    // Feel free to change or delete any of the code you see!
+    svg.append("rect")
+      .attr({x: 20, y: 10, width: width - 40, height: height - 20})
+      .style({ stroke: 'RGBA(44, 46, 47, 1)', fill:'none'})
+    
+    // calculates the probability that x or more out of a batch of n will be successful
+    // i.e. if 4% of candidates make it to hired, what is that chance that 4 out of 50 will get hired
+    // likelihood of hiring 10 candidates this month is 10% (we auto know what the batch size is because we know number in stage)
+    // if you move 30 more people to this stage, the likelihood increases to 20$ 
+    function calcChanceOfOccurence(pSuccessRate, nBatchSize, xFailureThreshold){
+      // throw new Error 'The success rate must be a percentage' if failureRate > 1
+      var qFailureRate = 1 - pSuccessRate;
+      
+      var result = 1;
+      xFailureThreshold--;
+      while (xFailureThreshold >= 0){
+        // (n x) = n!/[(n-x)!x!]
+        var nOverX = factorial(nBatchSize)/( factorial(nBatchSize - xFailureThreshold) * factorial(xFailureThreshold) );
+        // p{3} = (n / x) * p^(x) * q^(n - x)
+        var p = nOverX * Math.pow(pSuccessRate, xFailureThreshold) * Math.pow(qFailureRate, (nBatchSize - xFailureThreshold));
+        result -= p;
+        xFailureThreshold--;
+      }
+      return result;
+    }
+
+    var f = [];
+    function factorial (n) {
+      if (n == 0 || n == 1)
+        return 1;
+      if (f[n] > 0)
+        return f[n];
+      return f[n] = factorial(n-1) * n;
+    }
+    
+    var newData = d3.range(NUMBER_SUCCESS_RATE).map(function(idx){
+      var chance = START_SUCCESS_RATE + 0.01*idx;
+      return d3.range(NUMBER_SAMPLE_SIZE).map(function(idx){return {chance: chance, n: START_SAMPLE_SIZE + STEP_SAMPLE_SIZE*idx, hire:NUMBER_HIRES}});
+    });
+    console.log(newData)
+    
+    newData.forEach(function(data){
+			var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+      d3.select("#transformGroup").append('g').selectAll("circle").data(data).enter().append('circle')
+        .attr({
+          cx: 0, 
+          cy: function(d){return 10 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (height - 20)}, 
+          r: 2, 
+        })
+        .style({ fill: color, opacity:0.4})
+				.transition().duration(1000)
+        .attr({
+          cx: function(d){return 20 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (width - 40)}, 
+          r: 14, 
+        })
+      
+      d3.select("#transformGroup").append('g').selectAll("text").data(data).enter().append('text')
+				.text(function(d){return Math.round(calcChanceOfOccurence(d.chance, d.n, d.hire)*1000)/10 + '%, ' +  Math.round(d.chance*100) + '% success, ' +  d.n + ', applicants'})
+        .attr({
+          x: 0, 
+          y: function(d){return 10 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (height - 20)}
+        })
+        .style({ fill: color, opacity:0.8})      
+				.transition().duration(1000)
+        .attr({
+          x: function(d){return 14 + 20 + calcChanceOfOccurence(d.chance, d.n, d.hire) * (width - 40)}, 
+        })
+      
+    })
+  </script>
+</body>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 | Random circles and squares</title>
+        <meta name="author" content="eesur.com">
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.2/d3.js"></script>
+
+        <style type="text/css">
+        
+        html, body, main {
+            height: 100%;
+            background-color: #130C0E;
+            padding: 0;
+            margin: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        svg {
+            width: 100%;
+            height: 99%; /* gets rid of scrollbar */
+        }
+
+        </style>
+    </head>
+    <body>
+
+    <script>
+
+// create data
+var data = [];
+for (var i=0; i < 108; i++) {
+ data.push(i);
+}
+
+// Scale for radius
+var xr = d3.scale
+        .linear()
+        .domain([0, 108])
+        .range([0, 27]);
+
+// Scale for random position
+var randomPosition = function(d) {
+    return Math.random() * 1024;
+}
+
+
+var tcColours = ['#FDBB30', '#EE3124', '#EC008C', '#F47521', '#7AC143', '#00B0DD'];
+var randomTcColour = function() {
+  return Math.floor(Math.random() * tcColours.length);
+};
+
+
+// SVG viewport
+var svg = d3.select('body')
+  .append('svg')
+    .attr('width', 1024)
+    .attr('height', 512);
+
+var update = function() {
+    var baseCircle = svg.selectAll('circle');
+    var baseRect = svg.selectAll('rect');
+
+    // Bind data
+    baseCircle = baseCircle.data(data);
+    baseRect = baseRect.data(data);
+
+    // set the rects
+    baseRect.transition()
+            .duration(200)
+            .attr('width', xr)
+            .attr('height', xr)
+            .attr('x', randomPosition)
+            .attr('y', randomPosition)
+            .style('fill', tcColours[randomTcColour()]);
+
+    baseRect.enter()
+            .append('rect')
+            .attr('width', xr)
+            .attr('height', xr)
+            .attr('x', randomPosition)
+            .attr('y', randomPosition)
+            .style('fill', tcColours[randomTcColour()]);
+
+
+    // set the circles
+    baseCircle.transition()
+            .duration(250)
+            .attr('r', xr)
+            .attr('cx', randomPosition)
+            .attr('cy', randomPosition)
+            .attr('fill', "none")
+            .attr("stroke-width", 4)
+            .style('stroke', tcColours[randomTcColour()]);
+ 
+    baseCircle.enter()
+            .append('circle')
+            .attr('r', xr)
+            .attr('cx', randomPosition)
+            .attr('cy', randomPosition)
+            .attr('fill', "none")
+            .attr("stroke-width", 4)
+            .style('stroke', tcColours[randomTcColour()]);
+
+
+}
+
+setInterval(function() {
+    update();
+}, 512);
+
+
+
+
+    </script>
+
+    </body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<body>
+<script src='http://d3js.org/d3.v3.js'></script>
+<script>
+
+var w = 700,
+    h = 700;
+
+var beaker_w = 250,
+    beaker_h = beaker_w * 1.3420289855072465,
+    beaker_area = beaker_w * beaker_h,
+    padding = 2;
+
+function get_area(circle_obj) { return Math.PI * circle_obj.r * circle_obj.r; }
+
+var dead = [],
+    n = 0;
+
+while (d3.sum(dead, get_area) < beaker_area * 0.6) {
+    dead.push({
+        date: n, 
+        x: w/2 + (Math.random() > 0.5 ? Math.random() * 50 : Math.random() * -50),
+        y: h/8 + (Math.random() > 0.5 ? Math.random() * 50 : Math.random() * -50) - 175,
+        r: Math.random() * 30 + 8
+    });
+
+    n += 1;
+}
+
+var living = [];
+
+var svg = d3.select("body").append('svg')
+    .attr('width', w)
+    .attr('height', h);
+
+svg.on('click', function () { console.log(d3.mouse(this)); })
+
+// put beaker on screen
+svg.append('image')
+    .attr({
+        'xlink:href': 'beaker.svg',
+        x: w / 2 - beaker_w / 2,
+        y: h - beaker_h,
+        width: beaker_w,
+        height: beaker_h
+    })
+    .style('opacity', 0.8);
+
+var shape_map = {0: 'cross', 1: 'hexagon', 2: 'circle', 3: 'diamond', 4: 'x'};
+var opacity = d3.scale.linear()
+    .domain([0, 1])
+    .range([0.1, 1])
+
+function get_shape() {
+    var n = Math.floor(Math.random() * 5);
+    return shape_map[n] + '.svg';
+}
+
+svg.selectAll('.shape')
+    .data(dead)
+    .enter()
+    .append('image')
+    .attr({
+        class: 'shape',
+        'xlink:href': function () { return get_shape(); },
+        x: function (d) { return d.x - d.r; },
+        y: function (d) { return d.y - d.r; },
+        width: function (d) { return d.r * 2; },
+        height: function (d) { return d.r * 2; }
+    })
+    .style('opacity', function () { return opacity(Math.random() / 3); });
+
+var force = d3.layout.force()
+    .size([w, h])
+    .gravity(0)
+    .charge(0)
+    .friction(0.8)
+    .nodes(living);
+
+force.on("tick", function(e) {
+    var q = d3.geom.quadtree(living),
+        i = 0,
+        n = living.length;
+
+    while (++i < n) q.visit(collide(living[i]));
+    living.forEach(move_towards_center(e.alpha));
+
+svg.selectAll('.shape')
+    .attr("x", function (d) { return d.x - d.r; })
+    .attr("y", function (d) { return d.y - d.r; });
+});
+
+var center = {x: w / 2, y: h};
+
+function move_towards_center(alpha) {
+    var k = alpha * 0.05;
+
+    return function(d, i) {
+        var new_x = d.x + (center.x - d.x) * k;
+        var min_x = w/2 - beaker_w/2 + d.r + padding,
+            max_x = w/2 + beaker_w/2 - d.r - padding;
+
+        var new_y = d.y + (center.y - d.y) * k;
+        var min_y = 0,//h - beaker_h + d.r + padding,
+            max_y = h - d.r - padding - 4;
+
+        d.x = Math.min(max_x, Math.max(new_x, min_x));
+        d.y = Math.min(max_y, Math.max(new_y, min_y));
+    }
+}
+
+function collide(node) {
+    var r = node.r + 16,
+        nx1 = node.x - r,
+        nx2 = node.x + r,
+        ny1 = node.y - r,
+        ny2 = node.y + r;
+    
+    return function(quad, x1, y1, x2, y2) {
+        
+        if (quad.point && (quad.point !== node)) {
+            var x = node.x - quad.point.x,
+                y = node.y - quad.point.y,
+                l = Math.sqrt(x * x + y * y),
+                r = node.r + quad.point.r + padding;
+         
+            if (l < r) {
+                l = (l - r) / l * .5;
+                node.x -= x *= l;
+                node.y -= y *= l;
+                quad.point.x += x;
+                quad.point.y += y;
+            }
+        } 
+
+        return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+    };
+}
+
+var started = false;
+
+function f() {
+    var current = dead.pop();
+    living.push(current);
+    force.start();
+}
+
+var n_dead = dead.length,
+    i = 0,
+    delay = 0;
+
+while (i < n_dead) {
+    setTimeout(f, delay)
+    delay += 600;
+    i += 1;
+}
+
+</script>

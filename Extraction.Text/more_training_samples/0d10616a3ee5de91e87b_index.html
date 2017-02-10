@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3 scatterplot fun</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: helvetica, calibri, arial, sans-serif;
+				font-size: 11px;
+			}
+
+			svg {
+				background-color: #cccccc;
+			}
+			
+			h1 {
+        		font-family: Helvetica, Calibri, Arial, sans-serif;
+        		font-size: 20px;
+           		color: #666666;
+           		margin:0;
+       		}
+
+      		h3 {
+        		font-family: Helvetica, Calibri, Arial, sans-serif;
+        		font-size: 16px;
+           		color: #666666;
+           		margin:0px;
+       		}
+
+       		circle:hover {
+				fill: #666666;
+				}			
+
+       		.x.axis path,
+       		.x.axis line {
+       			fill: none;
+       			stroke: black;
+       			shape-rendering: crispEdges;
+       		}
+
+       		.axis text {
+       			font-family: sans-serif;
+       			font-size: 11px;
+       		}
+
+       		.y.axis path,
+       		.y.axis line {
+       				fill: none;
+       				stroke:black;
+       				shape-rendering: crispEdges;
+       		}
+
+       		#container {
+			width: 740px;
+			height: 700px;
+			margin: 0;
+			padding: 0;
+			border: 1px solid #7f8c8d;
+			}
+			
+			#wrapper {
+			width: 720px;
+			height: 576px;		
+			margin: 0;
+			padding: 10px;
+			}
+			
+			#gr {
+				width:720px;
+				padding: none;
+				margin: none;
+				margin-top: 0px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+				height: 576px;
+				float: left;
+				}
+					
+			#rightdiv{
+				width: 140px;
+				padding-top: 0px;
+				padding-left: 0px;
+				/*padding-right: 10px;*/
+				padding-bottom: 0px;
+				margin: none;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				height: 100px;
+				float: right;
+				text-align: left;
+				}
+			
+			#header {
+				text-align: left;
+				font-family: helvetica, calibri, arial, sans-serif;
+				text-decoration: bold;
+				padding-left: 10px;
+				padding-bottom: 0px;
+				padding-top: 10px;
+				width: 720px;
+				background-color: #ffffff;
+				color: #000000;
+				}
+			#source {
+			width: 500px;
+			height: 50px;
+			padding-left: 0px;
+			font-family: helvetica, calibri, arial, sans-serif;
+			font-size:10px;
+			color: #95a5a6
+			float: right;
+			}
+
+			.arrow {
+  			stroke: #000;
+  			stroke-width: 1px;
+  			shape-rendering: geometricPrecision;
+			}
+
+			.regsel {
+  			stroke: yellow;
+  			stroke-width: 2px;
+  			shape-rendering: geometricPrecision;
+			}
+
+
+
+			</style>
+	</head>
+	<body>
+		<div id="container">
+		<div id="header">
+		<h1>NUMBER OF RUSSIAN "SAT" SUBJECT TESTS PARTICIPANTS IN 2013</h1>
+		<h3>Percentage of seniors and maximum score students </h3>
+		</div>
+		<div id="wrapper">
+		<div id="gr">
+		
+
+	<script type="text/javascript">
+			var margin = {top: 10, right: 20, bottom: 40, left:100}; //Margin convention http://bl.ocks.org/mbostock/3019563
+
+
+			var w = 720 - margin.left - margin.right;
+			var	h = 576 - margin.top - margin.bottom;	
+
+			var svg = d3.select("#gr")
+						.append("svg")
+						.attr("width", w + margin.left + margin.right)
+						.attr("height", h + margin.top + margin.bottom)
+						.append("g")
+						.attr("transform", "translate("+margin.left+","+margin.top+")");
+
+
+			var xScale = d3.scale.linear()
+							.range([0,w]);
+
+			var yScale = d3.scale.linear()
+							.range([0,h]);
+
+			var rScale = d3.scale.linear()
+							.range([3,20]);
+
+			var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient("bottom")
+							//.tickSize(-h - margin.bottom)
+							.ticks(5)
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+
+			var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient("left")
+							.ticks(10)
+							.tickFormat(function(d) {
+								return d + "%";
+							});
+
+			
+
+			d3.csv("EGE2013_SUM_SHORT.csv", function(data) {
+									
+				/*data.sort(function(a, b) {
+					return d3.ascending(+a.NonSenPercent, +b.NonSenPercent);})*/
+				
+				xScale.domain([d3.min(data,function(d){return +d.StoBallPercent;}),d3.max(data, function(d){return +d.StoBallPercent;})]);
+			
+				yScale.domain([d3.max(data,function(d){return +d.SenPercent;}),d3.min(data, function(d){return +d.SenPercent;})]);
+
+				rScale.domain([d3.min(data,function(d){return +d.All_Participants_Count;}),d3.max(data, function(d){return +d.All_Participants_Count;})]);
+
+				var circles = svg.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle");
+
+					circles.attr("cx", -100)
+					.attr("cy",function(d) {return yScale(d.SenPercent);})  
+					.attr("r",function(d) {return rScale(d.All_Participants_Count);} )
+					.attr("fill", "#999999")
+					.attr("fill-opacity",0.5)
+					.attr("stroke-width",1)
+					.attr("stroke","#666666")
+					.append("title")
+					.text(function(d) {
+						return "Number of participants who took test in "+d.Reg_name_eng + " is " + d.All_Participants_Count;
+					});
+
+					circles.transition()
+					.duration(2000)
+					.attr("cx", function(d) {return xScale(d.StoBallPercent);})
+					.attr("cy",function(d) {return yScale(d.SenPercent);}) 
+					.attr("r",function(d) {return rScale(d.All_Participants_Count);} )
+
+					
+             		svg.append("g")
+             		.attr("class", "x axis")
+             		.attr("transform","translate(0,"+h+")")
+             		.call(xAxis);
+
+             		svg.append("g")
+             		.attr("class", "y axis")
+             		.attr("transform","translate(0,0)")
+             		.call(yAxis);
+
+             		
+             		
+                });
+					
+		</script>
+
+		</div>
+		
+				
+		<div id="source">
+		<p>SOURCE: <a href="http://www.ege.edu.ru/ru/main/satistics-ege/"> Unified State Examination official website</a> (in Russian), 2013</p>
+		</div>
+		
+		</div>
+		
+
+	</body>
+</html>

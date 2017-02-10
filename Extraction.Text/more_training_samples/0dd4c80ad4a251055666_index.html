@@ -1,0 +1,277 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CFPB Credit Card Complaints by Company</title>
+		<style type="text/css">
+			
+			body {
+				background-color: white;
+				font-family: Helvetica, Arial, sans-serif;
+			}
+			#header{
+				padding: 10;
+			}
+			#mySVG {
+				display: inline-block;
+			}	
+			#copy{
+				height: 100%;
+				width: 25%;
+				padding: 15;
+				vertical-align: top;
+				display: inline-block;
+			}
+			
+			h1 {
+				font-family: Arial;
+				font-size: 30px;
+				margin: 0;
+			}
+			
+			p {
+				font-size: 16px;
+				color: #9C9EA0;
+				margin: 10px 0px 0px 0px;
+			}
+
+			svg {
+				background-color: white;
+				border-style: solid;
+				border-width: 1px;
+				border-color: #9C9EA0;
+			}
+			
+			/*style for all lines*/
+			path {
+				stroke: gray;
+				stroke-width: 0.5;
+			}
+
+			/*style for highlighted lines*/
+			g.highlight path {
+				stroke: steelblue;
+				stroke-width: 2;
+			}
+
+			.line:hover {
+				stroke: orange;
+				stroke-width: 3px;
+				opacity: 1;
+			}
+			
+			/*style for axis*/
+			.axis path,
+			.axis line {
+					fill: none;
+					stroke: black;
+					shape-rendering: crispEdges;
+					}
+			
+			.y.axis path,
+			.y.axis line {
+					opacity: 0
+			}
+			
+			.x.axis path,
+			.x.axis line {
+					opacity: 0
+			}
+			.y.axis text {
+					font-family: Arial;
+					font-size: 12px;
+					}
+					
+			.x.axis text {
+					font-family: Arial;
+					font-size: 12px;
+			}
+			
+					
+		</style>
+	</head>
+	<body>
+	<div id="container">
+	<div id="header">
+	<h1> CFPB Credit Card Complaints by Company </h1>
+	</div>
+	
+		<div id="mySvg" align="left">
+			<script src="http://d3js.org/d3.v3.js"></script>
+			<script type="text/javascript">		
+	
+//establishes svg dimensions and padding
+var w = 750;
+var h = 500;
+var padding = [ 25, 30, 75, 35 ]; //Top, right, bottom, left
+
+//parsing data structure
+var parseDate = d3.time.format("%x");
+
+//defining scale for x axis
+var xScale = d3.time.scale()
+    .range([ padding[3], w - padding[1] - padding[3] ]);
+
+//defining scale for y axis
+var yScale = d3.scale.linear()
+    .range([ padding[0], h - padding[2] ]);
+
+//defining orientation for x axis and establishing svg axis
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(10)
+	/*.tickFormat(function(d) {
+			return parseDate(d);
+	})*/;
+
+//defining orientation of y axis and establishing svg axis
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left");
+
+//defining line generator
+var line = d3.svg.line()
+    .x (function(d, i) {
+    	return xScale(d.DateReceived);
+    })
+    .y(function(d, i) { 
+    	return yScale(i); 
+    	});
+
+//placing svg html body and defining boundaries
+var myChart = d3.select("#mySvg")
+	.append("svg")
+	.attr("width", w)
+	.attr("height", h)
+	//.attr("style", "position:absolute; top: "+0"; left: "+0";")
+    .append("g")
+    .attr("transform", "translate(" + padding[3] + "," + (padding[0]-20) + ")");
+      
+  //get the data via API
+//d3.csv("https://data.consumerfinance.gov/resource/x94z-ydhh.csv?$order=date_received&state=IN&product=credit%20card",
+		
+//d3.csv("INCreditCardComplaints.csv",
+d3.csv("allComplaintsThru428.csv",
+		function(error, data) {
+  			data.forEach(function(d,i) {
+    			d.DateReceived = parseDate.parse(d.DateReceived);
+    			//d["DateReceived"] = parseDate.parse(d["DateReceived"]);
+});
+
+//creating nested array
+    var bankData = d3.nest()
+    	.key(function(d) { Company: return d.Company; })
+    	//.key(function(d) { Company: return d["Company"]; })
+    	.entries(data)
+    	console.log("bankData", bankData);
+
+//Set scale domains
+				xScale.domain([ 
+					d3.min(data, function(d) {
+						return d.DateReceived;
+						//return d["DateReceived"];
+					}),
+					d3.max(data, function(d) {
+						return d.DateReceived;
+						//return d["DateReceived"];
+					})
+				]);
+//0 second so axis goes in correct direction
+				yScale.domain([ 
+					d3.max(bankData, function(d) {
+						return d.values.length;
+						//return d[values].length;
+						})
+					,
+					0
+				]);
+
+  //draws x axis
+  myChart.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (h - padding[2]) + ")")
+      .call(xAxis)
+    .append("text")
+      .attr("x", w / 2)
+      .attr("dy", "4em")
+	  .style("text-anchor", "middle")
+      .text("Date Received");
+
+
+  //draws y axis
+  myChart.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + (padding[3]) + ",0)")
+      .call(yAxis)
+    .append("text")
+      .attr("y", 20)
+      .attr("dy", "-3em")
+	  .style("text-anchor", "middle")
+	  .attr("transform", "translate(" + -padding[3] + "," + h/2 + ") rotate(270)")
+      .text("Total Credit Card Complaints Received");
+
+ //creates group for each company...what's going on with the highlights?
+ var groups = myChart.selectAll("#mySvg") 
+            .data(bankData) //see: http://bost.ocks.org/mike/join/
+          	.enter()
+          	.append("g")
+        	.classed("highlight", function(d) {
+						if (d.key == "Citibank" ||
+							//d.key == "Capital One" ||
+							d.key == "JPMorgan Chase" ||
+							//d.key == "Fifth Third Bank" ||
+							d.key == "Barclays" ||
+							d.key == "Bank of America" ||
+							d.key == "GE Capital Retail" ||
+							//d.key == "PNC Bank" ||
+							//d.key == "HSBC" ||
+							d.key == "Wells Fargo" //||
+							//d.key == "Amex" ||
+							//d.key == "U.S. Bancorp"
+							) {
+							return true;
+						} else {
+							return false;
+						}
+
+					});
+
+	//adds title to each group with each company (working tooltip)
+	groups.append("title")
+		.text(function(d) {
+				//console.log(d.key);
+				return d.key + " has " + d3.format("0,000")(d.values.length) + " total complaints";
+		});
+  
+  
+  // draws lines 
+ groups.selectAll("path")
+      .data(function (d) { 
+          	 return [ d.values ]; })
+      .enter()
+	  .append("path")
+      .attr("class", "line")
+      .attr("d", line)
+      .attr("fill", "none")
+	  .attr("stroke-width", 2);	
+	 
+    });
+				</script>
+			</div>
+		<div id="copy" >
+			<p> The Consumer Financial Protection Bureau (CFPB) accepts consumer complaints about several 
+		financial products and makes the data available to the public on <a href="http://www.consumerfinance.gov/complaintdatabase/" target="_blank">consumerfinance.gov</a>.
+		This chart tracks all credit card complaints by company recorded in the public complaint database through April 28, 2015.
+		Hover over each line to see the company name and the total number of complaints filed.
+		The highlighted lines represent companies that have been deemed Systemically Important Financial Institutions (SIFIs)
+		by the US government's Large Institution Supervision Coordinating Committee (LISCC) due to the size and diversity of its financial business. For more information on
+		SIFIs, see <a href="http://www.financialstabilityboard.org/wp-content/uploads/r_121031ac.pdf?" target="_blank">this report</a> from the Financial Stability Board and
+		see the Federal Reserve's <a href="http://www.federalreserve.gov/newsevents/press/bcreg/bcreg20150311a1.pdf" target="_blank">
+		“Comprehensive Capital Analysis and Review 2015: Assessment Framework and Results,”</a> issued in March 2015, for a full list of US SIFIs. For more
+		information on the LISCC, see <a href="http://www.federalreserve.gov/bankinforeg/large-institution-supervision.htm" target="_blank"> its page </a>on FederalReserve.gov.</p>
+		</div>
+	</div>
+</body>
+</html>
+
+
