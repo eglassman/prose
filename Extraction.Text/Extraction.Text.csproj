@@ -1887,6 +1887,14 @@
     <None Include="more_training_samples\10465357_index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="handpickedexamples\index-239.html" />
+    <None Include="handpickedexamples\index-302.html" />
+    <None Include="handpickedexamples\index-304.html" />
+    <None Include="handpickedexamples\index-458.html" />
+    <None Include="handpickedexamples\index-8f1.html" />
+    <None Include="handpickedexamples\index-9d5.html" />
+    <None Include="handpickedexamples\index-d28.html" />
+    <None Include="handpickedexamples\index-def.html" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
