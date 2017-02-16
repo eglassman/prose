@@ -75,7 +75,7 @@
     "html": "<!DOCTYPE html>\n<meta charset=\"utf-8\">\n<svg width=\"960\" height=\"960\" font-family=\"sans-serif\" font-size=\"10\"></svg>",
     "js-import": "https://d3js.org/d3.v4.min.js",
     "js-include": "d3-scale-radial.js",
-    "js-d3": "var svg = d3.select(\"svg\"),\n    width = +svg.attr(\"width\"),\n    height = +svg.attr(\"height\"),\n    innerRadius = 180,\n    outerRadius = Math.min(width, height) * 0.67,\n    g = svg.append(\"g\").attr(\"transform\", \"translate(\" + width / 2 + \",\" + height * 0.69 + \")\");",
+    "js-core-selections-and-vardec": "var svg = d3.select(\"svg\"),\n    width = +svg.attr(\"width\"),\n    height = +svg.attr(\"height\"),\n    innerRadius = 180,\n    outerRadius = Math.min(width, height) * 0.67,\n    g = svg.append(\"g\").attr(\"transform\", \"translate(\" + width / 2 + \",\" + height * 0.69 + \")\");",
     "js-scale-ordinal": "var x = d3.scaleBand()\n    .range([0, 2 * Math.PI])\n    .align(0);\n\nvar y = d3.scaleRadial()\n    .range([innerRadius, outerRadius]);\n\nvar z = d3.scaleOrdinal()\n    .range([\"#98abc5\", \"#8a89a6\", \"#7b6888\", \"#6b486b\", \"#a05d56\", \"#d0743c\", \"#ff8c00\"]);",
     "js-request-call": "d3.csv(",
     "js-request-data": "\"data.csv\",",
