@@ -54,6 +54,7 @@ namespace Extraction.Text
 	{
 		public static List<Label> labelslist = new List<Label>(); // Modifiable in Code
 		public static Boolean testing = false;
+		public static Boolean handpicked = true;
 	}
 
 	/// <summary>
@@ -91,7 +92,7 @@ namespace Extraction.Text
 
 				LearnDocType();
 
-				LearnHTMLlang();
+				//LearnHTMLlang();
 
 				//LearnHead();
 
@@ -194,9 +195,17 @@ namespace Extraction.Text
 				return;
 			}
 
-			string[] fileEntries1 = Directory.GetFiles("training_samples");
-			string[] fileEntries2 = Directory.GetFiles("more_training_samples");
-			string[] fileEntries = fileEntries1.ToList().Concat(fileEntries2.ToList()).ToArray();
+			if (Globals.handpicked)
+			{
+				string[] fileEntries = Directory.GetFiles("handpickedexamples");
+				Console.WriteLine(fileEntries);
+			}
+			else
+			{
+				string[] fileEntries1 = Directory.GetFiles("training_samples");
+				string[] fileEntries2 = Directory.GetFiles("more_training_samples");
+				string[] fileEntries = fileEntries1.ToList().Concat(fileEntries2.ToList()).ToArray();
+			}
 			foreach (string fileName in fileEntries)
 			{
 				string text_new = File.ReadAllText(fileName);
@@ -431,45 +440,46 @@ namespace Extraction.Text
 				return;
 			}
 
-			string[] fileEntries = Directory.GetFiles("training_samples");
+			string[] fileEntries1 = Directory.GetFiles("training_samples");
+			string[] fileEntries2 = Directory.GetFiles("more_training_samples");
+			string[] fileEntries = fileEntries1.ToList().Concat(fileEntries2.ToList()).ToArray();
 			foreach (string fileName in fileEntries)
 			{
 				string text_new = File.ReadAllText(fileName);
 				var input_new = RegionLearner.CreateStringRegion(text_new);
 				StringRegion output_new = topRankedProg_b.Run(input_new);
-				var extracted = "";
+
 				if (output_new != null)
 				{
-					var output_new_escaped = HttpUtility.HtmlEncode(output_new);
-					//from http://stackoverflow.com/questions/1547476/easiest-way-to-split-a-string-on-newlines-in-net
-					var output_new_string = output_new_escaped.ToString();
-					//Console.WriteLine(output_new_string);
-					//return;
-					string[] lines = output_new_string.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-					if (lines.Length > 1)
+					Label l = new Label()
 					{
-						//Console.WriteLine("help");
-						//foreach (string l in lines)
-						//{
-						//	Console.WriteLine(l);
-						//}
-						//Console.WriteLine(string.Join("\\n", lines));
-						extracted = string.Join("\\n", lines);
-					}
-					else
-					{
-						extracted = output_new_string;
-					}
-
-					Console.WriteLine("{");
-					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", extracted, fileName, output_new.Start, output_new.End, "style");
-					Console.WriteLine("},");
+						label = "style",
+						extracted = HttpUtility.HtmlEncode(output_new),
+						filename = fileName,
+						charStart = output_new.Start,
+						charEnd = output_new.End,
+						success = true
+					};
+					Globals.labelslist.Add(l);
+					//Console.WriteLine("{");
+					//Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": {2}, \"charEnd\": {3}, \"label\": \"{4}\" ", HttpUtility.HtmlEncode(output_new), fileName, output_new.Start, output_new.End, "doctype");
+					//Console.WriteLine("},");
 				}
 				else
 				{
-					Console.WriteLine("{");
-					Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "style");
-					Console.WriteLine("},");
+					Label l = new Label()
+					{
+						label = "style",
+						extracted = "",
+						filename = fileName,
+						charStart = 0,
+						charEnd = 0,
+						success = false
+					};
+					Globals.labelslist.Add(l);
+					//Console.WriteLine("{");
+					//Console.WriteLine(" \"extracted\": \"{0}\", \"filename\": \"{1}\", \"charStart\": \"{2}\", \"charEnd\": \"{3}\", \"label\": \"{4}\" ", "", fileName, "", "", "doctype");
+					//Console.WriteLine("},");
 				}
 			}
 
