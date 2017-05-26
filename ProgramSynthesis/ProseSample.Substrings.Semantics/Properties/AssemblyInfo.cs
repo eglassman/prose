@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("ProseSample")]
+[assembly: AssemblyTitle("ProseSample.Substrings.Semantics")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ProseSample")]
+[assembly: AssemblyProduct("ProseSample.Substrings.Semantics")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("c7fc4d3c-3cae-42b9-aff9-83cb07a7872f")]
+[assembly: Guid("3C5A5EFD-4FA6-4493-BA02-AD5A1ACDFF69")]
 [assembly: AssemblyVersion("2.3.0")]
 [assembly: AssemblyFileVersion("2.3.0.0")]
 [assembly: AssemblyInformationalVersion("2.3.0")]

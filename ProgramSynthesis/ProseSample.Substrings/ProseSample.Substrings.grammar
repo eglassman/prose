@@ -1,5 +1,5 @@
 ﻿#reference 'Microsoft.ProgramSynthesis.Extraction.Text.Semantics, Version=1.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35';
-#reference 'file:ProseSample.Substrings.dll';
+#reference 'file:ProseSample.Substrings.Semantics.dll';
 
 using System.Text.RegularExpressions;
 using Microsoft.ProgramSynthesis.Extraction.Text.Semantics;
@@ -8,7 +8,7 @@ using ProseSample.Substrings;
 using semantics ProseSample.Substrings.Semantics;
 using learners ProseSample.Substrings.WitnessFunctions;
 
-language ProseSample_Substrings;
+language ProseSample.Substrings;
 
 @complete feature double Score = RankingScore;
 

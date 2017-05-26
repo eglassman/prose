@@ -1,12 +1,15 @@
 ﻿using System;
 
-namespace Transformation.Json {
+namespace Transformation.Json
+{
     /// <summary>
     ///     Sample of how to use PROSE's Json Transformation APIs. 
     ///     PROSE generates JsonToJson and TableToJson transformation programs from constraints.
     /// </summary>
-    internal static partial class Sample {
-        private static void Main(string[] args) {
+    internal static partial class Sample
+    {
+        private static void Main(string[] args)
+        {
             // Demonstrate Json To Json Transformation
             Console.WriteLine("JSON to JSON Transformation By Example\n");
             JsonToJsonSample();
@@ -16,6 +19,8 @@ namespace Transformation.Json {
             // Demonstrate Table To Json Transformation
             Console.WriteLine("Table to JSON Transformation By Example\n");
             TableToJsonSample();
+
+            Console.ReadKey();
         }
     }
 }
